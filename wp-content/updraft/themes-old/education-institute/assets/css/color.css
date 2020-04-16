@@ -1,0 +1,76 @@
+.home-btn-two,
+.home-btn,
+.login-box ul li a,
+.text-wht,
+.navbar-nav .nav-item:hover > a.nav-link:first-child,
+.top-widget {
+    color: #fff;
+}
+
+.inner-home .hover-btn:hover,
+.navbar-nav .nav-item:hover a,
+.megamenu-column .title,
+.dark-btn:hover,
+.btn-line:hover,
+.service-box:hover .service-description a,
+.service-box:hover .service-icon span,
+a:hover,
+.slicknav_nav a:hover,
+.course-meta li .fa-star,
+.event-box:hover .btn-line,
+.footer-about .meta-address li i,
+.footer-about .meta-address li a:hover,
+.sidebar-post .content .title:hover,
+.submit-btn:hover,
+.copyright-area a,
+.event-meta li,
+.faculties-info span,
+.theme-text {
+    color: #7e6df7;
+}
+
+.navbar-nav .dropdown-menu .dropdown-item:hover> a {
+    color: #7e6df7 !important;
+}
+
+.add-slider .owl-nav button.owl-next,
+.add-slider .owl-nav button.owl-prev,
+.inner-counter::before,
+.count-icon>span,
+.co-isotop-item-1::before,
+.faculties-box:before,
+.faculties-box:after,
+.testi-color-box,
+.course-box:hover .course-btn,
+.tabs-style-one .tabs li.active a .chekbox,
+.login-box ul li .box-btn,
+.slicknav_nav .slicknav_row:hover,
+.navbar-nav .nav-item > a.nav-link:first-child:before,
+.navbar-nav .nav-item:hover > a.nav-link:first-child:before,
+.title-sep,
+#scrollUp:hover,
+.footer-about .footer-icon li a:hover,
+.bg-theme,
+.home-btn-two {
+    background-color: #7e6df6;
+}
+
+.home-btn-two,
+#scrollUp:hover,
+.footer-about .footer-icon li a:hover,
+.btn-line,
+.home-btn-two {
+    border-color: #7e6df7;
+}
+
+.color-overlay {
+    background-color: rgba(126, 109, 247, 0.9);
+}
+
+.title-sep:before {
+    border-right: 2px solid #7e6df7;
+}
+
+.title-sep:after {
+    border-right: 2px solid #7e6df7;
+}

@@ -1,0 +1,451 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: education-hubs\n"
+"POT-Creation-Date: 2019-01-12 11:46+0530\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Your Name <you@example.com>\n"
+"Language-Team: Your Team "
+"<translations@example.com>\n"
+"Report-Msgid-Bugs-To: Translator Name "
+"<translations@example.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Textdomain-Support: yesX-Generator: Poedit "
+"1.6.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;esc_html_e;"
+"esc_html_x:1,2c;esc_html__;esc_attr_e;"
+"esc_attr_x:1,2c;esc_attr__;_ex:1,2c;"
+"_nx:4c,1,2;_nx_noop:4c,1,2;_x:1,2c;_n:1,2;"
+"_n_noop:1,2;__ngettext:1,2;"
+"__ngettext_noop:1,2;_c,_nc:4c,1,2\n"
+"X-Poedit-Basepath: ..\n"
+"Language: en_US\n"
+"X-Generator: Poedit 2.1.1\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: 404.php:17 index.php:23
+msgid "Blog"
+msgstr ""
+
+#: 404.php:35
+msgid "404"
+msgstr ""
+
+#: 404.php:36
+msgid "Oops! That Page Cannot be Found"
+msgstr ""
+
+#: 404.php:37
+msgid ""
+"Sorry , But the page you are looking for does "
+"not existing."
+msgstr ""
+
+#: 404.php:44
+msgid "BACK TO HOME"
+msgstr ""
+
+#: archive.php:48 index.php:54 search.php:56
+msgid "Prev"
+msgstr ""
+
+#: archive.php:49 index.php:55 search.php:57
+msgid "Next"
+msgstr ""
+
+#: class-wp-bootstrap-navwalker.php:406
+msgid "Add a menu"
+msgstr ""
+
+#: comments.php:32
+#, php-format
+msgid "One thought on &ldquo;%s&rdquo;"
+msgstr ""
+
+#: comments.php:37
+#, php-format
+msgctxt "comments title"
+msgid "%1$s Comment"
+msgid_plural "%1$s Comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:71
+msgid "Comments are closed."
+msgstr ""
+
+#: comments.php:83
+#: content-parts/content-single.php:38
+msgid " "
+msgstr ""
+
+#: content-parts/content-none.php:12
+msgid ""
+"Ready to publish your first post? Get started "
+"here."
+msgstr ""
+
+#: content-parts/content-none.php:18
+msgid ""
+"Sorry, but nothing matched your search terms. "
+"Please try again with some different keywords."
+msgstr ""
+
+#: content-parts/content-none.php:28
+msgid ""
+"It seems we can&rsquo;t find what you&rsquo;"
+"re looking for. Perhaps searching can help."
+msgstr ""
+
+#: content-parts/content-search.php:13
+#: content-parts/content.php:14
+#: section-parts/front-page-blogs.php:37
+msgid "Read More"
+msgstr ""
+
+#: content-parts/content-search.php:16
+#: content-parts/content-single.php:19
+#: content-parts/content.php:17
+#: section-parts/front-page-blogs.php:41
+msgid "By"
+msgstr ""
+
+#: content-parts/content-search.php:18
+#: content-parts/content-single.php:21
+#: content-parts/content.php:19
+msgid "0 Comment"
+msgstr ""
+
+#: content-parts/content-search.php:18
+#: content-parts/content-single.php:21
+#: content-parts/content.php:19
+msgid "1 Comment"
+msgstr ""
+
+#: content-parts/content-search.php:18
+#: content-parts/content-single.php:21
+#: content-parts/content.php:19
+msgid "% Comments"
+msgstr ""
+
+#: content-parts/content-single.php:29
+msgid "Pages: "
+msgstr ""
+
+#: content-parts/content-single.php:35
+msgid "Tags :"
+msgstr ""
+
+#: content-parts/content-single.php:50
+msgid "Prev Post"
+msgstr ""
+
+#: content-parts/content-single.php:57
+msgid "Next Post"
+msgstr ""
+
+#: footer.php:41
+#, php-format
+msgid "%1$sPowered by %2$s%3$s"
+msgstr ""
+
+#: footer.php:41
+msgid "https://wordpress.org/"
+msgstr ""
+
+#: footer.php:41
+msgid "WordPress"
+msgstr ""
+
+#: footer.php:43
+#, php-format
+msgid ""
+" Theme: powered by:wordpress %1$sDesign By "
+"%2$s%3$s"
+msgstr ""
+
+#: footer.php:43
+msgid ""
+"https://profiles.wordpress.org/gurutemplate/"
+msgstr ""
+
+#: footer.php:43
+msgid "gurutemplate"
+msgstr ""
+
+#: full-width.php:41 page.php:44
+msgid "Pages:"
+msgstr ""
+
+#: full-width.php:53 page.php:56
+msgid "Nothing Found"
+msgstr ""
+
+#: functions.php:72
+msgid "primary Menu"
+msgstr ""
+
+#: functions.php:162
+msgid "Blog Sidebar"
+msgstr ""
+
+#: functions.php:164
+msgid "Sidebar on the blog layout."
+msgstr ""
+
+#: functions.php:175
+msgid "Footer Widget Area 1"
+msgstr ""
+
+#: functions.php:177
+msgid "The footer widget area 1"
+msgstr ""
+
+#: functions.php:185
+msgid "Footer Widget Area 2"
+msgstr ""
+
+#: functions.php:187
+msgid "The footer widget area 2"
+msgstr ""
+
+#: functions.php:195
+msgid "Footer Widget Area 3"
+msgstr ""
+
+#: functions.php:197
+msgid "The footer widget area 3"
+msgstr ""
+
+#: functions.php:218
+msgctxt "placeholder"
+msgid " search here..."
+msgstr ""
+
+#: functions.php:218
+msgctxt "label"
+msgid "Search for:"
+msgstr ""
+
+#: functions.php:237
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: functions.php:252
+#, php-format
+msgid "%1$s %2$s"
+msgstr ""
+
+#: functions.php:252
+msgid "(Edit)"
+msgstr ""
+
+#: functions.php:257
+msgid "at"
+msgstr ""
+
+#: header.php:125
+msgid "call Us:"
+msgstr ""
+
+#: header.php:168
+msgid "Search"
+msgstr ""
+
+#: inc/breadcrumbs.php:10
+#: section-parts/front-page-banner.php:52
+msgid "Home"
+msgstr ""
+
+#: inc/customizer.php:23
+msgid "Show"
+msgstr ""
+
+#: inc/customizer.php:24
+msgid "Hide"
+msgstr ""
+
+#: inc/customizer.php:35
+msgid "2 Column Layout"
+msgstr ""
+
+#: inc/customizer.php:36
+msgid "3 Column Layout"
+msgstr ""
+
+#: inc/customizer.php:37
+msgid "4 Column Layout"
+msgstr ""
+
+#: inc/customizer.php:93
+msgid "Education-hubs Options"
+msgstr ""
+
+#: inc/customizer.php:104
+msgid "Header Section"
+msgstr ""
+
+#: inc/customizer.php:124
+msgid "Header Option"
+msgstr ""
+
+#: inc/customizer.php:125
+msgid "Show/hide option for Header Section."
+msgstr ""
+
+#: inc/customizer.php:144
+msgid "Contact Us"
+msgstr ""
+
+#: inc/customizer.php:160
+msgid "Facebook URL"
+msgstr ""
+
+#: inc/customizer.php:176
+msgid "Twitter URL"
+msgstr ""
+
+#: inc/customizer.php:192
+msgid "Linkedin URL"
+msgstr ""
+
+#: inc/customizer.php:208
+msgid "Instagram URL"
+msgstr ""
+
+#: inc/customizer.php:223
+msgid "Home Banner Section"
+msgstr ""
+
+#: inc/customizer.php:241
+msgid "Show/hide option for Image Section."
+msgstr ""
+
+#: inc/customizer.php:256
+msgid "Image"
+msgstr ""
+
+#: inc/customizer.php:269
+msgid "Heading"
+msgstr ""
+
+#: inc/customizer.php:281
+msgid "Sub Heading"
+msgstr ""
+
+#: inc/customizer.php:293 inc/customizer.php:355
+#: inc/customizer.php:648
+msgid "Button Text"
+msgstr ""
+
+#: inc/customizer.php:305 inc/customizer.php:374
+#: inc/customizer.php:630
+msgid "Button URL"
+msgstr ""
+
+#: inc/customizer.php:318
+msgid "Header Button Option"
+msgstr ""
+
+#: inc/customizer.php:337
+msgid "Button Option"
+msgstr ""
+
+#: inc/customizer.php:338
+msgid "Show/hide option for Quote Section."
+msgstr ""
+
+#: inc/customizer.php:386
+msgid "Home Service Section"
+msgstr ""
+
+#: inc/customizer.php:406
+msgid "Services Option"
+msgstr ""
+
+#: inc/customizer.php:407
+msgid "Show/hide option Section."
+msgstr ""
+
+#: inc/customizer.php:427
+msgid "service Title"
+msgstr ""
+
+#: inc/customizer.php:445
+msgid "service description"
+msgstr ""
+
+#: inc/customizer.php:464
+msgid "Column Layout option "
+msgstr ""
+
+#: inc/customizer.php:489
+msgid "Service Page "
+msgstr ""
+
+#: inc/customizer.php:503
+msgid "Home Blog Section"
+msgstr ""
+
+#: inc/customizer.php:522
+msgid "Blog Option"
+msgstr ""
+
+#: inc/customizer.php:523
+msgid "Show/hide option for Blog Section."
+msgstr ""
+
+#: inc/customizer.php:540
+msgid "Blog Title"
+msgstr ""
+
+#: inc/customizer.php:556
+msgid "Blog Subheading"
+msgstr ""
+
+#: inc/customizer.php:567
+msgid "Home Callout Section"
+msgstr ""
+
+#: inc/customizer.php:589
+msgid "Callout Option"
+msgstr ""
+
+#: inc/customizer.php:590
+msgid ""
+"Show/hide option for Footer Callout Section."
+msgstr ""
+
+#: inc/customizer.php:611
+msgid "Callout Title"
+msgstr ""
+
+#: inc/customizer.php:661
+msgid "Footer Section"
+msgstr ""
+
+#: inc/customizer.php:680
+msgid "Footer Option"
+msgstr ""
+
+#: inc/customizer.php:681
+msgid "Show/hide option for Footer Section."
+msgstr ""
+
+#: inc/customizer.php:700
+msgid "Copyright"
+msgstr ""
+
+#: search.php:20
+#, php-format
+msgid "Search Results for: %s"
+msgstr ""
+
+#: search.php:25
+#, php-format
+msgid "Nothing Found for: %s"
+msgstr ""

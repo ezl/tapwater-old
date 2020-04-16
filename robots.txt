@@ -1,0 +1,3 @@
+Sitemap: https://canyoudrinktapwaterin.com/sitemap_index.xml
+User-agent:*
+Disallow:

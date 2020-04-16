@@ -1,0 +1,580 @@
+/*
+Theme Name: Openness
+Description: Used to style the TinyMCE editor.
+*/
+
+
+/**
+ * Table of Contents:
+ *
+ * 1.0 - Body
+ * 2.0 - Typography
+ * 3.0 - Links
+ * 4.0 - Elements
+ * 5.0 - Alignment
+ * 6.0 - Caption
+ * 7.0 - Galleries
+ * 8.0 - Audio / Video
+ * 9.0 - RTL
+ */
+
+
+/**
+ * 1.0 Body
+ */
+
+body {
+	color: #888;
+	font-family: "Franklin Gothic Book", sans-serif;	
+	font-size: 1rem;
+	line-height: 1.6;
+	margin: 20px 40px;
+	max-width: 925px;
+	vertical-align: baseline;
+}
+
+
+/**
+ * 2.0 Typography
+ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color:#333;
+	clear: both;
+	font-family: "Noto Sans", sans-serif;
+	font-weight: 700;
+}
+h1 {
+	font-size: 2rem;
+}
+h2 {
+	font-size: 1.75rem;
+}
+h3 {
+	font-size: 1.5rem;
+}
+h4 {
+	font-size: 1.25rem;
+}
+h5 {
+	font-size: 1.125rem;
+}
+h6 {
+	font-size: 1.063rem;
+}
+
+p {
+	margin: 1.5rem 0;
+}
+p:first-child {
+    margin-top: 0;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+.text-left {
+    text-align: left!important;
+}
+.text-right {
+    text-align: right!important;
+}
+.text-center {
+    text-align: center!important;
+}
+.text-lowercase {
+    text-transform: lowercase!important;
+}
+.text-uppercase {
+    text-transform: uppercase!important;
+}
+.text-capitalize {
+    text-transform: capitalize!important;
+}
+b,
+strong {
+	font-weight: 700;
+}
+
+dfn,
+cite,
+em,
+i {
+	font-style: italic;
+}
+
+
+blockquote {
+    font-size: 1.125em;
+    line-height: 1.7;
+    font-style: italic;
+    text-align: center;
+    margin: 2em 3em;
+}
+blockquote:before, 
+blockquote:after {
+    display: block;
+    font-family: Georgia,serif;
+    font-size: 4.7777777em;
+    font-style: normal;
+    line-height: 1;
+    color: #d8d8d8;
+    height: .4418604em;
+}
+blockquote:before {
+    content: '\201C';
+    margin-bottom: .1395348em;
+}
+blockquote:after {
+    content: '\201D';
+    margin-top: .1395348em;
+}
+blockquote>:last-child {
+    margin: 0;
+}
+
+
+blockquote cite,
+blockquote small {
+	color: #b4af91;
+	font-size: 75%;
+	line-height: 1.6;
+}
+
+blockquote em,
+blockquote i,
+blockquote cite {
+	font-style: normal;
+}
+
+blockquote strong,
+blockquote b {
+	font-weight: 400;
+}
+
+
+address {
+	font-style: italic;
+	margin: 0 0 1.6em;
+}
+
+code,
+kbd,
+tt,
+var,
+samp,
+pre {
+	font-family: Inconsolata, monospace;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre {
+	background-color: transparent;
+	background-color: rgba(0, 0, 0, 0.01);
+	border: 1px solid #eaeaea;
+	line-height: 1.2;
+	margin: 1.6rem 0;
+	max-width: 100%;
+	overflow: auto;
+	padding: 1rem;
+	white-space: pre;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+abbr[title] {
+	border-bottom: 1px dotted #eaeaea;
+	cursor: help;
+	font-size: 90%;
+    text-transform: uppercase;
+}
+
+mark,
+ins {
+	background-color: #fff9c0;
+	text-decoration: none;
+}
+
+sup,
+sub {
+	font-size: 75%;
+	height: 0;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+
+sup {
+	bottom: 1ex;
+}
+
+sub {
+	top: .5ex;
+}
+
+small,
+.small {
+	font-size: 75%;
+}
+
+big,
+.big {
+	font-size: 125%;
+}
+
+
+/**
+ * 3.0 Links 
+ */
+ 
+a {
+	color: #333;
+	text-decoration: none;
+}
+
+a:hover,
+a:focus{
+	opacity: 0.9;
+}
+
+/**
+ * 4.0 Elements
+ */
+ .shadow {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+	    margin-bottom: 3rem!important;
+		padding: 1rem!important;
+}
+
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+	margin-bottom: 3rem!important;
+	padding: 1rem!important;
+}
+
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+	    margin-bottom: 3rem!important;
+		    padding: 1rem!important;
+}
+.text-box {
+    position: relative;
+    padding: 30px;
+    border: 3px double #e1e1e1;
+    margin: 30px 0;
+}
+hr {
+	background-color: #eaeaea;
+	border: 0;
+	height: 1px;
+	margin-bottom: 28px;
+}
+
+ul,
+ol {
+	margin: 0 0 28px 0;
+	padding: 0;
+}
+
+ul {
+	list-style: disc;
+}
+
+ol {
+	list-style: decimal;
+}
+
+li > ul,
+li > ol {
+	margin: 0 0 0 23px;
+}
+
+blockquote > ul,
+blockquote > ol {
+	margin-left: 28px;
+}
+
+dl {
+	margin: 0 0 28px;
+}
+
+dt {
+	font-weight: bold;
+}
+
+dd {
+	margin: 0 0 28px;
+}
+
+table,
+th,
+td,
+.mce-item-table,
+.mce-item-table th,
+.mce-item-table td {
+	border: 1px solid #eaeaea;
+}
+
+table a {
+	color: #333;
+}
+
+table,
+.mce-item-table {
+	border-collapse: separate;
+	border-spacing: 0;
+	border-width: 1px 0 0 1px;
+	margin: 0 0 28px;
+	width: 100%;
+}
+
+table th,
+.mce-item-table th,
+table caption {
+	border-width: 0 1px 1px 0;
+	font-size: 17px;
+	font-weight: 700;
+	padding: 7px;
+	text-align: left;
+	vertical-align: baseline;
+}
+
+table td,
+.mce-item-table td {
+	border-width: 0 1px 1px 0;	
+	font-size: 17px;
+	padding: 7px;
+	vertical-align: baseline;
+}
+
+img {
+	border: 0;
+	height: auto;
+	max-width: 100%;
+	vertical-align: middle;
+}
+
+figure {
+	margin: 0;
+}
+
+del {
+	opacity: 0.8;
+}
+
+
+a {
+	border-bottom: 1px solid #333;
+	color: #333;
+	text-decoration: none;
+}
+
+
+/**
+ * 5.0 Alignment
+ */
+
+
+.alignleft {
+	display: inline;
+	float: left;
+}
+
+.alignright {
+	display: inline;
+	float: right;
+}
+
+.aligncenter {
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+blockquote.alignleft,
+.wp-caption.alignleft,
+img.alignleft {
+	margin: 0.4em 1.6em 1.6em 0;
+}
+
+blockquote.alignright,
+.wp-caption.alignright,
+img.alignright {
+	margin: 0.4em 0 1.6em 1.6em;
+}
+
+blockquote.aligncenter,
+.wp-caption.aligncenter,
+img.aligncenter {
+	clear: both;
+	margin-top: 0.4em;
+	margin-bottom: 1.6em;
+}
+
+.wp-caption.alignleft,
+.wp-caption.alignright,
+.wp-caption.aligncenter {
+	margin-bottom: 1.2em;
+}
+
+/**
+ * 6.0 Caption
+ */
+
+.wp-caption {
+	background: transparent;
+	border: none;
+	color: #707070;
+	font-family: "Noto Sans", sans-serif;
+	margin: 0 0 28px 0;
+	max-width: 100%;
+	padding: 0;
+	text-align: inherit;
+}
+.wp-caption {
+	margin-bottom: 1.6em;
+	max-width: 100%;
+}
+
+.wp-caption img[class*="wp-image-"] {
+	display: block;
+	margin: 0;
+}
+
+.wp-caption-text {
+	color: #b4af91;	
+	font-size: 12px;
+	font-size: 1.2rem;
+	line-height: 1.5;
+	padding: 20px 0 5px;
+}
+.wp-caption.alignleft {
+	margin: 7px 28px 21px 0;
+}
+
+.wp-caption.alignright {
+	margin: 7px 0 21px 28px;
+}
+
+.wp-caption.aligncenter {
+	margin: 7px auto;
+}
+
+.wp-caption .wp-caption-text,
+.wp-caption-dd {
+	font-size: 14px;
+	line-height: 1.5;
+	padding: 7px 0;
+}
+
+
+/**
+ * 7.0 Galleries
+ */
+
+.gallery-item {
+	display: inline-block;
+	padding: 1.79104477%;
+	text-align: center;
+	vertical-align: top;
+	width: 100%;
+}
+
+.gallery-columns-2 .gallery-item {
+	max-width: 50%;
+}
+
+.gallery-columns-3 .gallery-item {
+	max-width: 33.33%;
+}
+
+.gallery-columns-4 .gallery-item {
+	max-width: 25%;
+}
+
+.gallery-columns-5 .gallery-item {
+	max-width: 20%;
+}
+
+.gallery-columns-6 .gallery-item {
+	max-width: 16.66%;
+}
+
+.gallery-columns-7 .gallery-item {
+	max-width: 14.28%;
+}
+
+.gallery-columns-8 .gallery-item {
+	max-width: 12.5%;
+}
+
+.gallery-columns-9 .gallery-item {
+	max-width: 11.11%;
+}
+
+.gallery-caption {
+    background-color: black;
+    color: #ffffff;
+    display: none;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    padding: 0.125rem 0;
+}
+
+.gallery-columns-6 .gallery-caption,
+.gallery-columns-7 .gallery-caption,
+.gallery-columns-8 .gallery-caption,
+.gallery-columns-9 .gallery-caption {
+	display: none;
+}
+
+
+/**
+ * 8.0 Audio / Video
+ */
+
+.mce-content-body .wpview-wrap {
+	margin-bottom: 32px;
+}
+
+.mce-content-body .wp-audio-playlist {
+	margin: 0;
+}
+
+
+/**
+ * 9.0 RTL
+ */
+
+body.rtl {
+	font-family: "Franklin Gothic Book", sans-serif;	
+}
+
+.rtl blockquote {
+	border-left: none;
+	border-right: 0.25rem solid #eaeaea;
+
+}
+
+.rtl blockquote > blockquote {
+	margin-left: auto;
+	margin-right: 0;
+}
+
+.rtl li > ul,
+.rtl li > ol {
+	margin: 0 23px 0 0;
+}
+
+.rtl table th,
+.rtl table caption {
+	text-align: right;
+}
