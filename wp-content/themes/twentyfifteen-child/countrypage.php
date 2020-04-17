@@ -418,8 +418,8 @@ endif;
     
     $query = new WP_Query(array(
     	'post_type' => 'page',
-    	'category_name' => $continent_name,
-        'post_status' => 'any'
+        'category_name' => $continent_name,
+        'post__not_in' => array(5233)
     ));
     if($query->have_posts()):
     echo '<h3>View other countries in '.$continent_name.'</h3>';
@@ -433,7 +433,7 @@ endif;
        echo '<li><a href="'.get_the_permalink().'">'.$currentcat[2].'</a></li>';
         }
         //if non usa
-        if(get_post_type() == 'page' && $currentcat[1] && $curID != get_the_ID()){
+        if(get_post_type() == 'page' && $currentcat[1] && $curID != get_the_ID() && $currentcat[1] != 'United States of America'){
        echo '<li><a href="'.get_the_permalink().'">'.$currentcat[1].'</a></li>';
        }
     endwhile;
@@ -444,6 +444,7 @@ endif;
     
     
 endif;
+
 
 // if continent page show list of countries in continent and cities list
  $categories = wp_get_post_terms(get_the_ID(), 'category',  array('fields' => 'all', 'orderby' => 'term_id')); 
