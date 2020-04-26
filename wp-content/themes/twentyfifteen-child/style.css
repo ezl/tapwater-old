@@ -6,6 +6,7 @@ Template:     twentyfifteen
 */
 
 
+
 .tophear {
     position: fixed;
 }
@@ -424,6 +425,13 @@ h3, .post-title{
     color:#354B95;
     font-family: 'Nato', sans-serif;
     padding-top:20px;
+    
+    font-weight:500;
+    
+}
+.entry-content h3{
+    margin-top:10px;
+    font-size:2.2rem;
 }
 h3 a{
 	color:#354b95;
@@ -691,6 +699,31 @@ article{
     margin: 0 1.5%;
 }
 
+/* US City Page */
+
+.ewg__intro{
+    display:flex;
+}
+.ewg__intro__utility{
+    min-width: 300px;
+    padding: 12px;
+    padding-top:0;
+}
+.ewg__intro__utility span{
+    font-weight: 700;
+    color: #354b95
+}
+.ewg__data{
+    display:flex;
+}
+
+.ewg__data>div{
+    padding:12px;
+}
+.ewg ul{
+    list-style-type: none;
+}
+
 
 
 
@@ -823,6 +856,9 @@ article{
 	
 	width:100%;
 	
+    }
+    .ewg__intro{
+        flex-direction:column;
     }
     
    

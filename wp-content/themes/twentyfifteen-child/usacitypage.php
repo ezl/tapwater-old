@@ -347,6 +347,73 @@ if($waterquality < 20){
 </table>
 </figure>
 <!-- /wp:html -->
+<?php
+if(is_user_logged_in()):
+?>
+<div class="ewg">
+<h2>Contaminants</h2>
+    <div class="ewg__intro">
+        <div class="ewg__intro__text">
+            
+            <h3><?php the_field('ewg_utility_name'); ?></h3>
+            <p><?php the_field('ewg_description'); ?></p> 
+        </div>
+        
+    <div class="ewg__intro__utility">
+    <h3>Utility details</h3>
+        <ul>
+            <li><span>Serves: </span><?php the_field('ewg_people'); ?></li>
+            <li><span>Data available: </span>2012-2017</li>
+            <li><span>Data Source: </span><?php the_field('ewg_data_source'); ?></li>
+            <li><span>Total: </span><?php the_field('ewg_total_number'); ?></li>
+        </ul>
+    </div>
+        
+
+    </div>
+    <div class="ewg__data">
+
+        <div class="ewg__data__exceed">
+        <h3>Contaminants That Exceed Guidelines</h3>
+        <ul>
+            <?php
+
+                $exceed_contaminants = explode(',', get_field('ewg_exceed'));
+                foreach($exceed_contaminants as $n):
+                    if($n):
+                        ?><li><?php echo $n; ?></li><?php
+                    endif;
+                endforeach;
+
+            ?>
+        </ul>
+        </div>
+
+        <div class="ewg__data__other">
+        <h3>Other Detected Contaminants</h3>
+        <ul>
+            <?php
+
+                $other_contaminants = explode(',', get_field('ewg_other'));
+                foreach($other_contaminants as $n):
+                    if($n):
+                        ?><li><?php echo $n; ?></li><?php
+                    endif;
+                endforeach;
+
+            ?>
+        </ul>
+        </div>
+
+    </div>
+
+    <p>Learn more: <a href="<?php the_field('ewg_source'); ?>"><?php the_field('ewg_source'); ?></a></p>
+
+</div>
+
+<?php
+endif;
+?>
 
 <p>
 <strong>Reminder:</strong><br/>
@@ -380,6 +447,9 @@ endif;
 
 
 the_content();
+
+
+
 
 // Display more cities from same state - usa city page
 
