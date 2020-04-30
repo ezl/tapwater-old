@@ -123,23 +123,23 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeProduct' ) ) {
 			 * Example $names array:
 			 *
 			 * array(
-			 * 	'depth'  => 'product:depth:value',
-			 * 	'height' => 'product:height:value',
-			 * 	'length' => 'product:length:value',
-			 * 	'size'   => 'product:size',
-			 * 	'volume' => 'product:volume:value',
-			 * 	'weight' => 'product:weight:value',
-			 * 	'width'  => 'product:width:value',
+			 * 	'depth'        => 'product:depth:value',
+			 * 	'height'       => 'product:height:value',
+			 * 	'length'       => 'product:length:value',
+			 * 	'size'         => 'product:size',
+			 * 	'fluid_volume' => 'product:fluid_volume:value',
+			 * 	'weight'       => 'product:weight:value',
+			 * 	'width'        => 'product:width:value',
 			 * );
 			 */
 			WpssoSchema::add_data_unit_from_assoc( $ret, $mt_og, $names = array( 
-				'depth'  => 'product:depth:value',
-				'height' => 'product:height:value',
-				'length' => 'product:length:value',
-				'size'   => 'product:size',
-				'volume' => 'product:volume:value',
-				'weight' => 'product:weight:value',
-				'width'  => 'product:width:value',
+				'depth'        => 'product:depth:value',
+				'height'       => 'product:height:value',
+				'length'       => 'product:length:value',
+				'size'         => 'product:size',
+				'fluid_volume' => 'product:fluid_volume:value',
+				'weight'       => 'product:weight:value',
+				'width'        => 'product:width:value',
 			) );
 
 			/**
@@ -149,6 +149,7 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeProduct' ) ) {
 			if ( empty( $mt_og[ 'product:offers' ] ) ) {	// No product variations.
 
 				if ( $single_offer = WpssoSchemaSingle::get_offer_data( $mod, $mt_og ) ) {
+
 					$ret[ 'offers' ] = WpssoSchema::get_schema_type_context( 'https://schema.org/Offer', $single_offer );
 				}
 

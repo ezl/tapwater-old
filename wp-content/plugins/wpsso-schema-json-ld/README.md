@@ -1,16 +1,16 @@
-<h1>Schema JSON-LD Markup for Google Rich Results</h1><h3>WPSSO Add-on</h3>
+<h1>Schema JSON-LD Markup for Google Rich Results and Structured Data</h1><h3>WPSSO Add-on</h3>
 
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Schema JSON-LD Markup</td></tr>
-<tr><th align="right" valign="top" nowrap>Summary</th><td>Google Rich Results and Structured Data for Articles, Carousels, Events, FAQ Pages, How-Tos, Local SEO, Products, Recipes, Ratings, Reviews, and more.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>3.2.0</td></tr>
+<tr><th align="right" valign="top" nowrap>Summary</th><td>Google Rich Results and Structured Data for Articles, Carousels, Events, FAQ Pages, How-Tos, Local SEO, Products, Recipes, Ratings, Reviews, and More.</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>3.5.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>5.6 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>4.2 or newer</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.4</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.4.1</td></tr>
 <tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>4.0.1</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://www.gnu.org/licenses/gpl.txt">GPLv3</a></td></tr>
-<tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>schema.org, rich snippets, structured data, amp, woocommerce, image seo, video seo, news seo, schema, rich results, knowledge graph, rating, review, recipe, event, product</td></tr>
+<tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>schema.org, schema, rich snippets, structured data, rich results, woocommerce, seo, image seo, video seo, local seo, news seo, knowledge graph</td></tr>
 </table>
 
 <h2>Description</h2>
@@ -31,7 +31,7 @@
 
 <p><strong>Most complete Schema JSON-LD markup for WooCommerce products:</strong></p>
 
-<p>The WooCommerce plugin is known to provide incomplete Schema markup for Google. The <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium plugin</a> (required for WooCommerce integration) and its WPSSO Schema JSON-LD add-on provide a far better solution by offering complete Facebook / Pinterest Product meta tags and Schema Product markup for Google Rich Results (previously known as Rich Snippets) &mdash; including additional product images, product variations, product attributes (brand, color, condition, EAN, dimensions, GTIN-8/12/13/14, ISBN, material, MPN, size, SKU, weight, etc), product reviews, product ratings, sale start / end dates, sale prices, pre-tax prices, VAT prices, and much, much more.</p>
+<p>The WooCommerce plugin is known to provide incomplete Schema markup for Google. The <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium plugin</a> (required for WooCommerce integration) and its WPSSO Schema JSON-LD add-on provide a far better solution by offering complete Facebook / Pinterest Product meta tags and Schema Product markup for Google Rich Results (aka Rich Snippets) &mdash; including additional product images, product variations, product attributes (brand, color, condition, EAN, dimensions, GTIN-8/12/13/14, ISBN, material, MPN, size, SKU, weight, etc), product reviews, product ratings, sale start / end dates, sale prices, pre-tax prices, VAT prices, and much, much more.</p>
 
 <p><strong>Fixes all Google Search Console / Structured Data Testing Tool errors:</strong></p>
 
@@ -70,7 +70,7 @@
 
 <ul>
 <li><p>Extends the features of the WPSSO Core plugin.</p></li>
-<li><p>Provides accurate and comprehensive Schema JSON-LD markup for Google Rich Results / Rich Snippets with Structured Data.</p></li>
+<li><p>Provides accurate and comprehensive Schema JSON-LD markup for Google Rich Results (aka Rich Snippets) with Structured Data.</p></li>
 <li><p>Provides complete Schema ImageObject SEO markup with image information from the WordPress Media Library (name, alternateName, alternativeHeadline, caption, description, fileFormat, uploadDate, and more).</p></li>
 <li><p>Provides complete Schema VideoObject SEO markup with video information from WPSSO Core Premium service APIs (Facebook, Slideshare, Soundcloud, Vimeo, Wistia, YouTube).</p></li>
 <li><p>Provides Schema Article AMP 1:1, 4:3, and 16:9 images for mobile Google Rich Results (see the <a href="https://developers.google.com/search/docs/data-types/article#amp-sd">Google Article AMP structured data guidelines</a> for details).</p></li>
@@ -87,9 +87,10 @@
 <li>Product Color</li>
 <li>Product Condition</li>
 <li>Product Depth</li>
+<li>Product Fluid Volume</li>
 <li>Product GTIN-14</li>
-<li>Product GTIN-13/EAN</li>
-<li>Product GTIN-12/UPC</li>
+<li>Product GTIN-13 (EAN)</li>
+<li>Product GTIN-12 (UPC)</li>
 <li>Product GTIN-8</li>
 <li>Product GTIN</li>
 <li>Product ISBN</li>
@@ -102,7 +103,6 @@
 <li>Product Target Gender</li>
 <li>Product Weight</li>
 <li>Product Width</li>
-<li>Product Volume</li>
 </ul></li>
 <li><p>WooCommerce product variations from the WPSSO Core Premium plugin are grouped by currency and added as Schema AggregateOffer for Google's Rich Results (includes the product variation group high price, low price, and currency).</p></li>
 <li><p>Fixes common Google testing tool warnings like "aggregateRating field is recommended" and "review field is recommended".</p></li>
@@ -112,6 +112,8 @@
 <h3>WPSSO JSON Premium Features</h3>
 
 <p>The Standard version is designed to satisfy the requirements of most standard WordPress sites / blogs. If your site requires additional customizable Schema properties for products, events, places / locations, recipes, etc., then you may want the Premium version for those additional features.</p>
+
+<p><strong>Note that values for Schema type and sub-type properties are created automatically based on different option values, WordPress object properties, WordPress object metadata, 3rd party plugin data, and service API data. The WPSSO JSON Premium add-on offers <em>human-friendly</em> customizable options, and option values may be used for one or several different properties.</strong></p>
 
 <ul>
 <li><p>Includes additional customizable option values in the Document SSO metabox:</p>
@@ -125,12 +127,6 @@
 <li>Description</li>
 <li>Microdata Type URLs</li>
 <li>Same-As URLs</li>
-</ul></li>
-<li>Claim Review Information
-
-<ul>
-<li>Short Summary of Claim</li>
-<li>First Appearance URL</li>
 </ul></li>
 <li>Creative Work Information
 
@@ -208,10 +204,10 @@
 <li>Product Width (cm)</li>
 <li>Product Height (cm)</li>
 <li>Product Depth (cm)</li>
-<li>Product Volume (ml)</li>
+<li>Product Fluid Volume (ml)</li>
 <li>Product GTIN-14</li>
-<li>Product GTIN-13/EAN</li>
-<li>Product GTIN-12/UPC</li>
+<li>Product GTIN-13 (EAN)</li>
+<li>Product GTIN-12 (UPC)</li>
 <li>Product GTIN-8</li>
 <li>Product GTIN</li>
 </ul></li>
@@ -263,7 +259,7 @@
 <li>Subject Name </li>
 <li>Subject Description </li>
 <li>Subject Image ID or URL </li>
-<li>Claim Subject Information
+<li>Claim Subject Information (for Claim Review)
 
 <ul>
 <li>Short Summary of Claim</li>
@@ -325,8 +321,8 @@
 <h3 class="top">Install and Uninstall</h3>
 
 <ul>
-<li><a href="https://wpsso.com/docs/plugins/wpsso-schema-json-ld/installation/install-the-plugin/">Install the WPSSO JSON Add-on</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso-schema-json-ld/installation/uninstall-the-plugin/">Uninstall the WPSSO JSON Add-on</a></li>
+<li><a href="https://wpsso.com/docs/plugins/wpsso-schema-json-ld/installation/install-the-plugin/">Install the WPSSO Schema JSON-LD Markup add-on</a>.</li>
+<li><a href="https://wpsso.com/docs/plugins/wpsso-schema-json-ld/installation/uninstall-the-plugin/">Uninstall the WPSSO Schema JSON-LD Markup add-on</a>.</li>
 </ul>
 
 

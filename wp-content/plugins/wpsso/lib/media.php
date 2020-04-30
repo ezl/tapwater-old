@@ -31,6 +31,8 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				$this->p->debug->mark();
 			}
 
+			$max_int = SucomUtil::get_max_int();
+
 			$this->p->util->add_plugin_filters( $this, array(
 				'plugin_image_sizes' => 1,
 			) );
@@ -46,14 +48,9 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 			add_action( 'init', array( $this, 'allow_img_data_attributes' ) );
 			add_action( 'post-upload-ui', array( $this, 'show_post_upload_ui_message' ) );
 
-			/**
-			 * Prevent image_downsize() from lying about image width and height.
-			 */
-			if ( is_admin() ) {
-				add_filter( 'editor_max_image_size', array( $this, 'editor_max_image_size' ), 10, 3 );
-			}
-
+			add_filter( 'editor_max_image_size', array( $this, 'maybe_adjust_max_image_size' ), 10, 3 );
 			add_filter( 'image_make_intermediate_size', array( $this, 'maybe_update_image_filename' ), -5000, 1 );
+			add_filter( 'wp_image_resize_identical_dimensions', array( $this, 'maybe_resize_fuzzy_dimensions' ), $max_int, 1 );
 			add_filter( 'wp_get_attachment_image_attributes', array( $this, 'add_attachment_image_attributes' ), 10, 2 );
 			add_filter( 'get_image_tag', array( $this, 'get_image_tag' ), 10, 6 );
 		}
@@ -77,7 +74,7 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				return false;
 			}
 
-			if ( strpos( $size_name, $this->p->lca . '-' ) !== 0 ) {
+			if ( 0 !== strpos( $size_name, $this->p->lca . '-' ) ) {
 
 				if ( $this->p->debug->enabled ) {
 					$this->p->debug->log( 'exiting early: ' . $size_name . ' not a ' . $this->p->lca . ' custom image size' );
@@ -91,72 +88,57 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 			$is_sufficient_h = $img_height >= $size_info[ 'height' ] ? true : false;
 			$is_cropped      = empty( $size_info[ 'crop' ] ) ? false : true;
 
-			if ( ( ! $is_cropped && ( ! $is_sufficient_w && ! $is_sufficient_h ) ) ||
-				( $is_cropped && ( ! $is_sufficient_w || ! $is_sufficient_h ) ) ) {
-
-				$img_meta = wp_get_attachment_metadata( $pid );
-
-				if ( isset( $img_meta[ 'width' ] ) && isset( $img_meta[ 'height' ] ) &&
-					$img_meta[ 'width' ] < $size_info[ 'width' ] && $img_meta[ 'height' ] < $size_info[ 'height' ] ) {
-
-					$size_text = $img_meta[ 'width' ] . 'x' . $img_meta[ 'height' ] . ' (' . __( 'full size original', 'wpsso' ) . ')';
-				} else {
-					$size_text = $img_width . 'x' . $img_height;
-				}
+			if ( ( ! $is_cropped && ( $is_sufficient_w || $is_sufficient_h ) ) ||
+				( $is_cropped && ( $is_sufficient_w && $is_sufficient_h ) ) ) {
 
 				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'image id ' . $pid . ' rejected - ' . $size_text . ' too small for the ' . $size_name .
-						' (' . $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . ( $is_cropped ? ' cropped' : '' ) . ') image size' );
+					$this->p->debug->log( 'image id ' . $pid . ' dimensions (' . $img_width . 'x' . $img_height . ') are sufficient' );
 				}
+
+				return true;	// Image dimensions are sufficient.
+			}
+
+			$img_meta = wp_get_attachment_metadata( $pid );
+
+			if ( isset( $img_meta[ 'width' ] ) && isset( $img_meta[ 'height' ] ) &&
+				$img_meta[ 'width' ] < $size_info[ 'width' ] && $img_meta[ 'height' ] < $size_info[ 'height' ] ) {
+
+				$size_text = $img_meta[ 'width' ] . 'x' . $img_meta[ 'height' ] . ' (' . __( 'full size original', 'wpsso' ) . ')';
+			} else {
+				$size_text = $img_width . 'x' . $img_height;
+			}
+
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->log( 'image id ' . $pid . ' rejected - ' . $size_text . ' too small for the ' . $size_name .
+					' (' . $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . ( $is_cropped ? ' cropped' : '' ) . ') image size' );
+			}
+
+			/**
+			 * Add notice only if the admin notices have not already been shown.
+			 */
+			if ( $this->p->notice->is_admin_pre_notices() ) {
+
+				$media_lib    = __( 'Media Library', 'wpsso' );
+				$img_edit_url = get_edit_post_link( $pid );
+				$img_title    = get_the_title( $pid );
+				$img_label    = sprintf( __( 'image ID %1$s (%2$s)', 'wpsso' ), $pid, $img_title );
+				$img_label    = empty( $img_edit_url ) ? $img_label : '<a href="' . $img_edit_url . '">' . $img_label . '</a>';
+				$size_label   = $this->p->util->get_image_size_label( $size_name );
+				$req_img_dims = '<b>' . $size_label . '</b> (' . $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] .
+					( $is_cropped ? ' ' . __( 'cropped', 'wpsso' ) : '' ) . ')';
+
+				$error_msg = __( '%1$s %2$s ignored &mdash; the resulting image of %3$s is too small for the required %4$s image dimensions.', 'wpsso' );
+
+				$rejected_msg = $this->p->msgs->get( 'notice-image-rejected' );
 
 				$notice_key = 'wp_' . $pid . '_' . $img_width . 'x' . $img_height . '_' . $size_name . '_' .
 					$size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . '_rejected';
 
-				/**
-				 * Add notice only if the admin notices have not already been shown.
-				 */
-				if ( $this->p->notice->is_admin_pre_notices() ) {
-
-					if ( $this->p->debug->enabled ) {
-						$this->p->debug->log( 'showing admin notice for rejected Media Library image id ' . $pid );
-					}
-
-					$media_lib    = __( 'Media Library', 'wpsso' );
-					$img_edit_url = get_edit_post_link( $pid );
-					$img_title    = get_the_title( $pid );
-					$img_label    = sprintf( __( 'image ID %1$s (%2$s)', 'wpsso' ), $pid, $img_title );
-					$img_label    = empty( $img_edit_url ) ? $img_label : '<a href="' . $img_edit_url . '">' . $img_label . '</a>';
-					$size_label   = $this->p->util->get_image_size_label( $size_name );
-					$req_img_dims = '<b>' . $size_label . '</b> (' . $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . ( $is_cropped ? ' ' . __( 'cropped', 'wpsso' ) : '' ) . ')';
-
-					$error_msg = __( '%1$s %2$s ignored &mdash; the resulting image of %3$s is too small for the required %4$s image dimensions.', 'wpsso' );
-
-					$rejected_msg = $this->p->msgs->get( 'notice-image-rejected' );
-
-					$this->p->notice->warn( sprintf( $error_msg, $media_lib, $img_label, $size_text, $req_img_dims ) . ' ' . 
-						$rejected_msg, null, $notice_key, true );
-
-				} else {
-
-					if ( $this->p->debug->enabled ) {
-						$this->p->debug->log( 'skipped admin notice for rejected Media Library image id ' . $pid );
-						$this->p->debug->log( 'admin warning notice for rejected image id ' . $pid . ' is ' .
-							( $this->p->notice->is_dismissed( $notice_key ) ? 'dismissed' : 'shown (not dismissed)' ) );
-					}
-				}
-
-				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'exiting early: image id ' . $pid . ' dimensions (' . $img_width . 'x' . $img_height . ') rejected' );
-				}
-
-				return false;	// Stop here.
+				$this->p->notice->warn( sprintf( $error_msg, $media_lib, $img_label, $size_text, $req_img_dims ) . ' ' . 
+					$rejected_msg, null, $notice_key, true );
 			}
 
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'image id ' . $pid . ' dimensions (' . $img_width . 'x' . $img_height . ') are sufficient' );
-			}
-
-			return true;	// Image dimensions are good.
+			return false;
 		}
 
 		public function filter_content_accept_img_dims( $bool, $og_image, $size_name, $attr_name, $content_passed ) {
@@ -168,7 +150,7 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				return false;
 			}
 
-			if ( strpos( $size_name, $this->p->lca . '-' ) !== 0 ) {
+			if ( 0 !== strpos( $size_name, $this->p->lca . '-' ) ) {
 
 				if ( $this->p->debug->enabled ) {
 					$this->p->debug->log( 'exiting early: ' . $size_name . ' not a ' . $this->p->lca . ' custom image size' );
@@ -183,8 +165,8 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 			$is_cropped      = empty( $size_info[ 'crop' ] ) ? false : true;
 			$og_image_url    = SucomUtil::get_mt_media_url( $og_image );
 
-			if ( ( $attr_name == 'src' && $is_cropped && ( $is_sufficient_w && $is_sufficient_h ) ) ||
-				( $attr_name == 'src' && ! $is_cropped && ( $is_sufficient_w || $is_sufficient_h ) ) ||
+			if ( ( $attr_name == 'src' && ! $is_cropped && ( $is_sufficient_w || $is_sufficient_h ) ) ||
+				( $attr_name == 'src' && $is_cropped && ( $is_sufficient_w && $is_sufficient_h ) ) ||
 					$attr_name == 'data-share-src' ) {
 
 				if ( $this->p->debug->enabled ) {
@@ -192,7 +174,7 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 						$og_image[ 'og:image:height' ] . ') are sufficient' );
 				}
 
-				return true;	// Image dimensions are good.
+				return true;	// Image dimensions are sufficient.
 			}
 
 			if ( $this->p->debug->enabled ) {
@@ -206,7 +188,8 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 
 				$notice_key   = 'content_' . $og_image_url . '_' . $size_name . '_rejected';
 				$size_label   = $this->p->util->get_image_size_label( $size_name );
-				$req_img_dims = '<b>' . $size_label . '</b> (' . $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . ( $is_cropped ? ' ' . __( 'cropped', 'wpsso' ) : '' ) . ')';
+				$req_img_dims = '<b>' . $size_label . '</b> (' . $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] .
+					( $is_cropped ? ' ' . __( 'cropped', 'wpsso' ) : '' ) . ')';
 
 				$error_msg    = __( 'Image %1$s in content ignored &mdash; the image width / height is too small for the required %2$s image dimensions.', 'wpsso' );
 
@@ -227,12 +210,13 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 
 		public function show_post_upload_ui_message() {
 
+			$msg_transl = __( '<strong>Suggested minimum dimension for uploaded images</strong> (to satisfy all %1$d image sizes): %2$d by %3$d pixels.', 'wpsso' );
+
 			list( $min_width, $min_height, $size_count ) = SucomUtilWP::get_minimum_image_wh();
 
 			echo '<p class="minimum-dimensions">';
 
-			echo sprintf( __( '<strong>Suggested minimum dimension for uploaded images</strong> (to satisfy all %1$d image sizes): %2$d by %3$d pixels.',
-				'wpsso' ), $size_count, $min_width, $min_height );
+			echo sprintf( $msg_transl, $size_count, $min_width, $min_height );
 
 			echo '</p>' . "\n";
 
@@ -245,12 +229,12 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 		/**
 		 * Note that $size_name can be a string or an array().
 		 */
-		public function editor_max_image_size( $max_sizes = array(), $size_name = '', $context = '' ) {
+		public function maybe_adjust_max_image_size( $max_sizes = array(), $size_name = '', $context = '' ) {
 
 			/**
 			 * Allow only our sizes to exceed the editor width.
 			 */
-			if ( is_string( $size_name ) && strpos( $size_name, $this->p->lca . '-' ) === 0 ) {
+			if ( is_string( $size_name ) && 0 === strpos( $size_name, $this->p->lca . '-' ) ) {
 				$max_sizes = array( 0, 0 );
 			}
 
@@ -277,7 +261,7 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 			 */
 			$img_info = (array) self::get_image_src_args();
 
-			if ( empty( $img_info[ 'size_name' ] ) || strpos( $img_info[ 'size_name' ], $this->p->lca . '-' ) !== 0 ) {
+			if ( empty( $img_info[ 'size_name' ] ) || 0 !== strpos( $img_info[ 'size_name' ], $this->p->lca . '-' ) ) {
 				return $file_path;
 			}
 
@@ -299,6 +283,23 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 			}
 
 			return $file_path;
+		}
+
+		/**
+		 * Hooked to the 'wp_image_resize_identical_dimensions' filter added in WP v5.3.
+		 *
+		 * The 'wp_image_resize_identical_dimensions' filter always returns for resized dimensions that are close to the
+		 * original image dimensions.
+		 */
+		public function maybe_resize_fuzzy_dimensions( $bool ) {
+
+			$img_info = (array) self::get_image_src_args();
+
+			if ( empty( $img_info[ 'size_name' ] ) || 0 !== strpos( $img_info[ 'size_name' ], $this->p->lca . '-' ) ) {
+				return $bool;
+			}
+
+			return true;
 		}
 
 		/**
@@ -641,12 +642,13 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				return self::reset_image_src_args();
 			}
 
-			$img_url    = '';
-			$img_width  = WPSSO_UNDEF;
-			$img_height = WPSSO_UNDEF;
-			$is_cropped = empty( $size_info[ 'crop' ] ) ? false : true;
+			$img_url       = '';
+			$img_width     = WPSSO_UNDEF;
+			$img_height    = WPSSO_UNDEF;
+			$is_cropped    = empty( $size_info[ 'crop' ] ) ? false : true;
+			$use_full_size = false;
 
-			if ( $this->p->avail[ 'media' ][ 'ngg' ] && strpos( $pid, 'ngg-' ) === 0 ) {
+			if ( $this->p->avail[ 'media' ][ 'ngg' ] && 0 === strpos( $pid, 'ngg-' ) ) {
 
 				if ( ! empty( $this->p->m[ 'media' ][ 'ngg' ] ) ) {
 
@@ -656,16 +658,6 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 
 					if ( $this->p->debug->enabled ) {
 						$this->p->debug->log( 'ngg module is not available: image id ' . $attr_value . ' ignored' );
-					}
-
-					/**
-					 * Add notice only if the admin notices have not already been shown.
-					 */
-					if ( $this->p->notice->is_admin_pre_notices() ) {
-
-						$error_msg = __( 'The NGG integration module provided by %1$s is required to read information for image ID %2$s.', 'wpsso' );
-
-						$this->p->notice->err( sprintf( $error_msg, $this->p->cf[ 'plugin' ][ $this->p->lca ][ 'short' ] . ' Pro', $pid ) );
 					}
 
 					return self::reset_image_src_args();
@@ -680,13 +672,12 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				return self::reset_image_src_args();
 			}
 
-			$use_full = false;
 			$img_meta = wp_get_attachment_metadata( $pid );
 			$img_alt  = get_post_meta( $pid, '_wp_attachment_image_alt', true );
 
 			/**
-			 * Check to see if the full size image width/height matches the resize width/height we require. If so, then
-			 * use the full size image instead.
+			 * Check to see if the full size image width / height matches the resize width / height we require. If so,
+			 * then use the full size image instead.
 			 */
 			if ( isset( $img_meta[ 'file' ] ) && isset( $img_meta[ 'width' ] ) && isset( $img_meta[ 'height' ] ) ) {
 
@@ -698,26 +689,36 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				if ( $img_meta[ 'width' ] === $size_info[ 'width' ] && $img_meta[ 'height' ] === $size_info[ 'height' ] ) {
 
 					if ( $this->p->debug->enabled ) {
-						$this->p->debug->log( 'using full size image - dimensions same as ' . $size_name .
-							' (' . $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . ')' );
+						$this->p->debug->log( 'using full size image - dimensions identical to ' . $size_name .
+							' (' . $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . ' ' . 
+								( $size_info[ 'crop' ] ? 'cropped' : 'uncropped' ) . ')' );
+
 					}
 
-					$use_full = true;
+					$use_full_size = true;
+
+				} elseif ( ! $is_cropped ) {
+
+					if ( $img_meta[ 'width' ] === $size_info[ 'width' ] || $img_meta[ 'height' ] === $size_info[ 'height' ] ) {
+
+						if ( $this->p->debug->enabled ) {
+							$this->p->debug->log( 'using full size image - dimension matches ' . $size_name .
+								' (' . $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . ' ' . 
+									( $size_info[ 'crop' ] ? 'cropped' : 'uncropped' ) . ')' );
+						}
+
+						$use_full_size = true;
+					}
 				}
 
 			} else {
 
-				$media_lib = __( 'Media Library', 'wpsso' );
-
-				$wp_func_url = __( 'https://developer.wordpress.org/reference/functions/wp_get_attachment_metadata/', 'wpsso' );
-
-				$wp_func_name = 'wp_get_attachment_metadata()';
-
-				$regen_msg = sprintf( __( 'You may consider regenerating the thumbnails of all WordPress Media Library images using one of <a href="%s">several available plugins from WordPress.org</a>.', 'wpsso' ), 'https://wordpress.org/plugins/search/regenerate+thumbnails/' );
-
+				$media_lib    = __( 'Media Library', 'wpsso' );
 				$img_edit_url = get_edit_post_link( $pid );
-
-				$img_title = get_the_title( $pid );
+				$img_title    = get_the_title( $pid );
+				$wp_func_url  = __( 'https://developer.wordpress.org/reference/functions/wp_get_attachment_metadata/', 'wpsso' );
+				$wp_func_name = 'wp_get_attachment_metadata()';
+				$regen_msg    = sprintf( __( 'You may consider regenerating the thumbnails of all WordPress Media Library images using one of <a href="%s">several available plugins from WordPress.org</a>.', 'wpsso' ), 'https://wordpress.org/plugins/search/regenerate+thumbnails/' );
 
 				if ( isset( $img_meta[ 'file' ] ) ) {
 
@@ -776,160 +777,177 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 			/**
 			 * Only resize our own custom image sizes.
 			 */
-			if ( ! $use_full && 0 === strpos( $size_name, $this->p->lca . '-' ) ) {
+			if ( 0 === strpos( $size_name, $this->p->lca . '-' ) ) {
 
-				$is_accurate_filename = false;
-				$is_accurate_width    = false;
-				$is_accurate_height   = false;
+				if ( ! $use_full_size ) {
 
-				/**
-				 * Make sure the metadata contains complete image information for the requested size.
-				 */
-				if ( ! empty( $img_meta[ 'sizes' ][ $size_name ] ) &&
-					! empty( $img_meta[ 'sizes' ][ $size_name ][ 'file' ] ) &&
-					! empty( $img_meta[ 'sizes' ][ $size_name ][ 'width' ] )  &&
-					! empty( $img_meta[ 'sizes' ][ $size_name ][ 'height' ] ) ) {
+					$is_accurate_filename = false;
+					$is_accurate_width    = false;
+					$is_accurate_height   = false;
 
 					/**
-					 * By default, WordPress adds only the resolution of the resized image to the file name. If
-					 * the image size is ours, then add crop information to the file name as well. This allows
-					 * for different cropped versions for the same image resolution.
+					 * Make sure the metadata contains complete image information for the requested size.
 					 */
-					$img_filename = $this->get_cropped_image_filename( $img_meta[ 'sizes' ][ $size_name ][ 'file' ], $size_info );
-
-					$is_accurate_filename = $img_filename === $img_meta[ 'sizes' ][ $size_name ][ 'file' ] ? true : false;
-					$is_accurate_width    = $size_info[ 'width' ] === $img_meta[ 'sizes' ][ $size_name ][ 'width' ] ? true : false;
-					$is_accurate_height   = $size_info[ 'height' ] === $img_meta[ 'sizes' ][ $size_name ][ 'height' ] ? true : false;
-
-					/**
-					 * If not cropped, make sure the resized image respects the original aspect ratio.
-					 */
-					if ( $is_accurate_width && $is_accurate_height && empty( $is_cropped ) &&
-						isset( $img_meta[ 'width' ] ) && isset( $img_meta[ 'height' ] ) ) {
-
-						if ( $img_meta[ 'width' ] > $img_meta[ 'height' ] ) {
-							$ratio = $img_meta[ 'width' ] / $size_info[ 'width' ];
-							$check = 'height';
-						} else {
-							$ratio = $img_meta[ 'height' ] / $size_info[ 'height' ];
-							$check = 'width';
-						}
-
-						$should_be = (int) round( $img_meta[ $check ] / $ratio );
+					if ( ! empty( $img_meta[ 'sizes' ][ $size_name ] ) &&
+						! empty( $img_meta[ 'sizes' ][ $size_name ][ 'file' ] ) &&
+						! empty( $img_meta[ 'sizes' ][ $size_name ][ 'width' ] )  &&
+						! empty( $img_meta[ 'sizes' ][ $size_name ][ 'height' ] ) ) {
 
 						/**
-						 * Allow for a +/- one pixel difference.
+						 * By default, WordPress adds only the resolution of the resized image to the file
+						 * name. If the image size is ours, then add crop information to the file name as
+						 * well. This allows for different cropped versions for the same image resolution.
 						 */
-						if ( $img_meta[ 'sizes' ][ $size_name ][ $check ] < ( $should_be - 1 ) ||
-							$img_meta[ 'sizes' ][ $size_name ][ $check ] > ( $should_be + 1 ) ) {
+						$img_filename = $this->get_cropped_image_filename( $img_meta[ 'sizes' ][ $size_name ][ 'file' ], $size_info );
 
-							if ( $this->p->debug->enabled ) {
-								$this->p->debug->log( $size_name . ' image metadata not accurate' );
+						$is_accurate_filename = $img_filename === $img_meta[ 'sizes' ][ $size_name ][ 'file' ] ? true : false;
+						$is_accurate_width    = $size_info[ 'width' ] === $img_meta[ 'sizes' ][ $size_name ][ 'width' ] ? true : false;
+						$is_accurate_height   = $size_info[ 'height' ] === $img_meta[ 'sizes' ][ $size_name ][ 'height' ] ? true : false;
+
+						/**
+						 * If not cropped, make sure the resized image respects the original aspect ratio.
+						 */
+						if ( ! $is_cropped ) {
+
+							if ( $is_accurate_width && $is_accurate_height && 
+								isset( $img_meta[ 'width' ] ) && isset( $img_meta[ 'height' ] ) ) {
+
+								if ( $img_meta[ 'width' ] > $img_meta[ 'height' ] ) {
+									$ratio = $img_meta[ 'width' ] / $size_info[ 'width' ];
+									$check = 'height';
+								} else {
+									$ratio = $img_meta[ 'height' ] / $size_info[ 'height' ];
+									$check = 'width';
+								}
+
+								$should_be = (int) round( $img_meta[ $check ] / $ratio );
+
+								/**
+								 * Allow for a +/- one pixel difference.
+								 */
+								if ( $img_meta[ 'sizes' ][ $size_name ][ $check ] < ( $should_be - 1 ) ||
+									$img_meta[ 'sizes' ][ $size_name ][ $check ] > ( $should_be + 1 ) ) {
+
+									if ( $this->p->debug->enabled ) {
+										$this->p->debug->log( $size_name . ' image metadata not accurate' );
+									}
+
+									$is_accurate_width  = false;
+									$is_accurate_height = false;
+								}
+							}
+						}
+					}
+
+					/**
+					 * Depending on cropping, one or both sides of the image must be accurate. If not, attempt
+					 * to create a resized image by calling image_make_intermediate_size().
+					 */
+					if ( ! $is_accurate_filename ||
+						( ! $is_cropped && ( ! $is_accurate_width && ! $is_accurate_height ) ) ||
+							( $is_cropped && ( ! $is_accurate_width || ! $is_accurate_height ) ) ) {
+
+						if ( $this->can_make_intermediate_size( $img_meta, $size_info ) ) {
+
+							$media_lib    = __( 'Media Library', 'wpsso' );
+							$wp_func_url  = __( 'https://developer.wordpress.org/reference/functions/image_make_intermediate_size/', 'wpsso' );
+							$wp_func_name = 'image_make_intermediate_size()';
+							$fullsizepath = get_attached_file( $pid );
+
+							$mtime_start = microtime( true );
+
+							/**
+							 * image_make_intermediate_size() resizes an image to make a thumbnail or
+							 * intermediate size.
+							 *
+							 * Returns (array|false) metadata array on success, false if no image was created.
+							 */
+							$resized_meta = image_make_intermediate_size( $fullsizepath,
+								$size_info[ 'width' ], $size_info[ 'height' ], $size_info[ 'crop' ] );
+
+							$mtime_total = microtime( true ) - $mtime_start;
+
+							$mtime_max = SucomUtil::get_const( 'WPSSO_IMAGE_MAKE_SIZE_MAX_TIME', 1.00 );
+
+							/**
+							 * Issue warning for slow image_make_intermediate_size() request.
+							 */
+							if ( $mtime_max > 0 && $mtime_total > $mtime_max ) {
+
+								$info = $this->p->cf[ 'plugin' ][ $this->p->lca ];
+
+								if ( $this->p->debug->enabled ) {
+									$this->p->debug->log( sprintf( 'slow WordPress function detected - %1$s took %2$0.3f secs to make size "%3$s" from %4$s', $wp_func_name, $mtime_total, $size_name, $fullsizepath ) );
+								}
 							}
 
-							$is_accurate_width  = false;
-							$is_accurate_height = false;
+							if ( $this->p->debug->enabled ) {
+								$this->p->debug->log( 'WordPress ' . $wp_func_name . ' reported ' .
+									( false === $resized_meta ? 'failure' : 'success' ) );
+							}
+
+							/**
+							 * Returns (array|false) metadata array on success, false if no image was created.
+							 */
+							if ( false === $resized_meta ) {
+
+								$notice_key = 'image-make-intermediate-size-' . $fullsizepath . '-failure';
+
+								/**
+								 * Add notice only if the admin notices have not already been shown.
+								 */
+								if ( $this->p->notice->is_admin_pre_notices() ) {
+
+									$size_msg = $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . 'px ' . 
+										( $size_info[ 'crop' ] ? _x( 'cropped', 'option value', 'wpsso' ) :
+											_x( 'uncropped', 'option value', 'wpsso' ) );
+
+									$error_msg = sprintf( __( 'Possible %1$s corruption detected &mdash; the <a href="%2$s">WordPress %3$s function</a> failed to create the "%4$s" image size (%5$s) from %6$s.', 'wpsso' ), $media_lib, $wp_func_url, '<code>' . $wp_func_name . '</code>', $size_name, $size_msg, $fullsizepath );
+
+									$regen_msg = sprintf( __( 'You may consider regenerating the thumbnails of all WordPress Media Library images using one of <a href="%s">several available plugins from WordPress.org</a>.', 'wpsso' ), 'https://wordpress.org/plugins/search/regenerate+thumbnails/' );
+
+									$this->p->notice->err( $error_msg . ' ' . $regen_msg, null, $notice_key, $dismiss_time = WEEK_IN_SECONDS );
+								}
+
+								$use_full_size = true;
+
+							} else {
+
+								$img_meta[ 'sizes' ][ $size_name ] = $resized_meta;
+
+								wp_update_attachment_metadata( $pid, $img_meta );
+							}
+
+						} else {
+
+							if ( $this->p->debug->enabled ) {
+								$this->p->debug->log( 'skipped image_make_intermediate_size()' );
+							}
+
+							if ( isset( $img_meta[ 'file' ] ) && isset( $img_meta[ 'width' ] ) && isset( $img_meta[ 'height' ] ) ) {
+
+								if ( $this->p->debug->enabled ) {
+									$this->p->debug->log( 'falling back to full size image ' . $img_meta[ 'file' ] .
+										' (' . $img_meta[ 'width' ] . 'x' . $img_meta[ 'height' ] . ')' );
+								}
+
+								$use_full_size = true;
+							}
 						}
 					}
 				}
 
-				/**
-				 * Depending on cropping, one or both sides of the image must be accurate. If not, attempt to
-				 * create a resized image by calling image_make_intermediate_size().
-				 */
-				if ( ! $is_accurate_filename ||
-					( ! $is_cropped && ( ! $is_accurate_width && ! $is_accurate_height ) ) ||
-					( $is_cropped && ( ! $is_accurate_width || ! $is_accurate_height ) ) ) {
+				if ( $use_full_size ) {
 
-					if ( $this->can_make_intermediate_size( $img_meta, $size_info ) ) {
-
-						$fullsizepath = get_attached_file( $pid );
-
-						$mtime_start = microtime( true );
-
-						$resized_meta = image_make_intermediate_size( $fullsizepath,
-							$size_info[ 'width' ], $size_info[ 'height' ], $size_info[ 'crop' ] );
-
-						$mtime_total = microtime( true ) - $mtime_start;
-
-						$mtime_max = SucomUtil::get_const( 'WPSSO_IMAGE_MAKE_SIZE_MAX_TIME', 1.00 );
-
-						/**
-						 * Issue warning for slow getimagesize() request.
-						 */
-						if ( $mtime_max > 0 && $mtime_total > $mtime_max ) {
-
-							$info = $this->p->cf[ 'plugin' ][ $this->p->lca ];
-
-							if ( $this->p->debug->enabled ) {
-								$this->p->debug->log( sprintf( 'slow WordPress function detected - image_make_intermediate_size() took %1$0.3f secs to make size "%2$s" from %3$s', $mtime_total, $size_name, $fullsizepath ) );
-							}
-						}
+					if ( isset( $img_meta[ 'sizes' ][ $size_name ] ) ) {
 
 						if ( $this->p->debug->enabled ) {
-							$this->p->debug->log( 'WordPress image_make_intermediate_size() reported ' . 
-								( false === $resized_meta ? 'failure' : 'success' ) );
+							$this->p->debug->log( 'using full size image - removing ' . $size_name . ' image metadata' );
 						}
 
-						if ( false === $resized_meta ) {
+						unset ( $img_meta[ 'sizes' ][ $size_name ] );
 
-							$notice_key = 'image-make-intermediate-size-' . $fullsizepath . '-failure';
-
-							/**
-							 * Add notice only if the admin notices have not already been shown.
-							 */
-							if ( $this->p->notice->is_admin_pre_notices() ) {
-
-								$media_lib = __( 'Media Library', 'wpsso' );
-
-								$wp_func_url = __( 'https://developer.wordpress.org/reference/functions/image_make_intermediate_size/', 'wpsso' );
-
-								$wp_func_name = 'image_make_intermediate_size()';
-
-								$size_msg = $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . 'px ' . 
-									( $size_info[ 'crop' ] ? _x( 'cropped', 'option value', 'wpsso' ) :
-										_x( 'uncropped', 'option value', 'wpsso' ) );
-
-								$error_msg = sprintf( __( 'Possible %1$s corruption detected &mdash; the <a href="%2$s">WordPress %3$s function</a> reported an error (returned false) when trying to create the "%4$s" image size (%5$s) from %6$s.', 'wpsso' ), $media_lib, $wp_func_url, '<code>' . $wp_func_name . '</code>', $size_name, $size_msg, $fullsizepath );
-
-								$regen_msg = sprintf( __( 'You may consider regenerating the thumbnails of all WordPress Media Library images using one of <a href="%s">several available plugins from WordPress.org</a>.', 'wpsso' ), 'https://wordpress.org/plugins/search/regenerate+thumbnails/' );
-
-								$this->p->notice->err( $error_msg . ' ' . $regen_msg, null, $notice_key, $dismiss_time = WEEK_IN_SECONDS );
-							}
-
-						} else {
-
-							$img_meta[ 'sizes' ][ $size_name ] = $resized_meta;
-
-							wp_update_attachment_metadata( $pid, $img_meta );
-						}
-
-					} else {
-
-						if ( $this->p->debug->enabled ) {
-							$this->p->debug->log( 'skipped image_make_intermediate_size()' );
-						}
-
-						if ( isset( $img_meta[ 'sizes' ][ $size_name ] ) ) {
-
-							if ( $this->p->debug->enabled ) {
-								$this->p->debug->log( 'removing ' . $size_name . ' image metadata' );
-							}
-
-							unset ( $img_meta[ 'sizes' ][ $size_name ] );
-
-							wp_update_attachment_metadata( $pid, $img_meta );
-						}
-
-						if ( isset( $img_meta[ 'file' ] ) && isset( $img_meta[ 'width' ] ) && isset( $img_meta[ 'height' ] ) ) {
-
-							if ( $this->p->debug->enabled ) {
-								$this->p->debug->log( 'falling back to full size image ' . $img_meta[ 'file' ] .
-									' (' . $img_meta[ 'width' ] . 'x' . $img_meta[ 'height' ] . ')' );
-							}
-
-							$use_full = true;
-						}
+						wp_update_attachment_metadata( $pid, $img_meta );
 					}
 				}
 			}
@@ -938,16 +956,16 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 			 * Some image_downsize hooks may return only 3 elements, so use array_pad() to sanitize the returned array.
 			 */
 			list( $img_url, $img_width, $img_height, $img_intermediate ) = apply_filters( $this->p->lca . '_image_downsize',
-				array_pad( image_downsize( $pid, ( true === $use_full ? 'full' : $size_name ) ), 4, null ), $pid, $size_name );
+				array_pad( image_downsize( $pid, ( $use_full_size ? 'full' : $size_name ) ), 4, null ), $pid, $size_name );
 
 			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'image_downsize returned ' . $img_url . ' (' . $img_width . 'x' . $img_height . ')' );
+				$this->p->debug->log( 'image_downsize for ' . $size_name . ' returned ' . $img_url . ' (' . $img_width . 'x' . $img_height . ')' );
 			}
 
 			if ( empty( $img_url ) ) {
 
 				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'exiting early: image_downsize returned an empty url' );
+					$this->p->debug->log( 'exiting early: image_downsize for ' . $size_name . ' returned an empty url' );
 				}
 
 				return self::reset_image_src_args();
@@ -994,6 +1012,7 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				$new_suffix .= '-cropped';
 
 				if ( is_array( $size_info[ 'crop' ] ) ) {
+
 					if ( $size_info[ 'crop' ] !== array( 'center', 'center' ) ) {
 						$new_suffix .= '-' . implode( '-', $size_info[ 'crop' ] );
 					}
@@ -1920,27 +1939,27 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				case $this->p->lca . '-opengraph':
 
 					$markup_name = _x( 'Facebook Open Graph', 'option label', 'wpsso' );
-					$min_width   = $cf_min[ 'og_img_width' ];	// Default is 200.
-					$min_height  = $cf_min[ 'og_img_height' ];	// Default is 200.
-					$max_ratio   = $cf_max[ 'og_img_ratio' ];	// Default is 3.000.
+					$min_width   = $cf_min[ 'og_img_width' ];			// Default is 200.
+					$min_height  = $cf_min[ 'og_img_height' ];			// Default is 200.
+					$max_ratio   = $cf_max[ 'og_img_ratio' ];			// Default is 3.000.
 
 					break;
 
 				case $this->p->lca . '-schema':
 
 					$markup_name = _x( 'Google Schema', 'option label', 'wpsso' );
-					$min_width   = $cf_min[ 'schema_img_width' ];	// Default is 400.
-					$min_height  = $cf_min[ 'schema_img_height' ];	// Default is 160.
-					$max_ratio   = $cf_max[ 'schema_img_ratio' ];	// Default is 2.500.
+					$min_width   = $cf_min[ 'schema_img_width' ];			// Default is 400.
+					$min_height  = $cf_min[ 'schema_img_height' ];			// Default is 160.
+					$max_ratio   = $cf_max[ 'schema_img_ratio' ];			// Default is 2.500.
 
 					break;
 
 				case $this->p->lca . '-schema-article':
 
 					$markup_name = _x( 'Google Schema Article', 'option label', 'wpsso' );
-					$min_width   = $cf_min[ 'schema_article_img_width' ];	// Default is 696.
-					$min_height  = $cf_min[ 'schema_article_img_height' ];	// Default is 279.
-					$max_ratio   = $cf_max[ 'schema_article_img_ratio' ];	// Default is 2.500.
+					$min_width   = $cf_min[ 'schema_article_img_width' ];		// Default is 696.
+					$min_height  = $cf_min[ 'schema_article_img_height' ];		// Default is 279.
+					$max_ratio   = $cf_max[ 'schema_article_img_ratio' ];		// Default is 2.500.
 
 					break;
 
@@ -2091,7 +2110,7 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 				$this->p->debug->log( 'full size image of ' . $full_width . 'x' . $full_height . ( $upscale_multiplier !== 1 ?
 					' (' . $upscale_full_width . 'x' . $upscale_full_height . ' upscaled by ' . $upscale_multiplier . ')' : '' ) . 
 					( $ret ? ' sufficient' : ' too small' ) . ' to create size ' . $size_info[ 'width' ] . 'x' . $size_info[ 'height' ] . 
-					( $is_cropped ? ' cropped' : '' ) );
+						( $is_cropped ? ' cropped' : '' ) );
 			}
 
 			return $ret;

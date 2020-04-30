@@ -183,19 +183,18 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 			foreach ( $this->p->cf[ 'plugin' ] as $ext => $info ) {
 
-				$ext_pdir    = $this->p->check->pp( $ext, $li = false );
-				$ext_auth_id = $this->p->check->get_ext_auth_id( $ext );
-				$ext_pp      = $ext_auth_id && $this->p->check->pp( $ext, $li = true, WPSSO_UNDEF ) === WPSSO_UNDEF ? true : false;
-				$ext_stat    = ( $ext_pp ? 'L' : ( $ext_pdir ? 'U' : 'S' ) ) . ( $ext_auth_id ? '*' : '' );
+				$ext_pdir      = $this->p->check->pp( $ext, $li = false );
+				$ext_auth_id   = $this->p->check->get_ext_auth_id( $ext );
+				$ext_pp        = $ext_auth_id && $this->p->check->pp( $ext, $li = true, WPSSO_UNDEF ) === WPSSO_UNDEF ? true : false;
+				$ext_stat      = ( $ext_pp ? 'L' : ( $ext_pdir ? 'U' : 'S' ) ) . ( $ext_auth_id ? '*' : '' );
+				$dist_pro_name = _x( $this->p->cf[ 'dist' ][ 'pro' ], 'distribution name', 'wpsso' );
+				$dist_std_name = _x( $this->p->cf[ 'dist' ][ 'std' ], 'distribution name', 'wpsso' );
 
 				self::$pkg[ $ext ][ 'pdir' ] = $ext_pdir;
 				self::$pkg[ $ext ][ 'pp' ]   = $ext_pp;
-				self::$pkg[ $ext ][ 'dist' ] = $ext_pp ?
-					_x( $this->p->cf[ 'dist' ][ 'pro' ], 'distribution name', 'wpsso' ) :
-					_x( $this->p->cf[ 'dist' ][ 'std' ], 'distribution name', 'wpsso' );
-
-				self::$pkg[ $ext ][ 'short_pro' ] = $info[ 'short' ] . ' ' . _x( $this->p->cf[ 'dist' ][ 'pro' ], 'distribution name', 'wpsso' );
-				self::$pkg[ $ext ][ 'short_std' ] = $info[ 'short' ] . ' ' . _x( $this->p->cf[ 'dist' ][ 'std' ], 'distribution name', 'wpsso' );
+				self::$pkg[ $ext ][ 'dist' ] = $ext_pp ? $dist_pro_name : $dist_std_name;
+				self::$pkg[ $ext ][ 'short_pro' ] = $info[ 'short' ] . ' ' . $dist_pro_name;
+				self::$pkg[ $ext ][ 'short_std' ] = $info[ 'short' ] . ' ' . $dist_std_name;
 				self::$pkg[ $ext ][ 'short' ]     = $info[ 'short' ] . ' ' . self::$pkg[ $ext ][ 'dist' ];
 				self::$pkg[ $ext ][ 'name' ]      = SucomUtil::get_dist_name( $info[ 'name' ], self::$pkg[ $ext ][ 'dist' ] );
 				self::$pkg[ $ext ][ 'gen' ]       = $info[ 'short' ] . ( isset( $info[ 'version' ] ) ? ' ' . $info[ 'version' ] . '/' . $ext_stat : '' );
@@ -289,7 +288,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 				}
 			}
 
-			ksort( $sorted_menu );
+			ksort( $sorted_menu,  SORT_FLAG_CASE | SORT_NATURAL );
 
 			foreach ( array_merge( $unsorted_menu, $sorted_menu ) as $key => $arg ) {
 
@@ -364,7 +363,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 					}
 				}
 
-				ksort( $sorted_menu );
+				ksort( $sorted_menu, SORT_FLAG_CASE | SORT_NATURAL );
 
 				foreach ( $sorted_menu as $key => $arg ) {
 
@@ -452,7 +451,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			$cap_name = isset( $this->p->cf[ 'wp' ][ 'admin' ][ $this->menu_lib ][ 'cap' ] ) ?	// Just in case.
 				$this->p->cf[ 'wp' ][ 'admin' ][ $this->menu_lib ][ 'cap' ] : 'manage_options';
 
-			$icon_url = null;	// An icon is provided by WpssoStyle::add_admin_page_style().
+			$icon_url = 'none';	// An icon is provided by WpssoStyle::add_admin_page_style().
 
 			$function = array( $this, 'show_setting_page' );
 
@@ -2616,8 +2615,10 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			$se_func = 'get_select';
 
 			if ( ! self::$pkg[ $this->p->lca ][ 'pp' ] ) {
+
 				$td_attr = ' class="blank"';
 				$se_func = 'get_no_select';
+
 				$table_rows[] = '<td colspan="2">' . $this->p->msgs->pro_feature( 'wpsso' ) . '</td>';
 			}
 
@@ -2626,7 +2627,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			foreach ( array( 
 				'home_page'    => _x( 'Type for Page Homepage', 'option label', 'wpsso' ),
 				'home_posts'   => _x( 'Type for Posts Homepage', 'option label', 'wpsso' ),
-				'user_page'    => _x( 'Type for User / Author', 'option label', 'wpsso' ),
+				'user_page'    => _x( 'Type for User Profile', 'option label', 'wpsso' ),
 				'search_page'  => _x( 'Type for Search Results', 'option label', 'wpsso' ),
 				'archive_page' => _x( 'Type for Other Archive', 'option label', 'wpsso' ),
 			) as $type_name => $th_label ) {
@@ -2639,7 +2640,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			}
 
 			/**
-			 * Type by Post Type.
+			 * Open Graph Type by Post Type.
 			 */
 			$type_select = '';
 			$type_keys   = array();
@@ -2649,10 +2650,10 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 				$type_keys[] = $opt_key = 'og_type_for_' . $obj->name;
 
-				$type_label = $obj->label . ' [' . $obj->name . ']';
+				$obj_label = SucomUtilWP::get_object_label( $obj );
 
 				$type_select .= '<p>' . $form->$se_func( $opt_key, $og_types, $css_class = 'og_type' ) . ' ' .
-					sprintf( _x( 'for %s', 'option comment', 'wpsso' ), $type_label ) . '</p>' . "\n";
+					sprintf( _x( 'for %s', 'option comment', 'wpsso' ), $obj_label ) . '</p>' . "\n";
 			}
 
 			$type_keys[] = $opt_key = 'og_type_for_post_archive';
@@ -2670,7 +2671,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			unset( $type_select, $type_keys );	// Just in case.
 
 			/**
-			 * Type by Taxonomy.
+			 * Open Graph Type by Taxonomy.
 			 */
 			$type_select = '';
 			$type_keys   = array();
@@ -2680,10 +2681,10 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 				$type_keys[] = $opt_key = 'og_type_for_tax_' . $obj->name;
 
-				$type_label = $obj->label . ' [' . $obj->name . ']';
+				$obj_label = SucomUtilWP::get_object_label( $obj );
 
 				$type_select .= '<p>' . $form->$se_func( $opt_key, $og_types, $css_class = 'og_type' ) . ' ' .
-					sprintf( _x( 'for %s', 'option comment', 'wpsso' ), $type_label ) . '</p>' . "\n";
+					sprintf( _x( 'for %s', 'option comment', 'wpsso' ), $obj_label ) . '</p>' . "\n";
 			}
 
 			$tr_key   = 'og_type_for_ttn';
@@ -2698,31 +2699,12 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 		public function add_schema_knowledge_graph_table_rows( array &$table_rows, $form ) {
 
-			$website_info = __( 'WebSite Information', 'wpsso' );
-
-			$org_social = '<a href="https://developers.google.com/search/docs/guides/enhance-site#add-your-sites-name-logo-and-social-links">' .
-				__( 'Organization Social Profile', 'wpsso' ) . '</a>';
-
-			$person_social = __( 'Person Social Profile', 'wpsso' );
-
 			$table_rows[ 'schema_knowledge_graph' ] = '' . 
 			$form->get_th_html( _x( 'Knowledge Graph for Home Page', 'option label', 'wpsso' ), '', 'schema_knowledge_graph' ) . 
 			'<td>' .
-			'<p>' .
-				$form->get_checkbox( 'schema_add_home_website' ) . ' ' .
-				// translators: %s is "WebSite Information".
-				sprintf( __( 'Include %s for Google Search', 'wpsso' ), $website_info ) .
-			'</p>' .
-			'<p>' .
-				$form->get_checkbox( 'schema_add_home_organization' ) . ' ' .
-				// translators: %s is "Organization Social Profile".
-				sprintf( __( 'Include %s for a Business Website', 'wpsso' ), $org_social ) .
-			'</p>' .
-			'<p>' .
-				$form->get_checkbox( 'schema_add_home_person' ) . ' ' .
-				// translators: %s is "Person Social Profile".
-				sprintf( __( 'Include %s for a Personal Website', 'wpsso' ), $person_social ) .
-			'</p>' .
+			'<p>' . $form->get_checkbox( 'schema_add_home_website' ) . ' ' . __( 'Include Schema WebSite', 'wpsso' ) . '</p>' .
+			'<p>' . $form->get_checkbox( 'schema_add_home_organization' ) . ' ' . __( 'Include Schema Organization', 'wpsso' ) . '</p>' .
+			'<p>' . $form->get_checkbox( 'schema_add_home_person' ) . ' ' . __( 'Include Schema Person', 'wpsso' ) . '</p>' .
 			'</td>';
 
 			$owner_roles = $this->p->cf[ 'wp' ][ 'roles' ][ 'owner' ];
@@ -2743,17 +2725,15 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 			$json_req_msg = $this->p->msgs->maybe_ext_required( 'wpssojson' );
 
-			$atts_locale = array( 'is_locale' => true );
-
 			$table_rows[ 'schema_logo_url' ] = '' . 
-			$form->get_th_html( '<a href="https://developers.google.com/structured-data/customize/logos">' .
-			_x( 'Organization Logo URL', 'option label', 'wpsso' ) . '</a>', $css_class = '', $css_id = 'schema_logo_url', $atts_locale ) . 
-			'<td>' . $form->get_input( SucomUtil::get_key_locale( 'schema_logo_url', $this->p->options ), $css_class = 'wide is_required' ) . '</td>';
+			$form->get_th_html_locale( '<a href="https://developers.google.com/structured-data/customize/logos">' .
+			_x( 'Organization Logo URL', 'option label', 'wpsso' ) . '</a>', $css_class = '', $css_id = 'schema_logo_url' ) . 
+			'<td>' . $form->get_input_locale( 'schema_logo_url', $css_class = 'wide is_required' ) . '</td>';
 
 			$table_rows[ 'schema_banner_url' ] = '' . 
-			$form->get_th_html( '<a href="https://developers.google.com/search/docs/data-types/article#logo-guidelines">' .
-			_x( 'Organization Banner URL', 'option label', 'wpsso' ) . '</a>', $css_class = '', $css_id = 'schema_banner_url', $atts_locale ) . 
-			'<td>' . $form->get_input( SucomUtil::get_key_locale( 'schema_banner_url', $this->p->options ), $css_class = 'wide is_required' ) . '</td>';
+			$form->get_th_html_locale( '<a href="https://developers.google.com/search/docs/data-types/article#logo-guidelines">' .
+			_x( 'Organization Banner URL', 'option label', 'wpsso' ) . '</a>', $css_class = '', $css_id = 'schema_banner_url' ) . 
+			'<td>' . $form->get_input_locale( 'schema_banner_url', $css_class = 'wide is_required' ) . '</td>';
 
 			$table_rows[ 'seo_author_name' ] = $form->get_tr_hide( 'basic', 'seo_author_name' ) . 
 			$form->get_th_html( _x( 'Author / Person Name Format', 'option label', 'wpsso' ), $css_class = '', $css_id = 'seo_author_name' ) . 
@@ -2816,7 +2796,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			foreach ( array( 
 				'home_page'    => _x( 'Type for Page Homepage', 'option label', 'wpsso' ),
 				'home_posts'   => _x( 'Type for Posts Homepage', 'option label', 'wpsso' ),
-				'user_page'    => _x( 'Type for User / Author', 'option label', 'wpsso' ),
+				'user_page'    => _x( 'Type for User Profile', 'option label', 'wpsso' ),
 				'search_page'  => _x( 'Type for Search Results', 'option label', 'wpsso' ),
 				'archive_page' => _x( 'Type for Other Archive', 'option label', 'wpsso' ),
 			) as $type_name => $th_label ) {
@@ -2838,7 +2818,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			}
 
 			/**
-			 * Type by Post Type.
+			 * Schema Type by Post Type.
 			 */
 			$type_select = '';
 			$type_keys   = array();
@@ -2848,7 +2828,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 				$type_keys[] = $opt_key = 'schema_type_for_' . $obj->name;
 
-				$type_label = $obj->label . ' [' . $obj->name . ']';
+				$obj_label = SucomUtilWP::get_object_label( $obj );
 
 				$type_select .= '<p>' . $form->$se_func( $opt_key, $schema_types, $css_class = 'schema_type', $css_id = '',
 					$is_assoc = true, $is_disabled = false, $selected = false, $event_names = array( 'on_focus_load_json' ),
@@ -2858,9 +2838,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 							'is_transl' => true,	// No label translation required.
 							'is_sorted' => true,	// No label sorting required.
 						)
-					) . ' ' .
-					sprintf( _x( 'for %s', 'option comment', 'wpsso' ), $type_label ) .
-					'</p>' . "\n";
+					) . ' ' . sprintf( _x( 'for %s', 'option comment', 'wpsso' ), $obj_label ) . '</p>' . "\n";
 			}
 
 			$type_keys[] = $opt_key = 'schema_type_for_post_archive';
@@ -2887,7 +2865,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			unset( $type_select, $type_keys );	// Just in case.
 
 			/**
-			 * Type by Taxonomy.
+			 * Schema Type by Taxonomy.
 			 */
 			$type_select = '';
 			$type_keys   = array();
@@ -2897,7 +2875,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 
 				$type_keys[] = $opt_key = 'schema_type_for_tax_' . $obj->name;
 
-				$type_label = $obj->label . ' [' . $obj->name . ']';
+				$obj_label = SucomUtilWP::get_object_label( $obj );
 
 				$type_select .= '<p>' . $form->$se_func( $opt_key, $schema_types, $css_class = 'schema_type', $css_id = '',
 					$is_assoc = true, $is_disabled = false, $selected = false, $event_names = array( 'on_focus_load_json' ),
@@ -2907,9 +2885,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 							'is_transl' => true,	// No label translation required.
 							'is_sorted' => true,	// No label sorting required.
 						)
-					) . ' ' .
-					sprintf( _x( 'for %s', 'option comment', 'wpsso' ), $type_label ) .
-					'</p>' . "\n";
+					) . ' ' . sprintf( _x( 'for %s', 'option comment', 'wpsso' ), $obj_label ) . '</p>' . "\n";
 			}
 
 			$tr_key   = 'schema_type_for_ttn';
@@ -2942,13 +2918,13 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			'<td>' . $form->get_select( 'plugin_show_opts', $this->p->cf[ 'form' ][ 'show_options' ] ) . '</td>' .
 			self::get_option_site_use( 'plugin_show_opts', $form, $network, true );
 
-			$table_rows[ 'plugin_notice_system' ] = '' .
+			$table_rows[ 'plugin_notice_system' ] = $form->get_tr_hide( 'basic', 'plugin_notice_system' ) .
 			$form->get_th_html( _x( 'Notification System', 'option label', 'wpsso' ), '', 'plugin_notice_system' ) .
 			'<td>' . $form->get_select( 'plugin_notice_system', $this->p->cf[ 'form' ][ 'notice_systems' ] ) . '</td>' .
 			self::get_option_site_use( 'plugin_notice_system', $form, $network, true );
 		}
 
-		public function add_advanced_product_attr_table_rows( array &$table_rows, $form ) {
+		public function add_advanced_product_attrs_table_rows( array &$table_rows, $form ) {
 
 			$td_attr = '';
 			$in_func = 'get_input';
@@ -2959,9 +2935,9 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 				$table_rows[] = '<td colspan="2">' . $this->p->msgs->pro_feature( 'wpsso' ) . '</td>';
 			}
 
-			$table_rows[ 'info_product_attr' ] = '<td colspan="2">' . $this->p->msgs->get( 'info-product-attr' ) . '</td>';
+			$table_rows[] = '<td colspan="2">' . $this->p->msgs->get( 'info-product-attrs' ) . '</td>';
 
-			foreach ( $this->p->cf[ 'form' ][ 'product_attr_labels' ] as $opt_key => $opt_label ) {
+			foreach ( $this->p->cf[ 'form' ][ 'attr_labels' ] as $opt_key => $opt_label ) {
 
 				$cmt_transl = self::get_option_unit_comment( $opt_key );
 
@@ -2982,12 +2958,12 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 				$table_rows[] = '<td colspan="2">' . $this->p->msgs->pro_feature( 'wpsso' ) . '</td>';
 			}
 
-			$table_rows[] = '<td colspan="2">' . $this->p->msgs->get( 'info-cf-attr' ) . '</td>';
+			$table_rows[] = '<td colspan="2">' . $this->p->msgs->get( 'info-custom-fields' ) . '</td>';
 
 			/**
 			 * Example config:
 			 *
-			 * 	$cf_md_keys = array(
+			 * 	$cf_md_index = array(
 			 *		'plugin_cf_addl_type_urls'           => 'schema_addl_type_url',
 			 *		'plugin_cf_howto_steps'              => 'schema_howto_step',
 			 *		'plugin_cf_howto_supplies'           => 'schema_howto_supply',
@@ -3014,11 +2990,11 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			 * Hooked by the WpssoProRecipeWpRecipeMaker and WpssoProRecipeWpUltimateRecipe classes
 			 * to clear the 'plugin_cf_recipe_ingredients' and 'plugin_cf_recipe_instructions' values.
 			 */
-			$cf_md_keys = (array) apply_filters( $this->p->lca . '_cf_md_keys', $this->p->cf[ 'opt' ][ 'cf_md_key' ] );
+			$cf_md_index = (array) apply_filters( $this->p->lca . '_cf_md_index', $this->p->cf[ 'opt' ][ 'cf_md_index' ] );
 
 			$opt_labels = array();
 
-			foreach ( $cf_md_keys as $opt_key => $cf_md_key ) {
+			foreach ( $cf_md_index as $opt_key => $md_key ) {
 
 				/**
 				 * Make sure we have a label for the custom field option.
@@ -3036,7 +3012,7 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 				 * If we don't have a meta data key, then clear the custom field name (just in case) and disable
 				 * the option.
 				 */
-				if ( empty( $cf_md_keys[ $opt_key ] ) ) {
+				if ( empty( $cf_md_index[ $opt_key ] ) ) {
 
 					$form->options[ $opt_key ] = '';
 
@@ -3060,7 +3036,9 @@ if ( ! class_exists( 'WpssoAdmin' ) ) {
 			$cmt_transl = '';
 
 			if ( preg_match( '/^.*_([^_]+)_value$/', $opt_key, $unit_match ) ) {
+
 				if ( $unit_text = WpssoSchema::get_data_unit_text( $unit_match[ 1 ] ) ) {
+
 					$cmt_transl = ' ' . sprintf( _x( 'in %s', 'option comment', 'wpsso' ), $unit_text );
 				}
 			}

@@ -23,9 +23,11 @@ get_header(); ?>
 					<h1>Tap Water Blog</h1>
 				</header>
 		<?php 
-
+		$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 		$query = new WP_Query([
 			'post_type' => 'blog-post',
+			'posts_per_page' => 10,
+        	'paged' => $paged
 		]);
 		
 		if ( $query->have_posts() ) : 
@@ -49,23 +51,47 @@ get_header(); ?>
                     </header><!-- .entry-header -->
 
                     <div class="entry-content">
-                    <?php the_content(); ?>
+					<?php 
+					
+					if(get_the_excerpt()){
+						the_excerpt();
+					}else{
+						wp_trim_words(get_the_content(), 60, '...');
+					}
+					
+					?>
+
                     </div>
 
                 </article>
 
             <?php
+
+			
 				
 			endwhile;
-
-			// Previous/next page navigation.
-			the_posts_pagination(
-				array(
-					'prev_text'          => __( 'Previous page', 'twentyfifteen' ),
-					'next_text'          => __( 'Next page', 'twentyfifteen' ),
-					'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentyfifteen' ) . ' </span>',
-				)
-			);
+			?>
+			<div class="paginate">
+				<?php 
+					echo paginate_links( array(
+						'base'         => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
+						'total'        => $query->max_num_pages,
+						'current'      => max( 1, get_query_var( 'paged' ) ),
+						'format'       => '?paged=%#%',
+						'show_all'     => false,
+						'type'         => 'plain',
+						'end_size'     => 2,
+						'mid_size'     => 1,
+						'prev_next'    => true,
+						'prev_text'    => __( '&laquo; Previous' ),
+        				'next_text'    => __( 'Next &raquo;' ),
+						'add_args'     => false,
+						'add_fragment' => '',
+					) );
+				?>
+			</div>
+			<?php
+			
 
 			// If no content, include the "No posts found" template.
 		else :
@@ -73,7 +99,7 @@ get_header(); ?>
 
 		endif;
 		?>
-
+		<?php wp_reset_postdata(); ?>
 		</main><!-- .site-main -->
 	</div><!-- .content-area -->
 

@@ -429,6 +429,8 @@ if ( ! class_exists( 'WpssoAdminHead' ) ) {
 
 				$wp_plugin_link = '<a href="' . $info[ 'url' ][ 'home' ] . '">' . $info[ 'name' ] . '</a>';
 
+				$wp_plugin_link_desc = $wp_plugin_link . ' (' . trim( $info[ 'desc' ], '.' ) . ')';
+
 				/**
 				 * The action buttons.
 				 */
@@ -439,14 +441,14 @@ if ( ! class_exists( 'WpssoAdminHead' ) ) {
 				$rate_plugin_clicked = '<p>' . sprintf( __( 'Thank you for rating the %s plugin!',
 					'wpsso' ), $info[ 'name' ] ) . '</p>';
 
-				$already_rated_clicked = '<p>' . sprintf( __( 'Thank you for encouraging and supporting your plugin developers!',
+				$already_rated_clicked = '<p>' . sprintf( __( 'Thank you for supporting and encouraging your plugin developers!',
 					'wpsso' ), $info[ 'name' ] ) . '</p>';
 
-				$rate_plugin_button = '<div style="display:inline-block;vertical-align:top;margin:0.4em 0.8em 0.6em 0;">' .
+				$rate_plugin_button = '<div class="notice-single-button">' .
 					$form->get_button( $rate_plugin_label, 'button-primary dismiss-on-click', '', $info[ 'url' ][ 'review' ],
 						true, false, array( 'dismiss-msg' => $rate_plugin_clicked ) ) . '</div>';
 
-				$already_rated_button = '<div style="display:inline-block;vertical-align:top;margin:0.4em 0 0.6em 0;">' .
+				$already_rated_button = '<div class="notice-single-button">' .
 					$form->get_button( $already_rated_label, 'button-secondary dismiss-on-click', '', '',
 						false, false, array( 'dismiss-msg' => $already_rated_clicked ) ) . '</div>';
 
@@ -455,35 +457,33 @@ if ( ! class_exists( 'WpssoAdminHead' ) ) {
 				 */
 				$notice_msg = '<div style="display:table-cell;">';
 
-				$notice_msg .= '<p style="margin-right:20px;">' . $this->p->admin->get_ext_img_icon( $ext ) . '</p>';
+				$notice_msg .= '<p style="margin-right:25px;">' . $this->p->admin->get_ext_img_icon( $ext ) . '</p>';
 
 				$notice_msg .= '</div>';
 
 				$notice_msg .= '<div style="display:table-cell;vertical-align:top;">';
 
-				$notice_msg .= '<p class="top">';
+				$notice_msg .= '<p>';
 
 				$notice_msg .= '<b>' . __( 'Fantastic!', 'wpsso' ) . '</b> ';
 
-				$notice_msg .= sprintf( __( 'You\'ve been using %s for a while now, which is awesome!', 'wpsso' ), $wp_plugin_link );
+				$notice_msg .= sprintf( __( 'You\'ve been using %s for a while now, which is awesome!', 'wpsso' ), $wp_plugin_link_desc );
 
 				$notice_msg .= '</p><p>';
 
-				$notice_msg .= sprintf( __( 'We\'ve put many years of time and effort into making %s and its add-ons the best possible.', 'wpsso' ),
-					$this->p->cf[ 'plugin' ][ $this->p->lca ][ 'name' ] ) . ' ';
+				$notice_msg .= sprintf( __( 'We\'ve put many years of time and effort into making %s and its add-ons the best possible.', 'wpsso' ), $this->p->cf[ 'plugin' ][ $this->p->lca ][ 'name' ] ) . ' ';
 
-				$notice_msg .= sprintf( __( 'It\'s great that %s is a valued addition to your site.', 'wpsso' ), $wp_plugin_link );
+				$notice_msg .= sprintf( __( 'It\'s great that %s is a valued addition to your site.', 'wpsso' ), $wp_plugin_link ) . ' ';
 
 				$notice_msg .= '</p><p>';
 
-				$notice_msg .= sprintf( __( 'Now that you\'ve been using %s for a while, could you quickly rate it on WordPress.org?', 'wpsso' ),
-					$wp_plugin_link ) . ' ';
+				$notice_msg .= sprintf( __( 'Now that you\'ve been using %s for a while, could you quickly rate it on WordPress.org?', 'wpsso' ), $wp_plugin_link ) . ' ';
 
 				$notice_msg .= '<b>' . __( 'Great ratings are an excellent way to encourage your plugin developers and support the continued development of your favorite plugins!', 'wpsso' ) . '</b>';
 
 				$notice_msg .= '</p>';
 				
-				$notice_msg .= '<div style="text-align:center;">';
+				$notice_msg .= '<div class="notice-actions">';
 
 				$notice_msg .= $rate_plugin_button . $already_rated_button;
 
@@ -553,11 +553,11 @@ if ( ! class_exists( 'WpssoAdminHead' ) ) {
 				sprintf( __( 'Hopefully you\'ll change your mind in the future and choose to support the continued development of %s.',
 					'wpsso' ), $info[ 'name' ] ) . '</p>';
 
-			$purchase_button  = '<div style="display:inline-block;vertical-align:top;margin:0.4em 0.8em 0.6em 0;">' .
+			$purchase_button  = '<div class="notice-single-button">' .
 				$form->get_button( $purchase_label, 'button-primary dismiss-on-click', '', $purchase_url,
 					true, false, array( 'dismiss-msg' => $purchase_clicked ) ) . '</div>';
 
-			$no_thanks_button  = '<div style="display:inline-block;vertical-align:top;margin:0.4em 0 0.6em 0;">' .
+			$no_thanks_button  = '<div class="notice-single-button">' .
 				$form->get_button( $no_thanks_label, 'button-secondary dismiss-on-click', '', '',
 					false, false, array( 'dismiss-msg' => $no_thanks_clicked ) ) . '</div>';
 
@@ -566,35 +566,31 @@ if ( ! class_exists( 'WpssoAdminHead' ) ) {
 			 */
 			$notice_msg = '<div style="display:table-cell;">';
 
-			$notice_msg .= '<p style="margin-right:20px;">' . $this->p->admin->get_ext_img_icon( $ext ) . '</p>';
+			$notice_msg .= '<p style="margin-right:25px;">' . $this->p->admin->get_ext_img_icon( $ext ) . '</p>';
 
 			$notice_msg .= '</div>';
 
 			$notice_msg .= '<div style="display:table-cell;vertical-align:top;">';
 
-			$notice_msg .= '<p class="top">';
+			$notice_msg .= '<p>';
 
 			$notice_msg .= '<b>' . __( 'Fantastic!', 'wpsso' ) . '</b> ';
 
-			$notice_msg .= sprintf( __( 'You\'ve been using %1$s for more than %2$s now, which is awesome!', 'wpsso' ),
-				$wp_plugin_link, $months_transl );
+			$notice_msg .= sprintf( __( 'You\'ve been using %1$s for more than %2$s now, which is awesome!', 'wpsso' ), $wp_plugin_link, $months_transl );
 
 			$notice_msg .= '</p><p>';
 
-			$notice_msg .= sprintf( __( 'We\'ve put many years of time and effort into making %s and its add-ons the best possible.', 'wpsso' ),
-				$this->p->cf[ 'plugin' ][ $this->p->lca ][ 'name' ] ) . ' ';
+			$notice_msg .= sprintf( __( 'We\'ve put many years of time and effort into making %s and its add-ons the best possible.', 'wpsso' ), $this->p->cf[ 'plugin' ][ $this->p->lca ][ 'name' ] ) . ' ';
 
-			$notice_msg .= sprintf( __( 'I hope you\'ve enjoyed all the new features, improvements and updates over the past %s.', 'wpsso' ),
-				$months_transl );
+			$notice_msg .= sprintf( __( 'I hope you\'ve enjoyed all the new features, improvements and updates over the past %s.', 'wpsso' ), $months_transl );
 
 			$notice_msg .= '</p><p>';
 
-			$notice_msg .= sprintf( __( 'Have you thought about purchasing the %s version? It comes with a lot of great extra features!', 'wpsso' ),
-				_x( $this->p->cf[ 'dist' ][ 'pro' ], 'distribution name', 'wpsso' ) );
+			$notice_msg .= sprintf( __( 'Have you thought about purchasing the %s version? It comes with a lot of great extra features!', 'wpsso' ), _x( $this->p->cf[ 'dist' ][ 'pro' ], 'distribution name', 'wpsso' ) );
 
 			$notice_msg .= '</p>';
 
-			$notice_msg .= '<div style="text-align:center;">';
+			$notice_msg .= '<div class="notice-actions">';
 
 			$notice_msg .= $purchase_button . $no_thanks_button;
 

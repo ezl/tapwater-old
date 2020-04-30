@@ -1,4 +1,4 @@
-=== Schema JSON-LD Markup for Google Rich Results | WPSSO Add-on ===
+=== Schema JSON-LD Markup for Google Rich Results and Structured Data | WPSSO Add-on ===
 Plugin Name: WPSSO Schema JSON-LD Markup
 Plugin Slug: wpsso-schema-json-ld
 Text Domain: wpsso-schema-json-ld
@@ -6,15 +6,15 @@ Domain Path: /languages
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.txt
 Assets URI: https://surniaulula.github.io/wpsso-schema-json-ld/assets/
-Tags: schema.org, rich snippets, structured data, amp, woocommerce, image seo, video seo, news seo, schema, rich results, knowledge graph, rating, review, recipe, event, product
+Tags: schema.org, schema, rich snippets, structured data, rich results, woocommerce, seo, image seo, video seo, local seo, news seo, knowledge graph
 Contributors: jsmoriss
 Requires PHP: 5.6
 Requires At Least: 4.2
-Tested Up To: 5.4
+Tested Up To: 5.4.1
 WC Tested Up To: 4.0.1
-Stable Tag: 3.2.0
+Stable Tag: 3.5.0
 
-Google Rich Results and Structured Data for Articles, Carousels, Events, FAQ Pages, How-Tos, Local SEO, Products, Recipes, Ratings, Reviews, and more.
+Google Rich Results and Structured Data for Articles, Carousels, Events, FAQ Pages, How-Tos, Local SEO, Products, Recipes, Ratings, Reviews, and More.
 
 == Description ==
 
@@ -34,7 +34,7 @@ This add-on provides accurate and comprehensive Schema JSON-LD markup for posts,
 
 **Most complete Schema JSON-LD markup for WooCommerce products:**
 
-The WooCommerce plugin is known to provide incomplete Schema markup for Google. The <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium plugin</a> (required for WooCommerce integration) and its WPSSO Schema JSON-LD add-on provide a far better solution by offering complete Facebook / Pinterest Product meta tags and Schema Product markup for Google Rich Results (previously known as Rich Snippets) &mdash; including additional product images, product variations, product attributes (brand, color, condition, EAN, dimensions, GTIN-8/12/13/14, ISBN, material, MPN, size, SKU, weight, etc), product reviews, product ratings, sale start / end dates, sale prices, pre-tax prices, VAT prices, and much, much more.
+The WooCommerce plugin is known to provide incomplete Schema markup for Google. The <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium plugin</a> (required for WooCommerce integration) and its WPSSO Schema JSON-LD add-on provide a far better solution by offering complete Facebook / Pinterest Product meta tags and Schema Product markup for Google Rich Results (aka Rich Snippets) &mdash; including additional product images, product variations, product attributes (brand, color, condition, EAN, dimensions, GTIN-8/12/13/14, ISBN, material, MPN, size, SKU, weight, etc), product reviews, product ratings, sale start / end dates, sale prices, pre-tax prices, VAT prices, and much, much more.
 
 **Fixes all Google Search Console / Structured Data Testing Tool errors:**
 
@@ -71,7 +71,7 @@ Google regularly updates and changes their Schema markup requirements - WPSSO JS
 
 * Extends the features of the WPSSO Core plugin.
 
-* Provides accurate and comprehensive Schema JSON-LD markup for Google Rich Results / Rich Snippets with Structured Data.
+* Provides accurate and comprehensive Schema JSON-LD markup for Google Rich Results (aka Rich Snippets) with Structured Data.
 
 * Provides complete Schema ImageObject SEO markup with image information from the WordPress Media Library (name, alternateName, alternativeHeadline, caption, description, fileFormat, uploadDate, and more).
 
@@ -95,9 +95,10 @@ Google regularly updates and changes their Schema markup requirements - WPSSO JS
 	* Product Color
 	* Product Condition
 	* Product Depth
+	* Product Fluid Volume
 	* Product GTIN-14
-	* Product GTIN-13/EAN
-	* Product GTIN-12/UPC
+	* Product GTIN-13 (EAN)
+	* Product GTIN-12 (UPC)
 	* Product GTIN-8
 	* Product GTIN
 	* Product ISBN
@@ -110,7 +111,6 @@ Google regularly updates and changes their Schema markup requirements - WPSSO JS
 	* Product Target Gender
 	* Product Weight
 	* Product Width
-	* Product Volume
 
 * WooCommerce product variations from the WPSSO Core Premium plugin are grouped by currency and added as Schema AggregateOffer for Google's Rich Results (includes the product variation group high price, low price, and currency).
 
@@ -122,6 +122,8 @@ Google regularly updates and changes their Schema markup requirements - WPSSO JS
 
 The Standard version is designed to satisfy the requirements of most standard WordPress sites / blogs. If your site requires additional customizable Schema properties for products, events, places / locations, recipes, etc., then you may want the Premium version for those additional features.
 
+**Note that values for Schema type and sub-type properties are created automatically based on different option values, WordPress object properties, WordPress object metadata, 3rd party plugin data, and service API data. The WPSSO JSON Premium add-on offers *human-friendly* customizable options, and option values may be used for one or several different properties.**
+
 * Includes additional customizable option values in the Document SSO metabox:
 
 	* All Schema Types
@@ -130,9 +132,6 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 		* Description
 		* Microdata Type URLs
 		* Same-As URLs
-	* Claim Review Information
-		* Short Summary of Claim
-		* First Appearance URL
 	* Creative Work Information
 		* Is Part of URL
 		* Headline
@@ -186,10 +185,10 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 		* Product Width (cm)
 		* Product Height (cm)
 		* Product Depth (cm)
-		* Product Volume (ml)
+		* Product Fluid Volume (ml)
 		* Product GTIN-14
-		* Product GTIN-13/EAN
-		* Product GTIN-12/UPC
+		* Product GTIN-13 (EAN)
+		* Product GTIN-12 (UPC)
 		* Product GTIN-8
 		* Product GTIN
 	* QA Page Information
@@ -227,7 +226,7 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 			* Subject Name 
 			* Subject Description 
 			* Subject Image ID or URL 
-			* Claim Subject Information
+			* Claim Subject Information (for Claim Review)
 				* Short Summary of Claim
 				* First Appearance URL
 			* Creative Work Subject Information
@@ -262,8 +261,8 @@ WPSSO Schema JSON-LD Markup (aka WPSSO JSON) is an add-on for the [WPSSO Core pl
 
 <h3 class="top">Install and Uninstall</h3>
 
-* [Install the WPSSO JSON Add-on](https://wpsso.com/docs/plugins/wpsso-schema-json-ld/installation/install-the-plugin/)
-* [Uninstall the WPSSO JSON Add-on](https://wpsso.com/docs/plugins/wpsso-schema-json-ld/installation/uninstall-the-plugin/)
+* [Install the WPSSO Schema JSON-LD Markup add-on](https://wpsso.com/docs/plugins/wpsso-schema-json-ld/installation/install-the-plugin/).
+* [Uninstall the WPSSO Schema JSON-LD Markup add-on](https://wpsso.com/docs/plugins/wpsso-schema-json-ld/installation/uninstall-the-plugin/).
 
 == Frequently Asked Questions ==
 
@@ -313,6 +312,68 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 3.6.0-dev.7 (2020/04/30)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added recursion checks in Schema Product and SoftwareApplication to prevent recursion for an itemOffered within a Schema Offer.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+	* WPSSO Core v7.3.0-dev.7.
+
+**Version 3.5.0 (2020/04/28)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Minor update for option labels in WPSSO Core v7.2.0.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+	* WPSSO Core v7.2.0.
+
+**Version 3.4.0 (2020/04/25)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Changed `get_input()` for multilingual options to `get_input_locale()` (available since WPSSO Core v7.1.0).
+	* Changed `get_th_html()` for multilingual options to `get_th_html_locale()` (available since WPSSO Core v7.1.0).
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+	* WPSSO Core v7.1.0.
+
+**Version 3.3.0 (2020/04/17)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added support for WPSSO FAQ shortcodes with a non-public 'question' post type and 'faq_category' taxonomy.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Updated the `WpssoJsonFiltersTypeThing->wpsso_json_data_https_schema_org_thing()` method to check `$mod[ 'is_public' ]` (new in WPSSO Core v7.0.0) and if `false` (ie. not public) set the Schema 'url' property to a fragment (relevant to the current webpage URL). This allows WPSSO JSON to create Schema markup for non-public content which may be included as Schema parts from the current webpage content.
+	* Replaced the 'wpss_save_post_options' filter hook by 'wpsso_save_md_options' (available since WPSSO Core v7.0.0).
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+	* WPSSO Core v7.0.1.
+
 **Version 3.2.0 (2020/04/06)**
 
 * **New Features**
@@ -360,7 +421,7 @@ Added Schema Event options for virtual, postponed, and canceled events as [sugge
 		* Added an Advanced Settings metabox with relevant tabs from the SSO &gt; Advanced Settings page:
 			* Schema Types
 			* Product Attributes
-			* Custom Fields
+			* Custom Fields (Metadata)
 * **Bugfixes**
 	* None.
 * **Developer Notes**
@@ -370,37 +431,23 @@ Added Schema Event options for virtual, postponed, and canceled events as [sugge
 	* WordPress v4.0.
 	* WPSSO Core v6.26.1.
 
-**Version 2.25.0 (2020/03/14)**
-
-* **New Features**
-	* None.
-* **Improvements**
-	* Moved support for the 'aggregateRating' and 'review' properties from the Premium version to the Free / Standard version.
-* **Bugfixes**
-	* None.
-* **Developer Notes**
-	* None.
-* **Requires At Least**
-	* PHP v5.6.
-	* WordPress v4.0.
-	* WPSSO Core v6.25.0.
-
-**Version 2.24.0 (2020/03/11)**
-
-* **New Features**
-	* None.
-* **Improvements**
-	* Moved the Document SSO &gt; Priority Media &gt; Schema JSON-LD Markup / Rich Results options from WPSSO Core to the WPSSO JSON add-on.
-* **Bugfixes**
-	* None.
-* **Developer Notes**
-	* Added support for a new WPSSO_SCHEMA_MARKUP_DISABLE constant.
-* **Requires At Least**
-	* PHP v5.6.
-	* WordPress v4.0.
-	* WPSSO Core v6.24.0.
-
 == Upgrade Notice ==
+
+= 3.6.0-dev.7 =
+
+(2020/04/30) Added recursion checks in Schema Product and SoftwareApplication to prevent recursion for an itemOffered within a Schema Offer.
+
+= 3.5.0 =
+
+(2020/04/28) Minor update for option labels in WPSSO Core v7.2.0.
+
+= 3.4.0 =
+
+(2020/04/25) Updated multilingual option method calls for optimized methods in WPSSO Core v7.1.0.
+
+= 3.3.0 =
+
+(2020/04/17) Added support for WPSSO FAQ shortcodes with a non-public 'question' post type and 'faq_category' taxonomy.
 
 = 3.2.0 =
 
@@ -413,12 +460,4 @@ Added Schema Event options for virtual, postponed, and canceled events as [sugge
 = 3.0.0 =
 
 (2020/03/27) Moved all Schema type and sub-type modules from the Premium version to the Free / Standard version. Refactored the Schema Markup settings page metaboxes and tabs.
-
-= 2.25.0 =
-
-(2020/03/14) Moved support for the 'aggregateRating' and 'review' properties from the Premium version to the Free / Standard version.
-
-= 2.24.0 =
-
-(2020/03/11) Moved the Document SSO &gt; Priority Media &gt; Schema JSON-LD Markup / Rich Results options from WPSSO Core to the WPSSO JSON add-on.
 

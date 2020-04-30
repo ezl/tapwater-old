@@ -338,7 +338,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 			}
 
 			/**
-			 * Include WebSite, Organization and/or Person markup on the home page.
+			 * Include Schema WebSite, Organization, and/or Person markup on the home page.
 			 *
 			 * The custom 'site_org_schema_type' may be a sub-type of organization, and may be filtered as a
 			 * local.business.
@@ -520,7 +520,12 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 			}
 
 			if ( empty( $page_type_id ) ) {
+
 				$page_type_id = $this->get_mod_schema_type( $mod, $get_id = true );
+
+				if ( $this->p->debug->enabled ) {
+					$this->p->debug->log( 'page type ID is ' . $page_type_id );
+				}
 			}
 
 			$json_data         = null;
@@ -598,6 +603,10 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 				return false;
 			}
 
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->log( 'getting schema type for ' . $mod[ 'name' ] . ' ID ' . $mod[ 'id' ] );
+			}
+
 			$page_type_id = $this->get_mod_schema_type( $mod, $get_id = true );
 
 			if ( empty( $page_type_id ) ) {	// Just in case.
@@ -617,12 +626,27 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 				return false;
 			}
 
-			$size_name    = $this->p->lca . '-schema';
-			$sharing_url  = $this->p->util->maybe_set_ref( null, $mod, __( 'adding schema', 'wpsso' ) );
-			$mt_og        = $this->p->og->get_array( $mod, $size_name );
-			$json_data    = $this->get_json_data( $mod, $mt_og, $page_type_id, $is_main = true );
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->log( 'page type ID is ' . $page_type_id );
+			}
 
-			$this->p->util->maybe_unset_ref( $sharing_url );
+			$size_name = $this->p->lca . '-schema';
+
+			$ref_url = $this->p->util->maybe_set_ref( null, $mod, __( 'adding schema', 'wpsso' ) );
+
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->log( 'getting open graph meta tag array' );
+			}
+
+			$mt_og = $this->p->og->get_array( $mod, $size_name );
+
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->log( 'getting schema json-ld markup array' );
+			}
+
+			$json_data = $this->get_json_data( $mod, $mt_og, $page_type_id, $is_main = true );
+
+			$this->p->util->maybe_unset_ref( $ref_url );
 
 			return $json_data;
 		}
@@ -1911,8 +1935,11 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 			}
 
 			if ( empty( $json_data[ $prop_name ] ) ) {
+
 				$json_data[ $prop_name ] = array();
+
 			} elseif ( ! is_array( $json_data[ $prop_name ] ) ) {	// Convert single value to an array.
+
 				$json_data[ $prop_name ] = array( $json_data[ $prop_name ] );
 			}
 
@@ -2678,6 +2705,15 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 		 * 	'width'  => 'product:width:value',
 		 * );
 		 */
+		public static function get_data_unit_from_assoc( array $assoc, array $names ) {
+
+			$json_data = array();
+
+			self::add_data_unit_from_assoc( $json_data, $assoc, $names );
+
+			return empty( $json_data ) ? false : $json_data;
+		}
+
 		public static function add_data_unit_from_assoc( array &$json_data, array $assoc, array $names ) {
 
 			$wpsso =& Wpsso::get_instance();
@@ -2904,7 +2940,9 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 			/**
 			 * Check only published posts or other non-post objects.
 			 */
-			if ( ! $mod[ 'is_post' ] || $mod[ 'post_status' ] === 'publish' ) {
+			if ( ! $mod[ 'is_post' ] || 'publish' === $mod[ 'post_status' ] ) {
+
+				$ref_url = $wpsso->util->maybe_set_ref( null, $mod, __( 'checking meta tags', 'wpsso' ) );
 
 				foreach ( $prop_names as $prop_name ) {
 
@@ -2924,6 +2962,8 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 						}
 					}
 				}
+
+				$wpsso->util->maybe_unset_ref( $ref_url );
 			}
 		}
 
@@ -3144,7 +3184,7 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 			}
 
 			/**
-			 * Check if $type_id is a URL, just in case. If $type_id is a URL, then use it as-is.
+			 * If $type_id is a URL, then use it as-is.
 			 */
 			if ( false !== filter_var( $type_id, FILTER_VALIDATE_URL ) ) {
 
@@ -3166,22 +3206,33 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 
 			} else {
 
-				$id_url = empty( $type_url ) ? $json_data[ 'url' ] : $type_url;
+				if ( ! empty( $type_url ) ) {
+					$id_url = $type_url;
+				} elseif ( ! empty( $json_data[ '@id' ] ) ) {
+					$id_url = $json_data[ '@id' ];
+				} else {
+					$id_url = $json_data[ 'url' ];
+				}
 
 				/**
-				 * Just in case - remove any id anchor from the begining of the $type_id string.
+				 * Maybe remove an anchor ID from the begining of the type ID string.
 				 */
 				$type_id = preg_replace( '/^' . preg_quote( $id_anchor, '/' ) . '/', '', $type_id );
 
-				if ( false !== strpos( $id_url, $id_anchor ) ) {	// Just in case.
-					$new_id = trim( $id_url, $id_delim ) . $id_delim . $type_id;
+				/**
+				 * Check to see if we already have an anchor ID in the URL.
+				 */
+				if ( false !== strpos( $id_url, $id_anchor ) ) {
+					$id_url = rtrim( $id_url, $id_delim );			// Avoid repeating the delimiter.
+					$id_url = rtrim( $id_url, $id_delim . $type_id );	// Avoid appending a duplicate type ID.
+					$id_url .= $id_delim . $type_id;
 				} else {
-					$new_id = $id_url . $id_anchor . $type_id;
+					$id_url .= $id_anchor . $type_id;
 				}
 
 				unset( $json_data[ '@id' ] );	// Just in case.
 
-				$json_data = array( '@id' => $new_id ) + $json_data;	// Make @id the first value in the array.
+				$json_data = array( '@id' => $id_url ) + $json_data;	// Make @id the first value in the array.
 			}
 
 			/**
@@ -3189,8 +3240,8 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 			 * '@id' value as a URL, use a leading slash to create the same path for the same '@id' URLs between
 			 * different Schema JSON-LD scripts (ie. not relative to the current webpage). For example:
 			 *
-			 *	"@id": "http://adm.surniaulula.com/author/manovotny/#wpsso/person"
-			 *	"@id": "/06d3730efc83058f497d3d44f2f364e3#wpsso/person"
+			 *	"@id": "http://adm.surniaulula.com/author/manovotny/#sso/person"
+			 *	"@id": "/06d3730efc83058f497d3d44f2f364e3#sso/person"
 			 */
 			if ( $hash_url ) {
 				$json_data[ '@id' ] = preg_replace( '/^(.*:\/\/.*)(' . preg_quote( $id_anchor, '/' ) . '.*)?$/U',
@@ -3204,14 +3255,6 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 			return true;
 		}
 
-		public static function get_id_anchor() {
-			return '#wpsso/';
-		}
-
-		public static function get_id_delim() {
-			return '/';
-		}
-
 		/**
 		 * Sanitation used by filters to return their data.
 		 */
@@ -3223,9 +3266,16 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 				unset( $json_data[ 'mainEntityOfPage' ] );
 
 			} else {
+
 				if ( ! isset( $merge_data[ 'mainEntityOfPage' ] ) ) {
+
 					if ( ! empty( $merge_data[ 'url' ] ) ) {
-						$merge_data[ 'mainEntityOfPage' ] = $merge_data[ 'url' ];
+
+						/**
+						 * Remove any URL fragment from the main entity URL. The 'mainEntityOfPage' value
+						 * can be empty and will be removed by WpssoSchemaGraph::optimize_json().
+						 */
+						$merge_data[ 'mainEntityOfPage' ] = preg_replace( '/#.*$/', '', $merge_data[ 'url' ] );
 					}
 				}
 			}
@@ -3261,6 +3311,16 @@ if ( ! class_exists( 'WpssoSchema' ) ) {
 			} else {
 				return $json_data;
 			}
+		}
+
+		public static function get_id_anchor() {
+
+			return '#sso/';
+		}
+
+		public static function get_id_delim() {
+
+			return '/';
 		}
 
 		/**

@@ -1,4 +1,4 @@
-=== WPSSO Core | The Complete Meta Tag and Schema Markup Solution ===
+=== The WordPress Social and Search Optimizer | WPSSO Core ===
 Plugin Name: WPSSO Core
 Plugin Slug: wpsso
 Text Domain: wpsso
@@ -6,37 +6,31 @@ Domain Path: /languages
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.txt
 Assets URI: https://surniaulula.github.io/wpsso/assets/
-Tags: open graph, meta tags, rich pins, twitter cards, schema, rich results, embed, social sharing, structured data, snippet, seo, facebook, twitter, linkedin, pinterest, google, schema.org
+Tags: optimize, open graph, meta tags, rich pins, twitter cards, schema, seo, social sharing, structured data, rich snippets, facebook, linkedin
 Contributors: jsmoriss
 Requires PHP: 5.6
 Requires At Least: 4.2
-Tested Up To: 5.4
+Tested Up To: 5.4.1
 WC Tested Up To: 4.0.1
-Stable Tag: 6.28.0
+Stable Tag: 7.2.0
 
-Makes sure your content looks great on all social and search sites - no matter how webpage URLs are crawled, shared, re-shared, posted, or embedded.
+Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded.
 
 == Description ==
 
 <p style="margin:0;"><img class="readme-icon" src="https://surniaulula.github.io/wpsso/assets/icon-256x256.png"></p>
 
-**Makes sure your content looks great on all social and search sites - no matter how webpage URLs are crawled, shared, re-shared, posted, or embedded:**
+**Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded:**
 
-WPSSO Core and its free complementary add-ons provide comprehensive information about your webpage content to social sites (Facebook, Pinterest, Twitter, LinkedIn, etc.), search engines and crawlers (Google, Bing, etc.), mail and text messaging apps (Facebook Messenger, iMessage, Skype, WhatsApp, etc.), REST API clients, and oEmbed data for embedded objects / iframes (LinkedIn, WordPress, etc.) &mdash; all from your existing WordPress content and supported plugins.
+WPSSO Core and its complementary add-ons create meta tags and Schema markup for Facebook / Open Graph, Google's Knowledge Graph, Google Rich Results (aka Rich Snippets, Structured Data), Mobile Web Browsers, oEmbed data for LinkedIn, Pinterest Rich Pins, Twitter Cards &mdash; including complete markup for image SEO, video SEO, extensive e-Commerce product markup (for WooCommerce and others), mobile store apps, author profile / authorship, co-authors, publisher information, local business markup, aggregate ratings, reviews, recipe information, event details, and much, much more &mdash; all from your existing WordPress content, supported plugin data, and service API data.
 
-**Uses your existing WordPress content, plugin and service API data:**
+There's no need to manually re-enter descriptions, titles, product information, re-select images / videos, etc. like other meta tag and Schema markup plugins &mdash; WPSSO Core reads all your existing post, page, image, video, e-commerce product, recipe, rating, review, event, and SEO content automatically.
 
-There's no need to manually re-create descriptions, titles, product information, re-select images / videos, etc. WPSSO Core reads your existing post, page, product, media, recipe, event, forum, and SEO content automatically &mdash; while also offering fine-tuning and customization options for just about everything. ;-)
-
-**Creates complete and accurate meta tags and Schema markup:**
-
-WPSSO Core and its complementary add-ons create meta tags and Schema markup for Facebook / Open Graph, Google's Knowledge Graph, Google Rich Results (aka Rich Snippets) with Structured Data, Mobile Web Browsers, oEmbed data for LinkedIn, Pinterest Rich Pins, Twitter Cards &mdash; including complete markup for image SEO, video SEO, extensive e-Commerce product markup (for WooCommerce and others), mobile store apps, author profile / authorship, co-authors, publisher information, local business markup, aggregate ratings, reviews, recipe information, event details, and much, much more &mdash; all from your existing WordPress content and plugin data!
-
-WPSSO Core is also language / locale aware, which means you can customize many option values for different languages.
+WPSSO Core is also language / locale aware, which means you can customize several option values for different webpage languages.
 
 **Coded for maximum performance:**
 
-WPSSO Core makes full use of all available caching methods &mdash; along with offering advanced caching features like pre-seeding its cache in background. WPSSO Core and its complementary add-ons only load the libraries and classes they need, keeping their code small, fast and light. All code is fully tested and compatible with the latest version of WordPress and PHP v7.x (PHP v5.5 or newer required).
+WPSSO Core makes full use of all available caching methods &mdash; along with offering advanced caching features like pre-seeding in background. WPSSO Core and its complementary add-ons load only the libraries and classes they need, keeping their code small, fast and light. All code is fully tested and compatible with the latest version of WordPress and PHP v7.x (WordPress v4.2 and PHP v5.6 or newer required).
 
 <h3>Users Love the WPSSO Core Plugin</h3>
 
@@ -98,7 +92,7 @@ WPSSO Core makes full use of all available caching methods &mdash; along with of
 		* Facebook / Open Graph and Default Media
 			* Priority Image Information
 				* Maximum Images
-				* Image ID or Image URL
+				* Image ID or an Image URL
 
 * Built-in support for AMP plugins:
 
@@ -143,7 +137,8 @@ Need even more features?
 Simply activate the free complementary add-on(s) you need:
 
 * [WPSSO FAQ Manager](https://wordpress.org/plugins/wpsso-faq/) to manage FAQ categories with Question and Answer pages.
-* [WPSSO Mobile App Meta](https://wordpress.org/plugins/wpsso-am/) to manage mobile App information.
+* [WPSSO Inherit Parent Metadata](https://wordpress.org/plugins/wpsso-inherit-parent-meta/) to inherit featured and custom images.
+* [WPSSO Mobile App Meta Tags](https://wordpress.org/plugins/wpsso-am/) to manage mobile App information.
 * [WPSSO Organization Markup](https://wordpress.org/plugins/wpsso-organization/) to manage multiple Organizations.
 * [WPSSO Place and Local SEO Markup](https://wordpress.org/plugins/wpsso-plm/) to manage multiple locations.
 * [WPSSO Ratings and Reviews](https://wordpress.org/plugins/wpsso-ratings-and-reviews/) to add ratings in WordPress comments.
@@ -151,7 +146,6 @@ Simply activate the free complementary add-on(s) you need:
 * [WPSSO Ridiculously Responsive Social Sharing Buttons](https://wordpress.org/plugins/wpsso-rrssb/) to add responsive share buttons.
 * [WPSSO Schema Breadcrumbs Markup](https://wordpress.org/plugins/wpsso-breadcrumbs/) to add Breadcrumbs markup for Google.
 * [WPSSO Schema JSON-LD Markup](https://wordpress.org/plugins/wpsso-schema-json-ld/) to add JSON-LD for Google.
-* [WPSSO Social Sharing Buttons](https://wordpress.org/plugins/wpsso-ssb/) to add traditional share buttons.
 * [WPSSO Strip Schema Microdata](https://wordpress.org/plugins/wpsso-strip-schema-microdata) to strip incorrect markup from templates.
 * [WPSSO Tune Image Editors](https://wordpress.org/plugins/wpsso-tune-image-editors) for better looking WordPress thumbnails.
 * [WPSSO Tweet a Quote](https://wordpress.org/plugins/wpsso-tweet-a-quote) to add tweetable quotes to your content.
@@ -243,17 +237,17 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 			* Priority Video Information
 				* Include Preview Images
 				* Maximum Videos
-				* Video Size
+				* Video Dimensions
 				* Video Embed HTML or Video URL
 				* Video Name / Title
 				* Video Description
 		* Pinterest Pin It
-			* Image ID or Image URL
+			* Image ID or an Image URL
 		* Twitter Card
-			* Image ID or Image URL
+			* Image ID or an Image URL
 		* Schema JSON-LD Markup / Rich Results
 			* Maximum Images
-			* Image ID or Image URL
+			* Image ID or an Image URL
 
 * Additional customizable option values in the Document SSO metabox are available from the [WPSSO Schema JSON-LD Markup Premium add-on](https://wpsso.com/extend/plugins/wpsso-schema-json-ld/):
 
@@ -263,9 +257,6 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 		* Description
 		* Microdata Type URLs
 		* Same-As URLs
-	* Claim Review Information
-		* Short Summary of Claim
-		* First Appearance URL
 	* Creative Work Information
 		* Is Part of URL
 		* Headline
@@ -319,10 +310,10 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 		* Product Width (cm)
 		* Product Height (cm)
 		* Product Depth (cm)
-		* Product Volume (ml)
+		* Product Fluid Volume (ml)
 		* Product GTIN-14
-		* Product GTIN-13/EAN
-		* Product GTIN-12/UPC
+		* Product GTIN-13 (EAN)
+		* Product GTIN-12 (UPC)
 		* Product GTIN-8
 		* Product GTIN
 	* QA Page Information
@@ -360,7 +351,7 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 			* Subject Name 
 			* Subject Description 
 			* Subject Image ID or URL 
-			* Claim Subject Information
+			* Claim Subject Information (for Claim Review)
 				* Short Summary of Claim
 				* First Appearance URL
 			* Creative Work Subject Information
@@ -507,7 +498,141 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
+**Version 7.3.0-dev.7 (2020/04/30)**
+
+* **New Features**
+	* Added a new WPSSO Metadata for WooCommerce add-on.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a new lib/util-woocommerce.php library file.
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+
+**Version 7.2.0 (2020/04/28)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added a new 'wpseo_frontend_presenters' filter to disable Open Graph, Twitter, and Schema markup in Yoast SEO v14.0.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Renamed the 'plugin_product_attr_' option keys to 'plugin_attr_product_' for the new WPSSO WCMD add-on.
+	* Moved the lib/pro/util/custom-fields.php library class to lib/util-custom-fields.php.
+	* Removed applying the following filters, which are no longer compatible with Yoast SEO v14.0.
+		* 'wpseo_desc'
+		* 'wpseo_metadesc'
+		* 'wpseo_title'
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+
+**Version 7.1.0 (2020/04/25)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* The "Import Yoast SEO Social Meta" feature module (Advanced Settings page) now reads image IDs instead of image URLs, and shows an update notice for any custom metadata values read (Premium version).
+	* The "Structured data product" setting for the Product GTIN (EAN, UPC, ISBN) for WooCommerce plugin is now checked to assign the GTIN/ISBN/MPN value to the correct Schema property (Premium version).
+* **Bugfixes**
+	* Fixed a conflict when both a custom Image ID and Image URL were provided for the same option.
+* **Developer Notes**
+	* Added a new 'wpsso_get_md_options' filter.
+	* Added a new `SucomForm->get_input_locale()` method.
+	* Added a new `SucomForm->get_textarea_locale()` method.
+	* Added a new `SucomForm->get_th_html_locale()` method.
+	* Refactored the WpssoProUtilWpseoMeta class methods (ie. the "Import Yoast SEO Social Meta" feature module).
+	* Refactored the `SucomForm->get_css_class_hide()` method to check both localized and non-localized values.
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+
+**Version 7.0.1 (2020/04/19)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added a fallback to the full size image if the requested image size is uncropped and one side matches the image size.
+* **Bugfixes**
+	* Fixed a possible error notice when the WordPress `image_make_intermediate_size()` function returns false instead of creating a resized image as expected.
+* **Developer Notes**
+	* Added a 'wp_image_resize_identical_dimensions' filter (added in WordPress v5.3) hook in `WpssoMedia->maybe_resize_fuzzy_dimensions()` to prevent WordPress from skipping image creation if the resized image and the original image are "close enough".
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+
+**Version 7.0.0 (2020/04/17)**
+
+* **New Features**
+	* Added taxonomy names to the SSO &gt; Advanced Settings &gt; Editing Pages &gt; Add Document SSO Metabox option.
+	* Deprecated the WPSSO Social Sharing Buttons (aka WPSSO SSB) add-on.
+* **Improvements**
+	* Added a title to the tab content for mobile icon-only tabs.
+	* Added a default icon for unknown WPSSO settings tabs.
+	* Added a dismiss link to WPSSO "update-nag" notices.
+	* Updated the Image ID and Image URL option enabled/disabled behavior:
+		* The Image ID option is disabled when an Image URL is entered.
+		* The Image URL option is disabled when an Image ID is selected.
+	* Renamed the Document SSO "Head" tab to "Head Markup".
+	* Renamed the SSO &gt; Advanced Settings "Plugin Behavior" tab to "Standard Settings".
+	* Renamed the 'Enforce Image Size Checks' option to 'Enforce Image Dimension Checks'.
+	* Renamed the 'Video Size' option to 'Video Dimensions'.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added new methods:
+		* `SucomUtil::add_query_fragment()`
+		* `SucomUtil::get_mod_anchor()`
+		* `SucomUtil::sanitize_anchor()`
+		* `SucomUtilWP::get_post_type_labels()`
+		* `SucomUtilWP::get_taxonomy_labels()`
+		* `SucomUtilWP::is_post_type_public()`
+		* `SucomUtilWP::sort_objects_by_label()`
+		* `WpssoUtil->add_post_type_names()`
+		* `WpssoUtil->add_taxonomy_names()`
+		* `WpssoUtil::get_fragment_anchor()` (for the WPSSO FAQ add-on)
+	* Updated post type and taxonomy "public" query filters:
+		* From:
+			* `array( 'public' => 1, 'show_ui' => 1 )`
+		* To:
+			* `array( 'show_in_menu' => 1, 'show_ui' => 1 )`
+		* In:
+			* `WpssoTerm::get_public_ids()`
+			* `WpssoUtil->get_post_types()`
+			* `SucomUtilWP::get_post_type_labels()`
+			* `SucomUtilWP::get_taxonomy_labels()`
+	* Added a new 'is_public' key to the `$mod` associative array (value is `true` by default, and `false` for non-public post types and taxonomies).
+	* Added a static local cache to the `WpssoUtil->get_page_url()` private method.
+	* Refactored the `SucomForm->get_checklist_post_types()` method and removed the `$values` argument.
+	* Removed the `$src_id` argument from `WpssoUtil->get_canonical_url()`.
+	* Removed the `$src_id` argument from `WpssoUtil->get_sharing_url()`.
+	* Removed the `$src_id` argument from `WpssoUtil->get_page_url()`.
+	* Removed the `$src_id` argument from following filters:
+		* 'wpsso_archive_page_url'
+		* 'wpsso_canonical_url'
+		* 'wpsso_home_url'
+		* 'wpsso_post_url'
+		* 'wpsso_search_url'
+		* 'wpsso_server_request_url_cache_disabled'
+		* 'wpsso_server_request_url'
+		* 'wpsso_sharing_url'
+		* 'wpsso_term_url'
+		* 'wpsso_user_url'
+	* Removed the 'plugin_add_to_term' option key (replaced by new 'plugin_add_to_tax_{tax_slug}' options).
+	* Renamed the 'wpsso_server_request_url_disable_cache' filter to 'wpsso_server_request_url_cache_disabled'.
+	* Deprecated the `WpssoUtil->get_atts_css_attr()` public method.
+	* Deprecated the `WpssoUtil->get_atts_src_id()` public method.
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+
 **Version 6.28.0 (2020/04/06)**
+
+The WebSite Organization Schema Type option (WPSSO ORG add-on required) is now fixed to "Organization" since Google does not recognize all Schema Organization sub-types as valid organization and publisher types.
 
 * **New Features**
 	* None.
@@ -522,7 +647,7 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 	* Refactored the `WpssoConfig::get_config()` method.
 	* Refactored the `WpssoConfig::get_ext_sorted()` method.
 	* Removed `empty()` property checks when creating json data and added a `WpssoSchemaGraph::clean_json()` method to remove null values, empty strings, and empty arrays from the json data.
-	* The WebSite Organization Schema Type option is now fixed to "Organization" since Google does not recognize all Schema Organization sub-types as valid organization and publisher types.
+	* The WebSite Organization Schema Type option (WPSSO ORG add-on required) is now fixed to "Organization" since Google does not recognize all Schema Organization sub-types as valid organization and publisher types.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
@@ -557,7 +682,7 @@ Added Schema Event properties for virtual, postponed, and canceled events as [su
 	* Added AMP image sizes to the SSO &gt; Image Sizes page (as hidden options), even if an AMP plugin is not active.
 * **Bugfixes**
 	* Fixed a possible `image_make_intermediate_size()` error from using an undefined Pinterest image size.
-	* Fixed incorrectly disabled "or Image URL" options, which should only be disabled when an image ID is selected.
+	* Fixed incorrectly disabled "or an Image URL" options, which should only be disabled when an image ID is selected.
 * **Developer Notes**
 	* None.
 * **Requires At Least**
@@ -571,7 +696,7 @@ Added Schema Event properties for virtual, postponed, and canceled events as [su
 * **Improvements**
 	* Added a new Pinterest Pin It image size to the SSO &gt; Image Sizes settings page.
 	* Added a new Pinterest Pin It section in the Document SSO &gt; Priority Media tab:
-		* Image ID or Image URL
+		* Image ID or an Image URL
 	* Added an SSO &gt; Advanced Settings &gt; Document Types metabox with tabs:
 		* Open Graph Types
 		* Schema Types
@@ -579,7 +704,7 @@ Added Schema Event properties for virtual, postponed, and canceled events as [su
 		* Table Columns
 		* Document Meta
 		* Product Attributes
-		* Custom Fields
+		* Custom Fields (Metadata)
 * **Bugfixes**
 	* None.
 * **Developer Notes**
@@ -985,6 +1110,26 @@ Added Schema Event properties for virtual, postponed, and canceled events as [su
 
 == Upgrade Notice ==
 
+= 7.3.0-dev.7 =
+
+(2020/04/30) Added a new WPSSO Metadata for WooCommerce add-on.
+
+= 7.2.0 =
+
+(2020/04/28) Added a new 'wpseo_frontend_presenters' filter to disable Open Graph, Twitter, and Schema markup in Yoast SEO v14.0.
+
+= 7.1.0 =
+
+(2020/04/25) The "Import Yoast SEO Social Meta" feature module (Advanced Settings page) now reads image IDs instead of image URLs. Fixed a conflict when both a custom Image ID and Image URL were provided for the same option.
+
+= 7.0.1 =
+
+(2020/04/19) Added a fallback to the full size image if the requested image size is uncropped and one side matches the image size. Fixed a possible error notice when the WordPress `image_make_intermediate_size()` function returns false.
+
+= 7.0.0 =
+
+(2020/04/17) Added taxonomy names to the SSO &gt; Advanced Settings &gt; Editing Pages &gt; Add Document SSO Metabox option. Deprecated the WPSSO Social Sharing Buttons (aka WPSSO SSB) add-on.
+
 = 6.28.0 =
 
 (2020/04/06) Updated "Requires At Least" to WordPress v4.2. The WebSite Organization Schema Type option is now fixed to "Organization" (see changelog for details).
@@ -995,7 +1140,7 @@ Added Schema Event properties for virtual, postponed, and canceled events as [su
 
 = 6.26.1 =
 
-(2020/03/29) Added AMP image sizes to the SSO &gt; Image Sizes page (as hidden options), even if an AMP plugin is not active. Fixed a possible `image_make_intermediate_size()` error. Fixed incorrectly disabled "or Image URL" options.
+(2020/03/29) Added AMP image sizes to the SSO &gt; Image Sizes page (as hidden options), even if an AMP plugin is not active. Fixed a possible `image_make_intermediate_size()` error. Fixed incorrectly disabled "or an Image URL" options.
 
 = 6.26.0 =
 
@@ -1012,8 +1157,4 @@ Added Schema Event properties for virtual, postponed, and canceled events as [su
 = 6.24.0 =
 
 (2020/03/11) Added several Open Graph image options in the Document SSO metabox to the Standard / Free version.
-
-= 6.23.2 =
-
-(2020/03/06) Fixed possible javascript undefined variable error for missing checkbox name attributes. Refactored the WpssoStyle, WpssoScript, and SucomNotice classes.
 

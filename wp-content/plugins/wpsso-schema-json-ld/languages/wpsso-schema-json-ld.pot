@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the WPSSO Schema JSON-LD Markup package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPSSO Schema JSON-LD Markup 3.2.0\n"
+"Project-Id-Version: WPSSO Schema JSON-LD Markup 3.5.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpsso-schema-json-"
 "ld\n"
 "POT-Creation-Date: 2020-MO-DA HO:MI+ZONE\n"
@@ -687,7 +687,7 @@ msgid ""
 "Google Rich Results and Structured Data for Articles, Carousels (aka Item "
 "Lists), Claim Reviews, Events, FAQ Pages, How-Tos, Images, Local Business / "
 "Local SEO, Organizations, Products, Ratings, Recipes, Restaurants, Reviews, "
-"Videos, and more."
+"Videos, and More."
 msgstr ""
 
 #: lib/gettext-pro.php:6 lib/pro/admin/meta-edit.php:109
@@ -1138,7 +1138,7 @@ msgstr ""
 #: lib/gettext-pro.php:80 lib/pro/admin/meta-edit.php:713
 #: lib/std/admin/meta-edit.php:728
 msgctxt "option label"
-msgid "Product Volume"
+msgid "Product Fluid Volume"
 msgstr ""
 
 #: lib/gettext-pro.php:81 lib/pro/admin/meta-edit.php:721
@@ -1150,13 +1150,13 @@ msgstr ""
 #: lib/gettext-pro.php:82 lib/pro/admin/meta-edit.php:728
 #: lib/std/admin/meta-edit.php:745
 msgctxt "option label"
-msgid "Product GTIN-13/EAN"
+msgid "Product GTIN-13 (EAN)"
 msgstr ""
 
 #: lib/gettext-pro.php:83 lib/pro/admin/meta-edit.php:735
 #: lib/std/admin/meta-edit.php:753
 msgctxt "option label"
-msgid "Product GTIN-12/UPC"
+msgid "Product GTIN-12 (UPC)"
 msgstr ""
 
 #: lib/gettext-pro.php:84 lib/pro/admin/meta-edit.php:742
@@ -1724,7 +1724,7 @@ msgstr ""
 
 #: lib/submenu/schema-general.php:38
 msgctxt "metabox title"
-msgid "Schema Markup"
+msgid "Schema Markup Settings"
 msgstr ""
 
 #. translators: Please ignore - translation uses a different text domain.
@@ -1733,57 +1733,57 @@ msgctxt "metabox title"
 msgid "Advanced Settings"
 msgstr ""
 
-#: lib/submenu/schema-general.php:68
+#: lib/submenu/schema-general.php:70
 msgctxt "metabox tab"
 msgid "Knowledge Graph"
 msgstr ""
 
-#: lib/submenu/schema-general.php:69
+#: lib/submenu/schema-general.php:71
 msgctxt "metabox tab"
 msgid "Schema Properties"
 msgstr ""
 
-#: lib/submenu/schema-general.php:70
+#: lib/submenu/schema-general.php:72
 msgctxt "metabox tab"
 msgid "Schema Defaults"
 msgstr ""
 
 #. translators: Please ignore - translation uses a different text domain.
-#: lib/submenu/schema-general.php:100
+#: lib/submenu/schema-general.php:104
 msgctxt "metabox tab"
 msgid "Schema Types"
 msgstr ""
 
 #. translators: Please ignore - translation uses a different text domain.
-#: lib/submenu/schema-general.php:102
+#: lib/submenu/schema-general.php:106
 msgctxt "metabox tab"
 msgid "Product Attributes"
 msgstr ""
 
 #. translators: Please ignore - translation uses a different text domain.
-#: lib/submenu/schema-general.php:104
+#: lib/submenu/schema-general.php:108
 msgctxt "metabox tab"
-msgid "Custom Fields"
+msgid "Custom Fields (Metadata)"
 msgstr ""
 
-#: lib/submenu/schema-general.php:195
+#: lib/submenu/schema-general.php:193
 msgctxt "option label"
 msgid "WebSite Name"
 msgstr ""
 
-#: lib/submenu/schema-general.php:200
+#: lib/submenu/schema-general.php:199
 msgctxt "option label"
 msgid "WebSite Alternate Name"
 msgstr ""
 
-#: lib/submenu/schema-general.php:205
+#: lib/submenu/schema-general.php:204
 msgctxt "option label"
 msgid "WebSite Description"
 msgstr ""
 
 #: lib/submenu/schema-general.php:212
 msgctxt "option label"
-msgid "Max. Text or Article Body Length"
+msgid "Max. Text and Article Body Length"
 msgstr ""
 
 #: lib/submenu/schema-general.php:215
@@ -1793,7 +1793,7 @@ msgstr ""
 
 #: lib/submenu/schema-general.php:218
 msgctxt "option label"
-msgid "Add Text or Article Body Properties"
+msgid "Add Text and Article Body Properties"
 msgstr ""
 
 #: lib/submenu/schema-general.php:223
@@ -1831,7 +1831,7 @@ msgid ""
 "Google Rich Results and Structured Data for Articles, Carousels (aka Item "
 "Lists), Claim Reviews, Events, FAQ Pages, How-Tos, Images, Local Business / "
 "Local SEO, Organizations, Products, Ratings, Recipes, Restaurants, Reviews, "
-"Videos, and more."
+"Videos, and More."
 msgstr ""
 
 #. Author of the plugin/theme

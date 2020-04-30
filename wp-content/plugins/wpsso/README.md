@@ -1,39 +1,33 @@
-<h1>WPSSO Core</h1><h3>The Complete Meta Tag and Schema Markup Solution</h3>
+<h1>The WordPress Social and Search Optimizer</h1><h3>WPSSO Core</h3>
 
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Core</td></tr>
-<tr><th align="right" valign="top" nowrap>Summary</th><td>Makes sure your content looks great on all social and search sites - no matter how webpage URLs are crawled, shared, re-shared, posted, or embedded.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>6.28.0</td></tr>
+<tr><th align="right" valign="top" nowrap>Summary</th><td>Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded.</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>7.2.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>5.6 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>4.2 or newer</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.4</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.4.1</td></tr>
 <tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>4.0.1</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://www.gnu.org/licenses/gpl.txt">GPLv3</a></td></tr>
-<tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>open graph, meta tags, rich pins, twitter cards, schema, rich results, embed, social sharing, structured data, snippet, seo, facebook, twitter, linkedin, pinterest, google, schema.org</td></tr>
+<tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>optimize, open graph, meta tags, rich pins, twitter cards, schema, seo, social sharing, structured data, rich snippets, facebook, linkedin</td></tr>
 </table>
 
 <h2>Description</h2>
 
 <p style="margin:0;"><img class="readme-icon" src="https://surniaulula.github.io/wpsso/assets/icon-256x256.png"></p>
 
-<p><strong>Makes sure your content looks great on all social and search sites - no matter how webpage URLs are crawled, shared, re-shared, posted, or embedded:</strong></p>
+<p><strong>Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded:</strong></p>
 
-<p>WPSSO Core and its free complementary add-ons provide comprehensive information about your webpage content to social sites (Facebook, Pinterest, Twitter, LinkedIn, etc.), search engines and crawlers (Google, Bing, etc.), mail and text messaging apps (Facebook Messenger, iMessage, Skype, WhatsApp, etc.), REST API clients, and oEmbed data for embedded objects / iframes (LinkedIn, WordPress, etc.) &mdash; all from your existing WordPress content and supported plugins.</p>
+<p>WPSSO Core and its complementary add-ons create meta tags and Schema markup for Facebook / Open Graph, Google's Knowledge Graph, Google Rich Results (aka Rich Snippets, Structured Data), Mobile Web Browsers, oEmbed data for LinkedIn, Pinterest Rich Pins, Twitter Cards &mdash; including complete markup for image SEO, video SEO, extensive e-Commerce product markup (for WooCommerce and others), mobile store apps, author profile / authorship, co-authors, publisher information, local business markup, aggregate ratings, reviews, recipe information, event details, and much, much more &mdash; all from your existing WordPress content, supported plugin data, and service API data.</p>
 
-<p><strong>Uses your existing WordPress content, plugin and service API data:</strong></p>
+<p>There's no need to manually re-enter descriptions, titles, product information, re-select images / videos, etc. like other meta tag and Schema markup plugins &mdash; WPSSO Core reads all your existing post, page, image, video, e-commerce product, recipe, rating, review, event, and SEO content automatically.</p>
 
-<p>There's no need to manually re-create descriptions, titles, product information, re-select images / videos, etc. WPSSO Core reads your existing post, page, product, media, recipe, event, forum, and SEO content automatically &mdash; while also offering fine-tuning and customization options for just about everything. ;-)</p>
-
-<p><strong>Creates complete and accurate meta tags and Schema markup:</strong></p>
-
-<p>WPSSO Core and its complementary add-ons create meta tags and Schema markup for Facebook / Open Graph, Google's Knowledge Graph, Google Rich Results (aka Rich Snippets) with Structured Data, Mobile Web Browsers, oEmbed data for LinkedIn, Pinterest Rich Pins, Twitter Cards &mdash; including complete markup for image SEO, video SEO, extensive e-Commerce product markup (for WooCommerce and others), mobile store apps, author profile / authorship, co-authors, publisher information, local business markup, aggregate ratings, reviews, recipe information, event details, and much, much more &mdash; all from your existing WordPress content and plugin data!</p>
-
-<p>WPSSO Core is also language / locale aware, which means you can customize many option values for different languages.</p>
+<p>WPSSO Core is also language / locale aware, which means you can customize several option values for different webpage languages.</p>
 
 <p><strong>Coded for maximum performance:</strong></p>
 
-<p>WPSSO Core makes full use of all available caching methods &mdash; along with offering advanced caching features like pre-seeding its cache in background. WPSSO Core and its complementary add-ons only load the libraries and classes they need, keeping their code small, fast and light. All code is fully tested and compatible with the latest version of WordPress and PHP v7.x (PHP v5.5 or newer required).</p>
+<p>WPSSO Core makes full use of all available caching methods &mdash; along with offering advanced caching features like pre-seeding in background. WPSSO Core and its complementary add-ons load only the libraries and classes they need, keeping their code small, fast and light. All code is fully tested and compatible with the latest version of WordPress and PHP v7.x (WordPress v4.2 and PHP v5.6 or newer required).</p>
 
 <h3>Users Love the WPSSO Core Plugin</h3>
 
@@ -108,7 +102,7 @@
 
 <ul>
 <li>Maximum Images</li>
-<li>Image ID or Image URL</li>
+<li>Image ID or an Image URL</li>
 </ul></li>
 </ul></li>
 </ul></li>
@@ -162,7 +156,8 @@
 
 <ul>
 <li><a href="https://wordpress.org/plugins/wpsso-faq/">WPSSO FAQ Manager</a> to manage FAQ categories with Question and Answer pages.</li>
-<li><a href="https://wordpress.org/plugins/wpsso-am/">WPSSO Mobile App Meta</a> to manage mobile App information.</li>
+<li><a href="https://wordpress.org/plugins/wpsso-inherit-parent-meta/">WPSSO Inherit Parent Metadata</a> to inherit featured and custom images.</li>
+<li><a href="https://wordpress.org/plugins/wpsso-am/">WPSSO Mobile App Meta Tags</a> to manage mobile App information.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-organization/">WPSSO Organization Markup</a> to manage multiple Organizations.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-plm/">WPSSO Place and Local SEO Markup</a> to manage multiple locations.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-ratings-and-reviews/">WPSSO Ratings and Reviews</a> to add ratings in WordPress comments.</li>
@@ -170,7 +165,6 @@
 <li><a href="https://wordpress.org/plugins/wpsso-rrssb/">WPSSO Ridiculously Responsive Social Sharing Buttons</a> to add responsive share buttons.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-breadcrumbs/">WPSSO Schema Breadcrumbs Markup</a> to add Breadcrumbs markup for Google.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-schema-json-ld/">WPSSO Schema JSON-LD Markup</a> to add JSON-LD for Google.</li>
-<li><a href="https://wordpress.org/plugins/wpsso-ssb/">WPSSO Social Sharing Buttons</a> to add traditional share buttons.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-strip-schema-microdata">WPSSO Strip Schema Microdata</a> to strip incorrect markup from templates.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-tune-image-editors">WPSSO Tune Image Editors</a> for better looking WordPress thumbnails.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-tweet-a-quote">WPSSO Tweet a Quote</a> to add tweetable quotes to your content.</li>
@@ -277,7 +271,7 @@
 <ul>
 <li>Include Preview Images</li>
 <li>Maximum Videos</li>
-<li>Video Size</li>
+<li>Video Dimensions</li>
 <li>Video Embed HTML or Video URL</li>
 <li>Video Name / Title</li>
 <li>Video Description</li>
@@ -286,18 +280,18 @@
 <li>Pinterest Pin It
 
 <ul>
-<li>Image ID or Image URL</li>
+<li>Image ID or an Image URL</li>
 </ul></li>
 <li>Twitter Card
 
 <ul>
-<li>Image ID or Image URL</li>
+<li>Image ID or an Image URL</li>
 </ul></li>
 <li>Schema JSON-LD Markup / Rich Results
 
 <ul>
 <li>Maximum Images</li>
-<li>Image ID or Image URL</li>
+<li>Image ID or an Image URL</li>
 </ul></li>
 </ul></li>
 </ul></li>
@@ -312,12 +306,6 @@
 <li>Description</li>
 <li>Microdata Type URLs</li>
 <li>Same-As URLs</li>
-</ul></li>
-<li>Claim Review Information
-
-<ul>
-<li>Short Summary of Claim</li>
-<li>First Appearance URL</li>
 </ul></li>
 <li>Creative Work Information
 
@@ -395,10 +383,10 @@
 <li>Product Width (cm)</li>
 <li>Product Height (cm)</li>
 <li>Product Depth (cm)</li>
-<li>Product Volume (ml)</li>
+<li>Product Fluid Volume (ml)</li>
 <li>Product GTIN-14</li>
-<li>Product GTIN-13/EAN</li>
-<li>Product GTIN-12/UPC</li>
+<li>Product GTIN-13 (EAN)</li>
+<li>Product GTIN-12 (UPC)</li>
 <li>Product GTIN-8</li>
 <li>Product GTIN</li>
 </ul></li>
@@ -450,7 +438,7 @@
 <li>Subject Name </li>
 <li>Subject Description </li>
 <li>Subject Image ID or URL </li>
-<li>Claim Subject Information
+<li>Claim Subject Information (for Claim Review)
 
 <ul>
 <li>Short Summary of Claim</li>

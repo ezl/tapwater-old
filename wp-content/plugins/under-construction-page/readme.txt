@@ -4,11 +4,11 @@ Tags: coming soon page, under construction mode, under construction, under const
 Requires at least: 4.0
 Requires PHP: 5.2
 Tested up to: 5.4
-Stable tag: 3.70
+Stable tag: 3.75
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Super-easy to use Under Construction Page, Maintenance Mode & Coming Soon Page. Enable Under Construction Mode in seconds!
+Easy to use Under Construction Page & Coming Soon Page. Enable Under Construction Mode in seconds & show you're Under Construction!
 
 
 == Description ==
@@ -137,6 +137,10 @@ Or if needed, upload manually;
 
 
 == Changelog ==
+
+= 3.75 =
+* 2020/04/15
+* better cache handling
 
 = 3.70 =
 * 2020/03/27

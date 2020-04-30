@@ -248,7 +248,7 @@ if ( ! class_exists( 'WpssoOptions' ) ) {
 				case 'plugin_yourls_password':
 				case 'plugin_yourls_token':
 				case ( 0 === strpos( $base_key, 'plugin_cf_' ) ? true : false ):		// Value is the name of a meta key.
-				case ( 0 === strpos( $base_key, 'plugin_product_attr_' ) ? true : false ):	// Value is the name of a product attribute.
+				case ( 0 === strpos( $base_key, 'plugin_attr_product_' ) ? true : false ):	// Value is the name of a product attribute.
 
 					return 'one_line';
 
@@ -274,6 +274,7 @@ if ( ! class_exists( 'WpssoOptions' ) ) {
 				case 'product_target_gender':		// Select option with 'none' as default.
 				case ( false !== strpos( $base_key, '_crop_x' ) ? true : false ):
 				case ( false !== strpos( $base_key, '_crop_y' ) ? true : false ):
+				case ( false !== strpos( $base_key, '_type_for_' ) ? true : false ):
 				case ( preg_match( '/^(plugin|wp)_cm_[a-z]+_(name|label)$/', $base_key ) ? true : false ):
 
 					return 'not_blank';
@@ -348,7 +349,6 @@ if ( ! class_exists( 'WpssoOptions' ) ) {
 		public function filter_init_objects() {
 
 			if ( $this->p->debug->enabled ) {
-				$this->p->debug->mark();
 				$this->p->debug->log( 'setting allow_cache to true' );
 			}
 
@@ -379,9 +379,9 @@ if ( ! class_exists( 'WpssoOptions' ) ) {
 					$this->p->debug->log( 'adding defaults derived from post type names' );
 				}
 
-				$defs = $this->p->util->add_ptns_to_opts( $defs, array(
+				$this->p->util->add_post_type_names( $defs, array(
+					'plugin_add_to'   => 1,			// Add Document SSO Metabox.
 					'og_type_for'     => 'article',
-					'plugin_add_to'   => 1,
 					'schema_type_for' => 'webpage',
 				) );
 
@@ -392,7 +392,8 @@ if ( ! class_exists( 'WpssoOptions' ) ) {
 					$this->p->debug->log( 'adding defaults derived from term names' );
 				}
 
-				$defs = $this->p->util->add_ttns_to_opts( $defs, array(
+				$this->p->util->add_taxonomy_names( $defs, array(
+					'plugin_add_to_tax'   => 1,		// Add Document SSO Metabox.
 					'og_type_for_tax'     => 'website',
 					'schema_type_for_tax' => 'item.list',
 				) );
@@ -700,9 +701,9 @@ if ( ! class_exists( 'WpssoOptions' ) ) {
 					$this->p->debug->log( 'adding options derived from post type names' );
 				}
 
-				$opts = $this->p->util->add_ptns_to_opts( $opts, array(
+				$this->p->util->add_post_type_names( $opts, array(
+					'plugin_add_to'   => 1,			// Add Document SSO Metabox.
 					'og_type_for'     => 'article',
-					'plugin_add_to'   => 1,
 					'schema_type_for' => 'webpage',
 				) );
 
@@ -713,7 +714,8 @@ if ( ! class_exists( 'WpssoOptions' ) ) {
 					$this->p->debug->log( 'adding options derived from term names' );
 				}
 
-				$opts = $this->p->util->add_ttns_to_opts( $opts, array(
+				$this->p->util->add_taxonomy_names( $opts, array(
+					'plugin_add_to_tax'   => 1,		// Add Document SSO Metabox.
 					'og_type_for_tax'     => 'website',
 					'schema_type_for_tax' => 'item.list',
 				) );
@@ -1430,7 +1432,9 @@ if ( ! class_exists( 'WpssoOptions' ) ) {
 					$ret_fnum = true;
 
 					if ( ! is_numeric( $opt_val ) ) {
+
 						$this->p->notice->err( sprintf( $error_messages[ 'numeric' ], $opt_key ) );
+
 						$opt_val = $def_val;
 					}
 

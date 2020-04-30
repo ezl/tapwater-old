@@ -10,12 +10,12 @@
  * Author URI: https://wpsso.com/
  * License: GPLv3
  * License URI: https://www.gnu.org/licenses/gpl.txt
- * Description: Google Rich Results and Structured Data for Articles, Carousels (aka Item Lists), Claim Reviews, Events, FAQ Pages, How-Tos, Images, Local Business / Local SEO, Organizations, Products, Ratings, Recipes, Restaurants, Reviews, Videos, and more.
+ * Description: Google Rich Results and Structured Data for Articles, Carousels (aka Item Lists), Claim Reviews, Events, FAQ Pages, How-Tos, Images, Local Business / Local SEO, Organizations, Products, Ratings, Recipes, Restaurants, Reviews, Videos, and More.
  * Requires PHP: 5.6
  * Requires At Least: 4.2
- * Tested Up To: 5.4
+ * Tested Up To: 5.4.1
  * WC Tested Up To: 4.0.1
- * Version: 3.2.0
+ * Version: 3.5.0
  * 
  * Version Numbering: {major}.{minor}.{bugfix}[-{stage}.{level}]
  *
@@ -127,15 +127,15 @@ if ( ! class_exists( 'WpssoJson' ) ) {
 		/**
 		 * The 'wpsso_init_textdomain' action is run after the $check, $avail, and $debug properties are defined.
 		 */
-		public static function wpsso_init_textdomain() {
+		public static function wpsso_init_textdomain( $debug_enabled = false ) {
 
-			static $do_once = null;
+			static $loaded = null;
 
-			if ( true === $do_once ) {
+			if ( null !== $loaded ) {
 				return;
 			}
 
-			$do_once = true;
+			$loaded = true;
 
 			load_plugin_textdomain( 'wpsso-schema-json-ld', false, 'wpsso-schema-json-ld/languages/' );
 		}

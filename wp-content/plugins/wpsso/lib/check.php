@@ -20,6 +20,9 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 				'amp'                      => 'AMP',	// AMP, Better AMP, etc.
 				'accelerated-mobile-pages' => 'Accelerated Mobile Pages',
 			),
+			'media' => array(
+				'wp-retina-2x' => 'WP Retina 2x',
+			),
 			'p' => array(
 				'schema'  => 'Schema Markup',
 				'vary_ua' => 'Vary by User Agent',
@@ -272,6 +275,15 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 									break;
 
 								/**
+								 * WP Retina 2x.
+								 */
+								case 'wp-retina-2x':
+
+									$chk[ 'class' ] = 'Meow_WR2X_Core';
+
+									break;
+
+								/**
 								 * Premium version feature / option.
 								 */
 								case 'facebook':
@@ -482,12 +494,6 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 						case 'util':
 
 							switch ( $id ) {
-
-								case 'custom-fields':
-
-									$get_avail[ $sub ][ 'any' ] = $get_avail[ $sub ][ $id ] = true;
-
-									break;
 
 								case 'coauthors':
 

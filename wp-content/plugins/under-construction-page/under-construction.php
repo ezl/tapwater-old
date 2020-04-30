@@ -4,7 +4,7 @@
   Plugin URI: https://underconstructionpage.com/
   Description: Put your site behind a great looking under construction, coming soon, maintenance mode or landing page.
   Author: WebFactory Ltd
-  Version: 3.70
+  Version: 3.75
   Author URI: https://www.webfactoryltd.com/
   Text Domain: under-construction-page
 
@@ -843,7 +843,7 @@ class UCP {
       $dismiss_url = add_query_arg(array('action' => 'ucp_dismiss_notice', 'notice' => 'welcome', 'redirect' => urlencode($_SERVER['REQUEST_URI'])), admin_url('admin.php'));
 
       echo '<div id="ucp_rate_notice" class="notice-info notice"><p>Hi' . $name . ',<br>';
-      echo 'We have a <a class="open-ucp-upsell" data-pro-ad="notification-welcome-text" href="#">special time-sensitive offer</a> available just for another <b class="ucp-countdown">59min</b>! A <b>20% DISCOUNT</b> on our most popular lifetime licenses!<br>No nonsense! Pay once and use the plugin forever. <a class="open-ucp-upsell" data-pro-ad="notification-welcome-text2" href="#">Get</a> more than 50+ extra features, 200+ premium themes and over a million professional images.</p>';
+      echo 'We have a <a class="open-ucp-upsell" data-pro-ad="notification-welcome-text" href="#">special time-sensitive offer</a> available just for another <b class="ucp-countdown">59min</b>! A <b>20% DISCOUNT</b> on our most popular lifetime licenses!<br>No nonsense! Pay once and use the plugin forever. <a class="open-ucp-upsell" data-pro-ad="notification-welcome-text2" href="#">Get</a> more than 50+ extra features, 220+ premium themes and over a million professional images.</p>';
 
       echo '<a href="#" class="button-primary open-ucp-upsell" data-pro-ad="notification-welcome-button">Upgrade to PRO now with a SPECIAL 20% WELCOME DISCOUNT</a>';
       echo '&nbsp;&nbsp;&nbsp;&nbsp;<a href="' . esc_url($dismiss_url) . '"><small>' . __('I\'m not interested (remove this notice)', 'under-construction-page') . '</small></a>';
@@ -858,7 +858,7 @@ class UCP {
       $dismiss_url = add_query_arg(array('action' => 'ucp_dismiss_notice', 'notice' => 'olduser', 'redirect' => urlencode($_SERVER['REQUEST_URI'])), admin_url('admin.php'));
 
       echo '<div id="ucp_rate_notice" class="notice-info notice"><p>Hi' . $name . ',<br>';
-      echo 'We have a <a class="open-ucp-upsell" data-pro-ad="notification-olduser-text" href="#">special offer</a> only for <b>users like you</b> who\'ve been using the UnderConstructionPage for a longer period of time: a <b>special DISCOUNT</b> on our most popular lifetime licenses!<br>No nonsense! Pay once and use the plugin forever.<br><a class="open-ucp-upsell" data-pro-ad="notification-olduser-text" href="#">Upgrade now</a> to <b>PRO</b> &amp; get more than 50+ extra features, 200+ premium themes and over a million HD images.</p>';
+      echo 'We have a <a class="open-ucp-upsell" data-pro-ad="notification-olduser-text" href="#">special offer</a> only for <b>users like you</b> who\'ve been using the UnderConstructionPage for a longer period of time: a <b>special DISCOUNT</b> on our most popular lifetime licenses!<br>No nonsense! Pay once and use the plugin forever.<br><a class="open-ucp-upsell" data-pro-ad="notification-olduser-text" href="#">Upgrade now</a> to <b>PRO</b> &amp; get more than 50+ extra features, 220+ premium themes and over a million HD images.</p>';
 
       echo '<a href="#" class="button-primary open-ucp-upsell" data-pro-ad="notification-olduser-button">Upgrade to PRO now with a SPECIAL DISCOUNT</a>';
       echo '&nbsp;&nbsp;&nbsp;&nbsp;<a href="' . esc_url($dismiss_url) . '"><small>' . __('I\'m not interested (remove this notice)', 'under-construction-page') . '</small></a>';
@@ -1267,40 +1267,44 @@ class UCP {
       $notices = get_option(UCP_NOTICES_KEY);
       unset($notices['dismiss_whitelisted']);
       update_option(UCP_NOTICES_KEY, $notices);
-
-      wp_cache_flush();
-      if (function_exists('w3tc_flush_all')) {
-        w3tc_flush_all();
-      }
-      if (function_exists('wp_cache_clear_cache')) {
-        wp_cache_clear_cache();
-      }
-      if (method_exists('LiteSpeed_Cache_API', 'purge_all')) {
-        LiteSpeed_Cache_API::purge_all();
-      }
-      if (class_exists('Endurance_Page_Cache')) {
-        $epc = new Endurance_Page_Cache;
-        $epc->purge_all();
-      }
-      if (class_exists('SG_CachePress_Supercacher') && method_exists('SG_CachePress_Supercacher', 'purge_cache')) {
-        SG_CachePress_Supercacher::purge_cache(true);
-      }
-      if (class_exists('SiteGround_Optimizer\Supercacher\Supercacher')) {
-        SiteGround_Optimizer\Supercacher\Supercacher::purge_cache();
-      }
-      if (isset($GLOBALS['wp_fastest_cache']) && method_exists($GLOBALS['wp_fastest_cache'], 'deleteCache')) {
-        $GLOBALS['wp_fastest_cache']->deleteCache(true);
-      }
-      if (is_callable(array('Swift_Performance_Cache', 'clear_all_cache'))) {
-        Swift_Performance_Cache::clear_all_cache();
-      }
-      if (is_callable(array('Hummingbird\WP_Hummingbird', 'flush_cache'))) {
-        Hummingbird\WP_Hummingbird::flush_cache(true, false);
-      }
+      self::empty_cache();
     }
 
     return array_merge($old_options, $options);
   } // sanitize_settings
+  
+  
+  static function empty_cache() {
+    wp_cache_flush();
+    if (function_exists('w3tc_flush_all')) {
+      w3tc_flush_all();
+    }
+    if (function_exists('wp_cache_clear_cache')) {
+      wp_cache_clear_cache();
+    }
+    if (method_exists('LiteSpeed_Cache_API', 'purge_all')) {
+      LiteSpeed_Cache_API::purge_all();
+    }
+    if (class_exists('Endurance_Page_Cache')) {
+      $epc = new Endurance_Page_Cache;
+      $epc->purge_all();
+    }
+    if (class_exists('SG_CachePress_Supercacher') && method_exists('SG_CachePress_Supercacher', 'purge_cache')) {
+      SG_CachePress_Supercacher::purge_cache(true);
+    }
+    if (class_exists('SiteGround_Optimizer\Supercacher\Supercacher')) {
+      SiteGround_Optimizer\Supercacher\Supercacher::purge_cache();
+    }
+    if (isset($GLOBALS['wp_fastest_cache']) && method_exists($GLOBALS['wp_fastest_cache'], 'deleteCache')) {
+      $GLOBALS['wp_fastest_cache']->deleteCache(true);
+    }
+    if (is_callable(array('Swift_Performance_Cache', 'clear_all_cache'))) {
+      Swift_Performance_Cache::clear_all_cache();
+    }
+    if (is_callable(array('Hummingbird\WP_Hummingbird', 'flush_cache'))) {
+      Hummingbird\WP_Hummingbird::flush_cache(true, false);
+    }
+  } // empty_cache
 
 
   // checkbox helper function
@@ -1827,7 +1831,7 @@ class UCP {
 
     echo '<table class="form-table">';
     echo '<tr valign="top">
-    <td colspan="2"><b style="margin-bottom: 10px; display: inline-block;">' . __('Theme', 'under-construction-page') . '</b> (<a target="_blank" href="' . self::generate_web_link('themes-browse-premium', 'templates') . '">browse 200+ premium themes</a>)<br>';
+    <td colspan="2"><b style="margin-bottom: 10px; display: inline-block;">' . __('Theme', 'under-construction-page') . '</b> (<a target="_blank" href="' . self::generate_web_link('themes-browse-premium', 'templates') . '">browse 220+ premium themes</a>)<br>';
     echo '<input type="hidden" id="theme_id" name="' . UCP_OPTIONS_KEY . '[theme]" value="' . $options['theme'] . '">';
 
     foreach ($themes as $theme_id => $theme_name) {
@@ -1863,7 +1867,7 @@ class UCP {
     <td>';
     echo '<textarea data-autoresize="1" rows="3" id="custom_css" class="code large-text" name="' . UCP_OPTIONS_KEY . '[custom_css]" placeholder=".selector { property-name: property-value; }">' . esc_textarea($options['custom_css']) . '</textarea>';
     echo '<p class="description">&lt;style&gt; tags will be added automatically. Do not include them in your code.<br>
-    For RTL languages support add: <code>body { direction: rtl; }</code></p>';
+    For RTL languages support add: <code>body { direction: rtl; }</code><br>If you need help with writing custom CSS code, post your question on the <a href="https://wordpress.org/support/plugin/under-construction-page/" target="_blank">official forum</a>.</p>';
     echo '</td></tr>';
 
     echo '</table>';
@@ -2214,7 +2218,7 @@ class UCP {
     echo '</div>';
 
     echo '<div class="ucp-pro-feature">';
-    echo '<span>200+ Templates</span>';
+    echo '<span>220+ Templates</span>';
     echo '<p>Building your own page from scratch is fun, but often you don\'t have time to do it! Use one of our purpose-built templates, change a few lines of text and you\'re ready to rock!</p>';
     echo '</div>';
 
@@ -2608,12 +2612,15 @@ class UCP {
   // reset pointers on activation
   static function activate() {
     self::reset_pointers();
+    self::empty_cache();
   } // activate
+
 
   // clean up on deactivation
   static function deactivate() {
     delete_option(UCP_POINTERS_KEY);
     delete_option(UCP_NOTICES_KEY);
+    self::empty_cache();
   } // deactivate
 
 

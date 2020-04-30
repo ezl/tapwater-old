@@ -61,7 +61,7 @@ if($categories[1])://only show if is country page
     $query = new WP_Query(array(
     	'post_type' => 'page',
     	'category_name' => $continent_name,
-        'post_status' => 'any'
+        'post_status' => 'publish'
     ));
     if($query->have_posts()):
     echo '<h3>View other countries in '.$continent_name.'</h3>';
@@ -109,7 +109,7 @@ if($categories[0] && !$categories[1]):
     	 $query = new WP_Query(array(
         	'post_type' => 'post',
         	'category_name' => $country->slug,
-            'post_status' => 'all'
+            'post_status' => 'publish'
         ));
         ?>
         <div class="region<?php if($n == 1){echo ' active';} ?>" data-region="<?php echo $country->slug; ?>">

@@ -61,15 +61,6 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 
 				$this->query_tax_obj = get_taxonomy( $this->query_tax_slug );
 
-				if ( empty( $this->query_tax_obj->public ) ) {
-
-					if ( $this->p->debug->enabled ) {
-						$this->p->debug->log( 'exiting early: taxonomy is not public' );
-					}
-
-					return;
-				}
-
 				/**
 				 * Add edit table columns.
 				 */
@@ -166,6 +157,17 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 			$mod[ 'is_term' ]  = true;
 			$mod[ 'tax_slug' ] = SucomUtil::get_term_object( $mod[ 'id' ], (string) $tax_slug, 'taxonomy' );
 
+			/**
+			 * Check if the taxonomy terms are publicly available.
+			 */
+			if ( $tax_object = get_taxonomy( $mod[ 'tax_slug' ] ) ) {
+
+				if ( isset( $tax_object->public ) ) {
+
+					$mod[ 'is_public' ] = $tax_object->public ? true : false;
+				}
+			}
+
 			return apply_filters( $this->p->lca . '_get_term_mod', $mod, $mod_id, $tax_slug );
 		}
 
@@ -190,11 +192,10 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 
 			static $local_cache = array();
 
-			$cache_id = SucomUtil::get_assoc_salt( array(
-				'id'     => $term_id,
-				'filter' => $filter_opts,
-				'pad'    => $pad_opts,
-			) );
+			/**
+			 * Do not add $pad_opts to the $cache_id string.
+			 */
+			$cache_id = SucomUtil::get_assoc_salt( array( 'id' => $term_id, 'filter' => $filter_opts ) );
 
 			/**
 			 * Maybe initialize the cache.
@@ -245,6 +246,11 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 
 					$mod = $this->get_mod( $term_id );
 
+					/**
+					 * Since WPSSO Core v7.1.0.
+					 */
+					$md_opts = apply_filters( $this->p->lca . '_get_md_options', $md_opts, $mod );
+
 					$md_opts = apply_filters( $this->p->lca . '_get_term_options', $md_opts, $term_id, $mod );
 
 					if ( $this->p->debug->enabled ) {
@@ -283,6 +289,8 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 				unset( $opts[ 'seo_desc' ] );
 			}
 
+			$opts = apply_filters( $this->p->lca . '_save_md_options', $opts, $mod );
+
 			$opts = apply_filters( $this->p->lca . '_save_term_options', $opts, $term_id, $term_tax_id, $mod );
 
 			if ( empty( $opts ) ) {
@@ -301,6 +309,8 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 
 		/**
 		 * Get all publicly accessible term IDs for a taxonomy slug (optional).
+		 *
+		 * These may include term IDs from non-public taxonomies.
 		 */
 		public static function get_public_ids( $tax_name = null ) {
 
@@ -311,18 +321,23 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 			);
 
 			$add_tax_in_args = version_compare( $wp_version, '4.5.0', '>=' ) ? true : false;
+
 			$public_term_ids = array();
 
-			foreach ( self::get_public_tax_names( $tax_name ) as $term_tax_name ) {
+			$args = array( 'show_in_menu' => 1, 'show_ui' => 1 );
+
+			$tax_names = get_taxonomies( $args, $output = 'names', $operator = 'and' );
+
+			foreach ( $tax_names as $name ) {
 
 				if ( $add_tax_in_args ) {	// Since WP v4.5.
 
-					$terms_args[ 'taxonomy' ] = $term_tax_name;
+					$terms_args[ 'taxonomy' ] = $name;
 
 					$term_ids = get_terms( $terms_args );
 
 				} else {
-					$term_ids = get_terms( $term_tax_name, $terms_args );
+					$term_ids = get_terms( $name, $terms_args );
 				}
 
 				foreach ( $term_ids as $term_id ) {
@@ -333,25 +348,6 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 			rsort( $public_term_ids );	// Newest id first.
 
 			return $public_term_ids;
-		}
-
-		/**
-		 * Get all publicly accessible taxonomy names for a taxonomy slug (optional).
-		 */
-		public static function get_public_tax_names( $tax_name = null ) {
-
-			$get_tax_args = array(
-				'public'  => 1,
-				'show_ui' => 1,
-			);
-
-			if ( is_string( $tax_name ) ) {
-				$get_tax_args[ 'name' ] = $tax_name;
-			}
-
-			$tax_oper = 'and';
-
-			return get_taxonomies( $get_tax_args, 'names', $tax_oper );
 		}
 
 		/**
@@ -586,7 +582,7 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 
 			WpssoWpMeta::$head_tags = array();
 
-			$add_metabox = empty( $this->p->options[ 'plugin_add_to_term' ] ) ? false : true;
+			$add_metabox = empty( $this->p->options[ 'plugin_add_to_tax_' . $this->query_tax_slug ] ) ? false : true;
 
 			$add_metabox = apply_filters( $this->p->lca . '_add_metabox_term', $add_metabox, $this->query_term_id );
 
@@ -607,30 +603,38 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 				 * $read_cache is false to generate notices etc.
 				 */
 				WpssoWpMeta::$head_tags = $this->p->head->get_head_array( $use_post = false, $mod, $read_cache = false );
+
 				WpssoWpMeta::$head_info = $this->p->head->extract_head_info( $mod, WpssoWpMeta::$head_tags );
 
 				/**
 				 * Check for missing open graph image and description values.
 				 */
-				foreach ( array( 'image', 'description' ) as $mt_suffix ) {
+				if ( $mod[ 'is_public' ] ) {	// Since WPSSO Core v7.0.0.
 
-					if ( empty( WpssoWpMeta::$head_info[ 'og:' . $mt_suffix] ) ) {
+					$ref_url = empty( WpssoWpMeta::$head_info[ 'og:url' ] ) ? null : WpssoWpMeta::$head_info[ 'og:url' ];
 
-						if ( $this->p->debug->enabled ) {
-							$this->p->debug->log( 'og:' . $mt_suffix . ' meta tag is value empty and required' );
-						}
+					$ref_url = $this->p->util->maybe_set_ref( $ref_url, $mod, __( 'checking meta tags', 'wpsso' ) );
 
-						/**
-						 * Add notice only if the admin notices have not already been shown.
-						 */
-						if ( $this->p->notice->is_admin_pre_notices() ) {
+					foreach ( array( 'image', 'description' ) as $mt_suffix ) {
 
-							$notice_msg = $this->p->msgs->get( 'notice-missing-og-' . $mt_suffix );
-							$notice_key = $mod[ 'name' ] . '-' . $mod[ 'id' ] . '-notice-missing-og-' . $mt_suffix;
+						if ( empty( WpssoWpMeta::$head_info[ 'og:' . $mt_suffix] ) ) {
 
-							$this->p->notice->err( $notice_msg, null, $notice_key );
+							if ( $this->p->debug->enabled ) {
+								$this->p->debug->log( 'og:' . $mt_suffix . ' meta tag is value empty and required' );
+							}
+
+							if ( $this->p->notice->is_admin_pre_notices() ) {
+
+								$notice_msg = $this->p->msgs->get( 'notice-missing-og-' . $mt_suffix );
+
+								$notice_key = $mod[ 'name' ] . '-' . $mod[ 'id' ] . '-notice-missing-og-' . $mt_suffix;
+
+								$this->p->notice->err( $notice_msg, null, $notice_key );
+							}
 						}
 					}
+
+					$this->p->util->maybe_unset_ref( $ref_url );
 				}
 			}
 
@@ -681,7 +685,8 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 				return;
 			}
 
-			$add_metabox = empty( $this->p->options[ 'plugin_add_to_term' ] ) ? false : true;
+			$add_metabox = empty( $this->p->options[ 'plugin_add_to_tax_' . $this->query_tax_slug ] ) ? false : true;
+
 			$add_metabox = apply_filters( $this->p->lca . '_add_metabox_term', $add_metabox, $this->query_term_id );
 
 			if ( $this->p->debug->enabled ) {
@@ -774,9 +779,13 @@ if ( ! class_exists( 'WpssoTerm' ) ) {
 			$mb_container_id = $this->p->lca . '_metabox_' . $metabox_id . '_inside';
 
 			$metabox_html = "\n" . '<div id="' . $mb_container_id . '">';
+
 			$metabox_html .= $this->p->util->get_metabox_tabbed( $metabox_id, $tabs, $table_rows, $tabbed_args );
+
 			$metabox_html .= apply_filters( $mb_container_id . '_footer', '', $mod );
+
 			$metabox_html .= '</div><!-- #'. $mb_container_id . ' -->' . "\n";
+
 			$metabox_html .= $this->get_metabox_javascript( $mb_container_id );
 
 			if ( $this->p->debug->enabled ) {

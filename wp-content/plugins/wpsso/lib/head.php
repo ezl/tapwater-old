@@ -379,7 +379,7 @@ if ( ! class_exists( 'WpssoHead' ) ) {
 				$mod = $this->p->util->get_page_mod( $use_post );
 			}
 
-			$sharing_url = $this->p->util->get_sharing_url( $mod, $add_page = true, 'head_sharing_url' );
+			$sharing_url = $this->p->util->get_sharing_url( $mod, $add_page = true );
 
 			if ( empty( $sharing_url ) ) {	// Just in case.
 
@@ -390,7 +390,9 @@ if ( ! class_exists( 'WpssoHead' ) ) {
 				return array();
 			}
 
-			$is_admin       = is_admin();	// Call the function only once.
+			/**
+			 * Setup variables for transient cache.
+			 */
 			$cache_md5_pre  = $this->p->lca . '_h_';
 			$cache_exp_secs = $this->p->util->get_cache_exp_secs( $cache_md5_pre );
 			$cache_salt     = __METHOD__ . '(' . SucomUtil::get_mod_salt( $mod, $sharing_url ) . ')';

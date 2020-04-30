@@ -182,29 +182,28 @@ if ( ! class_exists( 'WpssoStyle' ) ) {
 			/**
 			 * Re-use the notice border colors for the side column and dashboard metaboxes.
 			 */
+			$color            = $this->p->cf[ 'notice' ][ 'update-nag' ][ 'color' ];
+			$border_color     = $this->p->cf[ 'notice' ][ 'update-nag' ][ 'border-color' ];
+			$background_color = $this->p->cf[ 'notice' ][ 'update-nag' ][ 'background-color' ];
+
 			$custom_style_css .= '
-
 				#poststuff #side-info-column .postbox {
-					border:1px solid ' . $this->p->cf[ 'notice' ][ 'update-nag' ][ 'border-color' ] . ';
+					border:1px solid ' . $border_color . ';
 				}
-
 				#poststuff #side-info-column .postbox h2 {
-					border-bottom:1px dotted ' . $this->p->cf[ 'notice' ][ 'update-nag' ][ 'border-color' ] . ';
+					border-bottom:1px dotted ' . $border_color . ';
 				}
-
 				#poststuff #side-info-column .postbox.closed h2 {
-					border-bottom:1px solid ' . $this->p->cf[ 'notice' ][ 'update-nag' ][ 'border-color' ] . ';
+					border-bottom:1px solid ' . $border_color . ';
 				}
-
 				#poststuff #side-info-column .postbox.closed {
 					border-bottom:none;
 				}
-
 				#poststuff #side-info-column .postbox .inside td.blank,
 				#poststuff .dashboard_col .postbox .inside td.blank {
-					color:' . $this->p->cf[ 'notice' ][ 'update-nag' ][ 'color' ] . ';
-					border-color:' . $this->p->cf[ 'notice' ][ 'update-nag' ][ 'border-color' ] . ';
-					background-color:' . $this->p->cf[ 'notice' ][ 'update-nag' ][ 'background-color' ] . ';
+					color:' . $color . ';
+					border-color:' . $border_color . ';
+					background-color:' . $background_color . ';
 				}
 			';
 
@@ -306,10 +305,10 @@ if ( ! class_exists( 'WpssoStyle' ) ) {
 			 */
 			$custom_style_css .= '
 				#wpadminbar #wp-toolbar #' . $lca . '-toolbar-notices-icon.ab-icon::before { 
-					font-size:30px;
-					font-style:normal;
-					line-height:20px;
 					content:"' . $this->p->cf[ 'menu' ][ 'before' ] . '";
+					display:inline-block;
+					font-size:26px;
+					line-height:20px;
 				}
 			';
 
@@ -321,10 +320,10 @@ if ( ! class_exists( 'WpssoStyle' ) ) {
 				#adminmenu li.menu-top.toplevel_page_' . $sitemenu . ' div.wp-menu-image::before,
 				#adminmenu li.menu-top.toplevel_page_' . $menu . ':hover div.wp-menu-image::before,
 				#adminmenu li.menu-top.toplevel_page_' . $sitemenu . ':hover div.wp-menu-image::before {
-					display:inline-block;
-					font-size:30px;
 					content:"' . $this->p->cf[ 'menu' ][ 'before' ] . '";
-					margin:-4px 0 0 0;
+					display:inline-block;
+					font-size:26px;
+					margin:0;
 					padding:0;
 				}
 				#adminmenu #toplevel_page_' . $menu . ' ul > li > a,
@@ -473,13 +472,13 @@ if ( ! class_exists( 'WpssoStyle' ) ) {
 				table.wp-list-table > tbody > tr > td.column-categories,
 				table.wp-list-table > thead > tr > th.column-product_cat,
 				table.wp-list-table > tbody > tr > td.column-product_cat {
-					width:15% !important;
+					width:20%;
 				}
 				table.wp-list-table > thead > tr > th.column-tags,
 				table.wp-list-table > tbody > tr > td.column-tags,
 				table.wp-list-table > thead > tr > th.column-product_tag,
 				table.wp-list-table > tbody > tr > td.column-product_tag {
-					width:15% !important;
+					width:15%;
 				}
 				table.wp-list-table > thead > tr > th.column-description,
 				table.wp-list-table > tbody > tr > td.column-description {
@@ -585,11 +584,11 @@ if ( ! class_exists( 'WpssoStyle' ) ) {
 				table.wp-list-table > tbody > tr > td.column-wpseo-title,
 				table.wp-list-table > thead > tr > th.column-wpseo-metadesc,
 				table.wp-list-table > tbody > tr > td.column-wpseo-metadesc {
-					width:15%;
+					width:20%;
 				}
 				table.wp-list-table > thead > tr > th.column-wpseo-focuskw,	/* Yoast SEO. */
 				table.wp-list-table > tbody > tr > td.column-wpseo-focuskw {
-					width:8em;
+					width:8em;	/* Leave room for the sort arrow. */
 				}
 				table.wp-list-table > thead > tr > th.column-rank_math_seo_details,	/* Rank Math. */
 				table.wp-list-table > tbody > tr > td.column-rank_math_seo_details {
@@ -604,8 +603,8 @@ if ( ! class_exists( 'WpssoStyle' ) ) {
 			if ( isset( $sort_cols[ 'schema_type' ][ 'width' ] ) ) {
 				$custom_style_css .= '
 					.column-' . $lca . '_schema_type {
-						width:' . $sort_cols[ 'schema_type' ][ 'width' ] . ' !important;
-						max-width:' . $sort_cols[ 'schema_type' ][ 'width' ] . ' !important;
+						width:' . $sort_cols[ 'schema_type' ][ 'width' ] . ';
+						max-width:' . $sort_cols[ 'schema_type' ][ 'width' ] . ';
 						white-space:nowrap;
 						overflow:hidden;
 					}

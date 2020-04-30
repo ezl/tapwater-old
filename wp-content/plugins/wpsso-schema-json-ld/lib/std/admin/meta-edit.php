@@ -721,14 +721,14 @@ if ( ! class_exists( 'WpssoJsonStdAdminMetaEdit' ) ) {
 					'content'  => $form->get_no_input( 'product_depth_value', '', $css_id = '', $placeholder = true ) .
 						WpssoAdmin::get_option_unit_comment( 'product_depth_value' ),
 				),
-				'schema_product_volume_value' => array(
+				'schema_product_fluid_volume_value' => array(
 					'tr_class' => $schema_type_row_class[ 'product' ],
 					'th_class' => 'medium',
 					'td_class' => 'blank',
-					'label'    => _x( 'Product Volume', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-product_volume_value',
-					'content'  => $form->get_no_input( 'product_volume_value', '', $css_id = '', $placeholder = true ) .
-						WpssoAdmin::get_option_unit_comment( 'product_volume_value' ),
+					'label'    => _x( 'Product Fluid Volume', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-product_fluid_volume_value',
+					'content'  => $form->get_no_input( 'product_fluid_volume_value', '', $css_id = '', $placeholder = true ) .
+						WpssoAdmin::get_option_unit_comment( 'product_fluid_volume_value' ),
 				),
 				'schema_product_gtin14' => array(
 					'tr_class' => $schema_type_row_class[ 'product' ],
@@ -742,7 +742,7 @@ if ( ! class_exists( 'WpssoJsonStdAdminMetaEdit' ) ) {
 					'tr_class' => $schema_type_row_class[ 'product' ],
 					'th_class' => 'medium',
 					'td_class' => 'blank',
-					'label'    => _x( 'Product GTIN-13/EAN', 'option label', 'wpsso-schema-json-ld' ),	// aka Product EAN.
+					'label'    => _x( 'Product GTIN-13 (EAN)', 'option label', 'wpsso-schema-json-ld' ),	// aka Product EAN.
 					'tooltip'  => 'meta-product_gtin13',
 					'content'  => $form->get_no_input( 'product_gtin13', '', $css_id = '', $placeholder = true ),
 				),
@@ -750,7 +750,7 @@ if ( ! class_exists( 'WpssoJsonStdAdminMetaEdit' ) ) {
 					'tr_class' => $schema_type_row_class[ 'product' ],
 					'th_class' => 'medium',
 					'td_class' => 'blank',
-					'label'    => _x( 'Product GTIN-12/UPC', 'option label', 'wpsso-schema-json-ld' ),	// aka Product UPC.
+					'label'    => _x( 'Product GTIN-12 (UPC)', 'option label', 'wpsso-schema-json-ld' ),	// aka Product UPC.
 					'tooltip'  => 'meta-product_gtin12',
 					'content'  => $form->get_no_input( 'product_gtin12', '', $css_id = '', $placeholder = true ),
 				),

@@ -9,6 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
+/**
+ * WordPress metadata class, extended by the WpssoPost, WpssoTerm, and WpssoUser classes.
+ */
 if ( ! class_exists( 'WpssoWpMeta' ) ) {
 
 	class WpssoWpMeta {
@@ -20,9 +23,8 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 		 * The WpssoPost, WpssoTerm, and WpssoUser->load_meta_page() methods define the $head_tags and $head_info static
 		 * variables.
 		 */
-		protected static $head_tags = false;	// Must be false by default.
-		protected static $head_info = array();
-
+		protected static $head_tags         = false;	// Must be false by default.
+		protected static $head_info         = array();
 		protected static $last_column_id    = null;	// Cache id of the last column request in list table.
 		protected static $last_column_array = array();	// Array of column values for last column requested.
 		protected static $cache_short_url   = null;
@@ -124,9 +126,10 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 			/**
 			 * Common elements.
 			 */
-			'id'   => 0,			// Post, term, or user ID.
-			'name' => false,		// Module name ('post', 'term', or 'user').
-			'obj'  => false,		// Module object.
+			'id'        => 0,		// Post, term, or user ID.
+			'name'      => false,		// Module name ('post', 'term', or 'user').
+			'obj'       => false,		// Module object.
+			'is_public' => true,		// Module object is public.
 
 			/**
 			 * Post elements.
@@ -385,6 +388,9 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 			return false;
 		}
 
+		/**
+		 * Do not pass $md_opts by reference as the options array may get padded with default values.
+		 */
 		protected function return_options( $mod_id, array $md_opts, $md_key = false, $pad_opts = false ) {
 
 			if ( $pad_opts ) {
@@ -396,6 +402,7 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 					if ( is_array( $def_opts ) ) {	// Just in case.
 
 						foreach ( $def_opts as $key => $val ) {
+
 							if ( ! isset( $md_opts[ $key ] ) && $val !== '' ) {
 								$md_opts[ $key ] = $def_opts[ $key ];
 							}
@@ -530,14 +537,22 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 
 			switch ( $metabox_id ) {
 
-				case $this->p->cf[ 'meta' ][ 'id' ]:
+				case $this->p->cf[ 'meta' ][ 'id' ]:	// 'sso' metabox ID.
 
-					$tabs[ 'edit' ]     = _x( 'Customize', 'metabox tab', 'wpsso' );
-					$tabs[ 'media' ]    = _x( 'Priority Media', 'metabox tab', 'wpsso' );
-					$tabs[ 'preview' ]  = _x( 'Preview', 'metabox tab', 'wpsso' );
-					$tabs[ 'oembed' ]   = _x( 'oEmbed', 'metabox tab', 'wpsso' );
-					$tabs[ 'head' ]     = _x( 'Head', 'metabox tab', 'wpsso' );
-					$tabs[ 'validate' ] = _x( 'Validate', 'metabox tab', 'wpsso' );
+					if ( $mod[ 'is_public' ] ) {	// Since WPSSO Core v7.0.0.
+
+						$tabs[ 'edit' ]     = _x( 'Customize', 'metabox tab', 'wpsso' );
+						$tabs[ 'media' ]    = _x( 'Priority Media', 'metabox tab', 'wpsso' );
+						$tabs[ 'preview' ]  = _x( 'Preview', 'metabox tab', 'wpsso' );
+						$tabs[ 'oembed' ]   = _x( 'oEmbed', 'metabox tab', 'wpsso' );
+						$tabs[ 'head' ]     = _x( 'Head Markup', 'metabox tab', 'wpsso' );
+						$tabs[ 'validate' ] = _x( 'Validate', 'metabox tab', 'wpsso' );
+
+					} else {
+
+						$tabs[ 'edit' ]     = _x( 'Customize', 'metabox tab', 'wpsso' );
+						$tabs[ 'media' ]    = _x( 'Priority Media', 'metabox tab', 'wpsso' );
+					}
 
 					break;
 			}
@@ -552,9 +567,7 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 			/**
 			 * Exclude the 'oEmbed' tab from non-post editing pages.
 			 */
-			if ( ! function_exists( 'get_oembed_response_data' ) ||	// Since WP v4.4.
-				! $mod[ 'is_post' ] || ! $mod[ 'id' ] ) {
-
+			if ( ! function_exists( 'get_oembed_response_data' ) ||	! $mod[ 'is_post' ] || ! $mod[ 'id' ] ) {
 				unset( $tabs[ 'oembed' ] );
 			}
 
@@ -938,12 +951,10 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 			$xml_url     = $this->p->util->get_oembed_url( $mod, 'xml' );
 			$oembed_data = $this->p->util->get_oembed_data( $mod, $oembed_width );
 
-			$table_rows[] = '' . 
-			$form->get_th_html( _x( 'oEmbed JSON URL', 'option label', 'wpsso' ), 'medium' ) . 
+			$table_rows[] = $form->get_th_html( _x( 'oEmbed JSON URL', 'option label', 'wpsso' ), 'medium' ) . 
 			'<td>' . SucomForm::get_no_input_clipboard( $json_url ) . '</td>';
 
-			$table_rows[] = '' . 
-			$form->get_th_html( _x( 'oEmbed XML URL', 'option label', 'wpsso' ), 'medium' ) . 
+			$table_rows[] = $form->get_th_html( _x( 'oEmbed XML URL', 'option label', 'wpsso' ), 'medium' ) . 
 			'<td>' . SucomForm::get_no_input_clipboard( $xml_url ) . '</td>';
 
 			$table_rows[ 'subsection_oembed_data' ] = '<td colspan="2" class="subsection"><h4>' . 
@@ -954,13 +965,14 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 				foreach( $oembed_data as $key => $val ) {
 
 					if ( 'html' === $key ) {
+
 						$oembed_html = $val;
-						$val = __( '(see bellow)', 'wpsso' );
+
+						$val = __( '(see below)', 'wpsso' );
 					}
 
-					$table_rows[] = '' . 
-					'<th class="short">' . esc_html( $key ) . '</th>' .
-					'<td class="wide">' . SucomUtil::maybe_link_url( esc_html( $val ) ) . '</td>';
+					$table_rows[] = '<th class="short">' . esc_html( $key ) . '</th>' .
+						'<td class="wide">' . SucomUtil::maybe_link_url( esc_html( $val ) ) . '</td>';
 				}
 
 			} else {
@@ -972,10 +984,7 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 
 			if ( ! empty( $oembed_html ) ) {
 
-				$table_rows[] = '' .
-				'<td colspan="2" class="oembed_container">
-					' . $oembed_html . '
-				</td><!-- .oembed_container -->';
+				$table_rows[] = '<td colspan="2" class="oembed_container">' . $oembed_html . '</td><!-- .oembed_container -->';
 
 				$table_rows[] = '<td colspan="2">' . $this->p->msgs->get( 'info-meta-oembed-html' ) . '</td>';
 
@@ -1193,6 +1202,7 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 			$mod = $this->get_mod( $obj_id );
 
 			$local_head_tags = $this->p->head->get_head_array( $use_post = false, $mod, $read_cache );
+
 			$local_head_info = $this->p->head->extract_head_info( $mod, $local_head_tags );
 
 			return $local_cache[ $cache_id ] = $local_head_info;
@@ -1452,10 +1462,11 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 			/**
 			 * Check image size options (id, prefix, width, height, crop, etc.).
 			 */
-			foreach ( array( 'og', 'tc_sum', 'tc_lrg', 'schema', 'p' ) as $md_pre ) {
+			foreach ( array( 'og', 'p', 'schema', 'tc_lrg', 'tc_sum' ) as $md_pre ) {
 
 				/**
 				 * If there's no image ID, then remove the image ID library prefix.
+				 *
 				 * If an image ID is being used, then remove the image url (only one can be defined).
 				 */
 				if ( empty( $md_opts[ $md_pre . '_img_id' ] ) ) {
@@ -1575,14 +1586,16 @@ if ( ! class_exists( 'WpssoWpMeta' ) ) {
 			}
 
 			if ( false !== $col_key ) {
+
 				if ( isset( $sort_cols[ $col_key ] ) ) {
 					return $sort_cols[ $col_key ];
-				} else {
-					return null;
 				}
-			} else {
-				return $sort_cols;
+
+				return null;
+				
 			}
+
+			return $sort_cols;
 		}
 
 		public static function get_column_meta_keys() { 

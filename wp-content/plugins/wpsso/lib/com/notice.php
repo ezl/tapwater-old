@@ -170,11 +170,12 @@ if ( ! class_exists( 'SucomNotice' ) ) {
 		public function nag( $msg_text, $user_id = null, $notice_key = false, $dismiss_time = false, $payload = array() ) {
 
 			/**
-			 * By default, do not show a dismiss button.
+			 * Do not show a dismiss button by default.
+			 *
+			 * if ( ! isset( $payload[ 'dismiss_diff' ] ) ) {
+			 * 	$payload[ 'dismiss_diff' ] = false;
+			 * }
 			 */
-			if ( ! isset( $payload[ 'dismiss_diff' ] ) ) {
-				$payload[ 'dismiss_diff' ] = false;
-			}
 
 			$this->log( 'nag', $msg_text, $user_id, $notice_key, $dismiss_time, $payload );
 		}
@@ -327,7 +328,7 @@ if ( ! class_exists( 'SucomNotice' ) ) {
 				$trunc_user_ids = array( $user_id );
 			}
 
-			unset( $user_id );	// A reminder that we are re-using this variable name bellow.
+			unset( $user_id );	// A reminder that we are re-using this variable name below.
 
 			$trunc_types = empty( $msg_type ) ? $this->all_types : array( (string) $msg_type );
 
@@ -1257,12 +1258,16 @@ if ( ! class_exists( 'SucomNotice' ) ) {
 			';
 
 			if ( version_compare( $wp_version, '5.3.2', '>' ) ) {
+
 				$custom_style_css .= '
-					body.wp-admin.is-fullscreen-mode.has-toolbar-notices .block-editor__container .block-editor-editor-skeleton {
+					body.wp-admin.is-fullscreen-mode.has-toolbar-notices .block-editor__container .block-editor-editor-skeleton,
+					body.wp-admin.is-fullscreen-mode.has-toolbar-notices .block-editor__container .block-editor-editor-skeleton .editor-post-publish-panel {
 						top:32px;
 					}
 				';
+
 			} else {
+
 				$custom_style_css .= '
 					body.wp-admin.is-fullscreen-mode.has-toolbar-notices .block-editor__container .edit-post-layout > .edit-post-header {
 						top:32px;
@@ -1294,7 +1299,7 @@ if ( ! class_exists( 'SucomNotice' ) ) {
 				.components-notice-list .' . $this->lca . '-notice *,
 				#wpadminbar .' . $this->lca . '-notice *,
 				.' . $this->lca . '-notice * {
-					line-height:1.5em;
+					line-height:1.4em;
 				}
 				.components-notice-list .' . $this->lca . '-notice .notice-label,
 				.components-notice-list .' . $this->lca . '-notice .notice-message,
@@ -1325,31 +1330,31 @@ if ( ! class_exists( 'SucomNotice' ) ) {
 					background-color:inherit;
 				}
 				#wpadminbar #wp-toolbar .has-toolbar-notices.toolbar-notices-error {
-					background-color:#dc3232;	/* Red */
+					background-color:#dc3232;	/* Red. */
 				}
 				#wpadminbar #wp-toolbar .has-toolbar-notices.toolbar-notices-warning {
-					background-color:#ffb900;	/* Yellow */
+					background-color:#ffb900;	/* Yellow. */
 				}
 				#wpadminbar #wp-toolbar .has-toolbar-notices.toolbar-notices-info {
-					background-color:#00a0d2;	/* Blue */
+					background-color:#00a0d2;	/* Blue. */
 				}
 				#wpadminbar .has-toolbar-notices.toolbar-notices-success {
-					background-color:#46b450;	/* Green */
+					background-color:#46b450;	/* Green. */
 				}
-				#wpadminbar .has-toolbar-notices #wp-admin-bar-'.$this->lca.'-toolbar-notices-default { 
+				#wpadminbar .has-toolbar-notices #wp-admin-bar-' . $this->lca . '-toolbar-notices-default { 
 					padding:0;
 				}
-				#wpadminbar .has-toolbar-notices #wp-admin-bar-'.$this->lca.'-toolbar-notices-container { 
-					min-width:70vw;			/* 70% of the viewing window width */
-					max-height:90vh;		/* 90% of the viewing window height */
+				#wpadminbar .has-toolbar-notices #wp-admin-bar-' . $this->lca . '-toolbar-notices-container { 
+					min-width:70vw;			/* 70% of the viewing window width. */
+					max-height:90vh;		/* 90% of the viewing window height. */
 					overflow-y:scroll;
 				}
 				#wpadminbar .' . $this->lca . '-notice,
 				#wpadminbar .' . $this->lca . '-notice.error,
 				#wpadminbar .' . $this->lca . '-notice.updated,
 				.' . $this->lca . '-notice,
-				.' . $this->lca . '-notice.error,	/* wp sets padding to 1px 12px */
-				.' . $this->lca . '-notice.updated {	/* wp sets padding to 1px 12px */
+				.' . $this->lca . '-notice.error,
+				.' . $this->lca . '-notice.updated {
 					clear:both;
 					padding:0;
 					-webkit-box-shadow:none;
@@ -1374,16 +1379,6 @@ if ( ! class_exists( 'SucomNotice' ) ) {
 					text-decoration:underline;
 					padding:0;
 				}
-				#wpadminbar .' . $this->lca . '-notice .button-primary,
-				#wpadminbar .' . $this->lca . '-notice .button-secondary {
-					padding:0.3em 1em;
-					-webkit-border-radius:0;
-					-moz-border-radius:0;
-					border-radius:0;
-					-webkit-box-shadow:none;
-					-moz-box-shadow:none;
-					box-shadow:none;
-				}
 				#wpadminbar .' . $this->lca . '-notice .notice-label,
 				#wpadminbar .' . $this->lca . '-notice .notice-message,
 				#wpadminbar .' . $this->lca . '-notice .notice-dismiss {
@@ -1394,6 +1389,15 @@ if ( ! class_exists( 'SucomNotice' ) ) {
 					border:none;
 					vertical-align:top;
 					background:inherit;
+				}
+				.' . $this->lca . '-notice div.notice-actions {
+					text-align:center;
+					margin:20px 0 15px 0;
+				}
+				.' . $this->lca . '-notice div.notice-single-button {
+					display:inline-block;
+					vertical-align:top;
+					margin:5px;
 				}
 				.' . $this->lca . '-notice .notice-label,
 				.' . $this->lca . '-notice .notice-message,
@@ -1406,8 +1410,9 @@ if ( ! class_exists( 'SucomNotice' ) ) {
 					vertical-align:top;
 				}
 				.components-notice-list .' . $this->lca . '-notice .notice-dismiss,
-				#wpadminbar .'.$this->lca.'-notice .notice-dismiss,
-				.'.$this->lca.'-notice .notice-dismiss {
+				#wpadminbar .' . $this->lca . '-notice .notice-dismiss,
+				.' . $this->lca . '-notice .notice-dismiss {
+					clear:both;	/* Clear the "Screen Options" tab in nags. */
 					display:block;
 					float:right;
 					top:0;
@@ -1418,8 +1423,8 @@ if ( ! class_exists( 'SucomNotice' ) ) {
 				#wpadminbar .' . $this->lca . '-notice .notice-label,
 				.' . $this->lca . '-notice .notice-label {
 					font-weight:600;
-					color:#444;			/* default text color */
-					background-color:#fcfcfc;	/* default background color */
+					color:#444;			/* Default text color. */
+					background-color:#fcfcfc;	/* Default background color. */
 					white-space:nowrap;
 				}
 				#wpadminbar .' . $this->lca . '-notice.notice-error .notice-label,
@@ -1596,21 +1601,17 @@ if ( ! class_exists( 'SucomNotice' ) ) {
 			}
 
 			$custom_style_css .= '
-				.' . $this->lca . '-notice.update-nag {
-					margin-top:0;
-					clear:none;
-				}
-				.' . $this->lca . '-notice.update-nag > div {
+				.' . $this->lca . '-notice.update-nag .notice-message {
 					display:block;
 					margin:0 auto;
-					max-width:800px;
+					max-width:940px;
 				}
 				.' . $this->lca . '-notice.update-nag p,
 				.' . $this->lca . '-notice.update-nag ul,
 				.' . $this->lca . '-notice.update-nag ol {
 					font-size:1em;
 					text-align:center;
-					margin:15px auto 15px auto;
+					margin:10px auto 10px auto;
 				}
 				.' . $this->lca . '-notice.update-nag ul li {
 					list-style-type:square;

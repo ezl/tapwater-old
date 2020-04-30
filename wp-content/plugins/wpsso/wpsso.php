@@ -10,12 +10,12 @@
  * Author URI: https://wpsso.com/
  * License: GPLv3
  * License URI: https://www.gnu.org/licenses/gpl.txt
- * Description: Makes sure your content looks great on all social and search sites - no matter how webpage URLs are crawled, shared, re-shared, posted or embedded.
+ * Description: Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted or embedded.
  * Requires PHP: 5.6
  * Requires At Least: 4.2
  * Tested Up To: 5.4
  * WC Tested Up To: 4.0.1
- * Version: 6.28.0
+ * Version: 7.2.0
  *
  * Version Numbering: {major}.{minor}.{bugfix}[-{stage}.{level}]
  *
@@ -345,7 +345,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 				$this->debug->mark( 'init options do action' );	// Begin timer.
 			}
 
-			do_action( $this->lca . '_init_options' );
+			do_action( 'wpsso_init_options', $activate );
 
 			if ( $this->debug->enabled ) {
 				$this->debug->mark( 'init options do action' );	// End timer.
@@ -439,6 +439,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			 * from the filtered defaults.
 			 */
 			if ( ! empty( $this->options[ '__reload_defaults' ] ) ) {
+
 				$this->options = $this->opt->get_defaults();
 			}
 
@@ -461,6 +462,11 @@ if ( ! class_exists( 'Wpsso' ) ) {
 					$this->debug->log( 'site options array len is ' . SucomUtil::serialized_len( $this->options ) . ' bytes' );
 				}
 			}
+
+			/**
+			 * Init option checks.
+			 */
+			do_action( 'wpsso_init_check_options' );
 
 			/**
 			 * Issue reminder notices and disable some caching when the plugin's debug mode is enabled.
@@ -664,15 +670,15 @@ if ( ! class_exists( 'Wpsso' ) ) {
 		 * Hooks the 'override_textdomain_mofile' filter (if debug is enabled) to use the local translation files
 		 * instead of those from wordpress.org.
 		 */
-		public static function init_textdomain( $debug_enabled ) {
+		public static function init_textdomain( $debug_enabled = false ) {
 
-			static $do_once = null;
+			static $loaded = null;
 
-			if ( true === $do_once ) {
+			if ( null !== $loaded ) {
 				return;
 			}
 
-			$do_once = true;
+			$loaded = true;
 
 			if ( $debug_enabled ) {
 				add_filter( 'load_textdomain_mofile', array( self::get_instance(), 'override_textdomain_mofile' ), 10, 3 );
@@ -738,7 +744,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 		 */
 		public function override_textdomain_mofile( $wp_mofile, $domain ) {
 
-			if ( strpos( $domain, 'wpsso' ) === 0 ) {	// Optimize.
+			if ( 0 === strpos( $domain, 'wpsso' ) ) {	// Optimize.
 
 				foreach ( $this->cf[ 'plugin' ] as $ext => $info ) {
 

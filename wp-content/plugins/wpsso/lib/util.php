@@ -79,7 +79,13 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 				require_once WPSSO_PLUGINDIR . 'lib/util-reg.php';
 			}
 
-			$this->reg = new WpssoUtilReg( $plugin );
+			$this->reg = new WpssoUtilReg( $plugin, $this );
+
+			if ( ! class_exists( 'WpssoUtilCustomFields' ) ) {
+				require_once WPSSO_PLUGINDIR . 'lib/util-custom-fields.php';
+			}
+
+			$this->cf = new WpssoUtilCustomFields( $plugin, $this );
 
 			$this->add_plugin_filters( $this, array(
 				'pub_lang' => 3,
@@ -355,6 +361,30 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 		}
 
 		/**
+		 * If this is an '_img_url' option, add the image size and unset the '_img_id' option.
+		 */
+		public function maybe_add_img_url_size( array &$opts, $opt_key ) {
+
+			/**
+			 * Only process option keys with '_img_url' in their name.
+			 */
+			if ( false === strpos( $opt_key, '_img_url' ) ) {
+				return;
+			}
+
+			$this->add_image_url_size( $opts, $opt_key );
+
+			$img_id_key     = str_replace( '_img_url', '_img_id', $opt_key, $count );	// Image ID key.
+			$img_id_pre_key = str_replace( '_img_url', '_img_id_pre', $opt_key );		// Image ID media library prefix key.
+
+			if ( $count ) {	// Just in case.
+
+				unset( $opts[ $img_id_key ] );
+				unset( $opts[ $img_id_pre_key ] );
+			}
+		}
+
+		/**
 		 * $opt_prefixes can be a single key name or an array of key names. Uses a reference variable to modify the $opts
 		 * array directly.
 		 */
@@ -447,7 +477,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			}
 
 			$cache_md5_pre  = $this->p->lca . '_i_';
-			$cache_exp_secs = $this->p->util->get_cache_exp_secs( $cache_md5_pre );	// Default is day in seconds.
+			$cache_exp_secs = $this->get_cache_exp_secs( $cache_md5_pre );	// Default is day in seconds.
 
 			if ( $cache_exp_secs > 0 ) {
 
@@ -546,7 +576,9 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 		public function get_image_size_label( $size_name ) {
 
 			if ( ! empty( $this->size_labels[ $size_name ] ) ) {
+
 				return $this->size_labels[ $size_name ];
+
 			} else {
 				return $size_name;
 			}
@@ -787,7 +819,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 		}
 
 		/**
-		 * Add options using a key prefix string / array and post type names.
+		 * Deprecated on 2020/04/15.
 		 */
 		public function add_ptns_to_opts( array &$opts, $mixed, $default = 1 ) {
 
@@ -795,15 +827,23 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 				$mixed = array( $mixed => $default );
 			}
 
-			foreach ( $mixed as $opt_pre => $def_val ) {
+			return $this->add_post_type_names( $opts, $mixed );
+		}
+
+		/**
+		 * Add options using a key prefix string / array and post type names.
+		 */
+		public function add_post_type_names( array &$opts, array $pre_defs ) {
+
+			foreach ( $pre_defs as $opt_pre => $def_val ) {
 
 				if ( $this->p->debug->enabled ) {
 					$this->p->debug->log( 'checking options for prefix ' . $opt_pre );
 				}
 
-				foreach ( $this->get_post_types( 'names' ) as $ptn ) {
+				foreach ( $this->get_post_types( 'names' ) as $name ) {
 
-					$opt_key = $opt_pre . '_' . $ptn;
+					$opt_key = $opt_pre . '_' . $name;
 
 					if ( ! isset( $opts[ $opt_key ] ) ) {
 
@@ -814,6 +854,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 						$opts[ $opt_key ] = $def_val;
 
 					} else {
+
 						if ( $this->p->debug->enabled ) {
 							$this->p->debug->log( 'skipped ' . $opt_key . ' - already set' );
 						}
@@ -825,7 +866,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 		}
 
 		/**
-		 * Add options using a key prefix string / array and term names.
+		 * Deprecated on 2020/04/15.
 		 */
 		public function add_ttns_to_opts( array &$opts, $mixed, $default = 1 ) {
 
@@ -833,15 +874,23 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 				$mixed = array( $mixed => $default );
 			}
 
-			foreach ( $mixed as $opt_pre => $def_val ) {
+			return $this->add_taxonomy_names( $opts, $mixed );
+		}
+
+		/**
+		 * Add options using a key prefix string / array and term names.
+		 */
+		public function add_taxonomy_names( array &$opts, array $pre_defs ) {
+
+			foreach ( $pre_defs as $opt_pre => $def_val ) {
 
 				if ( $this->p->debug->enabled ) {
 					$this->p->debug->log( 'checking options for prefix ' . $opt_pre );
 				}
 
-				foreach ( $this->get_taxonomies( 'names' ) as $ttn ) {
+				foreach ( $this->get_taxonomies( 'names' ) as $name ) {
 
-					$opt_key = $opt_pre . '_' . $ttn;
+					$opt_key = $opt_pre . '_' . $name;
 
 					if ( ! isset( $opts[ $opt_key ] ) ) {
 
@@ -865,15 +914,15 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 		/**
 		 * $output = objects | names
 		 */
-		public function get_post_types( $output = 'objects', $sorted = true ) {
+		public function get_post_types( $output = 'objects' ) {
 
 			if ( $this->p->debug->enabled ) {
 				$this->p->debug->mark();
 			}
 
-			$obj_filter = array( 'public' => 1, 'show_ui' => 1 );
-
-			$ret = array();
+			$ret      = array();
+			$args     = array( 'show_in_menu' => 1, 'show_ui' => 1 );
+			$operator = 'and';
 
 			switch ( $output ) {
 
@@ -892,40 +941,13 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 				case 'names':
 				case 'objects':
 
-					$ret = get_post_types( $obj_filter, $output );
+					$ret = get_post_types( $args, $output, $operator );
 
 					break;
 			}
 
 			if ( $output === 'objects' ) {
-
-				$unsorted = $ret;
-
-				$by_name = array();
-
-				$ret = array();
-
-				foreach ( $unsorted as $num => $obj ) {
-
-					if ( ! empty( $obj->labels->name ) ) {
-						$sort_key = $obj->labels->name . '-' . $num;
-					} elseif ( ! empty( $obj->label ) ) {
-						$sort_key = $obj->label . '-' . $num;
-					} else {
-						$sort_key = $obj->name . '-' . $num;
-					}
-
-					$by_name[ $sort_key ] = $num;	// Make sure key is sortable and unique.
-				}
-
-				ksort( $by_name );
-
-				foreach ( $by_name as $sort_key => $num ) {
-
-					$ret[] = $unsorted[ $num ];
-				}
-
-				unset( $unsorted, $by_name );
+				SucomUtilWP::sort_objects_by_label( $ret );
 			}
 
 			return apply_filters( $this->p->lca . '_get_post_types', $ret, $output );
@@ -934,15 +956,15 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 		/**
 		 * $output = objects | names
 		 */
-		public function get_taxonomies( $output = 'objects', $sorted = true ) {
+		public function get_taxonomies( $output = 'objects' ) {
 
 			if ( $this->p->debug->enabled ) {
 				$this->p->debug->mark();
 			}
 
-			$obj_filter = array( 'public' => 1, 'show_ui' => 1 );
-
-			$ret = array();
+			$ret      = array();
+			$args     = array( 'show_in_menu' => 1, 'show_ui' => 1 );
+			$operator = 'and';
 
 			switch ( $output ) {
 
@@ -961,40 +983,13 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 				case 'names':
 				case 'objects':
 
-					$ret = get_taxonomies( $obj_filter, $output );
+					$ret = get_taxonomies( $args, $output, $operator );
 
 					break;
 			}
 
 			if ( $output === 'objects' ) {
-
-				$unsorted = $ret;
-
-				$by_name = array();
-
-				$ret = array();
-
-				foreach ( $unsorted as $num => $obj ) {
-
-					if ( ! empty( $obj->labels->name ) ) {
-						$sort_key = $obj->labels->name . '-' . $num;
-					} elseif ( ! empty( $obj->label ) ) {
-						$sort_key = $obj->label . '-' . $num;
-					} else {
-						$sort_key = $obj->name . '-' . $num;
-					}
-
-					$by_name[ $sort_key ] = $num;	// Make sure key is sortable and unique.
-				}
-
-				ksort( $by_name );
-
-				foreach ( $by_name as $sort_key => $num ) {
-
-					$ret[] = $unsorted[ $num ];
-				}
-
-				unset( $unsorted, $by_name );
+				SucomUtilWP::sort_objects_by_label( $ret );
 			}
 
 			return apply_filters( $this->p->lca . '_get_taxonomies', $ret, $output );
@@ -1146,9 +1141,12 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 		 */
 		public function schedule_add_user_roles( $user_id = null ) {
 
-			$user_id    = $this->maybe_change_user_id( $user_id );	// Maybe change textdomain for user ID.
+			$user_id = $this->maybe_change_user_id( $user_id );	// Maybe change textdomain for user ID.
+
 			$event_time = time() + $this->event_buffer;
+
 			$event_hook = $this->p->lca . '_add_user_roles';
+
 			$event_args = array( $user_id );
 
 			wp_schedule_single_event( $event_time, $event_hook, $event_args );
@@ -1918,7 +1916,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			}
 
 			$cache_md5_pre  = $this->p->lca . '_f_';
-			$cache_exp_secs = $this->p->util->get_cache_exp_secs( $cache_md5_pre );	// Default is month in seconds.
+			$cache_exp_secs = $this->get_cache_exp_secs( $cache_md5_pre );	// Default is month in seconds.
 			$text_list_file = self::get_file_path_locale( WPSSO_ARTICLE_SECTIONS_LIST );
 
 			if ( $cache_exp_secs > 0 ) {
@@ -2015,7 +2013,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			}
 
 			$cache_md5_pre  = $this->p->lca . '_f_';
-			$cache_exp_secs = $this->p->util->get_cache_exp_secs( $cache_md5_pre );	// Default is month in seconds.
+			$cache_exp_secs = $this->get_cache_exp_secs( $cache_md5_pre );	// Default is month in seconds.
 			$text_list_file = self::get_file_path_locale( WPSSO_PRODUCT_CATEGORIES_LIST );
 
 			if ( $cache_exp_secs > 0 ) {
@@ -2514,10 +2512,9 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			}
 
 			$add_page = isset( $atts[ 'add_page' ] ) ? $atts[ 'add_page' ] : true;
-			$src_id   = isset( $atts[ 'src_id' ] ) ? $atts[ 'src_id' ] : '';
 
 			if ( empty( $atts[ 'url' ] ) ) {
-				$sharing_url = $this->get_sharing_url( $mod, $add_page, $src_id );
+				$sharing_url = $this->get_sharing_url( $mod, $add_page );
 			} else {
 				$sharing_url = $atts[ 'url' ];
 			}
@@ -2909,32 +2906,31 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			return apply_filters( $this->p->lca . '_oembed_data', $data, $mod, $width );
 		}
 
-		public function get_canonical_url( $mod = false, $add_page = true, $src_id = '' ) {
+		public function get_canonical_url( $mod = false, $add_page = true ) {
 
 			if ( $this->p->debug->enabled ) {
 				$this->p->debug->mark();
 			}
 
-			return $this->get_page_url( 'canonical', $mod, $add_page, $src_id );
+			return $this->get_page_url( 'canonical', $mod, $add_page );
 		}
 
-		public function get_sharing_url( $mod = false, $add_page = true, $src_id = '' ) {
+		public function get_sharing_url( $mod = false, $add_page = true ) {
 
 			if ( $this->p->debug->enabled ) {
 				$this->p->debug->mark();
 			}
 
-			return $this->get_page_url( 'sharing', $mod, $add_page, $src_id );
+			return $this->get_page_url( 'sharing', $mod, $add_page );
 		}
 
-		private function get_page_url( $type, $mod, $add_page, $src_id ) {
+		private function get_page_url( $type, $mod, $add_page ) {
 
 			if ( $this->p->debug->enabled ) {
 				$this->p->debug->log_args( array(
 					'type'     => $type,
 					'mod'      => $mod,
 					'add_page' => $add_page,
-					'src_id'   => $src_id,
 				) );
 			}
 
@@ -2952,6 +2948,22 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 				}
 
 				$mod = $this->get_page_mod( $mod );
+			}
+
+			/**
+			 * Optimize and return the URL from local cache if possible.
+			 */
+			static $local_cache = array();
+
+			$cache_salt = false;
+
+			if ( ! empty( $mod[ 'name' ] ) && ! empty( $mod[ 'id' ] ) ) {
+
+				$cache_salt = self::get_mod_salt( $mod ) . '_type:' . (string) $type . '_add_page:' . (string) $add_page;
+
+				if ( ! empty( $local_cache[ $cache_salt ] ) ) {
+					return $local_cache[ $cache_salt ];
+				}
 			}
 
 			if ( $mod[ 'is_post' ] ) {
@@ -3021,7 +3033,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 					}
 				}
 
-				$url = apply_filters( $this->p->lca . '_post_url', $url, $mod, $add_page, $src_id );
+				$url = apply_filters( $this->p->lca . '_post_url', $url, $mod, $add_page );
 
 			} else {
 
@@ -3033,7 +3045,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 
 					} else {
 
-						$url = apply_filters( $this->p->lca . '_home_url', home_url( '/' ), $mod, $add_page, $src_id );
+						$url = apply_filters( $this->p->lca . '_home_url', home_url( '/' ), $mod, $add_page );
 
 						if ( $this->p->debug->enabled ) {
 							$this->p->debug->log( 'home url = ' . $url );
@@ -3057,7 +3069,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 						}
 					}
 
-					$url = apply_filters( $this->p->lca . '_term_url', $url, $mod, $add_page, $src_id );
+					$url = apply_filters( $this->p->lca . '_term_url', $url, $mod, $add_page );
 
 				} elseif ( $mod[ 'is_user' ] ) {
 
@@ -3068,22 +3080,26 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 						}
 
 						if ( ! empty( $url ) ) {	// Must be a non-empty string.
+
 							if ( $this->p->debug->enabled ) {
 								$this->p->debug->log( 'custom user ' . $type . '_url = ' . $url );
 							}
+
 						} else {
+
 							$url = get_author_posts_url( $mod[ 'id' ] );
+
 							$url = $this->check_url_string( $url, 'author posts' );
 						}
 					}
 
-					$url = apply_filters( $this->p->lca . '_user_url', $url, $mod, $add_page, $src_id );
+					$url = apply_filters( $this->p->lca . '_user_url', $url, $mod, $add_page );
 
 				} elseif ( is_search() ) {
 
 					$url = $this->check_url_string( get_search_link(), 'search link' );
 
-					$url = apply_filters( $this->p->lca . '_search_url', $url, $mod, $add_page, $src_id );
+					$url = apply_filters( $this->p->lca . '_search_url', $url, $mod, $add_page );
 
 				} elseif ( function_exists( 'get_post_type_archive_link' ) && $mod[ 'is_post_type_archive' ] ) {
 
@@ -3104,7 +3120,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 						}
 					}
 
-					$url = apply_filters( $this->p->lca . '_archive_page_url', $url, $mod, $add_page, $src_id );
+					$url = apply_filters( $this->p->lca . '_archive_page_url', $url, $mod, $add_page );
 				}
 
 				$url = $this->get_url_paged( $url, $mod, $add_page );
@@ -3117,54 +3133,74 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			 */
 			if ( empty ( $url ) ) {
 
-				$url = self::get_prot() . '://' . $_SERVER[ 'SERVER_NAME' ] . $_SERVER[ 'REQUEST_URI' ];
-
 				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'server request url = ' . $url );
+					$this->p->debug->log( 'falling back to request url' );
 				}
 
-				/**
-				 * Strip out tracking query arguments by facebook, google, etc.
-				 */
-				$url = preg_replace( '/([\?&])(' .
-					'fb_action_ids|fb_action_types|fb_source|fb_aggregation_id|' . 
-					'utm_source|utm_medium|utm_campaign|utm_term|utm_content|' .
-					'gclid|pk_campaign|pk_kwd' .
-					')=[^&]*&?/i', '$1', $url );
-
-				$url = apply_filters( $this->p->lca . '_server_request_url', $url, $mod, $add_page, $src_id );
-
-				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'server request url (filtered) = ' . $url );
-				}
-
-				/**
-				 * Maybe disable transient cache and URL shortening.
-				 */
-				if ( $src_id === 'head_sharing_url' && false !== strpos( $url, '?' ) ) {
-					$disable_cache = true;
-				} else {
-					$disable_cache = false;
-				}
-
-				if ( apply_filters( $this->p->lca . '_server_request_url_disable_cache', $disable_cache, $url, $mod, $add_page, $src_id ) ) {
-					$this->disable_cache_filters( array( 'shorten_url' => '__return_false' ) );
-				}
+				$url = $this->get_request_url( $mod, $add_page );
 			}
 
 			/**
 			 * Maybe enforce the FORCE_SSL constant.
 			 */
-			if ( self::get_const( 'FORCE_SSL' ) && ! self::is_https( $url ) ) {
+			if ( strpos( $url, '://' ) ) {	// Only check URLs with a protocol.
+				
+				if ( self::get_const( 'FORCE_SSL' ) && ! self::is_https( $url ) ) {
 
-				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'force ssl is enabled - replacing http by https' );
+					if ( $this->p->debug->enabled ) {
+						$this->p->debug->log( 'force ssl is enabled - replacing http by https' );
+					}
+
+					$url = set_url_scheme( $url, 'https' );
 				}
-
-				$url = set_url_scheme( $url, 'https' );
 			}
 
-			return apply_filters( $this->p->lca . '_' . $type . '_url', $url, $mod, $add_page, $src_id );
+			$url = apply_filters( $this->p->lca . '_' . $type . '_url', $url, $mod, $add_page );
+
+			if ( ! empty( $cache_salt ) ) {
+				$local_cache[ $cache_salt ] = $url;
+			}
+
+			return $url;
+		}
+
+		private function get_request_url( $mod, $add_page ) {
+
+			$url = self::get_prot() . '://' . $_SERVER[ 'SERVER_NAME' ] . $_SERVER[ 'REQUEST_URI' ];
+
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->log( 'server request url = ' . $url );
+			}
+
+			/**
+			 * Remove tracking query arguments used by facebook, google, etc.
+			 */
+			$url = preg_replace( '/([\?&])(' .
+				'fb_action_ids|fb_action_types|fb_source|fb_aggregation_id|' . 
+				'utm_source|utm_medium|utm_campaign|utm_term|utm_content|' .
+				'gclid|pk_campaign|pk_kwd' .
+				')=[^&]*&?/i', '$1', $url );
+
+			$url = apply_filters( $this->p->lca . '_server_request_url', $url, $mod, $add_page );
+
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->log( 'server request url (filtered) = ' . $url );
+			}
+
+			/**
+			 * Disable transient cache and URL shortening if the URL contains a query argument.
+			 */
+			if ( false !== strpos( $url, '?' ) ) {
+				$cache_disabled = true;
+			} else {
+				$cache_disabled = false;
+			}
+
+			if ( apply_filters( $this->p->lca . '_server_request_url_cache_disabled', $cache_disabled, $url, $mod, $add_page ) ) {
+				$this->disable_cache_filters( array( 'shorten_url' => '__return_false' ) );
+			}
+
+			return $url;
 		}
 
 		private function get_url_paged( $url, $mod, $add_page ) {
@@ -3831,7 +3867,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			 */
 			$tab_num = 0;
 
-			foreach ( $tabs as $tab => $title ) {
+			foreach ( $tabs as $tab => $title_transl ) {
 
 				$tab_num++;
 
@@ -3842,7 +3878,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 				$metabox_html .= '<li class="tab_space' . ( $tab_num === 1 ? ' start_tabs' : '' ) . '"></li>';
 				$metabox_html .= '<li class="' . $class_href_key . '">';
 				$metabox_html .= '<a class="' . $class_icon_key . '" href="#' . $class_href_key . '"></a>';
-				$metabox_html .= '<a class="' . $class_link_key . '" href="#' . $class_href_key . '">' . $title . '</a>';
+				$metabox_html .= '<a class="' . $class_link_key . '" href="#' . $class_href_key . '">' . $title_transl . '</a>';
 				$metabox_html .= '</li>';	// Do not add a newline.
 			}
 
@@ -3852,12 +3888,12 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			/**
 			 * Add the settings table for each tab.
 			 */
-			foreach ( $tabs as $tab => $title ) {
+			foreach ( $tabs as $tab => $title_transl ) {
 
 				$class_href_key = $class_tabset . $metabox_id . '-tab_' . $tab;
 
 				$metabox_html .= $this->get_metabox_table( $table_rows[ $tab ], $class_href_key, 
-					( empty( $metabox_id ) ? '' : $class_tabset . $metabox_id ), $class_tabset );
+					( empty( $metabox_id ) ? '' : $class_tabset . $metabox_id ), $class_tabset, $title_transl );
 			}
 
 			$metabox_html .= '</div><!-- .' . $class_metabox_tabs . ' -->' . "\n";
@@ -3865,12 +3901,12 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			return $metabox_html;
 		}
 
-		public function do_metabox_table( $table_rows, $class_href_key = '', $class_tabset_mb = '', $class_tabset = 'sucom-no_tabset' ) {
+		public function do_metabox_table( $table_rows, $class_href_key = '', $class_tabset_mb = '', $class_tabset = 'sucom-no_tabset', $title_transl = '' ) {
 
-			echo $this->get_metabox_table( $table_rows, $class_href_key, $class_tabset_mb, $class_tabset );
+			echo $this->get_metabox_table( $table_rows, $class_href_key, $class_tabset_mb, $class_tabset, $title_transl );
 		}
 
-		public function get_metabox_table( $table_rows, $class_href_key = '', $class_tabset_mb = '', $class_tabset = 'sucom-no_tabset' ) {
+		public function get_metabox_table( $table_rows, $class_href_key = '', $class_tabset_mb = '', $class_tabset = 'sucom-no_tabset', $title_transl = '' ) {
 
 			$metabox_html = '';
 
@@ -3978,6 +4014,7 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 				( $hidden_rows > 0 && $hidden_rows === $count_rows ? ' hide_in_' . $show_opts : '' );
 
 			$metabox_html .= '<div class="' . $div_class . '">' . "\n";
+			$metabox_html .= $title_transl ? '<h3 class="sucom-metabox-tab_title">' . $title_transl . '</h3>' : '';
 			$metabox_html .= '<table class="' . $table_class . '">' . "\n";
 
 			foreach ( $table_rows as $row ) {
@@ -4255,19 +4292,19 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 
 				$local_cache = array();
 
-				foreach ( $this->p->options as $key => $val ) {
+				foreach ( $this->p->cf[ 'form' ][ 'attr_labels' ] as $key => $label ) {
 
-					if ( 0 === strpos( $key, 'plugin_product_attr_' ) ) {
+					if ( 0 === strpos( $key, 'plugin_attr_product_' ) ) {	// Only use product attributes.
 
-						if ( empty( $val ) ) {	// Skip attributes that have no associated name.
-							continue;
-						} elseif ( preg_match( '/:is$/', $key ) ) {	// Skip option qualifiers.
+						$attr_name = SucomUtil::get_key_value( $key, $this->p->options );
+
+						if ( empty( $attr_name ) ) {	// Skip attributes that have no associated name.
 							continue;
 						}
 
-						$key = preg_replace( '/^plugin_product_attr_/', '', $key );
+						$key = preg_replace( '/^plugin_attr_product_/', '', $key );
 
-						$local_cache[ $key ] = $val;
+						$local_cache[ $key ] = $attr_name;
 					}
 				}
 
@@ -4280,22 +4317,20 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			if ( empty( $prefix ) ) {
 
 				return $local_cache;
+			}
 
-			} else {
+			$ret = array();
 
-				$ret = array();
+			foreach ( $local_cache as $key => $val ) {
 
-				foreach ( $local_cache as $key => $val ) {
-
-					if ( $sep !== '_' ) {
-						$key = preg_replace( '/_(value|units)$/', $sep . '$1', $key );
-					}
-
-					$ret[ $prefix . $sep . $key ] = $val;
+				if ( $sep !== '_' ) {
+					$key = preg_replace( '/_(value|units)$/', $sep . '$1', $key );
 				}
 
-				return $ret;
+				$ret[ $prefix . $sep . $key ] = $val;
 			}
+
+			return $ret;
 		}
 
 		public function maybe_set_ref( $sharing_url = null, $mod = false, $msg_transl = '' ) {
@@ -4329,8 +4364,9 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			}
 
 			// translators: %1$s is an action message, %2$s is the module or post type name and %3$d is the object ID.
-			return $this->p->notice->set_ref( $sharing_url, $mod, sprintf( __( '%1$s for %2$s ID %3$d', 'wpsso' ),
-				$msg_transl, $name, $mod[ 'id' ] ) );
+			$msg_transl = sprintf( __( '%1$s for %2$s ID %3$d', 'wpsso' ), $msg_transl, $name, $mod[ 'id' ] );
+
+			return $this->p->notice->set_ref( $sharing_url, $mod, $msg_transl );
 		}
 
 		public function maybe_unset_ref( $sharing_url ) {
@@ -4381,6 +4417,20 @@ if ( ! class_exists( 'WpssoUtil' ) ) {
 			}
 
 			return $local_cache[ $md5_pre ][ $cache_type ] = $exp_secs;
+		}
+
+		/**
+		 * Returns for example "#sso-post-123", #sso-term-123-tax-faq-category with a $mod array or "#sso-" without.
+		 *
+		 * Called by:
+		 *
+		 *	WpssoFaqShortcodeFaq->do_shortcode()
+		 *	WpssoFaqShortcodeQuestion->do_shortcode()
+		 *	WpssoJsonFiltersTypeThing->filter_json_data_https_schema_org_thing()
+		 */
+		public static function get_fragment_anchor( $mod = null ) {
+
+			return '#sso-' . ( $mod ? self::get_mod_anchor( $mod ) : '' );
 		}
 	}
 }

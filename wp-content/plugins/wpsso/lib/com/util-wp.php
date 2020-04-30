@@ -75,7 +75,7 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 
 			if ( function_exists( 'wp_encode_emoji' ) ) {
 
-				return wp_encode_emoji( $content ); // Since WP v4.2.
+				return wp_encode_emoji( $content );	// Since WP v4.2.
 			}
 			
 			/**
@@ -129,11 +129,7 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 		 */
 		public static function wp_get_shortlink( $id = 0, $context = 'post', $allow_slugs = true ) {
 
-			$shortlink = '';
-
-			if ( function_exists( 'wp_get_shortlink' ) ) {
-				$shortlink = wp_get_shortlink( $id, $context, $allow_slugs ); // Since WP v3.0.
-			}
+			$shortlink = wp_get_shortlink( $id, $context, $allow_slugs );	// Since WP v3.0.
 
 			if ( empty( $shortlink ) || ! is_string( $shortlink) || filter_var( $shortlink, FILTER_VALIDATE_URL ) === false ) {
 				$shortlink = self::raw_wp_get_shortlink( $id, $context, $allow_slugs );
@@ -937,17 +933,23 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 				}
 
 				if ( $crop ) {
+
 					if ( $width > $min_width ) {
 						$min_width = $width;
 					}
+
 					if ( $height > $min_height ) {
 						$min_height = $height;
 					}
+
 				} elseif ( $width < $height ) {
+
 					if ( $width > $min_width ) {
 						$min_width = $width;
 					}
+
 				} else {
+
 					if ( $height > $min_height ) {
 						$min_height = $height;
 					}
@@ -977,7 +979,7 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 
 			$meta_key = wp_unslash( $meta_key );
  
- 			$query = $wpdb->prepare( "SELECT COUNT( $id_column )FROM $table WHERE meta_key = %s", $meta_key );
+ 			$query = $wpdb->prepare( "SELECT COUNT( $id_column ) FROM $table WHERE meta_key = %s", $meta_key );
  
  			$result = $wpdb->get_col( $query );
 
@@ -986,6 +988,113 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 			}
 
 			return 0;
+		}
+
+		public static function is_post_type_public( $mixed ) {
+
+			$name = null;
+
+			if ( is_object( $mixed ) || is_numeric( $mixed ) ) {	// Post object or ID.
+				$name = get_post_type( $mixed );
+			} else {
+				$name = $mixed;					// Post type name.
+			}
+
+			if ( $name ) {
+
+				$args = array( 'name' => $name, 'public'  => 1 );
+
+				$post_types = get_post_types( $args, $output = 'names', $operator = 'and' );
+			
+				if ( isset( $post_types[ 0 ] ) && $post_types[ 0 ] === $name ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static function get_post_type_labels( array $values = array(), $val_prefix = '', $label_prefix = '' ) {
+
+			$args = array( 'show_in_menu' => 1, 'show_ui' => 1 );
+
+			$objects = get_post_types( $args, $output = 'objects', $operator = 'and' );
+
+			foreach ( $objects as $obj ) {
+
+				$obj_label = SucomUtilWP::get_object_label( $obj );
+
+				$values[ $val_prefix . $obj->name ] = trim( $label_prefix . ' ' . $obj_label );
+			}
+
+			asort( $values );	// Sort by label.
+
+			return $values;
+		}
+
+		public static function get_taxonomy_labels( array $values = array(), $val_prefix = '', $label_prefix = '' ) {
+
+			$args = array( 'show_in_menu' => 1, 'show_ui' => 1 );
+
+			$objects = get_taxonomies( $args, $output = 'objects', $operator = 'and' );
+
+			foreach ( $objects as $obj ) {
+
+				$obj_label = SucomUtilWP::get_object_label( $obj );
+
+				$values[ $val_prefix . $obj->name ] = trim( $label_prefix . ' ' . $obj_label );
+			}
+
+			asort( $values );	// Sort by label.
+
+			return $values;
+		}
+
+		public static function get_object_label( $obj ) {
+
+			$desc = '';
+				
+			if ( empty( $obj->description ) ) {
+
+				/**
+				 * Only show the slug (ie. name) of custom post types and taxonomies.
+				 */
+				if ( empty( $obj->_builtin ) ) {
+					$desc = '[' . $obj->name . ']';
+				}
+				
+			} else {
+				$decs = '(' . $obj->description . ')';
+			}
+
+			return trim( $obj->label . ' ' . $desc );
+		}
+
+		public static function sort_objects_by_label( array &$objects ) {
+
+			$sorted  = array();
+			$by_name = array();
+
+			foreach ( $objects as $num => $obj ) {
+
+				if ( ! empty( $obj->labels->name ) ) {
+					$sort_key = $obj->labels->name . '-' . $num;
+				} elseif ( ! empty( $obj->label ) ) {
+					$sort_key = $obj->label . '-' . $num;
+				} else {
+					$sort_key = $obj->name . '-' . $num;
+				}
+
+				$by_name[ $sort_key ] = $num;	// Make sure key is sortable and unique.
+			}
+
+			ksort( $by_name );
+
+			foreach ( $by_name as $sort_key => $num ) {
+				$sorted[] = $objects[ $num ];
+			}
+
+			return $objects = $sorted;
 		}
 	}
 }

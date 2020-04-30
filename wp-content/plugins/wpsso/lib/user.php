@@ -182,11 +182,10 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 			static $local_cache = array();
 
-			$cache_id = SucomUtil::get_assoc_salt( array(
-				'id'     => $user_id,
-				'filter' => $filter_opts,
-				'pad'    => $pad_opts,
-			) );
+			/**
+			 * Do not add $pad_opts to the $cache_id string.
+			 */
+			$cache_id = SucomUtil::get_assoc_salt( array( 'id' => $user_id, 'filter' => $filter_opts ) );
 
 			/**
 			 * Maybe initialize the cache.
@@ -247,6 +246,11 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 					$mod = $this->get_mod( $user_id );
 
+					/**
+					 * Since WPSSO Core v7.1.0.
+					 */
+					$md_opts = apply_filters( $this->p->lca . '_get_md_options', $md_opts, $mod );
+
 					$md_opts = apply_filters( $this->p->lca . '_get_user_options', $md_opts, $user_id, $mod );
 
 					if ( $this->p->debug->enabled ) {
@@ -268,12 +272,15 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				return;
 			}
 
-			$mod  = $this->get_mod( $user_id );
+			$mod = $this->get_mod( $user_id );
+
 			$opts = $this->get_submit_opts( $user_id );
 
 			if ( ! empty( $this->p->avail[ 'seo' ][ 'any' ] ) ) {
 				unset( $opts[ 'seo_desc' ] );
 			}
+
+			$opts = apply_filters( $this->p->lca . '_save_md_options', $opts, $mod );
 
 			$opts = apply_filters( $this->p->lca . '_save_user_options', $opts, $user_id, $rel_id, $mod );
 
@@ -576,7 +583,8 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 			WpssoWpMeta::$head_tags = array();
 
-			$add_metabox = empty( $this->p->options[ 'plugin_add_to_user' ] ) ? false : true;
+			$add_metabox = empty( $this->p->options[ 'plugin_add_to_user_page' ] ) ? false : true;
+
 			$add_metabox = apply_filters( $this->p->lca . '_add_metabox_user', $add_metabox, $user_id );
 
 			if ( $this->p->debug->enabled ) {
@@ -596,30 +604,38 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				 * $read_cache is false to generate notices etc.
 				 */
 				WpssoWpMeta::$head_tags = $this->p->head->get_head_array( $use_post = false, $mod, $read_cache = false );
+
 				WpssoWpMeta::$head_info = $this->p->head->extract_head_info( $mod, WpssoWpMeta::$head_tags );
 
 				/**
 				 * Check for missing open graph image and description values.
 				 */
-				foreach ( array( 'image', 'description' ) as $mt_suffix ) {
+				if ( $mod[ 'is_public' ] ) {	// Since WPSSO Core v7.0.0.
 
-					if ( empty( WpssoWpMeta::$head_info[ 'og:' . $mt_suffix ] ) ) {
+					$ref_url = empty( WpssoWpMeta::$head_info[ 'og:url' ] ) ? null : WpssoWpMeta::$head_info[ 'og:url' ];
 
-						if ( $this->p->debug->enabled ) {
-							$this->p->debug->log( 'og:' . $mt_suffix . ' meta tag is value empty and required' );
-						}
+					$ref_url = $this->p->util->maybe_set_ref( $ref_url, $mod, __( 'checking meta tags', 'wpsso' ) );
 
-						/**
-						 * Add notice only if the admin notices have not already been shown.
-						 */
-						if ( $this->p->notice->is_admin_pre_notices() ) {
+					foreach ( array( 'image', 'description' ) as $mt_suffix ) {
 
-							$notice_msg = $this->p->msgs->get( 'notice-missing-og-' . $mt_suffix );
-							$notice_key = $mod[ 'name' ] . '-' . $mod[ 'id' ] . '-notice-missing-og-' . $mt_suffix;
+						if ( empty( WpssoWpMeta::$head_info[ 'og:' . $mt_suffix ] ) ) {
 
-							$this->p->notice->err( $notice_msg, null, $notice_key );
+							if ( $this->p->debug->enabled ) {
+								$this->p->debug->log( 'og:' . $mt_suffix . ' meta tag is value empty and required' );
+							}
+
+							if ( $this->p->notice->is_admin_pre_notices() ) {
+
+								$notice_msg = $this->p->msgs->get( 'notice-missing-og-' . $mt_suffix );
+
+								$notice_key = $mod[ 'name' ] . '-' . $mod[ 'id' ] . '-notice-missing-og-' . $mt_suffix;
+
+								$this->p->notice->err( $notice_msg, null, $notice_key );
+							}
 						}
 					}
+
+					$this->p->util->maybe_unset_ref( $ref_url );
 				}
 			}
 
@@ -675,7 +691,8 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				return;
 			}
 
-			$add_metabox = empty( $this->p->options[ 'plugin_add_to_user' ] ) ? false : true;
+			$add_metabox = empty( $this->p->options[ 'plugin_add_to_user_page' ] ) ? false : true;
+
 			$add_metabox = apply_filters( $this->p->lca . '_add_metabox_user', $add_metabox, $user_id );
 
 			if ( $this->p->debug->enabled ) {
@@ -779,9 +796,13 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$mb_container_id = $this->p->lca . '_metabox_' . $metabox_id . '_inside';
 
 			$metabox_html = "\n" . '<div id="' . $mb_container_id . '">';
+
 			$metabox_html .= $this->p->util->get_metabox_tabbed( $metabox_id, $tabs, $table_rows, $tabbed_args );
+
 			$metabox_html .= apply_filters( $mb_container_id . '_footer', '', $mod );
+
 			$metabox_html .= '</div><!-- #'. $mb_container_id . ' -->' . "\n";
+
 			$metabox_html .= $this->get_metabox_javascript( $mb_container_id );
 
 			if ( $this->p->debug->enabled ) {

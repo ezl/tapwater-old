@@ -119,7 +119,7 @@ if ( ! class_exists( 'WpssoSubmenuAdvanced' ) && class_exists( 'WpssoAdmin' ) ) 
 			$table_rows = array();
 
 			$tabs = apply_filters( $this->p->lca . '_advanced_' . $metabox_id . '_tabs', array(
-				'settings'     => _x( 'Plugin Behavior', 'metabox tab', 'wpsso' ),
+				'settings'     => _x( 'Standard Settings', 'metabox tab', 'wpsso' ),
 				'content'      => _x( 'Content and Text', 'metabox tab', 'wpsso' ),
 				'integration'  => _x( 'Integration', 'metabox tab', 'wpsso' ),
 				'cache'        => _x( 'Cache', 'metabox tab', 'wpsso' ),
@@ -148,7 +148,7 @@ if ( ! class_exists( 'WpssoSubmenuAdvanced' ) && class_exists( 'WpssoAdmin' ) ) 
 				'table_columns' => _x( 'Table Columns', 'metabox tab', 'wpsso' ),
 				'document_meta' => _x( 'Document Meta', 'metabox tab', 'wpsso' ),
 				'product_attrs' => _x( 'Product Attributes', 'metabox tab', 'wpsso' ),
-				'custom_fields' => _x( 'Custom Fields', 'metabox tab', 'wpsso' ),
+				'custom_fields' => _x( 'Custom Fields (Metadata)', 'metabox tab', 'wpsso' ),
 			) );
 
 			foreach ( $tabs as $tab_key => $title ) {
@@ -278,7 +278,7 @@ if ( ! class_exists( 'WpssoSubmenuAdvanced' ) && class_exists( 'WpssoAdmin' ) ) 
 				 */
 				case 'edit-product_attrs':
 			
-					$this->add_advanced_product_attr_table_rows( $table_rows, $this->form );
+					$this->add_advanced_product_attrs_table_rows( $table_rows, $this->form );
 
 					break;
 

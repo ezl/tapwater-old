@@ -383,7 +383,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			 */
 
 			/**
-			 * Maybe get options from Premium version integration modules.
+			 * Maybe get options from integration modules.
 			 */
 			$event_opts = apply_filters( $wpsso->lca . '_get_event_options', false, $mod, $event_id );
 
@@ -672,7 +672,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/**
 			 * Begin creation of $job_opts array.
 			 *
-			 * Maybe get options from Premium version integration modules.
+			 * Maybe get options from integration modules.
 			 */
 			$job_opts = apply_filters( $wpsso->lca . '_get_job_options', false, $mod, $job_id );
 
@@ -833,9 +833,9 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			/**
 			 * Note that 'og:url' may be provided instead of 'product:url'.
 			 *
-			 * Note that there is no Schema 'ean' property for the 'product:ean' value.
+			 * Note that there is no Schema 'ean' property.
 			 *
-			 * Note that there is no Schema 'size' property for the 'product:size' value.
+			 * Note that there is no Schema 'size' property.
 			 */
 			$offer = WpssoSchema::get_data_itemprop_from_assoc( $mt_offer, array( 
 				'url'             => 'product:url',
@@ -932,7 +932,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			}
 
 			/**
-			 * Returns 0 if no organization was found / added.
+			 * Add the seller organization data.
 			 */
 			self::add_organization_data( $offer[ 'seller' ], $mod, 'site', 'org_logo_url', false );
 
@@ -1100,7 +1100,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 
 								} elseif ( ! empty( $wpsso->avail[ 'p_ext' ][ 'org' ] ) ) {
 
-									$org_page_link = $wpsso->util->get_admin_url( 'org-general#sucom-tabset_organization-tab_other_organizations' );
+									$org_page_link = $wpsso->util->get_admin_url( 'org-general#sucom-tabset_org-tab_other_organizations' );
 
 									$notice_msg .= ' <a href="' . $org_page_link . '">';
 									$notice_msg .= sprintf( $org_settings_msg, $ret[ 'name' ], 'ID #' . $org_id );
@@ -1225,7 +1225,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			$sharing_url = '';
 
 			/**
-			 * Maybe get options from Premium version integration modules.
+			 * Maybe get options from integration modules.
 			 */
 			$person_opts = apply_filters( $wpsso->lca . '_get_person_options', false, $mod, $person_id );
 
@@ -1389,7 +1389,7 @@ if ( ! class_exists( 'WpssoSchemaSingle' ) ) {
 			$size_name = $wpsso->lca . '-schema';
 
 			/**
-			 * Maybe get options from Premium version integration modules.
+			 * Maybe get options from integration modules.
 			 */
 			$place_opts = apply_filters( $wpsso->lca . '_get_place_options', false, $mod, $place_id );
 

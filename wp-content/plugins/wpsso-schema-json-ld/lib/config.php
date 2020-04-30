@@ -16,11 +16,11 @@ if ( ! class_exists( 'WpssoJsonConfig' ) ) {
 		public static $cf = array(
 			'plugin' => array(
 				'wpssojson' => array(			// Plugin acronym.
-					'version'     => '3.2.0',	// Plugin version.
+					'version'     => '3.5.0',	// Plugin version.
 					'opt_version' => '39',		// Increment when changing default option values.
 					'short'       => 'WPSSO JSON',	// Short plugin name.
 					'name'        => 'WPSSO Schema JSON-LD Markup',
-					'desc'        => 'Google Rich Results and Structured Data for Articles, Carousels (aka Item Lists), Claim Reviews, Events, FAQ Pages, How-Tos, Images, Local Business / Local SEO, Organizations, Products, Ratings, Recipes, Restaurants, Reviews, Videos, and more.',
+					'desc'        => 'Google Rich Results and Structured Data for Articles, Carousels (aka Item Lists), Claim Reviews, Events, FAQ Pages, How-Tos, Images, Local Business / Local SEO, Organizations, Products, Ratings, Recipes, Restaurants, Reviews, Videos, and More.',
 					'slug'        => 'wpsso-schema-json-ld',
 					'base'        => 'wpsso-schema-json-ld/wpsso-schema-json-ld.php',
 					'update_auth' => 'tid',
@@ -34,7 +34,7 @@ if ( ! class_exists( 'WpssoJsonConfig' ) ) {
 						'wpsso' => array(
 							'class'       => 'Wpsso',
 							'name'        => 'WPSSO Core',
-							'min_version' => '6.28.0',
+							'min_version' => '7.2.0',
 						),
 					),
 
@@ -118,8 +118,8 @@ if ( ! class_exists( 'WpssoJsonConfig' ) ) {
 			 */
 			'opt' => array(
 				'defaults' => array(
-					'schema_text_max_len'      => 10000,	// Max. Text or Article Body Length.
-					'schema_add_text_prop'     => 1,	// Add Text or Article Body Properties.
+					'schema_text_max_len'      => 10000,	// Max. Text and Article Body Length.
+					'schema_add_text_prop'     => 1,	// Add Text and Article Body Properties.
 					'schema_add_5_star_rating' => 0,	// Add 5 Star Rating If No Rating.
 
 					/**
@@ -178,14 +178,15 @@ if ( ! class_exists( 'WpssoJsonConfig' ) ) {
 
 		public static function set_variable_constants( $var_const = null ) {
 
-			if ( null === $var_const ) {
-				$var_const = self::get_variable_constants();
+			if ( ! is_array( $var_const ) ) {
+				$var_const = (array) self::get_variable_constants();
 			}
 
 			/**
 			 * Define the variable constants, if not already defined.
 			 */
 			foreach ( $var_const as $name => $value ) {
+
 				if ( ! defined( $name ) ) {
 					define( $name, $value );
 				}
@@ -205,6 +206,7 @@ if ( ! class_exists( 'WpssoJsonConfig' ) ) {
 			 * Maybe override the default constant value with a pre-defined constant value.
 			 */
 			foreach ( $var_const as $name => $value ) {
+
 				if ( defined( $name ) ) {
 					$var_const[$name] = constant( $name );
 				}

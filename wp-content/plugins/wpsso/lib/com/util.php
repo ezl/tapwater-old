@@ -1027,6 +1027,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 		 * Deprecated on 2019/08/18.
 		 */
 		public static function is_force_regen() {
+
 			return false;
 		}
 
@@ -1116,30 +1117,27 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 				return $local_cache[ $url ];
 			}
 
-			if ( ! empty( $url ) ) {
+			if ( strpos( $url, '://' ) ) {
 
-				if ( strpos( $url, '://' ) && parse_url( $url, PHP_URL_SCHEME ) === 'https' ) {
+				if ( 'https' === parse_url( $url, PHP_URL_SCHEME ) ) {
 					return $local_cache[ $url ] = true;
 				} else {
 					return $local_cache[ $url ] = false;
 				}
 
-			} else {
+			} elseif ( is_ssl() ) {
 
-				if ( is_ssl() ) {
+				return $local_cache[ $url ] = true;
 
-					return $local_cache[ $url ] = true;
+			} elseif ( isset( $_SERVER[ 'HTTP_X_FORWARDED_PROTO' ] )
+				&& 'https' === strtolower( $_SERVER[ 'HTTP_X_FORWARDED_PROTO' ] ) ) {
 
-				} elseif ( isset( $_SERVER[ 'HTTP_X_FORWARDED_PROTO' ] )
-					&& strtolower( $_SERVER[ 'HTTP_X_FORWARDED_PROTO' ] ) === 'https' ) {
+				return $local_cache[ $url ] = true;
 
-					return $local_cache[ $url ] = true;
+			} elseif ( isset( $_SERVER[ 'HTTP_X_FORWARDED_SSL' ] )
+				&& 'on' === strtolower( $_SERVER[ 'HTTP_X_FORWARDED_SSL' ] ) ) {
 
-				} elseif ( isset( $_SERVER[ 'HTTP_X_FORWARDED_SSL' ] )
-					&& strtolower( $_SERVER[ 'HTTP_X_FORWARDED_SSL' ] ) === 'on' ) {
-
-					return $local_cache[ $url ] = true;
-				}
+				return $local_cache[ $url ] = true;
 			}
 
 			return $local_cache[ $url ] = false;
@@ -1313,20 +1311,6 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			return $file_name;
 		}
 
-		public static function sanitize_hookname( $name ) {
-
-			$name = preg_replace( '/[:\/\-\. ]+/', '_', $name );
-
-			return self::sanitize_key( $name );
-		}
-
-		public static function sanitize_classname( $name, $allow_underscore = true ) {
-
-			$name = preg_replace( '/[:\/\-\. ' . ( $allow_underscore ? '' : '_' ) . ']+/', '', $name );
-
-			return self::sanitize_key( $name );
-		}
-
 		public static function sanitize_tag( $tag ) {
 
 			$tag = sanitize_title_with_dashes( $tag, '', 'display' );
@@ -1348,9 +1332,28 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			);
 		}
 
+		public static function sanitize_hookname( $name ) {
+
+			$name = preg_replace( '/[:\/\-\. ]+/', '_', $name );
+
+			return self::sanitize_key( $name );
+		}
+
+		public static function sanitize_classname( $name, $allow_underscore = true ) {
+
+			$name = preg_replace( '/[:\/\-\. ' . ( $allow_underscore ? '' : '_' ) . ']+/', '', $name );
+
+			return self::sanitize_key( $name );
+		}
+
 		public static function sanitize_key( $key ) {
 
 			return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( $key ) );
+		}
+
+		public static function sanitize_anchor( $anchor ) {
+
+			return preg_replace( '/[^a-z0-9\-]/', '-', strtolower( $anchor ) );
 		}
 
 		public static function array_to_keywords( array $tags = array() ) {
@@ -2194,14 +2197,13 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 		}
 
 		/**
-		 * Return a localized option value.
+		 * Returns a localized option value or null.
 		 *
 		 * $mixed = 'default' | 'current' | post ID | $mod array
 		 */
 		public static function get_key_value( $key, array $opts, $mixed = 'current' ) {
 
 			$key_locale = self::get_key_locale( $key, $opts, $mixed );
-
 			$val_locale = isset( $opts[ $key_locale ] ) ? $opts[ $key_locale ] : null;
 
 			/**
@@ -2209,23 +2211,24 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			 */
 			if ( ! isset( $opts[ $key_locale ] ) || $opts[ $key_locale ] === '' ) {
 
-				if ( ( $pos = strpos( $key_locale, '#' ) ) > 0 ) {
+				if ( false !== ( $pos = strpos( $key_locale, '#' ) ) ) {
 
-					$key_default = self::get_key_locale( substr( $key_locale, 0, $pos ), $opts, 'default' );
+					$key_default = substr( $key_locale, 0, $pos );
+					$key_default = self::get_key_locale( $key_default, $opts, 'default' );
 
 					if ( $key_locale !== $key_default ) {
 						return isset( $opts[ $key_default ] ) ? $opts[ $key_default ] : $val_locale;
-					} else {
-						return $val_locale;
 					}
 
-				} else {
 					return $val_locale;
+
 				}
 
-			} else {
 				return $val_locale;
+
 			}
+
+			return $val_locale;
 		}
 
 		public static function set_key_locale( $key, $value, &$opts, $mixed = 'current' ) {
@@ -2243,6 +2246,13 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 		 * $mixed = 'default' | 'current' | post ID | $mod array
 		 */
 		public static function get_key_locale( $key, $opts = false, $mixed = 'current' ) {
+
+			/**
+			 * Remove any pre-existing locale value.
+			 */
+			if ( false !== ( $pos = strpos( $key, '#' ) ) ) {
+				$key = substr_replace( $key, '', $pos );
+			}
 
 			$default    = self::get_locale( 'default' );
 			$locale     = self::get_locale( $mixed );
@@ -2345,12 +2355,12 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 				}
 
 				if ( empty( $locale ) ) {
-					$locale = 'en_US'; // Just in case.
+					$locale = 'en_US';	// Just in case.
 				}
 
 			} else {
 
-				if ( is_admin() && function_exists( 'get_user_locale' ) ) { // Since WP v4.7.
+				if ( is_admin() && function_exists( 'get_user_locale' ) ) {	// Since WP v4.7.
 					$locale = get_user_locale();
 				} else {
 					$locale = get_locale();
@@ -2362,11 +2372,11 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 		public static function get_available_locales() {
 
-			$available_locales = get_available_languages(); // Since WP v3.0.
+			$available_locales = get_available_languages();		// Since WP v3.0.
 
 			$default_locale = self::get_locale( 'default' );
 
-			if ( ! is_array( $available_locales ) ) {	// Just in case.
+			if ( ! is_array( $available_locales ) ) {		// Just in case.
 
 				$available_locales = array( $default_locale );
 
@@ -2403,6 +2413,15 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			return $type_opts;
 		}
 
+		public static function get_mod_anchor( array $mod ) {
+
+			$mod_anchor = self::get_mod_salt( $mod );
+
+			$mod_anchor = self::sanitize_anchor( $mod_anchor );
+
+			return $mod_anchor;
+		}
+
 		/**
 		 * Results a salt string based on $mod values.
 		 *
@@ -2414,11 +2433,13 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 		 */
 		public static function get_mod_salt( array $mod, $sharing_url = false ) {
 
+			$sep = '_';
+
 			$mod_salt = '';
 
 			if ( ! empty( $mod[ 'name' ] ) ) {
 
-				$mod_salt .= '_' . $mod[ 'name' ] . ':';
+				$mod_salt .= $sep . $mod[ 'name' ] . ':';
 
 				if ( $mod[ 'id' ] === false ) {
 					$mod_salt .= 'false';
@@ -2432,21 +2453,21 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			}
 
 			if ( ! empty( $mod[ 'tax_slug' ] ) ) {
-				$mod_salt .= '_tax:' . $mod[ 'tax_slug' ];
+				$mod_salt .= $sep . 'tax:' . $mod[ 'tax_slug' ];
 			}
 
 			if ( empty( $mod[ 'id' ] ) ) {
 
 				if ( ! empty( $mod[ 'is_home' ] ) ) {
-					$mod_salt .= '_home';
+					$mod_salt .= $sep . 'home';
 				}
 
 				if ( ! empty( $sharing_url ) ) {
-					$mod_salt .= '_url:' . $sharing_url;
+					$mod_salt .= $sep . 'url:' . $sharing_url;
 				}
 			}
 
-			$mod_salt = ltrim( $mod_salt, '_' );	// Remove leading underscore.
+			$mod_salt = ltrim( $mod_salt, $sep );
 
 			return apply_filters( 'sucom_mod_salt', $mod_salt, $sharing_url );
 		}
@@ -2581,13 +2602,15 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 		public static function get_page_info( $use_post = false ) {
 
-			/**
-			 * Optimize and only check what we need to.
-			 */
-			$is_term_page = $is_user_page = false;
+			$is_post_page = $is_term_page = $is_user_page = false;
 
+			/**
+			 * Optimize and stop on first match.
+			 */
 			if ( ! $is_post_page = self::is_post_page( $use_post ) ) {
+
 				if ( ! $is_term_page = self::is_term_page() ) {
+
 					$is_user_page = self::is_user_page();
 				}
 			}
@@ -2734,6 +2757,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			static $local_cache = array();
 
 			if ( ! isset( $local_cache[ $term_id ] ) ) {
+
 				$local_cache[ $term_id ] = get_term_by( 'id', $term_id, $tax_slug, OBJECT, 'raw' );
 			}
 
@@ -2904,7 +2928,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 			if ( is_numeric( $term_id ) && $term_id > 0 ) {
 
-				$ret = term_exists( $term_id, $tax_slug ); // Since WP v3.0.
+				$ret = term_exists( $term_id, $tax_slug );	// Since WP v3.0.
 
 			} elseif ( is_tax() || is_category() || is_tag() ) {
 
@@ -2914,10 +2938,12 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 				$screen_base = self::get_screen_base();
 
-				if ( $screen_base === 'term' ) { // Since WP v4.5.
+				if ( $screen_base === 'term' ) {	 	// Since WP v4.5.
+
 					$ret = true;
+
 				} elseif ( ( false === $screen_base || $screen_base === 'edit-tags' ) &&	
-					( self::get_request_value( 'taxonomy' ) !== '' && // Uses sanitize_text_field().
+					( self::get_request_value( 'taxonomy' ) !== '' &&
 						self::get_request_value( 'tag_ID' ) !== '' ) ) {
 
 					$ret = true;
@@ -2933,7 +2959,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 			if ( is_numeric( $term_id ) && $term_id > 0 ) {
 
-				$ret = term_exists( $term_id, 'category' ); // Since WP v3.0.
+				$ret = term_exists( $term_id, 'category' );	// Since WP v3.0.
 
 			} elseif ( is_category() ) {
 
@@ -2942,7 +2968,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			} elseif ( is_admin() ) {
 
 				if ( self::is_term_page()
-					&& self::get_request_value( 'taxonomy' ) === 'category' ) { // Uses sanitize_text_field().
+					&& self::get_request_value( 'taxonomy' ) === 'category' ) {
 
 					$ret = true;
 				}
@@ -2957,7 +2983,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 			if ( is_numeric( $term_id ) && $term_id > 0 ) {
 
-				$ret = term_exists( $term_id, 'post_tag' ); // Since WP v3.0.
+				$ret = term_exists( $term_id, 'post_tag' );	// Since WP v3.0.
 
 			} elseif ( is_tag() ) {
 
@@ -2966,7 +2992,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			} elseif ( is_admin() ) {
 
 				if ( self::is_term_page()
-					&& self::get_request_value( 'taxonomy' ) === '_tag' ) { // Uses sanitize_text_field().
+					&& self::get_request_value( 'taxonomy' ) === '_tag' ) {
 
 					$ret = true;
 				}
@@ -3241,6 +3267,15 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			$url = self::unparse_url( $parsed_url );
 
 			return $url;
+		}
+
+		public static function add_query_fragment( $url, $new_fragment ) {
+
+			if ( $old_fragment = strstr( $url, '#' ) ) {
+				$url = substr( $url, 0, -strlen( $old_fragment ) );
+			}
+
+			return $url . '#' . trim( $new_fragment, '#' );
 		}
 
 		public static function unparse_url( $parsed_url ) {
@@ -3603,33 +3638,19 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 		}
 
 		/**
-		 * Returns the class and id attributes.
+		 * Deprecated on 2020/04/14.
 		 */
 		public static function get_atts_css_attr( array $atts, $css_name, $css_extra = '' ) {
 
-			$css_class = $css_name . '-' . ( empty( $atts[ 'css_class' ] ) ? 'button' : $atts[ 'css_class' ] );
-
-			if ( ! empty( $css_extra ) ) {
-				$css_class = $css_extra . ' ' . $css_class;
-			}
-
-			return 'class="' . $css_class . '" id="' . self::get_atts_src_id( $atts, $css_name ) . '"';
+			return '';
 		}
 
+		/**
+		 * Deprecated on 2020/04/14.
+		 */
 		public static function get_atts_src_id( array $atts, $src_name ) {
 
-			$src_id = $src_name . '-' . ( empty( $atts[ 'css_id' ] ) ? 'button' : $atts[ 'css_id' ] );
-
-			if ( ! empty( $atts[ 'use_post' ] ) || is_singular() || in_the_loop() ) {
-
-				global $post;
-
-				if ( ! empty( $post->ID ) ) {
-					$src_id .= '-post-' . $post->ID;
-				}
-			}
-
-			return $src_id;
+			return '';
 		}
 
 		public static function is_toplevel_edit( $hook_name ) {
@@ -3885,8 +3906,14 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 				$ini_saved[ $name ] = ini_get( $name );	// Returns false if option does not exist.
 
-				if ( false !== $ini_saved[ $name ] && $ini_saved[ $name ] !== $value ) {
-					ini_set( $name, $value );
+				if ( false !== $ini_saved[ $name ] ) {
+				
+					if ( $ini_saved[ $name ] !== $value ) {
+						ini_set( $name, $value );
+					} else {
+						unset( $ini_saved[ $name ] );
+					}
+
 				} else {
 					unset( $ini_saved[ $name ] );
 				}
@@ -3902,7 +3929,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			error_log( $error_msg );
 
 			/**
-			 * Restore old option values that were changed.
+			 * Only restore option values that were changed.
 			 */
 			foreach ( $ini_saved as $name => $value ) {
 				ini_set( $name, $value );

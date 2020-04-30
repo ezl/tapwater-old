@@ -79,9 +79,11 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeThing' ) ) {
 			 * Property:
 			 *	url
 			 */
-			WpssoSchema::add_data_itemprop_from_assoc( $ret, $mt_og, array(
-				'url' => 'og:url',
-			) );
+			if ( empty( $mod[ 'is_public' ] ) ) {				// Since WPSSO Core v7.0.0.
+				$ret[ 'url' ] = WpssoUtil::get_fragment_anchor( $mod );	// Since WPSSO Core v7.0.0.
+			} else {
+				$ret[ 'url' ] = $this->p->util->get_canonical_url( $mod );
+			}
 
 			/**
 			 * Property:
@@ -89,11 +91,11 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeThing' ) ) {
 			 */
 			$ret[ 'sameAs' ] = array();
 
-			if ( ! empty( $mod[ 'obj' ] ) ) {
+			if ( ! empty( $mod[ 'is_public' ] ) ) {	// Since WPSSO Core v7.0.0.
 
-				$md_opts = $mod[ 'obj' ]->get_options( $mod[ 'id' ] );
-
-				$ret[ 'sameAs' ][] = $this->p->util->get_canonical_url( $mod );
+				if ( ! empty( $mt_og[ 'og:url' ] ) ) {
+					$ret[ 'sameAs' ][] = $mt_og[ 'og:url' ];
+				}
 
 				if ( $mod[ 'is_post' ] ) {
 
@@ -137,23 +139,28 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeThing' ) ) {
 							$this->p->options[ 'plugin_shortener' ], $mod );
 					}
 				}
+			}
+	
+			/**
+			 * Get additional sameAs URLs from the post/term/user custom meta.
+			 */
+			if ( ! empty( $mod[ 'obj' ] ) ) {
 
-				/**
-				 * Get additional sameAs URLs from the post/term/user custom meta.
-				 */
+				$md_opts = $mod[ 'obj' ]->get_options( $mod[ 'id' ] );
+	
 				if ( is_array( $md_opts ) ) {	// Just in case
-
+	
 					foreach ( SucomUtil::preg_grep_keys( '/^schema_sameas_url_[0-9]+$/', $md_opts ) as $url ) {
 						$ret[ 'sameAs' ][] = SucomUtil::esc_url_encode( $url );
 					}
 				}
 			}
-
+	
 			$ret[ 'sameAs' ] = (array) apply_filters( $this->p->lca . '_json_prop_https_schema_org_sameas',
 				$ret[ 'sameAs' ], $mod, $mt_og, $page_type_id, $is_main );
-
+	
 			WpssoSchema::check_sameas_prop_values( $ret );
-
+	
 			/**
 			 * Property:
 			 *	name

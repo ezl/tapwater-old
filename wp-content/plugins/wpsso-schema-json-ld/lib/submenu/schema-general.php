@@ -34,8 +34,8 @@ if ( ! class_exists( 'WpssoJsonSubmenuSchemaGeneral' ) && class_exists( 'WpssoAd
 
 			$this->maybe_show_language_notice();
 
-			$metabox_id      = 'schema_general';
-			$metabox_title   = _x( 'Schema Markup', 'metabox title', 'wpsso-schema-json-ld' );
+			$metabox_id      = 'general';
+			$metabox_title   = _x( 'Schema Markup Settings', 'metabox title', 'wpsso-schema-json-ld' );
 			$metabox_screen  = $this->pagehook;
 			$metabox_context = 'normal';
 			$metabox_prio    = 'default';
@@ -46,7 +46,7 @@ if ( ! class_exists( 'WpssoJsonSubmenuSchemaGeneral' ) && class_exists( 'WpssoAd
 				array( $this, 'show_metabox_' . $metabox_id ), $metabox_screen,
 					$metabox_context, $metabox_prio, $callback_args );
 
-			$metabox_id      = 'schema_advanced';
+			$metabox_id      = 'advanced';
 			// translators: Please ignore - translation uses a different text domain.
 			$metabox_title   = _x( 'Advanced Settings', 'metabox title', 'wpsso' );
 			$metabox_screen  = $this->pagehook;
@@ -60,11 +60,13 @@ if ( ! class_exists( 'WpssoJsonSubmenuSchemaGeneral' ) && class_exists( 'WpssoAd
 					$metabox_context, $metabox_prio, $callback_args );
 		}
 
-		public function show_metabox_schema_general() {
+		public function show_metabox_general() {
 
-			$metabox_id = 'schema_general';
+			$metabox_id = 'json-general';
 
-			$tabs = apply_filters( $this->p->lca . '_' . $metabox_id . '_tabs', array( 
+			$filter_name = SucomUtil::sanitize_hookname( $this->p->lca . '_' . $metabox_id . '_tabs' );
+
+			$tabs = apply_filters( $filter_name, array( 
 				'knowledge_graph' => _x( 'Knowledge Graph', 'metabox tab', 'wpsso-schema-json-ld' ),
 				'schema_props'    => _x( 'Schema Properties', 'metabox tab', 'wpsso-schema-json-ld' ),
 				'schema_defaults' => _x( 'Schema Defaults', 'metabox tab', 'wpsso-schema-json-ld' ),
@@ -80,7 +82,7 @@ if ( ! class_exists( 'WpssoJsonSubmenuSchemaGeneral' ) && class_exists( 'WpssoAd
 
 				} else {
 
-					$filter_name = $this->p->lca . '_' . $metabox_id . '_' . $tab_key . '_rows';
+					$filter_name = SucomUtil::sanitize_hookname( $this->p->lca . '_' . $metabox_id . '_' . $tab_key . '_rows' );
 
 					$table_rows[ $tab_key ] = $this->get_table_rows( $metabox_id, $tab_key );
 
@@ -91,17 +93,19 @@ if ( ! class_exists( 'WpssoJsonSubmenuSchemaGeneral' ) && class_exists( 'WpssoAd
 			$this->p->util->do_metabox_tabbed( $metabox_id, $tabs, $table_rows );
 		}
 
-		public function show_metabox_schema_advanced() {
+		public function show_metabox_advanced() {
 
-			$metabox_id = 'schema_advanced';
+			$metabox_id = 'json-advanced';
 
-			$tabs = apply_filters( $this->p->lca . '_' . $metabox_id . '_tabs', array( 
+			$filter_name = SucomUtil::sanitize_hookname( $this->p->lca . '_' . $metabox_id . '_tabs' );
+
+			$tabs = apply_filters( $filter_name, array( 
 				// translators: Please ignore - translation uses a different text domain.
 				'schema_types'  => _x( 'Schema Types', 'metabox tab', 'wpsso' ),
 				// translators: Please ignore - translation uses a different text domain.
 				'product_attrs' => _x( 'Product Attributes', 'metabox tab', 'wpsso' ),
 				// translators: Please ignore - translation uses a different text domain.
-				'custom_fields' => _x( 'Custom Fields', 'metabox tab', 'wpsso' ),
+				'custom_fields' => _x( 'Custom Fields (Metadata)', 'metabox tab', 'wpsso' ),
 			) );
 
 			$table_rows = array();
@@ -114,7 +118,7 @@ if ( ! class_exists( 'WpssoJsonSubmenuSchemaGeneral' ) && class_exists( 'WpssoAd
 
 				} else {
 
-					$filter_name = $this->p->lca . '_' . $metabox_id . '_' . $tab_key . '_rows';
+					$filter_name = SucomUtil::sanitize_hookname( $this->p->lca . '_' . $metabox_id . '_' . $tab_key . '_rows' );
 
 					$table_rows[ $tab_key ] = $this->get_table_rows( $metabox_id, $tab_key );
 
@@ -134,38 +138,38 @@ if ( ! class_exists( 'WpssoJsonSubmenuSchemaGeneral' ) && class_exists( 'WpssoAd
 				/**
 				 * Schema Markup metabox.
 				 */
-				case 'schema_general-knowledge_graph':
+				case 'json-general-knowledge_graph':
 
 					$this->add_schema_knowledge_graph_table_rows( $table_rows, $this->form );
 
 					break;
 
-				case 'schema_general-schema_props':
+				case 'json-general-schema_props':
 
 					$this->add_schema_props_table_rows( $table_rows, $this->form );
 
 					break;
 
-				case 'schema_general-schema_defaults':
+				case 'json-general-schema_defaults':
 
 					break;
 
 				/**
 				 * Advanced Settings metabox.
 				 */
-				case 'schema_advanced-schema_types':
+				case 'json-advanced-schema_types':
 
 					$this->add_schema_item_types_table_rows( $table_rows, $this->form );
 
 					break;
 
-				case 'schema_advanced-product_attrs':
+				case 'json-advanced-product_attrs':
 			
-					$this->add_advanced_product_attr_table_rows( $table_rows, $this->form );
+					$this->add_advanced_product_attrs_table_rows( $table_rows, $this->form );
 
 					break;
 
-				case 'schema_advanced-custom_fields':
+				case 'json-advanced-custom_fields':
 			
 					$this->add_advanced_custom_fields_table_rows( $table_rows, $this->form );
 
@@ -182,40 +186,36 @@ if ( ! class_exists( 'WpssoJsonSubmenuSchemaGeneral' ) && class_exists( 'WpssoAd
 				$this->p->debug->mark();
 			}
 
-			$atts_locale = array( 'is_locale' => true );
-
 			$def_site_name = get_bloginfo( 'name', 'display' );
 			$def_site_desc = get_bloginfo( 'description', 'display' );
 
-			$site_name_key     = SucomUtil::get_key_locale( 'site_name', $form->options );
-			$site_name_alt_key = SucomUtil::get_key_locale( 'site_name_alt', $form->options );
-			$site_desc_key     = SucomUtil::get_key_locale( 'site_desc', $form->options );
-
 			$table_rows[ 'site_name' ] = '' .
-			$form->get_th_html( _x( 'WebSite Name', 'option label', 'wpsso-schema-json-ld' ),
-				$css_class = '', $css_id = 'site_name', $atts_locale ) . 
-			'<td>' . $form->get_input( $site_name_key, 'long_name', '', 0, $def_site_name ) . '</td>';
+			$form->get_th_html_locale( _x( 'WebSite Name', 'option label', 'wpsso-schema-json-ld' ),
+				$css_class = '', $css_id = 'site_name' ) . 
+			'<td>' . $form->get_input_locale( 'site_name', $css_class = 'long_name', $css_id = '',
+				$len = 0, $def_site_name ) . '</td>';
 
 			$table_rows[ 'site_name_alt' ] = '' .
-			$form->get_th_html( _x( 'WebSite Alternate Name', 'option label', 'wpsso-schema-json-ld' ),
-				$css_class = '', $css_id = 'site_name_alt', $atts_locale ) . 
-			'<td>' . $form->get_input( $site_name_alt_key, 'long_name' ) . '</td>';
+			$form->get_th_html_locale( _x( 'WebSite Alternate Name', 'option label', 'wpsso-schema-json-ld' ),
+				$css_class = '', $css_id = 'site_name_alt' ) . 
+			'<td>' . $form->get_input_locale( 'site_name_alt', $css_class = 'long_name' ) . '</td>';
 
 			$table_rows[ 'site_desc' ] = '' .
-			$form->get_th_html( _x( 'WebSite Description', 'option label', 'wpsso-schema-json-ld' ),
-				$css_class = '', $css_id = 'site_desc', $atts_locale ) . 
-			'<td>' . $form->get_textarea( $site_desc_key, $css_class = '', $css_id = '', 0, $def_site_desc ) . '</td>';
+			$form->get_th_html_locale( _x( 'WebSite Description', 'option label', 'wpsso-schema-json-ld' ),
+				$css_class = '', $css_id = 'site_desc' ) . 
+			'<td>' . $form->get_textarea_locale( 'site_desc', $css_class = '', $css_id = '',
+				$len = 0, $def_site_desc ) . '</td>';
 
 			$this->add_schema_item_props_table_rows( $table_rows, $form );
 
 			$table_rows[ 'schema_text_max_len' ] = $form->get_tr_hide( 'basic', 'schema_text_max_len' ) . 
-			$form->get_th_html( _x( 'Max. Text or Article Body Length', 'option label', 'wpsso-schema-json-ld' ),
+			$form->get_th_html( _x( 'Max. Text and Article Body Length', 'option label', 'wpsso-schema-json-ld' ),
 				$css_class = '', $css_id = 'schema_text_max_len' ) . 
-			'<td>' . $form->get_input( 'schema_text_max_len', 'short' ) . ' ' .
+			'<td>' . $form->get_input( 'schema_text_max_len', $css_class = 'short' ) . ' ' .
 				_x( 'characters or less', 'option comment', 'wpsso-schema-json-ld' ) . '</td>';
 
 			$table_rows[ 'schema_add_text_prop' ] = $form->get_tr_hide( 'basic', 'schema_add_text_prop' ) .
-			$form->get_th_html( _x( 'Add Text or Article Body Properties', 'option label', 'wpsso-schema-json-ld' ),
+			$form->get_th_html( _x( 'Add Text and Article Body Properties', 'option label', 'wpsso-schema-json-ld' ),
 				$css_class = '', $css_id = 'schema_add_text_prop' ) . 
 			'<td>' . $form->get_checkbox( 'schema_add_text_prop' ) . '</td>';
 
