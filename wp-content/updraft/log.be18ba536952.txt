@@ -1,0 +1,632 @@
+0000.000 (0) Opened log file at time: Fri, 01 May 2020 15:52:50 +0000 on https://www.canyoudrinktapwaterin.com
+0000.002 (0) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 1.16.23 WP: 5.3.2 PHP: 7.2.24 (cgi-fcgi, Linux ps429333 4.9.159-vs2.3.9.8-vs+ #4 SMP Wed Aug 28 15:05:40 PDT 2019 x86_64) MySQL: 5.7.29-log WPLANG: en_US Server: Apache safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 9.9M | 2M) multisite: N openssl: OpenSSL 1.0.1f 6 Jan 2014 mcrypt: N LANG:  ZipArchive::addFile: Y
+0000.003 (0) Free space on disk containing Updraft's temporary directory: 23538.3 MB
+0000.005 (0) Tasks: Backup files: 1 (schedule: weekly) Backup DB:  (schedule: weekly)
+0000.006 (0) Processed schedules. Combining jobs from identical schedules. Tasks now: Backup files: 1 Backup DB: 1
+0000.018 (0) Requesting semaphore lock (fd) (apparently via scheduler: last_scheduled_action_called_at=1588262221, seconds_ago=86149)
+0000.021 (0) Set semaphore last lock (fd) time to 2020-05-01 15:52:50
+0000.021 (0) Semaphore lock (fd) complete
+0000.025 (0) Backup run: resumption=0, nonce=be18ba536952, file_nonce=be18ba536952 begun at=1588348370 (0s ago), job type=backup
+0000.027 (0) Scheduling a resumption (1) after 300 seconds (1588348670) in case this run gets aborted
+0000.054 (0) Checking if we have a zip executable available
+0000.055 (0) Testing: /usr/bin/zip
+0000.070 (0) Output: zip warning: binziptest/test.zip not found or empty
+0000.072 (0) Output: adding: binziptest/subdir1/	(in=0) (out=0) (stored 0%)
+0000.073 (0) Output: adding: binziptest/subdir1/subdir2/	(in=0) (out=0) (stored 0%)
+0000.075 (0) Output: adding: binziptest/subdir1/subdir2/test.html	(in=131) (out=107) (deflated 18%)
+0000.076 (0) Output: total bytes=131, compressed=107 -> 18% savings
+0000.085 (0) Output: adding: binziptest/subdir1/subdir2/test2.html	(in=138) (out=113) (deflated 18%)
+0000.087 (0) Output: total bytes=269, compressed=220 -> 18% savings
+0000.117 (0) Working binary zip found: /usr/bin/zip
+0000.119 (0) Zip engine: found/will use a binary zip: /usr/bin/zip
+0000.120 (0) Creation of backups of directories: beginning
+0000.124 (0) Beginning creation of dump of plugins (split every: 400 MB)
+0000.269 (0) Total entities for the zip file: 1137 directories, 5944 files (0 skipped as non-modified), 108.6 MB
+0000.278 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 100 files added (on-disk size: 0 KB)
+0000.285 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 200 files added (on-disk size: 0 KB)
+0000.292 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 300 files added (on-disk size: 0 KB)
+0000.299 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 400 files added (on-disk size: 0 KB)
+0000.306 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 500 files added (on-disk size: 0 KB)
+0000.308 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (12.6 MB, 5944 files batched, 501 (501) added so far); re-opening (prior size: 0 KB)
+0001.037 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: size is now: 6.00 MB
+0001.046 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 600 files added (on-disk size: 6113.9 KB)
+0001.054 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 700 files added (on-disk size: 6113.9 KB)
+0001.061 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 800 files added (on-disk size: 6113.9 KB)
+0001.068 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 900 files added (on-disk size: 6113.9 KB)
+0001.075 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 1000 files added (on-disk size: 6113.9 KB)
+0001.076 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (9.6 MB, 5944 files batched, 501 (1002) added so far); re-opening (prior size: 6113.9 KB)
+0001.542 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: size is now: 8.20 MB
+0001.549 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 1100 files added (on-disk size: 8361.6 KB)
+0001.557 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 1200 files added (on-disk size: 8361.6 KB)
+0001.564 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 1300 files added (on-disk size: 8361.6 KB)
+0001.635 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 1400 files added (on-disk size: 8361.6 KB)
+0001.642 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 1500 files added (on-disk size: 8361.6 KB)
+0001.643 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (11.5 MB, 5944 files batched, 501 (1503) added so far); re-opening (prior size: 8361.6 KB)
+0002.282 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: size is now: 11.60 MB
+0002.291 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 1600 files added (on-disk size: 11912.7 KB)
+0002.297 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 1700 files added (on-disk size: 11912.7 KB)
+0002.305 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 1800 files added (on-disk size: 11912.7 KB)
+0002.312 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 1900 files added (on-disk size: 11912.7 KB)
+0002.319 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 2000 files added (on-disk size: 11912.7 KB)
+0002.320 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (14.7 MB, 5944 files batched, 501 (2004) added so far); re-opening (prior size: 11912.7 KB)
+0003.278 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: size is now: 15.60 MB
+0003.287 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 2100 files added (on-disk size: 15993.6 KB)
+0003.293 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 2200 files added (on-disk size: 15993.6 KB)
+0003.301 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 2300 files added (on-disk size: 15993.6 KB)
+0003.308 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 2400 files added (on-disk size: 15993.6 KB)
+0003.316 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 2500 files added (on-disk size: 15993.6 KB)
+0003.318 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (2.3 MB, 5944 files batched, 501 (2505) added so far); re-opening (prior size: 15993.6 KB)
+0003.548 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 2600 files added (on-disk size: 16790.5 KB)
+0003.556 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 2700 files added (on-disk size: 16790.5 KB)
+0003.563 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 2800 files added (on-disk size: 16790.5 KB)
+0003.590 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 2900 files added (on-disk size: 16790.5 KB)
+0003.598 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 3000 files added (on-disk size: 16790.5 KB)
+0003.600 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (11.9 MB, 5944 files batched, 501 (3006) added so far); re-opening (prior size: 16790.5 KB)
+0004.290 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: size is now: 19.80 MB
+0004.297 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 3100 files added (on-disk size: 20263.4 KB)
+0004.303 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 3200 files added (on-disk size: 20263.4 KB)
+0004.309 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 3300 files added (on-disk size: 20263.4 KB)
+0004.315 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 3400 files added (on-disk size: 20263.4 KB)
+0004.320 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 3500 files added (on-disk size: 20263.4 KB)
+0004.322 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (13.2 MB, 5944 files batched, 501 (3507) added so far); re-opening (prior size: 20263.4 KB)
+0004.871 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: size is now: 29.20 MB
+0004.878 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 3600 files added (on-disk size: 29902.1 KB)
+0004.883 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 3700 files added (on-disk size: 29902.1 KB)
+0004.890 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 3800 files added (on-disk size: 29902.1 KB)
+0004.897 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 3900 files added (on-disk size: 29902.1 KB)
+0004.905 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 4000 files added (on-disk size: 29902.1 KB)
+0004.907 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (7.3 MB, 5944 files batched, 501 (4008) added so far); re-opening (prior size: 29902.1 KB)
+0005.271 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 4100 files added (on-disk size: 34179.7 KB)
+0005.277 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 4200 files added (on-disk size: 34179.7 KB)
+0005.283 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 4300 files added (on-disk size: 34179.7 KB)
+0005.290 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 4400 files added (on-disk size: 34179.7 KB)
+0005.297 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 4500 files added (on-disk size: 34179.7 KB)
+0005.299 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (7.9 MB, 5944 files batched, 501 (4509) added so far); re-opening (prior size: 34179.7 KB)
+0005.766 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 4600 files added (on-disk size: 36301.3 KB)
+0005.771 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 4700 files added (on-disk size: 36301.3 KB)
+0005.777 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 4800 files added (on-disk size: 36301.3 KB)
+0005.783 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 4900 files added (on-disk size: 36301.3 KB)
+0005.789 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 5000 files added (on-disk size: 36301.3 KB)
+0005.791 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (7.5 MB, 5944 files batched, 501 (5010) added so far); re-opening (prior size: 36301.3 KB)
+0006.302 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 5100 files added (on-disk size: 38630.2 KB)
+0006.307 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 5200 files added (on-disk size: 38630.2 KB)
+0006.313 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 5300 files added (on-disk size: 38630.2 KB)
+0006.319 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 5400 files added (on-disk size: 38630.2 KB)
+0006.324 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 5500 files added (on-disk size: 38630.2 KB)
+0006.326 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (4.9 MB, 5944 files batched, 501 (5511) added so far); re-opening (prior size: 38630.2 KB)
+0006.651 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 5600 files added (on-disk size: 39936.8 KB)
+0006.658 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 5700 files added (on-disk size: 39936.8 KB)
+0006.666 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 5800 files added (on-disk size: 39936.8 KB)
+0006.674 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip.tmp: 5900 files added (on-disk size: 39936.8 KB)
+0007.678 (0) Created plugins zip (0) - 41359.9 KB in 7.6 s (5476.1 KB/s) (sha1: 4cf495a6088b054f01f2d2688981355c6ad161bf, sha256: c6f79efa35b3680d1954607639b102c4a9e390d98903cb815a9d117752af24e0)
+0007.681 (0) Beginning creation of dump of themes (split every: 400 MB)
+0007.685 (0) Total entities for the zip file: 8 directories, 65 files (0 skipped as non-modified), 1.1 MB
+0007.729 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-themes.zip.tmp: size is now: 0.70 MB
+0007.746 (0) Created themes zip (0) - 761 KB in 0.1 s (11904.6 KB/s) (sha1: 2c03a5a2967590a1e28339c411c9509f7f17f18c, sha256: 8a0267af79be2cb623d260f1790333ede462a8563b532b03ba2f8fab2b972935)
+0007.749 (0) Exclusion option setting (uploads): backup*,*backups,backwpup*,wp-clone,snapshots
+0007.750 (0) Looking for candidates to backup in: /home/tapwater/canyoudrinktapwaterin.com/wp-content/uploads
+0007.751 (0) finding files: 2019: adding to list (1)
+0007.752 (0) finding files: 2020: adding to list (2)
+0007.753 (0) finding files: ampforwp-tree-shaking: adding to list (3)
+0007.754 (0) finding files: elementor: adding to list (4)
+0007.755 (0) finding files: essential-addons-elementor: adding to list (5)
+0007.756 (0) finding files: live-weather-station: adding to list (6)
+0007.756 (0) finding files: redux: adding to list (7)
+0007.757 (0) finding files: wp-file-manager-pro: adding to list (8)
+0007.758 (0) finding files: .htaccess: adding to list (9)
+0007.759 (0) finding files: wpallexport: adding to list (10)
+0007.759 (0) finding files: wpallimport: adding to list (11)
+0007.760 (0) Beginning creation of dump of uploads (split every: 400 MB)
+0007.780 (0) Total entities for the zip file: 36 directories, 1165 files (0 skipped as non-modified), 87 MB
+0007.786 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 100 files added (on-disk size: 0 KB)
+0007.792 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 200 files added (on-disk size: 0 KB)
+0007.799 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 300 files added (on-disk size: 0 KB)
+0007.801 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 25 MB added on this batch (25 MB, 1165 files batched, 320 (320) added so far); re-opening (prior size: 0 KB)
+0008.137 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: size is now: 25.10 MB
+0008.140 (0) A useful amount of data was added after this amount of zip processing: 1.3 s (normalised: 1.3 s, rate: 19526.9 KB/s)
+0008.142 (0) Performance is good - will increase the amount of data we attempt to batch (time=1.3119459152222, normalised_time=1.3110133565499, max_time=8.1407301425934, data points known=1, old_max_bytes=26214400, new_max_bytes=119973148)
+0008.149 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 400 files added (on-disk size: 25692.1 KB)
+0008.156 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 500 files added (on-disk size: 25692.1 KB)
+0008.164 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 600 files added (on-disk size: 25692.1 KB)
+0008.172 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 700 files added (on-disk size: 25692.1 KB)
+0008.180 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 800 files added (on-disk size: 25692.1 KB)
+0008.182 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 500 files added on this batch (33.2 MB, 1165 files batched, 501 (821) added so far); re-opening (prior size: 25692.1 KB)
+0008.595 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: size is now: 58.40 MB
+0008.604 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 900 files added (on-disk size: 59840.3 KB)
+0008.613 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 1000 files added (on-disk size: 59840.3 KB)
+0008.625 (0) Zip: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: 1100 files added (on-disk size: 59840.3 KB)
+0009.090 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip.tmp: size is now: 82.50 MB
+0010.435 (0) Created uploads zip (0) - 84445.5 KB in 2.7 s (31588.2 KB/s) (sha1: 2a81e6e443679f97cee3437a937e87a532c0d5d0, sha256: a116f3b51bb7ab8dd2616b23514f2272fc1a86cdbbfb1018ebf506c665a0a75a)
+0010.437 (0) Beginning backup of other directories found in the content directory (index: 0)
+0010.438 (0) Exclusion option setting (others): upgrade,cache,updraft,backup*,*backups,mysql.sql,debug.log
+0010.439 (0) Looking for candidates to backup in: /home/tapwater/canyoudrinktapwaterin.com/wp-content
+0010.440 (0) finding files: themes: skipping: this is the themes directory
+0010.441 (0) finding files: plugins: skipping: this is the plugins directory
+0010.442 (0) finding files: uploads: skipping: this is the uploads directory
+0010.442 (0) finding files: cache: skipping: excluded by options
+0010.443 (0) finding files: upgrade: skipping: excluded by options
+0010.444 (0) finding files: updraft: skipping: this is the updraft directory
+0010.445 (0) finding files: ai1wm-backups: skipping: excluded by options (glob)
+0010.446 (0) finding files: wp-cache-config.php-old: adding to list (1)
+0010.447 (0) finding files: wp-cache-config.php: adding to list (2)
+0010.448 (0) finding files: advanced-cache.php-old: adding to list (3)
+0010.449 (0) finding files: advanced-cache.php: adding to list (4)
+0010.449 (0) finding files: index.php-old: adding to list (5)
+0010.450 (0) finding files: index.php: adding to list (6)
+0010.451 (0) finding files: debug.log: skipping: excluded by options
+0010.454 (0) Total entities for the zip file: 0 directories, 6 files (0 skipped as non-modified), 0 MB
+0010.466 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-others.zip.tmp: size is now: 0.00 MB
+0010.471 (0) Created others zip (0) - 6.1 KB in 0 s (331.8 KB/s) (sha1: f1c120f834cd59b1d178d15933e7490d6824c82b, sha256: 76169cb8da4a1208544c572eb436eda7410fca53f0d8446862a157e7d124e3af)
+0010.475 (0) Saving backup status to database (elements: 8)
+0010.488 (0) Beginning creation of database dump (WordPress DB)
+0010.490 (0) Testing potential mysqldump binary: /usr/bin/mysqldump
+0010.750 (0) Output: /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;\n/*!40103 SET TIME_ZONE='+00:00' */;\n/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;\n/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;\n/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;\n/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;\nDROP TABLE IF EXISTS `wp_i8ksm2_options`;\n/*!40101 SET @saved_cs_client     = @@character_set_client */;\n/*!40101 SET character_set_client = utf8  (truncated - 1289 bytes total)
+0010.753 (0) Working binary mysqldump found: /usr/bin/mysqldump
+0010.953 (0) Table wp_i8ksm2_options: Total expected rows (approximate): 9486
+0012.358 (0) Table wp_i8ksm2_options: binary mysqldump finished (writes: 65) in 1.40 seconds
+0012.360 (0) Table wp_i8ksm2_options: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_options.table.gz - 1708.1 KB)
+0012.364 (0) Table wp_i8ksm2_users: Total expected rows (approximate): 4
+0012.367 (0) Table wp_i8ksm2_users: Total rows added: 5 in 0.00 seconds
+0012.368 (0) Table wp_i8ksm2_users: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_users.table.gz - 0.9 KB)
+0012.373 (0) Table wp_i8ksm2_usermeta: Total expected rows (approximate): 229
+0012.378 (0) Table wp_i8ksm2_usermeta: Total rows added: 224 in 0.00 seconds
+0012.380 (0) Table wp_i8ksm2_usermeta: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_usermeta.table.gz - 6.4 KB)
+0012.384 (0) Table wp_i8ksm2_actionscheduler_actions: Total expected rows (approximate): 105
+0012.399 (0) Table wp_i8ksm2_actionscheduler_actions: Total rows added: 105 in 0.01 seconds
+0012.400 (0) Table wp_i8ksm2_actionscheduler_actions: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_actionscheduler_actions.table.gz - 3.3 KB)
+0012.405 (0) Table wp_i8ksm2_actionscheduler_claims: Total expected rows (approximate): 0
+0012.407 (0) Table wp_i8ksm2_actionscheduler_claims: Total rows added: 0 in 0.00 seconds
+0012.408 (0) Table wp_i8ksm2_actionscheduler_claims: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_actionscheduler_claims.table.gz - 0.4 KB)
+0012.413 (0) Table wp_i8ksm2_actionscheduler_groups: Total expected rows (approximate): 2
+0012.415 (0) Table wp_i8ksm2_actionscheduler_groups: Total rows added: 2 in 0.00 seconds
+0012.416 (0) Table wp_i8ksm2_actionscheduler_groups: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_actionscheduler_groups.table.gz - 0.4 KB)
+0012.426 (0) Table wp_i8ksm2_actionscheduler_logs: Total expected rows (approximate): 196
+0012.446 (0) Table wp_i8ksm2_actionscheduler_logs: Total rows added: 313 in 0.02 seconds
+0012.448 (0) Table wp_i8ksm2_actionscheduler_logs: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_actionscheduler_logs.table.gz - 3.8 KB)
+0012.452 (0) Table wp_i8ksm2_commentmeta: Total expected rows (approximate): 0
+0012.455 (0) Table wp_i8ksm2_commentmeta: Total rows added: 0 in 0.00 seconds
+0012.456 (0) Table wp_i8ksm2_commentmeta: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_commentmeta.table.gz - 0.4 KB)
+0012.461 (0) Table wp_i8ksm2_comments: Total expected rows (approximate): 0
+0012.464 (0) Table wp_i8ksm2_comments: Total rows added: 1 in 0.00 seconds
+0012.465 (0) Table wp_i8ksm2_comments: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_comments.table.gz - 0.8 KB)
+0012.475 (0) Table wp_i8ksm2_links: Total expected rows (approximate): 0
+0012.485 (0) Table wp_i8ksm2_links: Total rows added: 0 in 0.01 seconds
+0012.487 (0) Table wp_i8ksm2_links: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_links.table.gz - 0.5 KB)
+0012.496 (0) Table wp_i8ksm2_postmeta: Total expected rows (approximate): 182224
+0012.499 (0) [Warning] Table wp_i8ksm2_postmeta has very many rows (182224) - we hope your web hosting company gives you enough resources to dump out that table in the backup If not, you will need to either remove data from this table, or contact your hosting company to request more resources.
+0013.472 (0) Table wp_i8ksm2_postmeta: binary mysqldump finished (writes: 46) in 0.97 seconds
+0013.476 (0) Table wp_i8ksm2_postmeta: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_postmeta.table.gz - 1647.7 KB)
+0013.491 (0) Table wp_i8ksm2_posts: Total expected rows (approximate): 14954
+0014.131 (0) Table wp_i8ksm2_posts: binary mysqldump finished (writes: 63) in 0.64 seconds
+0014.133 (0) Table wp_i8ksm2_posts: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_posts.table.gz - 1362.8 KB)
+0014.138 (0) Table wp_i8ksm2_term_relationships: Total expected rows (approximate): 23792
+0014.353 (0) Table wp_i8ksm2_term_relationships: binary mysqldump finished (writes: 30) in 0.21 seconds
+0014.357 (0) Table wp_i8ksm2_term_relationships: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_term_relationships.table.gz - 64.3 KB)
+0014.362 (0) Table wp_i8ksm2_term_taxonomy: Total expected rows (approximate): 276
+0014.377 (0) Table wp_i8ksm2_term_taxonomy: Total rows added: 312 in 0.01 seconds
+0014.383 (0) Table wp_i8ksm2_term_taxonomy: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_term_taxonomy.table.gz - 2.7 KB)
+0014.396 (0) Table wp_i8ksm2_termmeta: Total expected rows (approximate): 7
+0014.400 (0) Table wp_i8ksm2_termmeta: Total rows added: 7 in 0.00 seconds
+0014.401 (0) Table wp_i8ksm2_termmeta: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_termmeta.table.gz - 0.5 KB)
+0014.406 (0) Table wp_i8ksm2_terms: Total expected rows (approximate): 276
+0014.415 (0) Table wp_i8ksm2_terms: Total rows added: 312 in 0.01 seconds
+0014.419 (0) Table wp_i8ksm2_terms: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_terms.table.gz - 4.4 KB)
+0014.425 (0) Table wp_i8ksm2_yoast_seo_links: Total expected rows (approximate): 819
+0014.471 (0) Table wp_i8ksm2_yoast_seo_links: Total rows added: 822 in 0.05 seconds
+0014.478 (0) Table wp_i8ksm2_yoast_seo_links: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_seo_links.table.gz - 14.4 KB)
+0014.487 (0) Table wp_i8ksm2_yoast_seo_meta: Total expected rows (approximate): 10530
+0014.760 (0) Table wp_i8ksm2_yoast_seo_meta: binary mysqldump finished (writes: 29) in 0.27 seconds
+0014.762 (0) Table wp_i8ksm2_yoast_seo_meta: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_seo_meta.table.gz - 28.8 KB)
+0014.767 (0) Table wp_i8ksm2_apmm_custom_theme: Total expected rows (approximate): 0
+0014.776 (0) Table wp_i8ksm2_apmm_custom_theme: Total rows added: 1 in 0.01 seconds
+0014.778 (0) Table wp_i8ksm2_apmm_custom_theme: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_apmm_custom_theme.table.gz - 1.4 KB)
+0014.785 (0) Table wp_i8ksm2_cpk_wpcsv_export_queue: Total expected rows (approximate): 0
+0014.788 (0) Table wp_i8ksm2_cpk_wpcsv_export_queue: Total rows added: 0 in 0.00 seconds
+0014.789 (0) Table wp_i8ksm2_cpk_wpcsv_export_queue: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_cpk_wpcsv_export_queue.table.gz - 0.3 KB)
+0014.794 (0) Table wp_i8ksm2_cpk_wpcsv_log: Total expected rows (approximate): 4
+0014.802 (0) Table wp_i8ksm2_cpk_wpcsv_log: Total rows added: 4 in 0.01 seconds
+0014.803 (0) Table wp_i8ksm2_cpk_wpcsv_log: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_cpk_wpcsv_log.table.gz - 0.6 KB)
+0014.810 (0) Table wp_i8ksm2_ddp_log: Total expected rows (approximate): 2
+0014.819 (0) Table wp_i8ksm2_ddp_log: Total rows added: 2 in 0.01 seconds
+0014.820 (0) Table wp_i8ksm2_ddp_log: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_ddp_log.table.gz - 0.4 KB)
+0014.826 (0) Table wp_i8ksm2_litespeed_img_optm: Total expected rows (approximate): 0
+0014.834 (0) Table wp_i8ksm2_litespeed_img_optm: Total rows added: 0 in 0.01 seconds
+0014.835 (0) Table wp_i8ksm2_litespeed_img_optm: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_litespeed_img_optm.table.gz - 0.5 KB)
+0014.840 (0) Table wp_i8ksm2_litespeed_optimizer: Total expected rows (approximate): 0
+0014.849 (0) Table wp_i8ksm2_litespeed_optimizer: Total rows added: 0 in 0.01 seconds
+0014.851 (0) Table wp_i8ksm2_litespeed_optimizer: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_litespeed_optimizer.table.gz - 0.4 KB)
+0014.861 (0) Table wp_i8ksm2_live_weather_station_background_process: Total expected rows (approximate): 0
+0014.870 (0) Table wp_i8ksm2_live_weather_station_background_process: Total rows added: 0 in 0.01 seconds
+0014.872 (0) Table wp_i8ksm2_live_weather_station_background_process: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_background_process.table.gz - 0.4 KB)
+0014.876 (0) Table wp_i8ksm2_live_weather_station_data_year: Total expected rows (approximate): 12
+0014.880 (0) Table wp_i8ksm2_live_weather_station_data_year: Total rows added: 12 in 0.00 seconds
+0014.882 (0) Table wp_i8ksm2_live_weather_station_data_year: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_data_year.table.gz - 0.5 KB)
+0014.887 (0) Table wp_i8ksm2_live_weather_station_datas: Total expected rows (approximate): 0
+0014.896 (0) Table wp_i8ksm2_live_weather_station_datas: Total rows added: 0 in 0.01 seconds
+0014.897 (0) Table wp_i8ksm2_live_weather_station_datas: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_datas.table.gz - 0.4 KB)
+0014.906 (0) Table wp_i8ksm2_live_weather_station_datas_day: Total expected rows (approximate): 0
+0014.919 (0) Table wp_i8ksm2_live_weather_station_datas_day: Total rows added: 0 in 0.01 seconds
+0014.920 (0) Table wp_i8ksm2_live_weather_station_datas_day: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_datas_day.table.gz - 0.4 KB)
+0014.925 (0) Table wp_i8ksm2_live_weather_station_datas_year: Total expected rows (approximate): 0
+0014.939 (0) Table wp_i8ksm2_live_weather_station_datas_year: Total rows added: 0 in 0.01 seconds
+0014.940 (0) Table wp_i8ksm2_live_weather_station_datas_year: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_datas_year.table.gz - 0.4 KB)
+0014.957 (0) Table wp_i8ksm2_live_weather_station_log: Total expected rows (approximate): 7
+0014.962 (0) Table wp_i8ksm2_live_weather_station_log: Total rows added: 7 in 0.00 seconds
+0014.963 (0) Table wp_i8ksm2_live_weather_station_log: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_log.table.gz - 0.8 KB)
+0014.968 (0) Table wp_i8ksm2_live_weather_station_maps: Total expected rows (approximate): 0
+0014.972 (0) Table wp_i8ksm2_live_weather_station_maps: Total rows added: 0 in 0.00 seconds
+0014.973 (0) Table wp_i8ksm2_live_weather_station_maps: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_maps.table.gz - 0.4 KB)
+0014.983 (0) Table wp_i8ksm2_live_weather_station_medias: Total expected rows (approximate): 0
+0014.986 (0) Table wp_i8ksm2_live_weather_station_medias: Total rows added: 0 in 0.00 seconds
+0014.988 (0) Table wp_i8ksm2_live_weather_station_medias: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_medias.table.gz - 0.4 KB)
+0014.993 (0) Table wp_i8ksm2_live_weather_station_module_detail: Total expected rows (approximate): 0
+0014.997 (0) Table wp_i8ksm2_live_weather_station_module_detail: Total rows added: 0 in 0.00 seconds
+0014.999 (0) Table wp_i8ksm2_live_weather_station_module_detail: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_module_detail.table.gz - 0.4 KB)
+0015.011 (0) Table wp_i8ksm2_live_weather_station_notifications: Total expected rows (approximate): 0
+0015.016 (0) Table wp_i8ksm2_live_weather_station_notifications: Total rows added: 0 in 0.00 seconds
+0015.017 (0) Table wp_i8ksm2_live_weather_station_notifications: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_notifications.table.gz - 0.4 KB)
+0015.022 (0) Table wp_i8ksm2_live_weather_station_performance_cache: Total expected rows (approximate): 0
+0015.030 (0) Table wp_i8ksm2_live_weather_station_performance_cache: Total rows added: 1 in 0.01 seconds
+0015.031 (0) Table wp_i8ksm2_live_weather_station_performance_cache: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_performance_cache.table.gz - 0.5 KB)
+0015.042 (0) Table wp_i8ksm2_live_weather_station_performance_cron: Total expected rows (approximate): 27
+0015.049 (0) Table wp_i8ksm2_live_weather_station_performance_cron: Total rows added: 27 in 0.01 seconds
+0015.050 (0) Table wp_i8ksm2_live_weather_station_performance_cron: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_performance_cron.table.gz - 0.7 KB)
+0015.055 (0) Table wp_i8ksm2_live_weather_station_quota_day: Total expected rows (approximate): 0
+0015.064 (0) Table wp_i8ksm2_live_weather_station_quota_day: Total rows added: 0 in 0.01 seconds
+0015.067 (0) Table wp_i8ksm2_live_weather_station_quota_day: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_quota_day.table.gz - 0.4 KB)
+0015.073 (0) Table wp_i8ksm2_live_weather_station_quota_year: Total expected rows (approximate): 0
+0015.076 (0) Table wp_i8ksm2_live_weather_station_quota_year: Total rows added: 0 in 0.00 seconds
+0015.078 (0) Table wp_i8ksm2_live_weather_station_quota_year: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_quota_year.table.gz - 0.4 KB)
+0015.094 (0) Table wp_i8ksm2_live_weather_station_stations: Total expected rows (approximate): 0
+0015.100 (0) Table wp_i8ksm2_live_weather_station_stations: Total rows added: 0 in 0.00 seconds
+0015.103 (0) Table wp_i8ksm2_live_weather_station_stations: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_stations.table.gz - 0.7 KB)
+0015.115 (0) Table wp_i8ksm2_mistape_reports: Total expected rows (approximate): 10
+0015.135 (0) Table wp_i8ksm2_mistape_reports: Total rows added: 14 in 0.02 seconds
+0015.136 (0) Table wp_i8ksm2_mistape_reports: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_mistape_reports.table.gz - 2 KB)
+0015.164 (0) Table wp_i8ksm2_pmxe_exports: Total expected rows (approximate): 0
+0015.206 (0) Table wp_i8ksm2_pmxe_exports: Total rows added: 5 in 0.04 seconds
+0015.208 (0) Table wp_i8ksm2_pmxe_exports: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxe_exports.table.gz - 34 KB)
+0015.220 (0) Table wp_i8ksm2_pmxe_google_cats: Total expected rows (approximate): 5512
+0015.310 (0) Table wp_i8ksm2_pmxe_google_cats: Total rows added: 5371 in 0.09 seconds
+0015.312 (0) Table wp_i8ksm2_pmxe_google_cats: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxe_google_cats.table.gz - 75.4 KB)
+0015.317 (0) Table wp_i8ksm2_pmxe_posts: Total expected rows (approximate): 18000
+0015.578 (0) Table wp_i8ksm2_pmxe_posts: binary mysqldump finished (writes: 30) in 0.26 seconds
+0015.653 (0) Table wp_i8ksm2_pmxe_posts: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxe_posts.table.gz - 94.7 KB)
+0015.658 (0) Table wp_i8ksm2_pmxe_templates: Total expected rows (approximate): 0
+0015.661 (0) Table wp_i8ksm2_pmxe_templates: Total rows added: 0 in 0.00 seconds
+0015.662 (0) Table wp_i8ksm2_pmxe_templates: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxe_templates.table.gz - 0.3 KB)
+0015.666 (0) Table wp_i8ksm2_pmxi_files: Total expected rows (approximate): 0
+0015.694 (0) Table wp_i8ksm2_pmxi_files: Total rows added: 3 in 0.03 seconds
+0015.696 (0) Table wp_i8ksm2_pmxi_files: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_files.table.gz - 0.6 KB)
+0015.701 (0) Table wp_i8ksm2_pmxi_history: Total expected rows (approximate): 0
+0015.717 (0) Table wp_i8ksm2_pmxi_history: Total rows added: 0 in 0.02 seconds
+0015.718 (0) Table wp_i8ksm2_pmxi_history: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_history.table.gz - 0.4 KB)
+0015.723 (0) Table wp_i8ksm2_pmxi_images: Total expected rows (approximate): 0
+0015.726 (0) Table wp_i8ksm2_pmxi_images: Total rows added: 0 in 0.00 seconds
+0015.728 (0) Table wp_i8ksm2_pmxi_images: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_images.table.gz - 0.3 KB)
+0015.732 (0) Table wp_i8ksm2_pmxi_imports: Total expected rows (approximate): 0
+0015.744 (0) Table wp_i8ksm2_pmxi_imports: Total rows added: 2 in 0.01 seconds
+0015.745 (0) Table wp_i8ksm2_pmxi_imports: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_imports.table.gz - 2.8 KB)
+0015.750 (0) Table wp_i8ksm2_pmxi_posts: Total expected rows (approximate): 14184
+0016.045 (0) Table wp_i8ksm2_pmxi_posts: binary mysqldump finished (writes: 33) in 0.29 seconds
+0016.048 (0) Table wp_i8ksm2_pmxi_posts: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_posts.table.gz - 142.7 KB)
+0016.054 (0) Table wp_i8ksm2_pmxi_templates: Total expected rows (approximate): 0
+0016.064 (0) Table wp_i8ksm2_pmxi_templates: Total rows added: 0 in 0.01 seconds
+0016.065 (0) Table wp_i8ksm2_pmxi_templates: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_templates.table.gz - 0.4 KB)
+0016.072 (0) Table wp_i8ksm2_redirection_404: Total expected rows (approximate): 13646
+0016.554 (0) Table wp_i8ksm2_redirection_404: binary mysqldump finished (writes: 41) in 0.48 seconds
+0016.559 (0) Table wp_i8ksm2_redirection_404: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_redirection_404.table.gz - 389.5 KB)
+0016.678 (0) Table wp_i8ksm2_redirection_groups: Total expected rows (approximate): 2
+0016.692 (0) Table wp_i8ksm2_redirection_groups: Total rows added: 2 in 0.01 seconds
+0016.693 (0) Table wp_i8ksm2_redirection_groups: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_redirection_groups.table.gz - 0.5 KB)
+0016.699 (0) Table wp_i8ksm2_redirection_items: Total expected rows (approximate): 206
+0016.709 (0) Table wp_i8ksm2_redirection_items: Total rows added: 213 in 0.01 seconds
+0016.710 (0) Table wp_i8ksm2_redirection_items: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_redirection_items.table.gz - 6.6 KB)
+0016.716 (0) Table wp_i8ksm2_redirection_logs: Total expected rows (approximate): 405
+0016.738 (0) Table wp_i8ksm2_redirection_logs: Total rows added: 419 in 0.02 seconds
+0016.740 (0) Table wp_i8ksm2_redirection_logs: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_redirection_logs.table.gz - 11.5 KB)
+0016.745 (0) Table wp_i8ksm2_smush_dir_images: Total expected rows (approximate): 0
+0016.761 (0) Table wp_i8ksm2_smush_dir_images: Total rows added: 0 in 0.01 seconds
+0016.762 (0) Table wp_i8ksm2_smush_dir_images: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_smush_dir_images.table.gz - 0.4 KB)
+0016.768 (0) Table wp_i8ksm2_wpfm_backup: Total expected rows (approximate): 0
+0016.773 (0) Table wp_i8ksm2_wpfm_backup: Total rows added: 0 in 0.00 seconds
+0016.774 (0) Table wp_i8ksm2_wpfm_backup: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_wpfm_backup.table.gz - 0.3 KB)
+0016.780 (0) Table wp_i8ksm2_wpforms_tasks_meta: Total expected rows (approximate): 1
+0016.792 (0) Table wp_i8ksm2_wpforms_tasks_meta: Total rows added: 2 in 0.01 seconds
+0016.793 (0) Table wp_i8ksm2_wpforms_tasks_meta: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_wpforms_tasks_meta.table.gz - 0.5 KB)
+0016.801 (0) Table wp_i8ksm2_yoast_indexable: Total expected rows (approximate): 3575
+0017.009 (0) Table wp_i8ksm2_yoast_indexable: Total rows added: 3645 in 0.21 seconds
+0017.011 (0) Table wp_i8ksm2_yoast_indexable: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_indexable.table.gz - 207.5 KB)
+0017.017 (0) Table wp_i8ksm2_yoast_indexable_hierarchy: Total expected rows (approximate): 19
+0017.020 (0) Table wp_i8ksm2_yoast_indexable_hierarchy: Total rows added: 31 in 0.00 seconds
+0017.021 (0) Table wp_i8ksm2_yoast_indexable_hierarchy: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_indexable_hierarchy.table.gz - 0.5 KB)
+0017.029 (0) Table wp_i8ksm2_yoast_migrations: Total expected rows (approximate): 10
+0017.038 (0) Table wp_i8ksm2_yoast_migrations: Total rows added: 11 in 0.01 seconds
+0017.040 (0) Table wp_i8ksm2_yoast_migrations: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_migrations.table.gz - 0.5 KB)
+0017.046 (0) Table wp_i8ksm2_yoast_primary_term: Total expected rows (approximate): 340
+0017.068 (0) Table wp_i8ksm2_yoast_primary_term: Total rows added: 391 in 0.02 seconds
+0017.071 (0) Table wp_i8ksm2_yoast_primary_term: finishing file (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_primary_term.table.gz - 5.4 KB)
+0017.075 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_options.table.gz (1/61): adding to final database dump
+0017.827 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_users.table.gz (2/61): adding to final database dump
+0017.831 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_usermeta.table.gz (3/61): adding to final database dump
+0017.836 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_actionscheduler_actions.table.gz (4/61): adding to final database dump
+0017.844 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_actionscheduler_claims.table.gz (5/61): adding to final database dump
+0017.845 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_actionscheduler_groups.table.gz (6/61): adding to final database dump
+0017.846 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_actionscheduler_logs.table.gz (7/61): adding to final database dump
+0017.849 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_commentmeta.table.gz (8/61): adding to final database dump
+0017.850 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_comments.table.gz (9/61): adding to final database dump
+0017.851 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_links.table.gz (10/61): adding to final database dump
+0017.852 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_postmeta.table.gz (11/61): adding to final database dump
+0018.507 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_posts.table.gz (12/61): adding to final database dump
+0018.840 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_term_relationships.table.gz (13/61): adding to final database dump
+0018.862 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_term_taxonomy.table.gz (14/61): adding to final database dump
+0018.865 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_termmeta.table.gz (15/61): adding to final database dump
+0018.866 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_terms.table.gz (16/61): adding to final database dump
+0018.869 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_seo_links.table.gz (17/61): adding to final database dump
+0018.874 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_seo_meta.table.gz (18/61): adding to final database dump
+0018.881 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_apmm_custom_theme.table.gz (19/61): adding to final database dump
+0018.883 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_cpk_wpcsv_export_queue.table.gz (20/61): adding to final database dump
+0018.884 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_cpk_wpcsv_log.table.gz (21/61): adding to final database dump
+0018.884 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_ddp_log.table.gz (22/61): adding to final database dump
+0018.885 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_litespeed_img_optm.table.gz (23/61): adding to final database dump
+0018.886 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_litespeed_optimizer.table.gz (24/61): adding to final database dump
+0018.888 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_background_process.table.gz (25/61): adding to final database dump
+0018.889 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_data_year.table.gz (26/61): adding to final database dump
+0018.889 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_datas.table.gz (27/61): adding to final database dump
+0018.890 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_datas_day.table.gz (28/61): adding to final database dump
+0018.891 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_datas_year.table.gz (29/61): adding to final database dump
+0018.892 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_log.table.gz (30/61): adding to final database dump
+0018.892 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_maps.table.gz (31/61): adding to final database dump
+0018.893 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_medias.table.gz (32/61): adding to final database dump
+0018.894 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_module_detail.table.gz (33/61): adding to final database dump
+0018.895 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_notifications.table.gz (34/61): adding to final database dump
+0018.896 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_performance_cache.table.gz (35/61): adding to final database dump
+0018.897 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_performance_cron.table.gz (36/61): adding to final database dump
+0018.898 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_quota_day.table.gz (37/61): adding to final database dump
+0018.898 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_quota_year.table.gz (38/61): adding to final database dump
+0018.899 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_live_weather_station_stations.table.gz (39/61): adding to final database dump
+0018.900 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_mistape_reports.table.gz (40/61): adding to final database dump
+0018.901 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxe_exports.table.gz (41/61): adding to final database dump
+0018.911 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxe_google_cats.table.gz (42/61): adding to final database dump
+0018.940 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxe_posts.table.gz (43/61): adding to final database dump
+0018.967 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxe_templates.table.gz (44/61): adding to final database dump
+0018.969 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_files.table.gz (45/61): adding to final database dump
+0018.970 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_history.table.gz (46/61): adding to final database dump
+0018.972 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_images.table.gz (47/61): adding to final database dump
+0018.979 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_imports.table.gz (48/61): adding to final database dump
+0018.981 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_posts.table.gz (49/61): adding to final database dump
+0019.030 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_pmxi_templates.table.gz (50/61): adding to final database dump
+0019.033 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_redirection_404.table.gz (51/61): adding to final database dump
+0019.173 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_redirection_groups.table.gz (52/61): adding to final database dump
+0019.174 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_redirection_items.table.gz (53/61): adding to final database dump
+0019.177 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_redirection_logs.table.gz (54/61): adding to final database dump
+0019.183 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_smush_dir_images.table.gz (55/61): adding to final database dump
+0019.184 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_wpfm_backup.table.gz (56/61): adding to final database dump
+0019.185 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_wpforms_tasks_meta.table.gz (57/61): adding to final database dump
+0019.185 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_indexable.table.gz (58/61): adding to final database dump
+0019.237 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_indexable_hierarchy.table.gz (59/61): adding to final database dump
+0019.238 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_migrations.table.gz (60/61): adding to final database dump
+0019.240 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db-table-wp_i8ksm2_yoast_primary_term.table.gz (61/61): adding to final database dump
+0019.244 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db.gz: finished writing out complete database file (5824 KB)
+0019.348 (0) Total database tables backed up: 61 (backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db.gz, size: 5969550, sha1: 241e9020ed3d30004f946dafcf8fc9b83cc3707e, sha256: 48de6483a873304feb7cf803609b3275a74495168a6d19a5ce5192bca5a26cfb)
+0019.359 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip: plugins: This file has not yet been successfully uploaded: will queue
+0019.360 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-themes.zip: themes: This file has not yet been successfully uploaded: will queue
+0019.361 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip: uploads: This file has not yet been successfully uploaded: will queue
+0019.362 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-others.zip: others: This file has not yet been successfully uploaded: will queue
+0019.363 (0) backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db.gz: db: This file has not yet been successfully uploaded: will queue
+0019.364 (0) Saving backup history. Total backup size: 129.3 MB
+0019.370 (0) Requesting upload of the files that have not yet been successfully uploaded (5)
+0019.375 (0) Cloud backup selection (1/1): googledrive with instance (1/1) (last)
+0019.376 (0) Beginning dispatch of backup to remote (googledrive) (instance identifier s-e816badb7828225ace66dad45c1f3483)
+0021.736 (0) Google Drive: quota usage: used=1161.9 MB, total=102400 MB, available=101238.1 MB
+0021.770 (0) Google Drive: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip: Attempting to upload to Google Drive (into folder id: 1gfnD8le9Ge7gGgfal_E4VEkEnxSQ35c6)
+0022.213 (0) Googledrive chunked upload: 2.5 % uploaded (1048576)
+0022.384 (0) Googledrive chunked upload: 5 % uploaded (2097152)
+0022.516 (0) Googledrive chunked upload: 7.4 % uploaded (3145728)
+0022.678 (0) Googledrive chunked upload: 9.9 % uploaded (4194304)
+0022.840 (0) Googledrive chunked upload: 12.4 % uploaded (5242880)
+0023.023 (0) Googledrive chunked upload: 14.9 % uploaded (6291456)
+0023.176 (0) Googledrive chunked upload: 17.3 % uploaded (7340032)
+0023.323 (0) Googledrive chunked upload: 19.8 % uploaded (8388608)
+0023.468 (0) Googledrive chunked upload: 22.3 % uploaded (9437184)
+0023.621 (0) Googledrive chunked upload: 24.8 % uploaded (10485760)
+0023.768 (0) Googledrive chunked upload: 27.2 % uploaded (11534336)
+0023.921 (0) Googledrive chunked upload: 29.7 % uploaded (12582912)
+0024.068 (0) Googledrive chunked upload: 32.2 % uploaded (13631488)
+0024.244 (0) Googledrive chunked upload: 34.7 % uploaded (14680064)
+0024.390 (0) Googledrive chunked upload: 37.1 % uploaded (15728640)
+0024.543 (0) Googledrive chunked upload: 39.6 % uploaded (16777216)
+0024.705 (0) Googledrive chunked upload: 42.1 % uploaded (17825792)
+0024.837 (0) Googledrive chunked upload: 44.6 % uploaded (18874368)
+0024.984 (0) Googledrive chunked upload: 47 % uploaded (19922944)
+0025.122 (0) Googledrive chunked upload: 49.5 % uploaded (20971520)
+0025.250 (0) Googledrive chunked upload: 52 % uploaded (22020096)
+0025.408 (0) Googledrive chunked upload: 54.5 % uploaded (23068672)
+0025.558 (0) Googledrive chunked upload: 56.9 % uploaded (24117248)
+0025.690 (0) Googledrive chunked upload: 59.4 % uploaded (25165824)
+0025.832 (0) Googledrive chunked upload: 61.9 % uploaded (26214400)
+0026.020 (0) Googledrive chunked upload: 64.4 % uploaded (27262976)
+0026.169 (0) Googledrive chunked upload: 66.8 % uploaded (28311552)
+0026.313 (0) Googledrive chunked upload: 69.3 % uploaded (29360128)
+0026.502 (0) Googledrive chunked upload: 71.8 % uploaded (30408704)
+0026.653 (0) Googledrive chunked upload: 74.3 % uploaded (31457280)
+0026.812 (0) Googledrive chunked upload: 76.8 % uploaded (32505856)
+0026.958 (0) Googledrive chunked upload: 79.2 % uploaded (33554432)
+0027.120 (0) Googledrive chunked upload: 81.7 % uploaded (34603008)
+0027.254 (0) Googledrive chunked upload: 84.2 % uploaded (35651584)
+0027.408 (0) Googledrive chunked upload: 86.7 % uploaded (36700160)
+0027.632 (0) Googledrive chunked upload: 89.1 % uploaded (37748736)
+0027.779 (0) Googledrive chunked upload: 91.6 % uploaded (38797312)
+0027.913 (0) Googledrive chunked upload: 94.1 % uploaded (39845888)
+0028.068 (0) Googledrive chunked upload: 96.6 % uploaded (40894464)
+0028.360 (0) Googledrive chunked upload: 99 % uploaded (41943040)
+0029.491 (0) Googledrive chunked upload: 100 % uploaded (41943040)
+0029.494 (0) Google Drive: OK: Archive backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip uploaded in 7.72 seconds
+0029.496 (0) Recording as successfully uploaded: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip
+0029.511 (0) Deleting local file: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-plugins.zip: OK
+0029.943 (0) Google Drive: quota usage: used=1161.9 MB, total=102400 MB, available=101238.1 MB
+0029.945 (0) Google Drive: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-themes.zip: Attempting to upload to Google Drive (into folder id: 1gfnD8le9Ge7gGgfal_E4VEkEnxSQ35c6)
+0031.157 (0) Googledrive chunked upload: 100 % uploaded
+0031.164 (0) Google Drive: OK: Archive backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-themes.zip uploaded in 1.22 seconds
+0031.165 (0) Recording as successfully uploaded: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-themes.zip
+0031.168 (0) Deleting local file: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-themes.zip: OK
+0031.720 (0) Google Drive: quota usage: used=1203.1 MB, total=102400 MB, available=101196.9 MB
+0031.722 (0) Google Drive: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip: Attempting to upload to Google Drive (into folder id: 1gfnD8le9Ge7gGgfal_E4VEkEnxSQ35c6)
+0032.100 (0) Googledrive chunked upload: 1.2 % uploaded (1048576)
+0032.255 (0) Googledrive chunked upload: 2.4 % uploaded (2097152)
+0032.394 (0) Googledrive chunked upload: 3.6 % uploaded (3145728)
+0032.530 (0) Googledrive chunked upload: 4.9 % uploaded (4194304)
+0032.676 (0) Googledrive chunked upload: 6.1 % uploaded (5242880)
+0032.807 (0) Googledrive chunked upload: 7.3 % uploaded (6291456)
+0032.938 (0) Googledrive chunked upload: 8.5 % uploaded (7340032)
+0033.077 (0) Googledrive chunked upload: 9.7 % uploaded (8388608)
+0033.234 (0) Googledrive chunked upload: 10.9 % uploaded (9437184)
+0033.380 (0) Googledrive chunked upload: 12.1 % uploaded (10485760)
+0033.514 (0) Googledrive chunked upload: 13.3 % uploaded (11534336)
+0033.651 (0) Googledrive chunked upload: 14.6 % uploaded (12582912)
+0034.033 (0) Googledrive chunked upload: 15.8 % uploaded (13631488)
+0034.172 (0) Googledrive chunked upload: 17 % uploaded (14680064)
+0034.317 (0) Googledrive chunked upload: 18.2 % uploaded (15728640)
+0034.490 (0) Googledrive chunked upload: 19.4 % uploaded (16777216)
+0034.663 (0) Googledrive chunked upload: 20.6 % uploaded (17825792)
+0034.802 (0) Googledrive chunked upload: 21.8 % uploaded (18874368)
+0034.962 (0) Googledrive chunked upload: 23 % uploaded (19922944)
+0035.091 (0) Googledrive chunked upload: 24.3 % uploaded (20971520)
+0035.278 (0) Googledrive chunked upload: 25.5 % uploaded (22020096)
+0035.416 (0) Googledrive chunked upload: 26.7 % uploaded (23068672)
+0035.649 (0) Googledrive chunked upload: 27.9 % uploaded (24117248)
+0035.973 (0) Googledrive chunked upload: 29.1 % uploaded (25165824)
+0036.117 (0) Googledrive chunked upload: 30.3 % uploaded (26214400)
+0036.266 (0) Googledrive chunked upload: 31.5 % uploaded (27262976)
+0036.409 (0) Googledrive chunked upload: 32.7 % uploaded (28311552)
+0036.557 (0) Googledrive chunked upload: 34 % uploaded (29360128)
+0036.732 (0) Googledrive chunked upload: 35.2 % uploaded (30408704)
+0036.866 (0) Googledrive chunked upload: 36.4 % uploaded (31457280)
+0037.014 (0) Googledrive chunked upload: 37.6 % uploaded (32505856)
+0037.150 (0) Googledrive chunked upload: 38.8 % uploaded (33554432)
+0037.284 (0) Googledrive chunked upload: 40 % uploaded (34603008)
+0037.432 (0) Googledrive chunked upload: 41.2 % uploaded (35651584)
+0037.754 (0) Googledrive chunked upload: 42.4 % uploaded (36700160)
+0037.920 (0) Googledrive chunked upload: 43.7 % uploaded (37748736)
+0038.056 (0) Googledrive chunked upload: 44.9 % uploaded (38797312)
+0038.205 (0) Googledrive chunked upload: 46.1 % uploaded (39845888)
+0038.357 (0) Googledrive chunked upload: 47.3 % uploaded (40894464)
+0038.506 (0) Googledrive chunked upload: 48.5 % uploaded (41943040)
+0038.660 (0) Googledrive chunked upload: 49.7 % uploaded (42991616)
+0038.798 (0) Googledrive chunked upload: 50.9 % uploaded (44040192)
+0038.940 (0) Googledrive chunked upload: 52.1 % uploaded (45088768)
+0039.102 (0) Googledrive chunked upload: 53.4 % uploaded (46137344)
+0039.252 (0) Googledrive chunked upload: 54.6 % uploaded (47185920)
+0039.391 (0) Googledrive chunked upload: 55.8 % uploaded (48234496)
+0039.545 (0) Googledrive chunked upload: 57 % uploaded (49283072)
+0039.688 (0) Googledrive chunked upload: 58.2 % uploaded (50331648)
+0039.828 (0) Googledrive chunked upload: 59.4 % uploaded (51380224)
+0039.961 (0) Googledrive chunked upload: 60.6 % uploaded (52428800)
+0040.088 (0) Googledrive chunked upload: 61.8 % uploaded (53477376)
+0040.216 (0) Googledrive chunked upload: 63.1 % uploaded (54525952)
+0040.365 (0) Googledrive chunked upload: 64.3 % uploaded (55574528)
+0040.508 (0) Googledrive chunked upload: 65.5 % uploaded (56623104)
+0040.657 (0) Googledrive chunked upload: 66.7 % uploaded (57671680)
+0040.814 (0) Googledrive chunked upload: 67.9 % uploaded (58720256)
+0040.947 (0) Googledrive chunked upload: 69.1 % uploaded (59768832)
+0041.098 (0) Googledrive chunked upload: 70.3 % uploaded (60817408)
+0041.240 (0) Googledrive chunked upload: 71.5 % uploaded (61865984)
+0041.387 (0) Googledrive chunked upload: 72.8 % uploaded (62914560)
+0041.528 (0) Googledrive chunked upload: 74 % uploaded (63963136)
+0041.685 (0) Googledrive chunked upload: 75.2 % uploaded (65011712)
+0042.013 (0) Googledrive chunked upload: 76.4 % uploaded (66060288)
+0042.154 (0) Googledrive chunked upload: 77.6 % uploaded (67108864)
+0042.300 (0) Googledrive chunked upload: 78.8 % uploaded (68157440)
+0042.436 (0) Googledrive chunked upload: 80 % uploaded (69206016)
+0042.584 (0) Googledrive chunked upload: 81.2 % uploaded (70254592)
+0042.723 (0) Googledrive chunked upload: 82.5 % uploaded (71303168)
+0042.861 (0) Googledrive chunked upload: 83.7 % uploaded (72351744)
+0043.035 (0) Googledrive chunked upload: 84.9 % uploaded (73400320)
+0043.177 (0) Googledrive chunked upload: 86.1 % uploaded (74448896)
+0043.339 (0) Googledrive chunked upload: 87.3 % uploaded (75497472)
+0043.473 (0) Googledrive chunked upload: 88.5 % uploaded (76546048)
+0043.646 (0) Googledrive chunked upload: 89.7 % uploaded (77594624)
+0043.792 (0) Googledrive chunked upload: 90.9 % uploaded (78643200)
+0043.929 (0) Googledrive chunked upload: 92.2 % uploaded (79691776)
+0044.061 (0) Googledrive chunked upload: 93.4 % uploaded (80740352)
+0044.210 (0) Googledrive chunked upload: 94.6 % uploaded (81788928)
+0044.352 (0) Googledrive chunked upload: 95.8 % uploaded (82837504)
+0044.544 (0) Googledrive chunked upload: 97 % uploaded (83886080)
+0044.727 (0) Googledrive chunked upload: 98.2 % uploaded (84934656)
+0044.883 (0) Googledrive chunked upload: 99.4 % uploaded (85983232)
+0046.268 (0) Googledrive chunked upload: 100 % uploaded (85983232)
+0046.271 (0) Google Drive: OK: Archive backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip uploaded in 14.55 seconds
+0046.273 (0) Recording as successfully uploaded: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip
+0046.302 (0) Deleting local file: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-uploads.zip: OK
+0046.538 (0) Google Drive: quota usage: used=1203.1 MB, total=102400 MB, available=101196.9 MB
+0046.540 (0) Google Drive: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-others.zip: Attempting to upload to Google Drive (into folder id: 1gfnD8le9Ge7gGgfal_E4VEkEnxSQ35c6)
+0047.803 (0) Googledrive chunked upload: 100 % uploaded
+0047.807 (0) Google Drive: OK: Archive backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-others.zip uploaded in 1.27 seconds
+0047.808 (0) Recording as successfully uploaded: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-others.zip
+0047.811 (0) Deleting local file: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-others.zip: OK
+0048.107 (0) Google Drive: quota usage: used=1285.5 MB, total=102400 MB, available=101114.5 MB
+0048.109 (0) Google Drive: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db.gz: Attempting to upload to Google Drive (into folder id: 1gfnD8le9Ge7gGgfal_E4VEkEnxSQ35c6)
+0048.493 (0) Googledrive chunked upload: 17.6 % uploaded (1048576)
+0048.633 (0) Googledrive chunked upload: 35.1 % uploaded (2097152)
+0048.779 (0) Googledrive chunked upload: 52.7 % uploaded (3145728)
+0048.933 (0) Googledrive chunked upload: 70.3 % uploaded (4194304)
+0049.084 (0) Googledrive chunked upload: 87.8 % uploaded (5242880)
+0050.168 (0) Googledrive chunked upload: 100 % uploaded (5242880)
+0050.171 (0) Google Drive: OK: Archive backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db.gz uploaded in 2.06 seconds
+0050.172 (0) Recording as successfully uploaded: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db.gz
+0050.176 (0) Deleting local file: backup_2020-05-01-1552_Can_You_Drink_Tap_Water_in_be18ba536952-db.gz: OK
+0050.180 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=5, retain_db=5
+0050.183 (0) Number of backup sets in history: 6; groups (db): 1
+0050.184 (0) Examining (for databases) backup set with group_id=0, nonce=be18ba536952, datestamp=1588348370 (May 01 2020 15:52:50)
+0050.186 (0) This backup set is the backup set just made, so will not be deleted.
+0050.186 (0) Examining (for databases) backup set with group_id=0, nonce=b292c340844c, datestamp=1588262221 (Apr 30 2020 15:57:01)
+0050.186 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0050.186 (0) Examining (for databases) backup set with group_id=0, nonce=6a280af63c82, datestamp=1587743579 (Apr 24 2020 15:52:59)
+0050.186 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0050.186 (0) Examining (for databases) backup set with group_id=0, nonce=dbb86ea0fe87, datestamp=1587138768 (Apr 17 2020 15:52:48)
+0050.186 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0050.187 (0) Examining (for databases) backup set with group_id=0, nonce=7f670aeb6836, datestamp=1587070248 (Apr 16 2020 20:50:48)
+0050.187 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0050.187 (0) Examining (for databases) backup set with group_id=0, nonce=a6603d089b7a, datestamp=1586534109 (Apr 10 2020 15:55:09)
+0050.187 (0) 1586534109: db: this set includes a database (backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-db.gz); db count is now 5
+0050.187 (0) 1586534109: db: over retain limit (5); will delete this database
+0050.187 (0) Delete file: backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-db.gz, service=googledrive
+0051.394 (0) Google Drive: backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-db.gz: Deletion successful
+0051.397 (0) This backup set remains non-empty (f=1/d=0); will retain in history
+0051.398 (0) Number of backup sets in history: 6; groups (files): 1
+0051.399 (0) Examining (for files) backup set with nonce=be18ba536952, datestamp=1588348370 (May 01 2020 15:52:50)
+0051.399 (0) This backup set is the backup set just made, so will not be deleted.
+0051.400 (0) This backup set is the backup set just made, so will not be deleted.
+0051.400 (0) This backup set is the backup set just made, so will not be deleted.
+0051.400 (0) This backup set is the backup set just made, so will not be deleted.
+0051.400 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0051.401 (0) Examining (for files) backup set with nonce=b292c340844c, datestamp=1588262221 (Apr 30 2020 15:57:01)
+0051.401 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0051.401 (0) Examining (for files) backup set with nonce=6a280af63c82, datestamp=1587743579 (Apr 24 2020 15:52:59)
+0051.401 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0051.401 (0) Examining (for files) backup set with nonce=dbb86ea0fe87, datestamp=1587138768 (Apr 17 2020 15:52:48)
+0051.401 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0051.401 (0) Examining (for files) backup set with nonce=7f670aeb6836, datestamp=1587070248 (Apr 16 2020 20:50:48)
+0051.401 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0051.401 (0) Examining (for files) backup set with nonce=a6603d089b7a, datestamp=1586534109 (Apr 10 2020 15:55:09)
+0051.401 (0) plugins: over retain limit (5); will delete this file entity
+0051.401 (0) themes: over retain limit (5); will delete this file entity
+0051.401 (0) uploads: over retain limit (5); will delete this file entity
+0051.401 (0) others: over retain limit (5); will delete this file entity
+0051.401 (0) Delete file: backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-plugins.zip, service=googledrive
+0051.402 (0) Delete file: backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-themes.zip, service=googledrive
+0051.403 (0) Delete file: backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-uploads.zip, service=googledrive
+0051.404 (0) Delete file: backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-others.zip, service=googledrive
+0052.246 (0) Google Drive: backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-others.zip: Deletion successful
+0052.831 (0) Google Drive: backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-uploads.zip: Deletion successful
+0053.368 (0) Google Drive: backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-themes.zip: Deletion successful
+0053.836 (0) Google Drive: backup_2020-04-10-1555_Can_You_Drink_Tap_Water_in_a6603d089b7a-plugins.zip: Deletion successful
+0053.839 (0) This backup set is now empty; will remove from history
+0053.840 (0) Deleting log file (log.a6603d089b7a.txt)
+0053.841 (0) Retain: saving new backup history (sets now: 5) and finishing retain operation
+0053.847 (0) Resume backup (be18ba536952, 0): finish run
+0053.849 (0) Decremented the semaphore (fd) by 1
+0053.851 (0) Semaphore (fd) unlocked
+0053.852 (0) There were no errors in the uploads, so the 'resume' event (1) is being unscheduled
+0053.855 (0) No email will/can be sent - the user has not configured an email address.
+0053.856 (0) The backup apparently succeeded and is now complete

@@ -23,7 +23,6 @@ $curID = $post->ID;
 
     breadcrumbs();
 
-
     
 		
 		
@@ -33,8 +32,13 @@ $curID = $post->ID;
         <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
         <div class="toc"></div>
 	</header><!-- .entry-header -->
+<?php
+    if($curID == 5233){
 
+get_template_part('usa', 'map'); 
 
+}
+?>
 
 	<div class="entry-content">
 
@@ -111,6 +115,22 @@ if(get_field('travellers_notes')):
     <?php
 
 endif;
+
+// Wikitravel
+
+if(get_field('wikitravel_content')):
+
+    ?>
+    
+    <h2>Wikitravel</h2>
+    
+
+    <?php the_field('wikitravel_content'); ?>
+    
+    <?php
+
+endif;
+
 ?>
 
 <?php

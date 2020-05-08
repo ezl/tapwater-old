@@ -1,5 +1,8 @@
 <?php
 get_header();
+
+
+
 while(have_posts()){
 	the_post();
 ?>
@@ -14,12 +17,14 @@ while(have_posts()){
 	</header><!-- .entry-header -->
 
 	<div class="entry-content">
-		<?php 
+        <?php 
+        
         the_content(); 
         
+        get_template_part('world', 'map'); 
         
         ?>
-		
+	
 	</div><!-- .entry-content -->
 
 	

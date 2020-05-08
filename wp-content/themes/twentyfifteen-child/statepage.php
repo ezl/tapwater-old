@@ -140,6 +140,22 @@ if(get_field('travellers_notes')):
     <?php
 
 endif;
+
+// Wikitravel
+
+if(get_field('wikitravel_content')):
+
+    ?>
+    
+    <h2>Wikitravel</h2>
+    
+
+    <?php the_field('wikitravel_content'); ?>
+    
+    <?php
+
+endif;
+
 ?>
 
 <!-- wp:heading -->

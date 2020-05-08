@@ -661,6 +661,25 @@ article{
 	margin:0;
 }
 
+.world-map, .usa-map{
+    text-align:center;
+    margin: 60px 0;
+}
+
+.world-map svg, .usa-map svg{
+    width: 100%;
+    height: auto;
+}
+
+.world-map path, .usa-map path{
+    fill:lightgray;
+    stroke: lightgray;
+}
+
+.world-map path:hover, .usa-map path:hover{
+    fill-opacity:0.7;
+}
+
 /* Country Page template */
 
 .toc{

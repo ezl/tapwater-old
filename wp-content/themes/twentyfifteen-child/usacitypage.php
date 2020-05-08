@@ -193,6 +193,23 @@ if(get_field('travellers_notes')):
     <?php
 
 endif;
+
+// Wikitravel
+
+if(get_field('wikitravel_content')):
+
+    ?>
+    
+    <h2>Wikitravel</h2>
+    
+
+    <?php the_field('wikitravel_content'); ?>
+    
+    <?php
+
+endif;
+
+
 ?>
 
 <!-- wp:heading -->
@@ -348,7 +365,7 @@ if($waterquality < 20){
 </figure>
 <!-- /wp:html -->
 <?php
-if(is_user_logged_in()):
+
 ?>
 <div class="ewg">
 <h2>Contaminants</h2>
@@ -356,7 +373,12 @@ if(is_user_logged_in()):
         <div class="ewg__intro__text">
             
             <h3><?php the_field('ewg_utility_name'); ?></h3>
-            <p><?php the_field('ewg_description'); ?></p> 
+            <p><?php 
+            
+                echo urldecode(get_field('ewg_description'));
+            
+            
+            ?></p> 
         </div>
         
     <div class="ewg__intro__utility">
@@ -407,13 +429,11 @@ if(is_user_logged_in()):
 
     </div>
 
-    <p>Learn more: <a href="<?php the_field('ewg_source'); ?>"><?php the_field('ewg_source'); ?></a></p>
+    <p>Learn more: <a href="<?php the_field('ewg_source'); ?>" target="_blank"><?php the_field('ewg_source'); ?></a></p>
 
 </div>
 
-<?php
-endif;
-?>
+
 
 <p>
 <strong>Reminder:</strong><br/>
