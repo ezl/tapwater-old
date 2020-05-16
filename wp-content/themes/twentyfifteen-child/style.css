@@ -663,7 +663,8 @@ article{
 
 .world-map, .usa-map{
     text-align:center;
-    margin: 60px 0;
+    margin-top: 60px;
+    margin-bottom:30px;
 }
 
 .world-map svg, .usa-map svg{
@@ -679,6 +680,66 @@ article{
 .world-map path:hover, .usa-map path:hover{
     fill-opacity:0.7;
 }
+
+.map-legend{
+    list-style-type: none;
+    font-size: 12px;
+}
+.map-legend li{
+    display:inline-block;
+    overflow:hidden;
+    margin-bottom:6px;
+    margin-left:12px;
+}
+.map-legend li.title{
+text-decoration: underline;
+}
+
+.map-legend .red{
+    background-color:red;
+}
+.map-legend .orange{
+    background-color:orange;
+}
+.map-legend .yellow{
+    background-color:yellow;
+}
+.map-legend .lightgreen{
+    background-color:lightgreen;
+}
+.map-legend .green{
+    background-color:green;
+}
+
+.map-legend span{
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    float: left;
+    margin-right: 12px;
+    
+}
+
+.description{
+    pointer-events: none;
+    position: absolute;
+    font-size: 12px;
+    text-align: center;
+    background: white;
+    padding: 5px 10px;
+    z-index: 99;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 auto;
+    color: #000023;
+    border-radius: 1px;
+    box-shadow: 0 0 0 1px #eee;
+    display: none;
+    height:auto;
+  }
+    .description.active{
+      display: block;
+    }
 
 /* Country Page template */
 
@@ -892,6 +953,14 @@ article{
     
    
 }
+
+@media (max-width:830px){
+    .map-legend li{
+        display:block;
+        
+    }
+}
+
 
 @media (max-width:620px){
 
