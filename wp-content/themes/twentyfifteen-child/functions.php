@@ -65,12 +65,18 @@ if(!is_admin()):
     if($state){
         echo '<li>'.$separator.'<a href="'.site_url("/tap-water-safety-in-").$state_slug.'">'.$state.'</a></li>';
     }
+    
     //city-post
         if(get_field('city_name')){
             echo '<li> '.$separator.get_field('city_name').'</li>';
-        }        
+        }
+        
+    
+        
         echo '</ul>';
     }
+    
+
 endif;
 
 // Add Shortcode Top cities in country
@@ -126,7 +132,3 @@ function wspe16902_prepend_page_rewrite_rules( $rewrite_rules )
 {
     return $GLOBALS['wpse16902_page_rewrite_rules'] + $rewrite_rules;
 }
-
-
-
-

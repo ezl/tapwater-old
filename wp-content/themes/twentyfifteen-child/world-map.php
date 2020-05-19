@@ -2530,7 +2530,8 @@
   });
 
   // Map Tooltip, shows country name and water wuality rating
-
+  
+  $(document).ready(function() {
   $description = $(".description");
 
 $("path").hover(function() {
@@ -2555,10 +2556,14 @@ $("path").hover(function() {
 $(document).on('mousemove', function(e){
 
 $description.css({
-  left: e.pageX - $('div.world-map').offset().left + 50,
-  top: e.pageY - ($('div.world-map').offset().top / 2.4)
+  
+  left: e.pageX -300,
+  top: e.pageY -300
+  
 });
 
+});
+  
 });
  
 })(jQuery)

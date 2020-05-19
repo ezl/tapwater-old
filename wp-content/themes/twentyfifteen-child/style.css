@@ -39,6 +39,10 @@ Template:     twentyfifteen
     display: none;
 }
 
+#page{
+    max-width:1200px;
+}
+
 h2{
     font-weight: 500;
     color: #354b95;
@@ -47,7 +51,8 @@ h2{
 
 .inner-container {
     overflow: hidden;
-    max-width: 1260px;    margin: auto;
+    max-width: 1200px;    
+    margin: auto;
     padding: 13px 10px;
 }
 
@@ -92,6 +97,7 @@ h2{
     max-width: 1200px;
     width: 100% !IMPORTANT;
     margin: auto !IMPORTANT;
+    padding-left:35px;
 }
 
 .menu-navigation nav#site-navigation ul li {
@@ -321,9 +327,7 @@ color:#707070;
 .breadcrumbs .sep{
 	margin:0 6px;
 }
-.inner-container{
-    max-width:1403px;
-}
+
 .leftlogo{
     padding-left:0;
     max-width:60%!important;
@@ -558,7 +562,7 @@ h2.entry-title a{
 	text-decoration:underline;
 }
 .country{
-	width:50%;
+	width:100%;
     margin-bottom:25px;
 }
 .country h3{
@@ -613,6 +617,11 @@ article{
     height:24px;
 }
 
+#colophon{
+    width: 100%;
+    margin: 0;
+}
+
 
 /* Continent page */
 .continent-page-list .mainpage-category-subnav{
@@ -647,7 +656,9 @@ article{
     color:#354b95;
 }
 .country li{
-	list-style-type:none;
+    list-style-type:none;
+    display: inline-block;
+    margin-right: 15px;
 }
 .country li h3{
 	padding:0;
@@ -814,15 +825,18 @@ text-decoration: underline;
     list-style-type: none;
 }
 
+/* Table of content .page-title */
+
+.page-id-1 .breadcrumbs{
+    display:none;
+}
+
 
 
 
 @media (max-width:1300px){
 
-	.footer-social{
-		float:none;
-        margin-top:24px;
-    }
+	
     
 }
 
@@ -851,6 +865,19 @@ text-decoration: underline;
     .lwptoc:first-child{
         margin:16px 0;
     }
+
+    #sidebar{
+        display:none;
+    }
+    #content{
+        margin-left: 0;
+        width: 100%;
+    }
+
+    body:before{
+        display: none;
+    }
+
 }
 
 @media (max-width:954px){
@@ -951,6 +978,10 @@ text-decoration: underline;
         flex-direction:column;
     }
     
+    .footer-social{
+		float:none;
+        margin-top:24px;
+    }
    
 }
 

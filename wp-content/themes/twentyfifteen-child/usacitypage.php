@@ -216,10 +216,11 @@ endif;
 <h2>World Health Organization with Safely Managed Drinking Water Services Map</h2>
 <!-- /wp:heading -->
 
-<!-- wp:image {"align":"center","id":4838,"sizeSlug":"large"} -->
-<div class="wp-block-image"><figure class="aligncenter size-large"><img src="https://www.canyoudrinktapwaterin.com/wp-content/uploads/2020/01/Safely-Managed.jpg" alt="Safely Managed Drinking Water Services Map" class="wp-image-4838"/></figure></div>
-<!-- /wp:image -->
+<?php 
 
+get_template_part('world', 'map'); 
+
+?>
 <!-- wp:heading -->
 <!--/*
 <h2>Current Weather in <?php the_field('city_name'); ?></h2>

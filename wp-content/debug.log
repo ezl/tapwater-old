@@ -414,3 +414,7 @@
 [14-May-2020 22:18:39 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.105 secs to get posts for term ID 12 in taxonomy category (longer than recommended max of 0.100 secs).
 [15-May-2020 01:42:16 UTC] WpssoUtil::get_image_url_info warning: Slow PHP function detected - getimagesize() took 1.829 secs for https://www.canyoudrinktapwaterin.com/wp-content/uploads/2020/01/Macau-1.jpg (longer than recommended max of 1.500 secs).
 [15-May-2020 21:30:10 UTC] WpssoUtil::get_image_url_info warning: Slow PHP function detected - getimagesize() took 1.681 secs for https://www.canyoudrinktapwaterin.com/wp-content/uploads/2020/01/Prague-Castle-1.jpg (longer than recommended max of 1.500 secs).
+[18-May-2020 04:43:46 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.104 secs to get posts for term ID 68 in taxonomy category (longer than recommended max of 0.100 secs).
+[18-May-2020 09:28:36 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.107 secs to get posts for term ID 12 in taxonomy category (longer than recommended max of 0.100 secs).
+[18-May-2020 12:41:35 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.291 secs to get posts for term ID 12 in taxonomy category (longer than recommended max of 0.100 secs).
+[18-May-2020 13:22:49 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.105 secs to get posts for term ID 12 in taxonomy category (longer than recommended max of 0.100 secs).
