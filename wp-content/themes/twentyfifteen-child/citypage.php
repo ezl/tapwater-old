@@ -204,7 +204,7 @@ endif;
 ?>
 
 <!-- wp:heading -->
-<h2>World Health Organization with Safely Managed Drinking Water Services Map</h2>
+<h2>Tap water by country</h2>
 <!-- /wp:heading -->
 
 <?php get_template_part('world', 'map');  ?>

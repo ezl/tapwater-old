@@ -159,12 +159,10 @@ endif;
 ?>
 
 <!-- wp:heading -->
-<h2>World Health Organization with Safely Managed Drinking Water Services Map</h2>
+<h2>Tap water by country</h2>
 <!-- /wp:heading -->
 
-<!-- wp:image {"align":"center","id":4838,"sizeSlug":"large"} -->
-<div class="wp-block-image"><figure class="aligncenter size-large"><img src="https://www.canyoudrinktapwaterin.com/wp-content/uploads/2020/01/Safely-Managed.jpg" alt="Safely Managed Drinking Water Services Map" class="wp-image-4838"/></figure></div>
-<!-- /wp:image -->
+<?php get_template_part('world', 'map');  ?>
 
 <!-- wp:heading -->
 <!--/*

@@ -213,7 +213,7 @@ endif;
 ?>
 
 <!-- wp:heading -->
-<h2>World Health Organization with Safely Managed Drinking Water Services Map</h2>
+<h2>Tap water by country</h2>
 <!-- /wp:heading -->
 
 <?php 
@@ -365,9 +365,7 @@ if($waterquality < 20){
 </table>
 </figure>
 <!-- /wp:html -->
-<?php
-
-?>
+<?php if(get_field('ewg_utility_name')): ?>
 <div class="ewg">
 <h2>Contaminants</h2>
     <div class="ewg__intro">
@@ -434,6 +432,7 @@ if($waterquality < 20){
 
 </div>
 
+<?php endif; ?>
 
 
 <p>
