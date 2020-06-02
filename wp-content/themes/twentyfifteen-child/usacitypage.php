@@ -108,7 +108,7 @@ wp_reset_postdata();
             ?><tr><td>Safe to drink?</td><td class="has-text-align-right table-bool" data-align="right"><?php the_field('safe'); ?></td></tr><?php
         }else if(get_field('water_quality') >= 40){
             ?><tr><td>Safe to drink?</td><td class="has-text-align-right table-bool" data-align="right">Yes</td></tr><?php
-        }else if(get_field('water_quality') < 40){
+        }else if(get_field('water_quality') < 40 && get_field('water_quality') != ''){
             ?><tr><td>Safe to drink?</td><td class="has-text-align-right table-bool" data-align="right">No</td></tr><?php
         }else{
             ?><tr><td>Safe to drink?</td><td class="has-text-align-right table-bool" data-align="right">N/A</td></tr><?php
@@ -149,17 +149,18 @@ wp_reset_postdata();
 <h2>Can You Drink Tap Water in <?php echo the_field('city_name'); ?>?</h2>
 <!-- /wp:heading -->
 
-<?php if(get_field('water_quality') >= 40): ?>
+<?php if(get_field('water_quality') >= 40){ ?>
 <!-- wp:paragraph -->
 <p>Yes, tap water is drinkable.</p>
 <!-- /wp:paragraph -->
-<?php endif; ?>
-<?php if(get_field('water_quality') < 40 && get_field('water_quality') !== ''): ?>
+<?php }
+if(get_field('water_quality') < 40 && get_field('water_quality') != ''){ ?>
 <!-- wp:paragraph -->
 <p>No, tap water is not drinkable.</p>
 <!-- /wp:paragraph -->
-<?php endif; ?>
-<?php if(!get_field('water_quality')): ?>
+<?php }?>
+
+<?php if(get_field('water_quality') == ''): ?>
 <!-- wp:paragraph -->
 <p>Currently, there is no available public data about water quality in <?php the_field('city_name'); ?>. But the average water quality in <?php echo $state_name; ?> is <?php echo get_field('water_quality', $stateID); ?>%.</p>
 <!-- /wp:paragraph -->
@@ -185,7 +186,7 @@ if(get_field('travellers_notes')):
 
     ?>
     
-    <h2>Traveller's Notes</h2>
+    <h2>Local resident's opinion on the tap water quality in their region</h2>
     
 
     <p><?php the_field('travellers_notes'); ?></p>

@@ -100,7 +100,7 @@ wp_reset_postdata();
             ?><tr><td>Safe to drink?</td><td class="has-text-align-right table-bool" data-align="right"><?php the_field('safe'); ?></td></tr><?php
         }elseif(get_field('water_quality') >= 40){
             ?><tr><td>Safe to drink?</td><td class="has-text-align-right table-bool" data-align="right">Yes</td></tr><?php
-        }elseif(get_field('water_quality') < 40 && get_field('water_quality') !== ''){
+        }elseif(get_field('water_quality') < 40 && get_field('water_quality') != ''){
             ?><tr><td>Safe to drink?</td><td class="has-text-align-right table-bool" data-align="right">No</td></tr><?php
         }else{
             ?><tr><td>Safe to drink?</td><td class="has-text-align-right table-bool" data-align="right">N/A</td></tr><?php
@@ -145,7 +145,7 @@ wp_reset_postdata();
 <p>Yes, tap water is drinkable.</p>
 <!-- /wp:paragraph -->
 <?php endif; ?>
-<?php if(get_field('water_quality') < 40 && get_field('water_quality') !== ''): ?>
+<?php if(get_field('water_quality') < 40 && get_field('water_quality') != ''): ?>
 <!-- wp:paragraph -->
 <p>No, tap water is not drinkable.</p>
 <!-- /wp:paragraph -->
@@ -177,7 +177,7 @@ if(get_field('travellers_notes')):
 
     ?>
     
-    <h2>Traveller's Notes</h2>
+    <h2>Local resident's opinion on the tap water quality in their region</h2>
     
 
     <p><?php the_field('travellers_notes'); ?></p>

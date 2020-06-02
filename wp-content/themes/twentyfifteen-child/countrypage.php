@@ -107,7 +107,7 @@ if(get_field('travellers_notes')):
 
     ?>
     
-    <h2>Traveller's Notes</h2>
+    <h2>Local resident's opinion on the tap water quality in their region</h2>
     
 
     <p><?php the_field('travellers_notes'); ?></p>
@@ -170,18 +170,34 @@ wp_reset_postdata();
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
+
+
 <?php if(get_field('who_national_2017_basic')): ?>
-<p>The World Health Organization estimates that <?php the_field('who_national_2017_basic'); ?> percent of <?php the_field('country_name'); ?> have access to <a href="<?php site_url(); ?>/tap-water/">tap water</a>.</p>
+<p>The World Health Organization estimates that <?php the_field('who_national_2017_basic'); ?> percent of <?php the_field('country_name'); ?> have access to drinkable <a href="<?php site_url(); ?>/tap-water/">tap water</a>.</p>
 <?php else: ?>
 <p>The World Health Organization has unspecified data of information in <?php the_field('country_name'); ?>. You can review below how locals and tourists rated the drinking water in the country. Also, you may ask people from the area with regards to their advice of drinking water, or if skeptical stick with bottled water to ensure safety. 
 </p>
 <?php endif; ?>
-<p>In 2000, <?php if(get_field('who_national_2000_safely_managed')){echo get_field('who_national_2000_safely_managed').'%';}else{echo 'undefined %';} ?> of the population had access to drinkable, tap water on site, and <?php if(get_field('who_national_2000_basic')){echo get_field('who_national_2000_basic').'%';}else{echo 'undefined %';} ?> within an accessible distance, including both rural and urban areas.
-</p>
-<p>
-In <?php the_field('country_name'); ?>, like in most countries, clean tap water availability is much higher in urban areas than in rural areas, with urban area availability averages at <?php if(get_field('who_urban_2017_safely_managed')){echo get_field('who_urban_2017_safely_managed').'%';}else{echo 'undefined %';} ?> and rural availability figures at <?php if(get_field('who_rural_2017_safely_managed')){echo get_field('who_rural_2017_safely_managed').'%';}else{echo 'undefined %';} ?>.
 
-</p>
+<?php if(get_field('who_national_2000_safely_managed') && get_field('who_national_2000_basic')): ?>
+    <p>In 2000, <?php echo get_field('who_national_2000_safely_managed').'%'; ?> of the population had access to drinkable, tap water on site, and <?php echo get_field('who_national_2000_basic').'%'; ?> within an accessible distance, including both rural and urban areas.
+    </p>
+<?php endif; ?>
+
+<?php if(get_field('who_urban_2017_safely_managed')): ?>
+    <p>
+    In <?php the_field('country_name'); ?>, like in most countries, clean tap water availability is much higher in urban areas than in rural areas, with urban area availability averages at <?php echo get_field('who_urban_2017_safely_managed').'%'; ?>.
+    </p>
+<?php endif; ?>
+
+<?php if(get_field('who_rural_2017_safely_managed')): ?>
+    <p>
+    The rural availability figures at <?php echo get_field('who_rural_2017_safely_managed').'%'; ?>
+    </p>
+<?php endif; ?>
+
+
+
 
 <!-- /wp:paragraph -->
 
