@@ -787,3 +787,9 @@
 [01-Jun-2020 17:58:44 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.102 secs to get posts for term ID 12 in taxonomy category (longer than recommended max of 0.100 secs).
 [01-Jun-2020 21:22:06 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.131 secs to get posts for term ID 10 in taxonomy category (longer than recommended max of 0.100 secs).
 [02-Jun-2020 05:41:06 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.105 secs to get posts for term ID 12 in taxonomy category (longer than recommended max of 0.100 secs).
+[02-Jun-2020 17:43:47 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.140 secs to get posts for term ID 10 in taxonomy category (longer than recommended max of 0.100 secs).
+[02-Jun-2020 17:43:56 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.101 secs to get posts for term ID 12 in taxonomy category (longer than recommended max of 0.100 secs).
+[02-Jun-2020 21:03:11 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.117 secs to get posts for term ID 12 in taxonomy category (longer than recommended max of 0.100 secs).
+[03-Jun-2020 01:23:23 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.125 secs to get posts for term ID 68 in taxonomy category (longer than recommended max of 0.100 secs).
+[03-Jun-2020 03:10:23 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.110 secs to get posts for term ID 10 in taxonomy category (longer than recommended max of 0.100 secs).
+[03-Jun-2020 03:10:41 UTC] WpssoTerm::get_posts_ids warning: Slow query detected - get_posts() took 0.106 secs to get posts for term ID 12 in taxonomy category (longer than recommended max of 0.100 secs).

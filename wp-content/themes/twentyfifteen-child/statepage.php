@@ -132,7 +132,7 @@ if(get_field('travellers_notes')):
 
     ?>
     
-    <h2>Local resident's opinion on the tap water quality in their region</h2>
+    <h2>What do people in <?php the_field('country_name'); ?> think about the tap water?</h2>
     
 
     <p><?php the_field('travellers_notes'); ?></p>
