@@ -4,7 +4,8 @@ Theme URI: https://wordpress.org/themes/twentyfifteen/
 Author: the WordPress team
 Author URI: https://wordpress.org/
 Description: Our 2015 default theme is clean, blog-focused, and designed for clarity. Twenty Fifteen's simple, straightforward typography is readable on a wide variety of screen sizes, and suitable for multiple languages. We designed it using a mobile-first approach, meaning your content takes center-stage, regardless of whether your visitors arrive by smartphone, tablet, laptop, or desktop computer.
-Version: 2.5
+Version: 2.6
+Requires PHP: 5.2.4
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: blog, two-columns, left-sidebar, accessibility-ready, custom-background, custom-colors, custom-header, custom-logo, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, sticky-post, threaded-comments, translation-ready
@@ -660,17 +661,6 @@ a:focus {
 /**
  * 6.2 Menus
  */
-.widget_search {
-	position:absolute;
-	top:20px;
-	right:0;
-}
-
-
-#site-navigation ul li {
-	padding-top: 0.6rem;
-	padding-bottom: 0.6rem;
-}
 
 .main-navigation a {
 	display: block;
@@ -1416,8 +1406,23 @@ img.aligncenter {
 	margin: 0;
 }
 
+.widget_calendar .wp-calendar-nav {
+	display: table;
+	width: 100%;
+}
+
+.widget_calendar .wp-calendar-nav span {
+	display: table-cell;
+}
+
+.widget_calendar .wp-calendar-nav-prev,
+.widget_calendar .wp-calendar-nav-next {
+	width: 40%;
+}
+
 .widget_calendar td,
-.widget_calendar th {
+.widget_calendar th,
+.widget_calendar .wp-calendar-nav span {
 	line-height: 2.3333;
 	text-align: center;
 	padding: 0;
@@ -1586,7 +1591,6 @@ img.aligncenter {
 	background-color: #fff;
 	display: none;
 	padding: 0 7.6923%;
-
 }
 
 .secondary.toggled-on {
@@ -2815,9 +2819,7 @@ p > video {
 
 	.site-main {
 		padding: 7.6923% 0;
-	
 	}
-	
 
 	.hentry.sticky:not(.has-post-thumbnail) {
 		padding-top: inherit;
@@ -2839,11 +2841,7 @@ p > video {
 	.hentry + .hentry {
 		border-top: 0;
 	}
-	.post.hentry.ivycat-post {
-		padding-top: 0px;
-		Position: inherit
-	}
-	
+
 	.post-thumbnail {
 		margin-bottom: 2.4em;
 	}
@@ -3273,11 +3271,20 @@ p > video {
 	}
 
 	.widget_calendar td,
-	.widget_calendar th {
+	.widget_calendar th,
+	.widget_calendar .wp-calendar-nav span {
 		line-height: 2.9286;
 	}
 
 	.widget_calendar caption {
+		margin: 0 0 1.5em;
+	}
+
+	.widget_calendar .wp-calendar-table {
+		margin-bottom: 0;
+	}
+
+	.widget_calendar .wp-calendar-nav {
 		margin: 0 0 1.5em;
 	}
 
@@ -3852,7 +3859,8 @@ p > video {
 	}
 
 	.widget_calendar td,
-	.widget_calendar th {
+	.widget_calendar th,
+	.widget_calendar .wp-calendar-nav span {
 		line-height: 2.9375;
 	}
 
@@ -4156,8 +4164,8 @@ p > video {
 	.sidebar {
 		float: left;
 		margin-right: -100%;
-		max-width: 380px;
-		position: absolute !important;
+		max-width: 413px;
+		position: relative;
 		width: 29.4118%;
 	}
 
@@ -4167,12 +4175,10 @@ p > video {
 		display: block;
 		margin: 0;
 		padding: 0;
-		padding-top: 45px;
 	}
 
 	.site-main {
 		padding: 8.3333% 0;
-		padding-top: 20px;
 	}
 
 	.site-content {
@@ -4187,10 +4193,6 @@ p > video {
 		font-size: 1.5rem;
 		line-height: 1.6;
 	}
-	
-	main#main {
-    padding-top: 0px;
-}
 
 	p,
 	address,
@@ -4416,7 +4418,6 @@ p > video {
 		border-bottom: 0;
 		margin: 20% 0;
 		padding: 0 20%;
-		padding-top: 8px;
 	}
 
 	.site-branding {
@@ -4506,7 +4507,8 @@ p > video {
 	}
 
 	.widget_calendar td,
-	.widget_calendar th {
+	.widget_calendar th,
+	.widget_calendar .wp-calendar-nav span {
 		line-height: 1.9167;
 	}
 
@@ -5115,7 +5117,8 @@ p > video {
 	}
 
 	.widget_calendar td,
-	.widget_calendar th {
+	.widget_calendar th,
+	.widget_calendar .wp-calendar-nav span {
 		line-height: 1.9286;
 	}
 
@@ -5663,7 +5666,8 @@ p > video {
 	}
 
 	.widget_calendar td,
-	.widget_calendar th {
+	.widget_calendar th,
+	.widget_calendar .wp-calendar-nav span {
 		line-height: 1.9375;
 	}
 
@@ -6041,10 +6045,8 @@ p > video {
 	}
 
 	.sidebar {
-		position: absolute; /* Make sure sticky sidebar doesn't affect to print */
+		position: relative !important; /* Make sure sticky sidebar doesn't affect to print */
 	}
-	
-	div#sidebar {position: absolute;}
 
 	.site-branding {
 		padding: 0;

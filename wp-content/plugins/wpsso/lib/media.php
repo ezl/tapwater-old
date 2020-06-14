@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
+if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+	die( 'Do. Or do not. There is no try.' );
+}
+
 if ( ! class_exists( 'WpssoMedia' ) ) {
 
 	class WpssoMedia {
@@ -1146,7 +1150,7 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 
 				$filter_name = $this->p->lca . '_content_image_preg_' . $type;
 
-				if ( has_filter( $filter_name ) ) {	// Skip if no filters.
+				if ( false !== has_filter( $filter_name ) ) {
 
 					$content_img_preg[ $type ] = apply_filters( $filter_name, $this->default_content_img_preg[ $type ] );
 
@@ -1579,7 +1583,7 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 			 */
 			$filter_name = $this->p->lca . '_content_videos';
 
-			if ( has_filter( $filter_name ) ) {	// Skip if no filters.
+			if ( false !== has_filter( $filter_name ) ) {
 
 				if ( $this->p->debug->enabled ) {
 					$this->p->debug->log( 'applying ' . $filter_name . ' filters' );
@@ -1909,7 +1913,13 @@ if ( ! class_exists( 'WpssoMedia' ) ) {
 			} elseif ( false !== strpos( $img_mixed, '://' ) ) {
 
 				if ( $img_width === WPSSO_UNDEF || $img_height === WPSSO_UNDEF ) {
-					list( $img_width, $img_height, $img_type, $img_attr ) = $this->p->util->get_image_url_info( $img_mixed );
+
+					list(
+						$img_width,
+						$img_height,
+						$img_type,
+						$img_attr
+					) = $this->p->util->get_image_url_info( $img_mixed );
 				}
 
 				$img_label = '<a href="' . $img_mixed . '">' . $img_mixed . '</a>';

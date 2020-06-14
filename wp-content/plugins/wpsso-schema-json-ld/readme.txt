@@ -10,9 +10,9 @@ Tags: schema.org, schema, rich snippets, structured data, rich results, woocomme
 Contributors: jsmoriss
 Requires PHP: 5.6
 Requires At Least: 4.2
-Tested Up To: 5.4.1
-WC Tested Up To: 4.0.1
-Stable Tag: 3.5.0
+Tested Up To: 5.4.2
+WC Tested Up To: 4.2.0
+Stable Tag: 3.11.0
 
 Google Rich Results and Structured Data for Articles, Carousels, Events, FAQ Pages, How-Tos, Local SEO, Products, Recipes, Ratings, Reviews, and More.
 
@@ -34,7 +34,7 @@ This add-on provides accurate and comprehensive Schema JSON-LD markup for posts,
 
 **Most complete Schema JSON-LD markup for WooCommerce products:**
 
-The WooCommerce plugin is known to provide incomplete Schema markup for Google. The <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium plugin</a> (required for WooCommerce integration) and its WPSSO Schema JSON-LD add-on provide a far better solution by offering complete Facebook / Pinterest Product meta tags and Schema Product markup for Google Rich Results (aka Rich Snippets) &mdash; including additional product images, product variations, product attributes (brand, color, condition, EAN, dimensions, GTIN-8/12/13/14, ISBN, material, MPN, size, SKU, weight, etc), product reviews, product ratings, sale start / end dates, sale prices, pre-tax prices, VAT prices, and much, much more.
+The WooCommerce plugin is known to offer incomplete Schema markup for Google. The <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium plugin</a> (required for WooCommerce integration) and its WPSSO Schema JSON-LD add-on provide a far better solution by offering complete Facebook / Pinterest Product meta tags and Schema Product markup for Google Rich Results (aka Rich Snippets) &mdash; including additional product images, product variations, product information (brand, color, condition, dimensions, material, size, weight, SKU, GTIN-8/12/13/14, EAN, ISBN, MPN, etc), product reviews, product ratings, prices and currencies, sale start / end dates, sale prices, pre-tax prices, VAT prices, and much, much more.
 
 **Fixes all Google Search Console / Structured Data Testing Tool errors:**
 
@@ -271,7 +271,7 @@ WPSSO Schema JSON-LD Markup (aka WPSSO JSON) is an add-on for the [WPSSO Core pl
 * [Can I add custom Schema properties to the JSON-LD?](https://wpsso.com/docs/plugins/wpsso-schema-json-ld/faqs/can-i-add-custom-schema-properties-to-the-json-ld/)
 * [How do I create a Schema FAQPage?](https://wpsso.com/docs/plugins/wpsso-schema-json-ld/faqs/how-do-i-create-a-schema-faqpage/)
 
-<h3>Advanced Documentation and Notes</h3>
+<h3>Notes and Documentation</h3>
 
 * [Developer Resources](https://wpsso.com/docs/plugins/wpsso-schema-json-ld/notes/developer/)
 	* [Filters](https://wpsso.com/docs/plugins/wpsso-schema-json-ld/notes/developer/filters/)
@@ -308,11 +308,89 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <p>Development, alpha, beta, and release candidate updates are available for Premium users.</p>
 
-<p>Under the SSO &gt; Update Manager settings page, select the "Development and Up" version filter for WPSSO Core and all its extensions (to satisfy any version dependencies). Save the plugin settings, and click the "Check for Updates" button to fetch the latest / current WPSSO version information. When new Development versions are available, they will automatically appear under your WordPress Dashboard &gt; Updates page. You can always re-select the "Stable / Production" version filter at any time to re-install the last stable / production version of a plugin.</p>
+<p>Under the SSO &gt; Update Manager settings page, select the "Development and Up" version filter for WPSSO Core and all its extensions (to satisfy any version dependencies). Save the plugin settings, and click the "Check for Plugin Updates" button to fetch the latest / current WPSSO version information. When new Development versions are available, they will automatically appear under your WordPress Dashboard &gt; Updates page. You can always re-select the "Stable / Production" version filter at any time to re-install the last stable / production version of a plugin.</p>
 
 <h3>Changelog / Release Notes</h3>
 
-**Version 3.6.0-dev.7 (2020/04/30)**
+**Version 3.11.0 (2020/06/12)**
+
+* **New Features**
+	* Added support for the Schema Book type with an 'isbn' property value.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+	* WPSSO Core v7.7.0.
+
+**Version 3.10.0 (2020/05/30)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added a "# questions added to the Schema FAQPage markup" update notice when editing or saving a FAQPage.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a `WpssoJsonFiltersTypeFAQPage->filter_json_data_validate_https_schema_org_faqpage()` method to validate Schema FAQPage markup.
+	* Renamed the WpssoJsonProAdminMetaEdit class to WpssoJsonProAdminEdit.
+	* Renamed the WpssoJsonStdAdminMetaEdit class to WpssoJsonStdAdminEdit.
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+	* WPSSO Core v7.7.0.
+
+**Version 3.9.0 (2020/05/22)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Added a $context argument value for `WpssoSchema->get_schema_types_select()` calls.
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+	* WPSSO Core v7.6.0.
+
+**Version 3.8.0 (2020/05/14)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* Added an 'isPartOf' property to the Schema Article and WebPage types with the WordPress site Schema WebSite markup.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* None.
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+	* WPSSO Core v7.5.0.
+
+**Version 3.7.0 (2020/05/09)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
+* **Bugfixes**
+	* None.
+* **Developer Notes**
+	* Refactored the required plugin check to (optionally) check the class name and a version constant.
+	* Updated clear cache method call for WPSSO Core v7.4.0.
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+	* WPSSO Core v7.4.0.
+
+**Version 3.6.0 (2020/05/01)**
 
 * **New Features**
 	* None.
@@ -325,7 +403,7 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
-	* WPSSO Core v7.3.0-dev.7.
+	* WPSSO Core v7.3.0.
 
 **Version 3.5.0 (2020/04/28)**
 
@@ -394,13 +472,13 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 Added Schema Event options for virtual, postponed, and canceled events as [suggested by Google on March 17th, 2020](https://webmasters.googleblog.com/2020/03/new-properties-virtual-or-canceled-events.html).
 
 * **New Features**
-	* None.
-* **Improvements**
 	* Added new options for the Schema Event type in the Document SSO metabox.
 		* Event Attendance
 		* Event Online URL
 		* Event Status
 		* Event Previous Start
+* **Improvements**
+	* None.
 * **Bugfixes**
 	* None.
 * **Developer Notes**
@@ -433,31 +511,7 @@ Added Schema Event options for virtual, postponed, and canceled events as [sugge
 
 == Upgrade Notice ==
 
-= 3.6.0-dev.7 =
+= 3.11.0 =
 
-(2020/04/30) Added recursion checks in Schema Product and SoftwareApplication to prevent recursion for an itemOffered within a Schema Offer.
-
-= 3.5.0 =
-
-(2020/04/28) Minor update for option labels in WPSSO Core v7.2.0.
-
-= 3.4.0 =
-
-(2020/04/25) Updated multilingual option method calls for optimized methods in WPSSO Core v7.1.0.
-
-= 3.3.0 =
-
-(2020/04/17) Added support for WPSSO FAQ shortcodes with a non-public 'question' post type and 'faq_category' taxonomy.
-
-= 3.2.0 =
-
-(2020/04/06) Updated "Requires At Least" to WordPress v4.2. Refactored WPSSO Core active and minimum version dependency checks.
-
-= 3.1.0 =
-
-(2020/03/31) Added Schema Event options for virtual, postponed, and canceled events
-
-= 3.0.0 =
-
-(2020/03/27) Moved all Schema type and sub-type modules from the Premium version to the Free / Standard version. Refactored the Schema Markup settings page metaboxes and tabs.
+(2020/06/12) Added support for the Schema Book type with an 'isbn' property value.
 

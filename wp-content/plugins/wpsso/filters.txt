@@ -25,12 +25,6 @@
 
 'wpsso_add_link_rel_shortlink' ( $bool, $mod )
 
-'wpsso_add_metabox_post' ( $bool, $post_id, $post_type )
-
-'wpsso_add_metabox_term' ( $bool, $term_id )
-
-'wpsso_add_metabox_user' ( $bool, $user_id )
-
 'wpsso_add_schema_head_attributes' ( $bool )
 
 'wpsso_add_schema_meta_array' ( $bool )
@@ -93,7 +87,7 @@
 
 'wpsso_get_post_options' ( $options, $post_id, $mod )
 
-'wpsso_get_short_url' ( $long_url, $service_id, $mod )
+'wpsso_get_short_url' ( $long_url, $service_id, $mod, $is_main = false )
 
 'wpsso_get_site_defaults' ( $defaults )
 
@@ -138,6 +132,8 @@
 'wpsso_og_add_mt_rating' ( $bool, $mod )
 
 'wpsso_og_add_mt_reviews' ( $bool, $mod )
+
+'wpsso_og_data_https_ogp_me_ns_{og_type}' ( $mt_og, $mod )
 
 'wpsso_og_default_img_id' ( $image_id )
 
@@ -223,8 +219,6 @@
 
 'wpsso_save_post_options' ( $opts, $post_id, $rel_id, $mod )
 
-'wpsso_save_site_options' ( $opts )
-
 'wpsso_save_term_options' ( $opts, $term_id, $term_tax_id, $mod )
 
 'wpsso_save_user_options' ( $opts, $term_id, false, $mod )
@@ -250,6 +244,8 @@
 'wpsso_schema_type_id' ( $type_id, $mod, $is_custom )
 
 'wpsso_schema_types' ( (array) $schema_types )
+
+'wpsso_schema_types_select' ( (array) $schema_types, $context )	// $context = 'settings', 'business', 'organization', 'place', or 'meta'.
 
 'wpsso_search_url' ( $url, $mod, $add_page )
 

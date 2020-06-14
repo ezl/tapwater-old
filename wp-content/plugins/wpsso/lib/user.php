@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
+if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+	die( 'Do. Or do not. There is no try.' );
+}
+
 if ( ! class_exists( 'WpssoUser' ) ) {
 
 	class WpssoUser extends WpssoWpMeta {
@@ -35,23 +39,33 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$this->p->debug->mark();
 			}
 
-			$is_admin   = is_admin();	// Only check once.
+			$is_admin = is_admin();	// Only check once.
+
 			$cm_fb_name = $this->p->options[ 'plugin_cm_fb_name' ];
 
 			if ( ! SucomUtilWP::role_exists( 'person' ) ) {
-				add_role( 'person', _x( 'Person', 'user role', 'wpsso' ), array() );
+
+				$role_label = _x( 'Person', 'user role', 'wpsso' );
+
+				add_role( 'person', $role_label, array() );
 			}
 
 			if ( ! empty( $this->p->options[ 'plugin_new_user_is_person' ] ) ) {
+
 				if ( is_multisite() ) {
-					add_action( 'wpmu_new_user', array( __CLASS__, 'add_person_role' ), 20, 1 );
+					add_action( 'wpmu_new_user', array( __CLASS__, 'add_role_by_id' ), 20, 1 );
 				} else {
-					add_action( 'user_register', array( __CLASS__, 'add_person_role' ), 20, 1 );
+					add_action( 'user_register', array( __CLASS__, 'add_role_by_id' ), 20, 1 );
 				}
 			}
 
 			add_filter( 'user_contactmethods', array( $this, 'add_contact_methods' ), 20, 2 );
-			add_filter( 'user_' . $cm_fb_name . '_label', array( $this, 'fb_contact_label' ), 20, 1 );
+
+			add_filter( 'user_' . $cm_fb_name . '_label', array( $this, 'modify_fb_contact_label' ), 20, 1 );
+
+			add_action( $this->p->lca . '_add_person_role', array( $this, 'add_person_role' ), 10, 1 );	// For single scheduled task.
+
+			add_action( $this->p->lca . '_remove_person_role', array( $this, 'remove_person_role' ), 10, 1 );	// For single scheduled task.
 
 			/**
 			 * Hook a minimum number of admin actions to maximize performance. The user_id argument is 
@@ -69,7 +83,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 					/**
 					 * load_meta_page() priorities: 100 post, 200 user, 300 term.
 					 *
-					 * Sets the WpssoWpMeta::$head_tags and WpssoWpMeta::$head_info class properties.
+					 * Sets the parent::$head_tags and parent::$head_info class properties.
 					 */
 					add_action( 'current_screen', array( $this, 'load_meta_page' ), 200, 1 );
 				}
@@ -84,7 +98,9 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				}
 
 				add_filter( 'manage_users_columns', array( $this, 'add_column_headings' ), WPSSO_ADD_COLUMN_PRIORITY, 1 );
+
 				add_filter( 'manage_users_sortable_columns', array( $this, 'add_sortable_columns' ), 10, 1 );
+
 				add_filter( 'manage_users_custom_column', array( $this, 'get_column_content',), 10, 3 );
 
 				/**
@@ -115,13 +131,13 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				 */
 				add_action( 'edit_user_profile', array( $this, 'show_metabox_section' ), 20 );
 
-				add_action( 'edit_user_profile_update', array( $this, 'sanitize_submit_cm' ), 5 );
-				add_action( 'edit_user_profile_update', array( $this, 'save_options' ), WPSSO_META_SAVE_PRIORITY );	// Default is -10.
-				add_action( 'edit_user_profile_update', array( $this, 'clear_cache' ), WPSSO_META_CACHE_PRIORITY );	// Default is 0.
+				add_action( 'edit_user_profile_update', array( $this, 'sanitize_submit_cm' ), -200 );
+				add_action( 'edit_user_profile_update', array( $this, 'save_options' ), WPSSO_META_SAVE_PRIORITY );	// Default is -100.
+				add_action( 'edit_user_profile_update', array( $this, 'clear_cache' ), WPSSO_META_CACHE_PRIORITY );	// Default is -10.
 
-				add_action( 'personal_options_update', array( $this, 'sanitize_submit_cm' ), 5 );
-				add_action( 'personal_options_update', array( $this, 'save_options' ), WPSSO_META_SAVE_PRIORITY );	// Default is -10.
-				add_action( 'personal_options_update', array( $this, 'clear_cache' ), WPSSO_META_CACHE_PRIORITY );	// Default is 0.
+				add_action( 'personal_options_update', array( $this, 'sanitize_submit_cm' ), -200 );
+				add_action( 'personal_options_update', array( $this, 'save_options' ), WPSSO_META_SAVE_PRIORITY );	// Default is -100.
+				add_action( 'personal_options_update', array( $this, 'clear_cache' ), WPSSO_META_CACHE_PRIORITY );	// Default is -10.
 			}
 		}
 
@@ -134,14 +150,15 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$this->p->debug->mark();
 			}
 
-			$mod = WpssoWpMeta::$mod_defaults;
+			$mod = parent::$mod_defaults;
 
 			/**
 			 * Common elements.
 			 */
-			$mod[ 'id' ]   = is_numeric( $mod_id ) ? (int) $mod_id : 0;	// Cast as integer.
-			$mod[ 'name' ] = 'user';
-			$mod[ 'obj' ]  =& $this;
+			$mod[ 'id' ]          = is_numeric( $mod_id ) ? (int) $mod_id : 0;	// Cast as integer.
+			$mod[ 'name' ]        = 'user';
+			$mod[ 'name_transl' ] = _x( 'user', 'module name', 'wpsso' );
+			$mod[ 'obj' ]         =& $this;
 
 			/**
 			 * User elements.
@@ -192,6 +209,8 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			 */
 			if ( ! isset( $local_cache[ $cache_id ] ) ) {
 				$local_cache[ $cache_id ] = false;
+			} elseif ( $this->md_cache_disabled ) {
+				$local_cache[ $cache_id ] = false;
 			}
 
 			$md_opts =& $local_cache[ $cache_id ];	// Shortcut variable name.
@@ -201,7 +220,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$user_exists = SucomUtilWP::user_exists( $user_id );
 
 				if ( $user_exists ) {
-					$md_opts = get_user_meta( $user_id, WPSSO_META_NAME, true );
+					$md_opts = get_user_meta( $user_id, WPSSO_META_NAME, $single = true );
 				} else {
 					$md_opts = apply_filters( $this->p->lca . '_get_other_user_meta', false, $user_id );
 				}
@@ -242,7 +261,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 						$this->p->debug->log( 'applying get_user_options filters for user_id ' . $user_id . ' meta' );
 					}
 
-					$md_opts[ 'options_filtered' ] = true;	// Set before calling filter to prevent recursion.
+					$md_opts[ 'options_filtered' ] = 1;	// Set before calling filter to prevent recursion.
 
 					$mod = $this->get_mod( $user_id );
 
@@ -268,9 +287,11 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$this->p->debug->mark();
 			}
 
-			if ( ! $this->user_can_edit( $user_id, $rel_id ) ) {
+			if ( ! $this->user_can_save( $user_id, $rel_id ) ) {
 				return;
 			}
+
+			$this->md_cache_disabled = true;	// Disable local cache for get_defaults() and get_options().
 
 			$mod = $this->get_mod( $user_id );
 
@@ -299,23 +320,23 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		}
 
 		/**
-		 * Get all publicly accessible user IDs in the 'writer' array.
+		 * Get all publicly accessible user IDs in the 'creator' array.
 		 */
 		public static function get_public_ids() {
 
 			$wpsso =& Wpsso::get_instance();
 
 			/**
-			 * Default 'writer' roles are:
+			 * Default 'creator' roles are:
 			 *
-			 * 'writer' => array(	// Users that can write posts.
+			 * 'creator' => array(	// Users that can write posts.
 			 *	'administrator',
 			 *	'editor',
 			 *	'author',
 			 *	'contributor',
 			 * );
 			 */
-			$roles = $wpsso->cf[ 'wp' ][ 'roles' ][ 'writer' ];
+			$roles = $wpsso->cf[ 'wp' ][ 'roles' ][ 'creator' ];
 
 			return SucomUtilWP::get_roles_user_ids( $roles );
 		}
@@ -348,8 +369,8 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 			$posts_args = array_merge( array(
 				'has_password'   => false,
-				'orderby'        => 'date',
 				'order'          => 'DESC',		// Newest first.
+				'orderby'        => 'date',
 				'paged'          => $paged,
 				'post_status'    => 'publish',		// Only 'publish', not 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', or 'trash'.
 				'post_type'      => 'any',		// Return post, page, or any custom post type.
@@ -371,9 +392,11 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 						' to get posts authored by user ID %2$d', $mtime_total, $mod[ 'id' ] ) );
 				}
 
-				$error_pre   = sprintf( __( '%s warning:', 'wpsso' ), __METHOD__ );
+				$error_pre = sprintf( __( '%s warning:', 'wpsso' ), __METHOD__ );
+
 				$rec_max_msg = sprintf( __( 'longer than recommended max of %1$0.3f secs', 'wpsso' ), $mtime_max );
-				$error_msg   = sprintf( __( 'Slow query detected - get_posts() took %1$0.3f secs to get posts authored by user ID %2$d (%3$s).',
+
+				$error_msg = sprintf( __( 'Slow query detected - get_posts() took %1$0.3f secs to get posts authored by user ID %2$d (%3$s).',
 					'wpsso' ), $mtime_total, $mod[ 'id' ], $rec_max_msg );
 
 				/**
@@ -394,51 +417,6 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			return $post_ids;
 		}
 
-		public static function get_person_names( $add_none = true ) {
-
-			$wpsso =& Wpsso::get_instance();
-
-			$roles = $wpsso->cf[ 'wp' ][ 'roles' ][ 'person' ];
-			$limit = WPSSO_SELECT_PERSON_NAMES_MAX;	// Default is 100 user names.
-
-			return SucomUtilWP::get_roles_user_select( $roles, $blog_id = null, $add_none, $limit );
-		}
-
-		public static function add_person_role( $user_id ) {
-
-			$user_obj = get_user_by( 'ID', $user_id );
-
-			$user_obj->add_role( 'person' );
-		}
-
-		public static function remove_person_role( $user_id ) {
-
-			$user_obj = get_user_by( 'ID', $user_id );
-
-			$user_obj->remove_role( 'person' );
-		}
-
-		public function add_person_view( $user_views ) {
-
-			$user_views    = array_reverse( $user_views );
-			$all_view_link = $user_views[ 'all' ];
-
-			unset( $user_views[ 'all' ], $user_views[ 'person' ] );
-
-			$role_label = _x( 'Person', 'user role', 'wpsso' );
-			$role_view  = add_query_arg( 'role', 'person', admin_url( 'users.php' ) );
-			$user_query = new WP_User_Query( array( 'role' => 'person' ) );
-			$user_count = $user_query->get_total();
-
-			$user_views[ 'person' ] = '<a href="' . $role_view . '">' .  $role_label . '</a> (' . $user_count . ')';
-
-			$user_views[ 'all' ] = $all_view_link;
-
-			$user_views = array_reverse( $user_views );
-
-			return $user_views;
-		}
-
 		public function add_column_headings( $columns ) {
 
 			if ( $this->p->debug->enabled ) {
@@ -450,7 +428,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 		public function get_column_content( $value, $column_name, $user_id ) {
 
-			if ( ! empty( $user_id ) && strpos( $column_name, $this->p->lca . '_' ) === 0 ) {	// Just in case.
+			if ( ! empty( $user_id ) && 0 === strpos( $column_name, $this->p->lca . '_' ) ) {	// Just in case.
 
 				$col_key = str_replace( $this->p->lca . '_', '', $column_name );
 
@@ -511,12 +489,14 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			static $local_recursion = array();
 
 			if ( isset( $local_recursion[ $user_id ][ $meta_key ] ) ) {
+
 				return $value;	// Return null
 			}
 
-			$local_recursion[ $user_id ][ $meta_key ] = true;		// Prevent recursion.
+			$local_recursion[ $user_id ][ $meta_key ] = true;	// Prevent recursion.
 
 			if ( get_user_meta( $user_id, $meta_key, $single = true ) === '' ) {	// Returns empty string if meta not found.
+
 				$this->get_head_info( $user_id, $read_cache = true );
 			}
 
@@ -528,7 +508,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		/**
 		 * Hooked into the current_screen action.
 		 *
-		 * Sets the WpssoWpMeta::$head_tags and WpssoWpMeta::$head_info class properties.
+		 * Sets the parent::$head_tags and parent::$head_info class properties.
 		 */
 		public function load_meta_page( $screen = false ) {
 
@@ -539,7 +519,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			/**
 			 * All meta modules set this property, so use it to optimize code execution.
 			 */
-			if ( false !== WpssoWpMeta::$head_tags || ! isset( $screen->id ) ) {
+			if ( false !== parent::$head_tags || ! isset( $screen->id ) ) {
 				return;
 			}
 
@@ -549,10 +529,27 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 			switch ( $screen->id ) {
 
+				case ( 0 === strpos( $screen->id, 'users_page_' . $this->p->lca . '-add-' ) ? true : false ):	// Add user page.
+
+					$user_id = null;
+
+					$mod = $this->get_mod( null );
+
+					break;
+
 				case 'profile':		// User profile page.
 				case 'user-edit':	// User editing page.
-				case ( strpos( $screen->id, 'profile_page_' ) === 0 ? true : false ):		// Your profile page.
-				case ( strpos( $screen->id, 'users_page_' . $this->p->lca ) === 0 ? true : false ):	// Custom social settings page.
+				case ( 0 === strpos( $screen->id, 'profile_page_' ) ? true : false ):			// Your profile page.
+				case ( 0 === strpos( $screen->id, 'users_page_' . $this->p->lca ) ? true : false ):	// Users settings page.
+
+					/**
+					 * Get the user id.
+					 *
+					 * Returns the current user id if the 'user_id' query argument is empty.
+					 */
+					$user_id = SucomUtil::get_user_object( false, 'id' );
+
+					$mod = $this->get_mod( $user_id );
 
 					break;
 
@@ -565,15 +562,8 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 					return;
 			}
 
-			$user_id = SucomUtil::get_user_object( false, 'id' );
-
 			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'showing metabox for user ID ' . $user_id );
-			}
-
-			$mod = $this->get_mod( $user_id );
-
-			if ( $this->p->debug->enabled ) {
+				$this->p->debug->log( 'user ID = ' . $user_id );
 				$this->p->debug->log( 'home url = ' . get_option( 'home' ) );
 				$this->p->debug->log( 'locale default = ' . SucomUtil::get_locale( 'default' ) );
 				$this->p->debug->log( 'locale current = ' . SucomUtil::get_locale( 'current' ) );
@@ -581,18 +571,9 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$this->p->debug->log( SucomUtil::pretty_array( $mod ) );
 			}
 
-			WpssoWpMeta::$head_tags = array();
+			parent::$head_tags = array();
 
-			$add_metabox = empty( $this->p->options[ 'plugin_add_to_user_page' ] ) ? false : true;
-
-			$add_metabox = apply_filters( $this->p->lca . '_add_metabox_user', $add_metabox, $user_id );
-
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'add metabox for user ID ' . $user_id . ' is ' . 
-					( $add_metabox ? 'true' : 'false' ) );
-			}
-
-			if ( $add_metabox ) {
+			if ( $user_id && ! empty( $this->p->options[ 'plugin_add_to_user_page' ] ) ) {
 
 				do_action( $this->p->lca . '_admin_user_head', $mod, $screen->id );
 
@@ -603,22 +584,22 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				/**
 				 * $read_cache is false to generate notices etc.
 				 */
-				WpssoWpMeta::$head_tags = $this->p->head->get_head_array( $use_post = false, $mod, $read_cache = false );
+				parent::$head_tags = $this->p->head->get_head_array( $use_post = false, $mod, $read_cache = false );
 
-				WpssoWpMeta::$head_info = $this->p->head->extract_head_info( $mod, WpssoWpMeta::$head_tags );
+				parent::$head_info = $this->p->head->extract_head_info( $mod, parent::$head_tags );
 
 				/**
 				 * Check for missing open graph image and description values.
 				 */
 				if ( $mod[ 'is_public' ] ) {	// Since WPSSO Core v7.0.0.
 
-					$ref_url = empty( WpssoWpMeta::$head_info[ 'og:url' ] ) ? null : WpssoWpMeta::$head_info[ 'og:url' ];
+					$ref_url = empty( parent::$head_info[ 'og:url' ] ) ? null : parent::$head_info[ 'og:url' ];
 
 					$ref_url = $this->p->util->maybe_set_ref( $ref_url, $mod, __( 'checking meta tags', 'wpsso' ) );
 
 					foreach ( array( 'image', 'description' ) as $mt_suffix ) {
 
-						if ( empty( WpssoWpMeta::$head_info[ 'og:' . $mt_suffix ] ) ) {
+						if ( empty( parent::$head_info[ 'og:' . $mt_suffix ] ) ) {
 
 							if ( $this->p->debug->enabled ) {
 								$this->p->debug->log( 'og:' . $mt_suffix . ' meta tag is value empty and required' );
@@ -678,64 +659,42 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 		public function add_meta_boxes() {
 
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->mark();
-			}
-
 			$user_id = SucomUtil::get_user_object( false, 'id' );
 
 			if ( ! current_user_can( 'edit_user', $user_id ) ) {
-				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'insufficient privileges to add metabox for user ID ' . $user_id );
-				}
 				return;
 			}
 
-			$add_metabox = empty( $this->p->options[ 'plugin_add_to_user_page' ] ) ? false : true;
-
-			$add_metabox = apply_filters( $this->p->lca . '_add_metabox_user', $add_metabox, $user_id );
-
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'add metabox for user ID ' . $user_id . ' is ' . 
-					( $add_metabox ? 'true' : 'false' ) );
+			if ( empty( $this->p->options[ 'plugin_add_to_user_page' ] ) ) {
+				return;
 			}
 
-			if ( $add_metabox ) {
+			$metabox_id      = $this->p->cf[ 'meta' ][ 'id' ];
+			$metabox_title   = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+			$metabox_screen  = $this->p->lca . '-user';
+			$metabox_context = 'normal';
+			$metabox_prio    = 'default';
+			$callback_args   = array(	// Second argument passed to the callback.
+				'__block_editor_compatible_meta_box' => true,
+			);
 
-				$metabox_id      = $this->p->cf[ 'meta' ][ 'id' ];
-				$metabox_title   = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
-				$metabox_screen  = $this->p->lca . '-user';
-				$metabox_context = 'normal';
-				$metabox_prio    = 'default';
-				$callback_args   = array(	// Second argument passed to the callback.
-					'__block_editor_compatible_meta_box' => true,
-				);
-
-				add_meta_box( $this->p->lca . '_' . $metabox_id, $metabox_title,
-					array( $this, 'show_metabox_document_meta' ), $metabox_screen,
-						$metabox_context, $metabox_prio, $callback_args );
-			}
+			add_meta_box( $this->p->lca . '_' . $metabox_id, $metabox_title,
+				array( $this, 'show_metabox_document_meta' ), $metabox_screen,
+					$metabox_context, $metabox_prio, $callback_args );
 		}
 
 		public function show_metabox_section( $user_obj ) {
-
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->mark();
-			}
 
 			if ( ! isset( $user_obj->ID ) ) {	// Just in case.
 				return;
 			}
 
 			if ( ! current_user_can( 'edit_user', $user_obj->ID ) ) {
-				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'exiting early: current user does not have edit privileges for user ID ' . $user_obj->ID );
-				}
 				return;
 			}
 
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'doing metabox for ' . $this->p->lca . '-user' );
+			if ( empty( $this->p->options[ 'plugin_add_to_user_page' ] ) ) {
+				return;
 			}
 
 			$metabox_screen  = $this->p->lca . '-user';
@@ -769,6 +728,8 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$opts       = $this->get_options( $user_obj->ID );
 			$def_opts   = $this->get_defaults( $user_obj->ID );
 
+			$this->p->admin->plugin_pkg_info();
+
 			$this->form = new SucomForm( $this->p, WPSSO_META_NAME, $opts, $def_opts, $this->p->lca );
 
 			wp_nonce_field( WpssoAdmin::get_nonce_action(), WPSSO_NONCE_NAME );
@@ -781,12 +742,14 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 			foreach ( $tabs as $tab_key => $title ) {
 
-				$filter_name = $this->p->lca . '_' . $mod[ 'name' ] . '_' . $tab_key . '_rows';
+				$mb_filter_name  = $this->p->lca . '_metabox_' . $metabox_id . '_' . $tab_key . '_rows';
+				$mod_filter_name = $this->p->lca . '_' . $mod[ 'name' ] . '_' . $tab_key . '_rows';
 
-				$table_rows[ $tab_key ] = array_merge(
-					$this->get_table_rows( $metabox_id, $tab_key, WpssoWpMeta::$head_info, $mod ),
-					(array) apply_filters( $filter_name, array(), $this->form, WpssoWpMeta::$head_info, $mod )
-				);
+				$table_rows[ $tab_key ] = (array) apply_filters( $mb_filter_name,
+					array(), $this->form, parent::$head_info, $mod );
+
+				$table_rows[ $tab_key ] = (array) apply_filters( $mod_filter_name,
+					$table_rows[ $tab_key ], $this->form, parent::$head_info, $mod );
 			}
 
 			$tabbed_args = array(
@@ -882,9 +845,10 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			return $fields;
 		}
 
-		public function fb_contact_label( $label ) {
-			return $label . '<br/><span class="description">' . 
-				__( '(not a Facebook Page URL)', 'wpsso' ) . '</span>';
+		public function modify_fb_contact_label( $label ) {
+
+			return $label . '<br/><span class="description" style="font-weight:normal;">' . 
+				__( '(not a Facebook Pages URL)', 'wpsso' ) . '</span>';
 		}
 
 		public function sanitize_submit_cm( $user_id ) {
@@ -901,7 +865,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				if ( isset( $this->p->options[ 'plugin_cm_' . $opt_pre . '_name' ] ) ) {
 
 					$cm_enabled_value = $this->p->options[ 'plugin_cm_' . $opt_pre . '_enabled' ];
-					$cm_name_value = $this->p->options[ 'plugin_cm_' . $opt_pre . '_name' ];
+					$cm_name_value    = $this->p->options[ 'plugin_cm_' . $opt_pre . '_name' ];
 
 					/**
 					 * Sanitize values only for those enabled contact methods.
@@ -934,7 +898,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 									 * All other contact methods are assumed to be URLs.
 									 */
 
-									if ( strpos( $value, '://' ) === false ) {
+									if ( false === strpos( $value, '://' ) ) {
 										$value = '';
 									}
 
@@ -1105,7 +1069,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 							/**
 							 * Don't proceed if the metabox is already first.
 							 */
-							if ( strpos( $user_opts[ $context ], $pagehook . '_' . $box_id ) !== 0 ) {
+							if ( 0 !== strpos( $user_opts[ $context ], $pagehook . '_' . $box_id ) ) {
 
 								$boxes = explode( ',', $user_opts[ $context ] );
 
@@ -1206,8 +1170,8 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 					$users_args = array(
 						'role'     => 'contributor',	// Contributors can delete_posts, edit_posts, read.
-						'orderby'  => 'ID',
 						'order'    => 'DESC',		// Newest user first.
+						'orderby'  => 'ID',
 						'meta_key' => $meta_key,	// The meta_key in the wp_usermeta table.
 						'fields'   => array(		// Save memory and only return only specific fields.
 							'ID',
@@ -1280,6 +1244,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			}
 
 			$old_prefs = self::get_pref( false, $user_id );	// get all prefs for user
+
 			$new_prefs = array_merge( $old_prefs, $user_prefs );
 
 			/**
@@ -1328,19 +1293,33 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 		public function clear_cache( $user_id, $rel_id = false ) {
 
-			$mod           = $this->get_mod( $user_id );
-			$col_meta_keys = WpssoWpMeta::get_column_meta_keys();
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->mark();
+			}
+			
+			static $do_once = array();
+
+			if ( isset( $do_once[ $user_id ][ $rel_id ] ) ) {
+				return;
+			}
+
+			$do_once[ $user_id ][ $rel_id ] = true;
+
+			$mod = $this->get_mod( $user_id );
+
+			$col_meta_keys = parent::get_column_meta_keys();
 
 			foreach ( $col_meta_keys as $col_key => $meta_key ) {
+
 				delete_user_meta( $user_id, $meta_key );
 			}
 
 			$this->clear_mod_cache( $mod );
 		}
 
-		public function user_can_edit( $user_id, $rel_id = false ) {
+		public function user_can_save( $user_id, $rel_id = false ) {
 
-			$user_can_edit = false;
+			$user_can_save = false;
 
 			if ( ! $this->verify_submit_nonce() ) {
 
@@ -1348,10 +1327,10 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 					$this->p->debug->log( 'exiting early: verify_submit_nonce failed' );
 				}
 
-				return $user_can_edit;
+				return $user_can_save;
 			}
 
-			if ( ! $user_can_edit = current_user_can( 'edit_user', $user_id ) ) {
+			if ( ! $user_can_save = current_user_can( 'edit_user', $user_id ) ) {
 
 				if ( $this->p->debug->enabled ) {
 					$this->p->debug->log( 'insufficient privileges to save settings for user ID ' . $user_id );
@@ -1367,7 +1346,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				}
 			}
 
-			return $user_can_edit;
+			return $user_can_save;
 		}
 
 		/**
@@ -1490,6 +1469,348 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			}
 
 			return $website_url;
+		}
+
+		/**
+		 * Schedule the addition of user roles for self::get_public_ids().
+		 */
+		public function schedule_add_person_role( $user_id = null ) {
+
+			$user_id = $this->p->util->maybe_change_user_id( $user_id );	// Maybe change textdomain for user ID.
+
+			$event_time = time() + 5;	// Add a 5 second event buffer.
+
+			$event_hook = $this->p->lca . '_add_person_role';
+
+			$event_args = array( $user_id );
+
+			$this->stop_add_person_role();	// Just in case.
+
+			wp_schedule_single_event( $event_time, $event_hook, $event_args );
+		}
+
+		public function stop_add_person_role() {
+
+			$cache_md5_pre  = $this->p->lca . '_!_';		// Protect transient from being cleared.
+			$cache_exp_secs = HOUR_IN_SECONDS;			// Prevent duplicate runs for max 1 hour.
+			$cache_salt     = __CLASS__ . '::add_person_role';	// Use a common cache salt for start / stop.
+			$cache_id       = $cache_md5_pre . md5( $cache_salt );
+			$cache_stop_val = 'stop';
+
+			if ( false !== get_transient( $cache_id ) ) {				// Another process is already running.
+
+				set_transient( $cache_id, $cache_stop_val, $cache_exp_secs );	// Signal the other process to stop.
+			}
+		}
+
+		public function add_person_role( $user_id = null ) {
+
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->mark();
+			}
+
+			$user_id    = $this->p->util->maybe_change_user_id( $user_id );	// Maybe change textdomain for user ID.
+			$notice_key = 'add-user-roles-status';
+			$role_label = _x( 'Person', 'user role', 'wpsso' );
+
+			/**
+			 * A transient is set and checked to limit the runtime and allow this process to be terminated early.
+			 */
+			$cache_md5_pre  = $this->p->lca . '_!_';		// Protect transient from being cleared.
+			$cache_exp_secs = HOUR_IN_SECONDS;			// Prevent duplicate runs for max 1 hour.
+			$cache_salt     = __CLASS__ . '::add_person_role';	// Use a common cache salt for start / stop.
+			$cache_id       = $cache_md5_pre . md5( $cache_salt );
+			$cache_run_val  = 'running';
+			$cache_stop_val = 'stop';
+
+			/**
+			 * Prevent concurrent execution.
+			 */
+			if ( false !== get_transient( $cache_id ) ) {	// Another process is already running.
+
+				if ( $user_id ) {
+
+					$notice_msg = sprintf( __( 'Aborting task to add the %1$s role to content creators - another identical task is still running.',
+						'wpsso' ), $role_label );
+
+					$this->p->notice->warn( $notice_msg, $user_id, $notice_key . '-abort' );
+				}
+
+				return;
+			}
+
+			set_transient( $cache_id, $cache_run_val, $cache_exp_secs );
+
+			$mtime_start = microtime( true );
+
+			if ( $user_id ) {
+
+				$notice_msg = sprintf( __( 'A task to add the %1$s role for content creators was started at %2$s.',
+					'wpsso' ), $role_label, gmdate( 'c' ) );
+
+				$this->p->notice->upd( $notice_msg, $user_id, $notice_key . '-begin' );
+			}
+
+			if ( 0 === get_current_user_id() ) {		// User is the scheduler.
+				set_time_limit( HOUR_IN_SECONDS );	// Set maximum PHP execution time to one hour.
+			}
+
+			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+				do_action( $this->p->lca . '_scheduled_task_started', $user_id );
+			}
+
+			$public_user_ids = self::get_public_ids();	// Aka 'administrator', 'editor', 'author', and 'contributor'.
+
+			$count = 0;
+
+			foreach ( $public_user_ids as $id ) {
+
+				/**
+				 * Check that we are allowed to continue. Stop if cache status is not 'running'.
+				 */
+				if ( get_transient( $cache_id ) !== $cache_run_val ) {
+
+					delete_transient( $cache_id );
+
+					return;	// Stop here.
+				}
+
+				$count += self::add_role_by_id( $id, $role = 'person' );
+			}
+
+			if ( $user_id ) {
+
+				$mtime_total = microtime( true ) - $mtime_start;
+
+				$notice_msg = sprintf( __( 'The %1$s role has been added to %2$d content creators.', 'wpsso' ), $role_label, $count ) . ' ';
+
+				$notice_msg .= sprintf( __( 'The total execution time for this task was %0.3f seconds.', 'wpsso' ), $mtime_total );
+
+				$this->p->notice->upd( $notice_msg, $user_id, $notice_key . '-end' );
+			}
+
+			delete_transient( $cache_id );
+		}
+
+		/**
+		 * Schedule the removal of user roles for self::get_public_ids().
+		 */
+		public function schedule_remove_person_role( $user_id = null ) {
+
+			$user_id = $this->p->util->maybe_change_user_id( $user_id );	// Maybe change textdomain for user ID.
+
+			$event_time = time() + 5;	// Add a 5 second event buffer.
+
+			$event_hook = $this->p->lca . '_remove_person_role';
+
+			$event_args = array( $user_id );
+
+			wp_schedule_single_event( $event_time, $event_hook, $event_args );
+		}
+
+		public function remove_person_role( $user_id = null ) {
+
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->mark();
+			}
+
+			$user_id    = $this->p->util->maybe_change_user_id( $user_id );	// Maybe change textdomain for user ID.
+			$notice_key = 'remove-user-roles-status';
+			$role_label = _x( 'Person', 'user role', 'wpsso' );
+
+			/**
+			 * A transient is set and checked to limit the runtime and allow this process to be terminated early.
+			 */
+			$cache_md5_pre  = $this->p->lca . '_!_';		// Protect transient from being cleared.
+			$cache_exp_secs = HOUR_IN_SECONDS;			// Prevent duplicate runs for max 1 hour.
+			$cache_salt     = __CLASS__ . '::remove_person_role';	// Use a common cache salt for start / stop.
+			$cache_id       = $cache_md5_pre . md5( $cache_salt );
+			$cache_run_val  = 'running';
+			$cache_stop_val = 'stop';
+
+			/**
+			 * Prevent concurrent execution.
+			 */
+			if ( false !== get_transient( $cache_id ) ) {	// Another process is already running.
+
+				if ( $user_id ) {
+
+					$notice_msg = sprintf( __( 'Aborting task to remove the %1$s role from all users - another identical task is still running.',
+						'wpsso' ), $role_label );
+
+					$this->p->notice->warn( $notice_msg, $user_id, $notice_key . '-abort' );
+				}
+
+				return;
+			}
+
+			set_transient( $cache_id, $cache_run_val, $cache_exp_secs );
+
+			$mtime_start = microtime( true );
+
+			if ( $user_id ) {
+
+				$notice_msg = sprintf( __( 'A task to remove the %1$s role from all users was started at %2$s.',
+					'wpsso' ), $role_label, gmdate( 'c' ) );
+
+				$this->p->notice->upd( $notice_msg, $user_id, $notice_key . '-begin' );
+			}
+
+			$this->stop_add_person_role();	// Just in case.
+
+			if ( 0 === get_current_user_id() ) {		// User is the scheduler.
+				set_time_limit( HOUR_IN_SECONDS );	// Set maximum PHP execution time to one hour.
+			}
+
+			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+				do_action( $this->p->lca . '_scheduled_task_started', $user_id );
+			}
+
+			$blog_id = get_current_blog_id();
+
+			$count = 0;
+
+			while ( $blog_user_ids = SucomUtil::get_user_ids( $blog_id, '', 1000 ) ) {	// Get a maximum of 1000 user IDs at a time.
+
+				foreach ( $blog_user_ids as $id ) {
+
+					$count += self::remove_role_by_id( $id, $role = 'person' );
+				}
+			}
+
+			if ( $user_id ) {
+
+				$mtime_total = microtime( true ) - $mtime_start;
+
+				$notice_msg = sprintf( __( 'The %1$s role has been removed from %2$d content creators.', 'wpsso' ), $role_label, $count ) . ' ';
+
+				$notice_msg .= sprintf( __( 'The total execution time for this task was %0.3f seconds.', 'wpsso' ), $mtime_total );
+
+				$this->p->notice->upd( $notice_msg, $user_id, $notice_key . '-end' );
+			}
+
+			delete_transient( $cache_id );
+		}
+
+		/**
+		 * Hooked to the 'wpmu_new_user' and 'user_register' actions, which only provides a single argument.
+		 */
+		public static function add_role_by_id( $user_id, $role = 'person' ) {
+
+			$user_obj = get_user_by( 'ID', $user_id );
+
+			if ( ! in_array( $role, $user_obj->roles ) ) {
+
+				$user_obj->add_role( $role );	// Method does not return anything - assume it worked.
+
+				return 1;
+			}
+
+			return 0;
+		}
+
+		public static function remove_role_by_id( $user_id, $role = 'person' ) {
+
+			$user_obj = get_user_by( 'ID', $user_id );
+
+			if ( in_array( $role, $user_obj->roles ) ) {
+
+				$user_obj->remove_role( $person );	// Method does not return anything - assume it worked.
+
+				return 1;
+			}
+
+			return 0;
+		}
+
+		public static function get_person_names( $add_none = true ) {
+
+			$wpsso =& Wpsso::get_instance();
+
+			$roles = $wpsso->cf[ 'wp' ][ 'roles' ][ 'person' ];
+
+			$limit = WPSSO_SELECT_PERSON_NAMES_MAX;	// Default is 100 user names.
+
+			return SucomUtilWP::get_roles_user_select( $roles, $blog_id = null, $add_none, $limit );
+		}
+
+		public function add_person_view( $user_views ) {
+
+			$user_views = array_reverse( $user_views );
+
+			$all_view_link = $user_views[ 'all' ];
+
+			unset( $user_views[ 'all' ], $user_views[ 'person' ] );
+
+			$role_label = _x( 'Person', 'user role', 'wpsso' );
+
+			$role_view  = add_query_arg( 'role', 'person', admin_url( 'users.php' ) );
+
+			$user_query = new WP_User_Query( array( 'role' => 'person' ) );
+
+			$user_count = $user_query->get_total();
+
+			$user_views[ 'person' ] = '<a href="' . $role_view . '">' .  $role_label . '</a> (' . $user_count . ')';
+
+			$user_views[ 'all' ] = $all_view_link;
+
+			$user_views = array_reverse( $user_views );
+
+			return $user_views;
+		}
+
+		/**
+		 * Since WPSSO Core v7.6.0.
+		 */
+		public function add_attached( $user_id, $attach_type, $attach_id ) {
+
+			$opts = get_user_meta( $user_id, WPSSO_META_ATTACHED_NAME, $single = true );
+
+			if ( ! isset( $opts[ $attach_type ][ $attach_id ] ) ) {
+
+				if ( ! is_array( $opts ) ) {
+					$opts = array();
+				}
+
+				$opts[ $attach_type ][ $attach_id ] = true;
+
+				return update_user_meta( $user_id, WPSSO_META_ATTACHED_NAME, $opts );
+			}
+
+			return false;	// No addition.
+		}
+
+		public function delete_attached( $user_id, $attach_type, $attach_id ) {
+
+			$opts = get_user_meta( $user_id, WPSSO_META_ATTACHED_NAME, $single = true );
+
+			if ( isset( $opts[ $attach_type ][ $attach_id ] ) ) {
+
+				unset( $opts[ $attach_type ][ $attach_id ] );
+
+				if ( empty( $opts ) ) {	// Cleanup.
+					return delete_user_meta( $user_id, WPSSO_META_ATTACHED_NAME );
+				}
+
+				return update_user_meta( $user_id, WPSSO_META_ATTACHED_NAME, $opts );
+			}
+
+			return false;	// No delete.
+		}
+
+		public function get_attached( $user_id, $attach_type ) {
+
+			$opts = get_user_meta( $user_id, WPSSO_META_ATTACHED_NAME, $single = true );
+
+			if ( isset( $opts[ $attach_type ] ) ) {
+
+				if ( is_array( $opts[ $attach_type ] ) ) {	// Just in case.
+
+					return $opts[ $attach_type ];
+				}
+			}
+
+			return array();	// No values.
 		}
 	}
 }

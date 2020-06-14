@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
+if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+	die( 'Do. Or do not. There is no try.' );
+}
+
 if ( ! class_exists( 'WpssoPinterest' ) ) {
 
 	class WpssoPinterest {
@@ -108,7 +112,7 @@ if ( ! class_exists( 'WpssoPinterest' ) ) {
 
 		public function filter_plugin_image_sizes( $sizes ) {
 
-			if ( ! empty( $this->p->options[ 'p_add_img_html' ] ) ) {
+			if ( ! empty( $this->p->options[ 'p_add_img_html' ] ) ) {	// Just in case.
 
 				$sizes[ 'p' ] = array(	// Option prefix.
 					'name'  => 'pinterest',
@@ -186,7 +190,7 @@ if ( ! class_exists( 'WpssoPinterest' ) ) {
 
 			$image_url = SucomUtil::get_mt_media_url( $og_images );
 
-			$image_html = '<!-- ' . $this->p->lca . ' pinterest pin it image added on ' . date( 'c' ) . ' -->' . "\n";
+			$image_html = "\n" . '<!-- ' . $this->p->lca . ' pinterest pin it image added on ' . date( 'c' ) . ' -->' . "\n";
 
 			$image_html .= '<div class="' . $this->p->lca . '-pinterest-pin-it-image" style="display:none !important;">' . "\n";
 
@@ -211,11 +215,14 @@ if ( ! class_exists( 'WpssoPinterest' ) ) {
 				}
 
 				/**
-				 * Note that an empty alt attribute is required for W3C validation. Also note that adding a
-				 * 'loading="lazy"' attribute breaks the Pinterest Save button.
+				 * Note that an empty alt attribute is required for W3C validation.
+				 *
+				 * Adding a 'loading="lazy"' attribute breaks the Pinterest Save button.
+				 *
+				 * The 'skip-lazy' class is used by WP Rocket to skip lazy loading an image.
 				 */
 				$image_html .= "\t" . '<img src="' . SucomUtil::esc_url_encode( $image_url ) . '" ' .
-					'width="0" height="0" style="width:0;height:0;" alt="" ' . 
+					'width="0" height="0" class="skip-lazy" style="width:0;height:0;" alt="" ' . 
 					'data-pin-description="' . esc_attr( $data_pin_desc ) . '" />' . "\n";
 			}
 

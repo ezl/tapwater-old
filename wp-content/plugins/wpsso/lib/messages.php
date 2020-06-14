@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
+if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+	die( 'Do. Or do not. There is no try.' );
+}
+
 if ( ! class_exists( 'WpssoMessages' ) ) {
 
 	class WpssoMessages {
@@ -232,6 +236,14 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						 	break;
 
+						case 'tooltip-meta-book_isbn':		// Book ISBN.
+
+							$cf_frags = $this->get_cf_tooltip_fragments( preg_replace( '/^tooltip-meta-/', '', $msg_key ) );
+
+							$text = sprintf( __( 'The value of %s can be used in meta tags and Schema markup.', 'wpsso' ), $cf_frags[ 'desc' ] );
+
+						 	break;
+
 						case 'tooltip-meta-product_category':	// Product Category.
 
 							$general_page_link = $this->p->util->get_admin_url( 'general#sucom-tabset_og-tab_site',
@@ -247,11 +259,11 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						case ( 0 === strpos( $msg_key, 'tooltip-meta-product_' ) ? true : false ):
 
-							$cf_fragments = $this->get_cf_tooltip_fragments( preg_replace( '/^tooltip-meta-/', '', $msg_key ) );
+							$cf_frags = $this->get_cf_tooltip_fragments( preg_replace( '/^tooltip-meta-/', '', $msg_key ) );
 
-							if ( ! empty( $cf_fragments ) ) {	// Just in case.
+							if ( ! empty( $cf_frags ) ) {	// Just in case.
 
-								$text = sprintf( __( 'The value of %1$s can be used in meta tags and Schema markup for simple products.', 'wpsso' ), $cf_fragments[ 1 ] ) . ' ';
+								$text = sprintf( __( 'The value of %s can be used in meta tags and Schema markup for simple products.', 'wpsso' ), $cf_frags[ 'desc' ] ) . ' ';
 
 								$text .= __( 'When e-commerce product variations are available, the value from each variation will be used instead.', 'wpsso' ) . ' ';
 
@@ -669,9 +681,9 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						case 'tooltip-plugin_show_opts': 	// Options to Show by Default.
 
-							$metabox_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+							$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
 
-							$text = sprintf( __( 'You can select the default set of options to display in settings pages and the %1$s metabox.', 'wpsso' ), $metabox_title ) . ' ';
+							$text = sprintf( __( 'You can select the default set of options to display in settings pages and the %1$s metabox.', 'wpsso' ), $mb_title ) . ' ';
 
 							$text .= __( 'The basic view shows the most commonly used options, and includes a link to temporarily show all options when desired.', 'wpsso' ) . ' ';
 
@@ -773,7 +785,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						/**
 						 * Integration settings
 						 */
-						case 'tooltip-plugin_new_user_is_person':	// Add Person Role for New Users.
+						case 'tooltip-plugin_new_user_is_person':	// Add Person Role to New Users.
 
 							$text = sprintf( __( 'Automatically add the "%s" role when a new user is created.', 'wpsso' ), _x( 'Person', 'user role', 'wpsso' ) ) . ' ';
 
@@ -830,7 +842,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						case 'tooltip-plugin_upscale_img_max':	// Maximum Image Upscale Percent.
 
-							$upscale_max = WpssoConfig::$cf[ 'opt' ][ 'defaults' ][ 'plugin_upscale_img_max' ];
+							$upscale_max = $this->p->opt->get_defaults( 'plugin_upscale_img_max' );
 
 							$text = sprintf( __( 'When upscaling of %1$s image sizes is allowed, %2$s can make sure smaller images are not upscaled beyond reason, which would publish very low quality / fuzzy images on social and search sites (the default maximum is %3$s%%).', 'wpsso' ), $info[ 'short' ], $info[ 'name_pro' ], $upscale_max ) . ' ';
 
@@ -883,7 +895,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						 */
 						case 'tooltip-plugin_head_cache_exp':
 
-							$cache_exp_secs = WpssoConfig::$cf[ 'opt' ][ 'defaults' ][ 'plugin_head_cache_exp' ];
+							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_head_cache_exp' );
 
 							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
 								_x( 'disabled', 'option comment', 'wpsso' );
@@ -896,7 +908,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						case 'tooltip-plugin_content_cache_exp':
 
-							$cache_exp_secs = WpssoConfig::$cf[ 'opt' ][ 'defaults' ][ 'plugin_content_cache_exp' ];
+							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_content_cache_exp' );
 
 							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
 								_x( 'disabled', 'option comment', 'wpsso' );
@@ -909,7 +921,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						case 'tooltip-plugin_short_url_cache_exp':
 
-							$cache_exp_secs = WpssoConfig::$cf[ 'opt' ][ 'defaults' ][ 'plugin_short_url_cache_exp' ];
+							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_short_url_cache_exp' );
 
 							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
 								_x( 'disabled', 'option comment', 'wpsso' );
@@ -922,7 +934,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						case 'tooltip-plugin_imgsize_cache_exp':
 
-							$cache_exp_secs = WpssoConfig::$cf[ 'opt' ][ 'defaults' ][ 'plugin_imgsize_cache_exp' ];
+							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_imgsize_cache_exp' );
 
 							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
 								_x( 'disabled', 'option comment', 'wpsso' );
@@ -935,7 +947,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						case 'tooltip-plugin_select_cache_exp':
 
-							$cache_exp_secs = WpssoConfig::$cf[ 'opt' ][ 'defaults' ][ 'plugin_select_cache_exp' ];
+							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_select_cache_exp' );
 
 							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
 								_x( 'disabled', 'option comment', 'wpsso' );
@@ -948,7 +960,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						case 'tooltip-plugin_types_cache_exp':
 
-							$cache_exp_secs = WpssoConfig::$cf[ 'opt' ][ 'defaults' ][ 'plugin_types_cache_exp' ];
+							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_types_cache_exp' );
 
 							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
 								_x( 'disabled', 'option comment', 'wpsso' );
@@ -1008,11 +1020,11 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						 */
 						case 'tooltip-plugin_gravatar_api':	// Gravatar is Author Default Image.
 
-							$metabox_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+							$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
 
 							$text = __( 'If no custom image has been defined for an author, fallback to using their Gravatar image (if available) in author related meta tags and Schema markup.', 'wpsso' ) . ' ';
 
-							$text .= sprintf( __( 'A customized image can be selected for/by each author in the WordPress user profile %s metabox.', 'wpsso' ), $metabox_title );
+							$text .= sprintf( __( 'A customized image can be selected for/by each author in the WordPress user profile %s metabox.', 'wpsso' ), $mb_title );
 
 							break;
 
@@ -1132,17 +1144,23 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						 */
 						case 'tooltip-plugin_add_to':
 
-							$metabox_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+							$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
 
-							$text = sprintf( __( 'Add or remove the %s metabox from admin editing pages for posts, pages, custom post types, terms (categories and tags), and user profile pages.', 'wpsso' ), $metabox_title );
+							$text = sprintf( __( 'Add or remove the %s metabox from admin editing pages for posts, pages, custom post types, terms (categories and tags), and user profile pages.', 'wpsso' ), $mb_title );
 
 							break;
 
-						case 'tooltip-plugin_wpseo_social_meta':
+						case 'tooltip-plugin_wpseo_social_meta':	// Import Yoast SEO Social Meta.
 
 							$text = __( 'Import the Yoast SEO custom social meta text for Posts, Terms, and Users.', 'wpsso' ) . ' ';
 
-							$text .= __( 'This option is checked by default if the Yoast SEO plugin is active or its settings are found in the database.', 'wpsso' );
+							$text .= __( 'This option is checked by default if the Yoast SEO plugin is active or its settings are found in the WordPress database.', 'wpsso' );
+
+							break;
+
+						case 'tooltip-plugin_wpseo_show_import':	// Show Yoast SEO Import Details.
+
+							$text = __( 'Show notification messages for imported Yoast SEO custom social meta text for Posts, Terms, and Users.', 'wpsso' ) . ' ';
 
 							break;
 
@@ -1172,29 +1190,25 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						 */
 						case ( 0 === strpos( $msg_key, 'tooltip-plugin_cf_' ) ? true : false ):
 
-							$cf_key = str_replace( 'tooltip-', '', $msg_key );
+							$cf_key      = str_replace( 'tooltip-', '', $msg_key );
+							$cf_frags    = $this->get_cf_tooltip_fragments( preg_replace( '/^tooltip-plugin_cf_/', '', $msg_key ) );
+							$cf_md_index = $this->p->cf[ 'opt' ][ 'cf_md_index' ];
+							$cf_md_key   = empty( $cf_md_index[ $cf_key ] ) ? '' : $cf_md_index[ $cf_key ];
+							$cf_is_multi = empty( $this->p->cf[ 'opt' ][ 'cf_md_multi' ][ $cf_md_key ] ) ? false : true;
+							$mb_title    = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
 
-							$cf_fragments = $this->get_cf_tooltip_fragments( preg_replace( '/^tooltip-plugin_cf_/', '', $msg_key ) );
+							if ( ! empty( $cf_frags ) ) {	// Just in case.
 
-							$cf_md_index = empty( $this->p->cf[ 'opt' ][ 'cf_md_index' ][ $cf_key ] ) ? '' :
-								$this->p->cf[ 'opt' ][ 'cf_md_index' ][ $cf_key ];
-
-							$cf_is_multi = empty( $this->p->cf[ 'opt' ][ 'cf_md_multi' ][ $cf_md_index ] ) ? false : true;
-
-							$metabox_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
-
-							if ( ! empty( $cf_fragments ) ) {	// Just in case.
-
-								$text = sprintf( __( 'If your theme or another plugin provides a custom field (aka metadata) for %1$s, you may enter its custom field name here.', 'wpsso' ), $cf_fragments[ 1 ] ) . ' ';
+								$text = sprintf( __( 'If your theme or another plugin provides a custom field (aka metadata) for %1$s, you may enter its custom field name here.', 'wpsso' ), $cf_frags[ 'desc' ] ) . ' ';
 
 								// translators: %1$s is the metabox name, %2$s is the option name.
-								$text .= sprintf( __( 'If a custom field matching this name is found, its value will be imported for the %1$s "%2$s" option.', 'wpsso' ), $metabox_title, $cf_fragments[ 0 ] ) . ' ';
+								$text .= sprintf( __( 'If a custom field matching this name is found, its value will be imported for the %1$s "%2$s" option.', 'wpsso' ), $mb_title, $cf_frags[ 'label' ] ) . ' ';
 
 								if ( $cf_is_multi ) {
 
 									$text .= '</br></br>';
 
-									$text .= sprintf( __( 'Note that the "%1$s" option provides multiple input fields &mdash; the custom field value will be split on newline characters, and each line will be assigned to an individual input field.', 'wpsso' ), $cf_fragments[ 0 ] );
+									$text .= sprintf( __( 'Note that the "%1$s" option provides multiple input fields &mdash; the custom field value will be split on newline characters, and each line will be assigned to an individual input field.', 'wpsso' ), $cf_frags[ 'label' ] );
 								}
 							}
 
@@ -1957,7 +1971,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							$text .= sprintf( __( 'The example image container uses the minimum recommended Facebook image dimensions of %s.', 'wpsso' ), $fb_img_dims );
 
-						 	$text .= '</p><p class="status-msg">';
+						 	$text .= '</p> <p class="status-msg">';
 
 							$text .= sprintf( __( 'Edit images in the <a href="%s">WordPress Media Library</a> to select a preferred cropping area (ie. top/bottom) and optimize the image SEO text.', 'wpsso' ), $upload_url );
 
@@ -1980,6 +1994,68 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 				} else {
 
 					switch ( $msg_key ) {
+
+						case 'info-schema-faq':
+
+							/**
+							 * If the WPSSO FAQ add-on is active, avoid showing possible duplicate and confusing information.
+							 */
+							if ( ! empty( $this->p->avail[ 'p_ext' ][ 'faq' ] ) ) {
+
+								break;
+							}
+
+							$text = '<blockquote class="top-info">';
+
+							$text .= '<p>';
+
+							$text .= __( 'Schema FAQPage markup is a collection of Questions and Answers, and WordPress manages a collection of related content in two different ways:', 'wpsso' ) . ' ';
+
+							$text .= __( 'Schema FAQPage can be a parent page with Schema Question child pages, or a taxonomy (ie. categories, tags or custom taxonomies) term with Schema Question posts / pages assigned to that term.', 'wpsso' ) . ' ';
+							
+							$text .= '</p>';
+
+							$text .= '</blockquote>';
+
+							break;
+
+						case 'info-schema-qa':
+
+							$text = '<blockquote class="top-info">';
+
+							$text .= '<p>';
+
+							$text .= __( 'Google requires that Schema QAPage markup include one or more user submitted and upvoted answers.', 'wpsso' ) . ' ';
+							
+							$text .= __( 'The Schema QAPage document title is a summary of the question and the content text is the complete question.', 'wpsso' ) . ' ';
+
+							$text .= '</p>';
+
+							$text .= '</blockquote>';
+						
+							break;
+
+						case 'info-schema-question':
+
+							$text = '<blockquote class="top-info">';
+
+							$text .= '<p>';
+
+							/**
+							 * If the WPSSO FAQ add-on is active, avoid showing possible duplicate and confusing information.
+							 */
+							if ( empty( $this->p->avail[ 'p_ext' ][ 'faq' ] ) ) {
+
+								$text .= __( 'Schema Question can be a child page of a Schema FAQPage parent, or assigned to a Schema FAQPage taxonomy term.', 'wpsso' ) . ' ';
+							}
+
+							$text .= __( 'The Schema Question document title is a summary of the question and the content text is the complete answer for that question.', 'wpsso' ) . ' ';
+
+							$text .= '</p>';
+
+							$text .= '</blockquote>';
+
+							break;
 
 						case 'info-priority-media':	// Shown in the Document SSO > Priority Media tab.
 
@@ -2049,7 +2125,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							$text .= __( 'These are the product attribute names that you can create in your e-commerce plugin and not their values.', 'wpsso' ) . ' ';
 
-							$text .= '</p><p><center><strong>';
+							$text .= '</p> <p><center><strong>';
 							
 							$text .= __( 'Do not enter product attribute values here &ndash; these options are for product attribute names only.', 'wpsso' );
 							
@@ -2093,7 +2169,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							$text .= sprintf( __( 'These options allow you to customize the custom field names (aka metadata names) that %s can use to get additional information about your content.', 'wpsso' ), $info[ 'short_pro' ] ) . ' ';
 
-							$text .= '</p><p><center><strong>';
+							$text .= '</p> <p><center><strong>';
 
 							$text .= __( 'Do not enter custom field values here &ndash; these options are for custom field names only.', 'wpsso' );
 							
@@ -2146,7 +2222,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							$text .= sprintf( __( 'The <em>%1$s</em> column on the other hand is for display purposes only and can be changed as you wish.', 'wpsso' ), _x( 'Contact Field Label', 'column title', 'wpsso' ) ) . ' ';
 
-							$text .= '</p><p>';
+							$text .= '</p> <p>';
 
 							$text .= '<center>';
 
@@ -2243,7 +2319,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							$text = '<p class="pro-feature-msg">';
 
-							if ( WpssoAdmin::$pkg[ $this->p->lca ][ 'pp' ] ) {
+							if ( ! empty( WpssoAdmin::$pkg[ $this->p->lca ][ 'pp' ] ) ) {
 
 								$text .= __( 'An e-commerce plugin is active &ndash; product information may be provided by the e-commerce plugin.', 'wpsso' );
 
@@ -2301,12 +2377,11 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						if ( WpssoWpMeta::is_meta_page() ) {
 
-							$metabox_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
-
-							$metabox_tab = _x( 'Priority Media', 'metabox tab', 'wpsso' );
+							$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+							$md_tab   = _x( 'Priority Media', 'metabox tab', 'wpsso' );
 
 							$text .= sprintf( __( 'A larger custom image can be selected in the %1$s metabox under the %2$s tab.',
-								'wpsso' ), $metabox_title, $metabox_tab );
+								'wpsso' ), $mb_title, $md_tab );
 						}
 
 						/**
@@ -2322,13 +2397,13 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 								 */
 								$text .= '<!-- show-once -->';
 
-								$text .= '<p style="margin-left:0;"><em>' . __( 'Additional information shown only to users with Administrative privileges:', 'wpsso' ) . '</em></p>';
+								$text .= ' <p style="margin-left:0;"><em>' . __( 'Additional information shown only to users with Administrative privileges:', 'wpsso' ) . '</em></p>';
 
 								$text .= '<ul>';
 
 								$img_sizes_page_link = $this->p->util->get_admin_url( 'image-sizes', _x( 'Image Sizes', 'lib file description', 'wpsso' ) );
 
-								$text .= '<li>' . sprintf( __( 'Update image size dimensions in the %s settings page.', 'wpsso' ), $img_sizes_page_link ) . '</li>';
+								$text .= ' <li>' . sprintf( __( 'Update image size dimensions in the %s settings page.', 'wpsso' ), $img_sizes_page_link ) . '</li>';
 
 								if ( empty( $this->p->options[ 'plugin_upscale_images' ] ) ) {
 
@@ -2339,13 +2414,13 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 								$percent_option_link = $this->p->util->get_admin_url( 'advanced#sucom-tabset_plugin-tab_integration', _x( 'Maximum Image Upscale Percent', 'option label', 'wpsso' ) );
 
-								$text .= '<li>' . sprintf( __( 'Increase the %s option value.', 'wpsso' ), $percent_option_link ) . '</li>';
+								$text .= ' <li>' . sprintf( __( 'Increase the %s option value.', 'wpsso' ), $percent_option_link ) . '</li>';
 
 								if ( ! empty( $this->p->options[ 'plugin_check_img_dims' ] ) ) {
 
 									$img_dim_option_link = $this->p->util->get_admin_url( 'advanced#sucom-tabset_plugin-tab_integration', _x( 'Enforce Image Dimension Checks', 'option label', 'wpsso' ) );
 
-									$text .= '<li>' . sprintf( __( 'Disable the %s option (not recommended).', 'wpsso' ), $img_dim_option_link ) . '</li>';
+									$text .= ' <li>' . sprintf( __( 'Disable the %s option (not recommended).', 'wpsso' ), $img_dim_option_link ) . '</li>';
 								}
 
 								$text .= '</ul>';
@@ -2358,25 +2433,25 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 					case 'notice-missing-og-image':
 
-						$metabox_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+						$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
 
-						$text = sprintf( __( 'An Open Graph image meta tag could not be generated from this webpage content or its custom %s metabox settings. Facebook <em>requires at least one image meta tag</em> to render shared content correctly.', 'wpsso' ), $metabox_title );
+						$text = sprintf( __( 'An Open Graph image meta tag could not be generated from this webpage content or its custom %s metabox settings. Facebook <em>requires at least one image meta tag</em> to render shared content correctly.', 'wpsso' ), $mb_title );
 
 						break;
 
 					case 'notice-missing-og-description':
 
-						$metabox_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+						$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
 
-						$text = sprintf( __( 'An Open Graph description meta tag could not be generated from this webpage content or its custom %s metabox settings. Facebook <em>requires a description meta tag</em> to render shared content correctly.', 'wpsso' ), $metabox_title );
+						$text = sprintf( __( 'An Open Graph description meta tag could not be generated from this webpage content or its custom %s metabox settings. Facebook <em>requires a description meta tag</em> to render shared content correctly.', 'wpsso' ), $mb_title );
 
 						break;
 
 					case 'notice-missing-schema-image':
 
-						$metabox_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+						$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
 
-						$text = sprintf( __( 'A Schema "image" property could not be generated from this webpage content or its custom %s metabox settings. Google <em>requires at least one "image" property</em> for this Schema type.', 'wpsso' ), $metabox_title );
+						$text = sprintf( __( 'A Schema "image" property could not be generated from this webpage content or its custom %s metabox settings. Google <em>requires at least one "image" property</em> for this Schema type.', 'wpsso' ), $mb_title );
 
 						break;
 
@@ -2391,7 +2466,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						$text .= sprintf( __( 'The use of WordPress content filters allows %s to fully render your content text for meta tag descriptions and detect additional images and/or embedded videos provided by shortcodes.', 'wpsso' ), $info[ 'name' ] );
 
-						$text .= '</p><p>';
+						$text .= '</p> <p>';
 
 						$text .= '<b>' . __( 'Many themes and plugins have badly coded content filters, so this option is disabled by default.', 'wpsso' ) . '</b> ';
 
@@ -2439,7 +2514,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 							$text .= __( 'It is also important for Google in cases where Schema markup describing the content is not available in the webpage (for example, when the complementary WPSSO JSON add-on is not active).', 'wpsso' ) . ' ';
 						}
 
-						$text .= '</p><p>';
+						$text .= '</p> <p>';
 
 						$text .= sprintf( __( 'The %1$s HTML tag in your header template(s) should include a function, action, or filter for its attributes.', 'wpsso' ), $tag_code ) . ' ';
 
@@ -2487,9 +2562,9 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						$text = '<p>';
 
-						$text .= '<b>' . sprintf( __( 'At least one Authentication ID has been entered in the %1$s settings page,<br/>but the %2$s add-on is not active.', 'wpsso' ), $licenses_page_link, $um_info[ 'name' ] ) . '</b> ';
+						$text .= '<b>' . sprintf( __( 'At least one Authentication ID has been entered in the %1$s settings page, but the %2$s add-on is not active.', 'wpsso' ), $licenses_page_link, $um_info[ 'name' ] ) . '</b> ';
 
-						$text .= '</p><p>';
+						$text .= '</p> <p>';
 
 						$text .= sprintf( __( 'This complementary add-on is required to update and enable the %1$s plugin and its %2$s add-ons.', 'wpsso' ), $info[ 'name_pro' ], $pro_transl ) . ' ';
 
@@ -2517,7 +2592,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						$um_rec_version = WpssoConfig::$cf[ 'um' ][ 'rec_version' ];
 
-						$um_check_updates_transl = _x( 'Check for Updates', 'submit button', 'wpsso' );
+						$um_check_updates_transl = _x( 'Check for Plugin Updates', 'submit button', 'wpsso' );
 
 						$tools_settings_page_link = $this->p->util->get_admin_url( 'tools',
 							_x( 'Tools and Actions', 'lib file description', 'wpsso' ) );
@@ -2557,21 +2632,21 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 					case 'column-purchase-pro':
 
-						$metabox_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+						$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
 
 						$text = '<p>' . sprintf( __( '<strong>%s includes:</strong>', 'wpsso' ), $info[ 'short_pro' ] ) . '</p>';
 
 						$text .= '<ul>';
 
-						$text .= '<li>' . sprintf( __( 'Additional options in the %s metabox.', 'wpsso' ), $metabox_title ) . '</li>';
+						$text .= ' <li>' . sprintf( __( 'Additional options in the %s metabox.', 'wpsso' ), $mb_title ) . '</li>';
 
-						$text .= '<li>' . __( 'Integration with 3rd party plugins and service APIs.', 'wpsso' ) . '</li>';
+						$text .= ' <li>' . __( 'Integration with 3rd party plugins and service APIs.', 'wpsso' ) . '</li>';
 
-						$text .= '<li>' . __( 'Advanced plugin settings.', 'wpsso' ) . '</li>';
+						$text .= ' <li>' . __( 'Advanced plugin settings.', 'wpsso' ) . '</li>';
 
-						$text .= '<li>' . __( 'Access to development and release candidate updates.', 'wpsso' ) . '</li>';
+						$text .= ' <li>' . __( 'Access to development and release candidate updates.', 'wpsso' ) . '</li>';
 
-						$text .= '<li>' . __( 'Premium plugin support.', 'wpsso' ) . '</li>';
+						$text .= ' <li>' . __( 'Premium plugin support.', 'wpsso' ) . '</li>';
 
 						$text .= '</ul>';
 
@@ -2600,11 +2675,11 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						$text .= __( 'Great ratings are an excellent way to encourage your plugin developers.', 'wpsso' );
 
-						$text .= '</p><p style="text-align:center;">';
+						$text .= '</p> <p style="text-align:center;">';
 
 						$text .= '<span class="' . $lca . '-rate-heart"></span> ';
 
-						$text .= '</p><p style="text-align:center;">';
+						$text .= '</p> <p style="text-align:center;">';
 
 						$text .= __( 'Please take a moment to support the continued development of your favorite plugins by quickly rating those you value.', 'wpsso' );
 
@@ -2641,7 +2716,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 		/**
 		 * Returns an array of two elements: The custom field option label and a tooltip fragment.
 		 */
-		public function get_cf_tooltip_fragments( $msg_key = false ) {
+		private function get_cf_tooltip_fragments( $msg_key = false ) {
 
 			static $local_cache = null;
 
@@ -2649,147 +2724,151 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 				$local_cache = array(
 					'addl_type_urls' => array(
-						_x( 'Microdata Type URLs', 'option label', 'wpsso' ),
-						_x( 'additional microdata type URLs', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Microdata Type URLs', 'option label', 'wpsso' ),
+						'desc'  => _x( 'additional microdata type URLs', 'tooltip fragment', 'wpsso' ),
+					),
+					'book_isbn' => array(
+						'label' => _x( 'Book ISBN', 'option label', 'wpsso' ),
+						'desc'  => _x( 'an ISBN code (aka International Standard Book Number)', 'tooltip fragment', 'wpsso' ),
 					),
 					'howto_steps' => array(
-						_x( 'How-To Steps', 'option label', 'wpsso' ),
-						_x( 'how-to steps', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'How-To Steps', 'option label', 'wpsso' ),
+						'desc'  => _x( 'how-to steps', 'tooltip fragment', 'wpsso' ),
 					),
 					'howto_supplies' => array(
-						_x( 'How-To Supplies', 'option label', 'wpsso' ),
-						_x( 'how-to supplies', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'How-To Supplies', 'option label', 'wpsso' ),
+						'desc'  => _x( 'how-to supplies', 'tooltip fragment', 'wpsso' ),
 					),
 					'howto_tools' => array(
-						_x( 'How-To Tools', 'option label', 'wpsso' ),
-						_x( 'how-to tools', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'How-To Tools', 'option label', 'wpsso' ),
+						'desc'  => _x( 'how-to tools', 'tooltip fragment', 'wpsso' ),
 					),
 					'img_url' => array(
-						_x( 'Image URL', 'option label', 'wpsso' ),
-						_x( 'an image URL', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Image URL', 'option label', 'wpsso' ),
+						'desc'  => _x( 'an image URL', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_avail' => array(
-						_x( 'Product Availability', 'option label', 'wpsso' ),
-						_x( 'a product availability', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Availability', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product availability', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_brand' => array(
-						_x( 'Product Brand', 'option label', 'wpsso' ),
-						_x( 'a product brand', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Brand', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product brand', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_category' => array(
-						_x( 'Product Category', 'option label', 'wpsso' ),
-						sprintf( _x( 'a <a href="%s">Google product type ID</a>', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Category', 'option label', 'wpsso' ),
+						'desc'  => sprintf( _x( 'a <a href="%s">Google product type ID</a>', 'tooltip fragment', 'wpsso' ),
 							__( 'https://www.google.com/basepages/producttype/taxonomy-with-ids.en-US.txt', 'wpsso' ) ),
 					),
 					'product_color' => array(
-						_x( 'Product Color', 'option label', 'wpsso' ),
-						_x( 'a product color', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Color', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product color', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_condition' => array(
-						_x( 'Product Condition', 'option label', 'wpsso' ),
-						_x( 'a product condition', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Condition', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product condition', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_currency' => array(
-						_x( 'Product Currency', 'option label', 'wpsso' ),
-						_x( 'a product currency', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Currency', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product currency', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_depth_value' => array(
-						_x( 'Product Depth', 'option label', 'wpsso' ),
-						sprintf( _x( 'a product depth (in %s)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Depth', 'option label', 'wpsso' ),
+						'desc'  => sprintf( _x( 'a product depth (in %s)', 'tooltip fragment', 'wpsso' ),
 							WpssoSchema::get_data_unit_text( 'depth' ) ),
 					),
 					'product_gtin14' => array(
-						_x( 'Product GTIN-14', 'option label', 'wpsso' ),
-						_x( 'a product GTIN-14 code', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product GTIN-14', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product GTIN-14 code (aka ITF-14)', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_gtin13' => array(
-						_x( 'Product GTIN-13 (EAN)', 'option label', 'wpsso' ),
-						_x( 'a product GTIN-13 code (aka 13-digit ISBN codes or EAN/UCC-13)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product GTIN-13 (EAN)', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product GTIN-13 code (aka 13-digit ISBN codes or EAN/UCC-13)', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_gtin12' => array(
-						_x( 'Product GTIN-12 (UPC)', 'option label', 'wpsso' ),
-						_x( 'a product GTIN-12 code (12-digit GS1 identification key composed of a UPC company prefix, item reference, and check digit)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product GTIN-12 (UPC)', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product GTIN-12 code (12-digit GS1 identification key composed of a UPC company prefix, item reference, and check digit)', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_gtin8' => array(
-						_x( 'Product GTIN-8', 'option label', 'wpsso' ),
-						_x( 'a product GTIN-8 code (aka EAN/UCC-8 or 8-digit EAN)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product GTIN-8', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product GTIN-8 code (aka EAN/UCC-8 or 8-digit EAN)', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_gtin' => array(
-						_x( 'Product GTIN', 'option label', 'wpsso' ),
-						_x( 'a product GTIN code (GTIN-8, GTIN-12/UPC, GTIN-13/EAN, or GTIN-14)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product GTIN', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product GTIN code (GTIN-8, GTIN-12/UPC, GTIN-13/EAN, or GTIN-14)', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_height_value' => array(
-						_x( 'Product Height', 'option label', 'wpsso' ),
-						sprintf( _x( 'a product height (in %s)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Height', 'option label', 'wpsso' ),
+						'desc'  => sprintf( _x( 'a product height (in %s)', 'tooltip fragment', 'wpsso' ),
 							WpssoSchema::get_data_unit_text( 'height' ) ),
 					),
 					'product_isbn' => array(
-						_x( 'Product ISBN', 'option label', 'wpsso' ),
-						_x( 'an ISBN code (aka International Standard Book Number)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product ISBN', 'option label', 'wpsso' ),
+						'desc'  => _x( 'an ISBN code (aka International Standard Book Number)', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_length_value' => array(
-						_x( 'Product Length', 'option label', 'wpsso' ),
-						sprintf( _x( 'a product length (in %s)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Length', 'option label', 'wpsso' ),
+						'desc'  => sprintf( _x( 'a product length (in %s)', 'tooltip fragment', 'wpsso' ),
 							WpssoSchema::get_data_unit_text( 'length' ) ),
 					),
 					'product_material' => array(
-						_x( 'Product Material', 'option label', 'wpsso' ),
-						_x( 'a product material', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Material', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product material', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_mfr_part_no' => array(
-						_x( 'Product MPN', 'option label', 'wpsso' ),
-						_x( 'a Manufacturer Part Number (MPN)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product MPN', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a Manufacturer Part Number (MPN)', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_price' => array(
-						_x( 'Product Price', 'option label', 'wpsso' ),
-						_x( 'a product price', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Price', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product price', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_retailer_part_no' => array(
-						_x( 'Product SKU', 'option label', 'wpsso' ),
-						_x( 'a Stock-Keeping Unit (SKU)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product SKU', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a Stock-Keeping Unit (SKU)', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_size' => array(
-						_x( 'Product Size', 'option label', 'wpsso' ),
-						_x( 'a product size', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Size', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product size', 'tooltip fragment', 'wpsso' ),
 					),
 					'product_target_gender' => array(
-						_x( 'Product Target Gender', 'option label', 'wpsso' ),
-						_x( 'a product target gender', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Target Gender', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a product target gender', 'tooltip fragment', 'wpsso' ),
 					),
-					'product_volume_value' => array(
-						_x( 'Product Volume', 'option label', 'wpsso' ),
-						sprintf( _x( 'a product volume (in %s)', 'tooltip fragment', 'wpsso' ),
-							WpssoSchema::get_data_unit_text( 'volume' ) ),
+					'product_fluid_volume_value' => array(
+						'label' => _x( 'Product Fluid Volume', 'option label', 'wpsso' ),
+						'desc'  => sprintf( _x( 'a product fluid volume (in %s)', 'tooltip fragment', 'wpsso' ),
+							WpssoSchema::get_data_unit_text( 'fluid_volume' ) ),
 					),
 					'product_weight_value' => array(
-						_x( 'Product Weight', 'option label', 'wpsso' ),
-						sprintf( _x( 'a product weight (in %s)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Weight', 'option label', 'wpsso' ),
+						'desc'  => sprintf( _x( 'a product weight (in %s)', 'tooltip fragment', 'wpsso' ),
 							WpssoSchema::get_data_unit_text( 'weight' ) ),
 					),
 					'product_width_value' => array(
-						_x( 'Product Width', 'option label', 'wpsso' ),
-						sprintf( _x( 'a product width (in %s)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Product Width', 'option label', 'wpsso' ),
+						'desc'  => sprintf( _x( 'a product width (in %s)', 'tooltip fragment', 'wpsso' ),
 							WpssoSchema::get_data_unit_text( 'width' ) ),
 					),
 					'recipe_ingredients' => array(
-						_x( 'Recipe Ingredients', 'option label', 'wpsso' ),
-						_x( 'recipe ingredients', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Recipe Ingredients', 'option label', 'wpsso' ),
+						'desc'  => _x( 'recipe ingredients', 'tooltip fragment', 'wpsso' ),
 					),
 					'recipe_instructions' => array(
-						_x( 'Recipe Instructions', 'option label', 'wpsso' ),
-						_x( 'recipe instructions', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Recipe Instructions', 'option label', 'wpsso' ),
+						'desc'  => _x( 'recipe instructions', 'tooltip fragment', 'wpsso' ),
 					),
 					'sameas_urls' => array(
-						_x( 'Same-As URLs', 'option label', 'wpsso' ),
-						_x( 'additional Same-As URLs', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Same-As URLs', 'option label', 'wpsso' ),
+						'desc'  => _x( 'additional Same-As URLs', 'tooltip fragment', 'wpsso' ),
 					),
 					'vid_embed' => array(
-						_x( 'Video Embed HTML', 'option label', 'wpsso' ),
-						_x( 'video embed HTML code (not a URL)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Video Embed HTML', 'option label', 'wpsso' ),
+						'desc'  => _x( 'video embed HTML code (not a URL)', 'tooltip fragment', 'wpsso' ),
 					),
 					'vid_url' => array(
-						_x( 'Video URL', 'option label', 'wpsso' ),
-						_x( 'a video URL (not HTML code)', 'tooltip fragment', 'wpsso' ),
+						'label' => _x( 'Video URL', 'option label', 'wpsso' ),
+						'desc'  => _x( 'a video URL (not HTML code)', 'tooltip fragment', 'wpsso' ),
 					),
 				);
 			}
@@ -2837,12 +2916,19 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 			list( $ext, $p_ext ) = $this->get_ext_p_ext( $ext );
 
 			if ( empty( $ext ) ) {							// Just in case.
+
 				return '';
+
 			} elseif ( $this->p->lca === $ext ) {					// The main plugin is not considered an add-on.
+
 				return '';
+
 			} elseif ( ! empty( $this->p->avail[ 'p_ext' ][ $p_ext ] ) ) {		// Add-on is already active.
+
 				return '';
+
 			} elseif ( empty( $this->p->cf[ 'plugin' ][ $ext ][ 'short' ] ) ) {	// Unknown add-on.
+
 				return '';
 			}
 
@@ -2930,14 +3016,16 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 		public function schema_disabled() {
 
-			return '<p class="status-msg">' . __( 'Schema markup is disabled.', 'wpsso' ) . '</p>' .
-				'<p class="status-msg">' . __( 'No options available.', 'wpsso' ) . '</p>';
+			$html = '<p class="status-msg">' . __( 'Schema markup is disabled.', 'wpsso' ) . '</p>';
+
+			$html .= '<p class="status-msg">' . __( 'No options available.', 'wpsso' ) . '</p>';
+
+			return $html;
 		}
 
 		public function get_schema_disabled_rows( array &$table_rows, $col_span = 1 ) {
 
-			$table_rows[ 'schema_disabled' ] = '<tr><td align="center" colspan="' . $col_span . '">' .
-				$this->schema_disabled() . '</td></tr>';
+			$table_rows[ 'schema_disabled' ] = '<tr><td align="center" colspan="' . $col_span . '">' . $this->schema_disabled() . '</td></tr>';
 
 			return $table_rows;
 		}

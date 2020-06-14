@@ -3,11 +3,11 @@
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Schema JSON-LD Markup</td></tr>
 <tr><th align="right" valign="top" nowrap>Summary</th><td>Google Rich Results and Structured Data for Articles, Carousels, Events, FAQ Pages, How-Tos, Local SEO, Products, Recipes, Ratings, Reviews, and More.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>3.5.0</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>3.11.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>5.6 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>4.2 or newer</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.4.1</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>4.0.1</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.4.2</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>4.2.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://www.gnu.org/licenses/gpl.txt">GPLv3</a></td></tr>
 <tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>schema.org, schema, rich snippets, structured data, rich results, woocommerce, seo, image seo, video seo, local seo, news seo, knowledge graph</td></tr>
@@ -31,7 +31,7 @@
 
 <p><strong>Most complete Schema JSON-LD markup for WooCommerce products:</strong></p>
 
-<p>The WooCommerce plugin is known to provide incomplete Schema markup for Google. The <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium plugin</a> (required for WooCommerce integration) and its WPSSO Schema JSON-LD add-on provide a far better solution by offering complete Facebook / Pinterest Product meta tags and Schema Product markup for Google Rich Results (aka Rich Snippets) &mdash; including additional product images, product variations, product attributes (brand, color, condition, EAN, dimensions, GTIN-8/12/13/14, ISBN, material, MPN, size, SKU, weight, etc), product reviews, product ratings, sale start / end dates, sale prices, pre-tax prices, VAT prices, and much, much more.</p>
+<p>The WooCommerce plugin is known to offer incomplete Schema markup for Google. The <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium plugin</a> (required for WooCommerce integration) and its WPSSO Schema JSON-LD add-on provide a far better solution by offering complete Facebook / Pinterest Product meta tags and Schema Product markup for Google Rich Results (aka Rich Snippets) &mdash; including additional product images, product variations, product information (brand, color, condition, dimensions, material, size, weight, SKU, GTIN-8/12/13/14, EAN, ISBN, MPN, etc), product reviews, product ratings, prices and currencies, sale start / end dates, sale prices, pre-tax prices, VAT prices, and much, much more.</p>
 
 <p><strong>Fixes all Google Search Console / Structured Data Testing Tool errors:</strong></p>
 
@@ -335,7 +335,7 @@
 <li><a href="https://wpsso.com/docs/plugins/wpsso-schema-json-ld/faqs/how-do-i-create-a-schema-faqpage/">How do I create a Schema FAQPage?</a></li>
 </ul>
 
-<h3>Advanced Documentation and Notes</h3>
+<h3>Notes and Documentation</h3>
 
 <ul>
 <li><a href="https://wpsso.com/docs/plugins/wpsso-schema-json-ld/notes/developer/">Developer Resources</a>

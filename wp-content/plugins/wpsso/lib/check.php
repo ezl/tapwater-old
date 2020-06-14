@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
+if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+	die( 'Do. Or do not. There is no try.' );
+}
+
 if ( ! class_exists( 'WpssoCheck' ) ) {
 
 	class WpssoCheck {
@@ -42,6 +46,10 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 			),
 		);
 
+		/**
+		 * The WpssoCheck class is instantiated before the SucomDebug class, so do not use the $this->p->debug class
+		 * object to log status messages.
+		 */
 		public function __construct( &$plugin ) {
 
 			$this->p =& $plugin;
@@ -606,33 +614,9 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 
 			if ( $rc && isset( $lc[ $id ] ) ) {
 				return $lc[ $id ];
-			}
-
-			$uca = strtoupper( $ext );
-
-			if ( defined( 'WPSSO_PRO_DISABLE' ) && WPSSO_PRO_DISABLE ) {
-
+			} elseif ( defined( 'WPSSO_PRO_DISABLE' ) && WPSSO_PRO_DISABLE ) {
 				return $lc[ $id ] = false;
-
-			} elseif ( defined( $uca . '_PLUGINDIR' ) ) {
-
-				$ext_dir = constant( $uca . '_PLUGINDIR' );
-
-			} elseif ( isset( $this->p->cf[ 'plugin' ][ $ext ][ 'slug' ] ) ) {
-
-				$slug = $this->p->cf[ 'plugin' ][ $ext ][ 'slug' ];
-
-				if ( ! defined ( 'WPMU_PLUGIN_DIR' ) ||
-					! is_dir( $ext_dir = WPMU_PLUGIN_DIR . '/' . $slug . '/' ) ) {
-
-					if ( ! defined ( 'WP_PLUGIN_DIR' ) ||
-						! is_dir( $ext_dir = WP_PLUGIN_DIR . '/' . $slug . '/' ) ) {
-
-						return $lc[ $id ] = false;
-					}
-				}
-
-			} else {
+			} elseif ( ! $ext_dir = WpssoConfig::get_ext_dir( $ext ) ) {
 				return $lc[ $id ] = false;
 			}
 
@@ -652,8 +636,9 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 			}
 
 			$local_cache = array();
+			$ext_sorted  = WpssoConfig::get_ext_sorted();
 
-			foreach ( WpssoConfig::get_ext_sorted() as $ext => $info ) {
+			foreach ( $ext_sorted as $ext => $info ) {
 
 				if ( empty( $info[ 'version' ] ) ) {	// Include only active add-ons.
 					continue;

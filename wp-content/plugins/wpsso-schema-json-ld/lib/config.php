@@ -16,8 +16,8 @@ if ( ! class_exists( 'WpssoJsonConfig' ) ) {
 		public static $cf = array(
 			'plugin' => array(
 				'wpssojson' => array(			// Plugin acronym.
-					'version'     => '3.5.0',	// Plugin version.
-					'opt_version' => '39',		// Increment when changing default option values.
+					'version'     => '3.11.0',	// Plugin version.
+					'opt_version' => '40',		// Increment when changing default option values.
 					'short'       => 'WPSSO JSON',	// Short plugin name.
 					'name'        => 'WPSSO Schema JSON-LD Markup',
 					'desc'        => 'Google Rich Results and Structured Data for Articles, Carousels (aka Item Lists), Claim Reviews, Events, FAQ Pages, How-Tos, Images, Local Business / Local SEO, Organizations, Products, Ratings, Recipes, Restaurants, Reviews, Videos, and More.',
@@ -32,9 +32,11 @@ if ( ! class_exists( 'WpssoJsonConfig' ) ) {
 					 */
 					'req' => array(
 						'wpsso' => array(
-							'class'       => 'Wpsso',
-							'name'        => 'WPSSO Core',
-							'min_version' => '7.2.0',
+							'name'          => 'WPSSO Core',
+							'home'          => 'https://wordpress.org/plugins/wpsso/',
+							'plugin_class'  => 'Wpsso',
+							'version_const' => 'WPSSO_VERSION',
+							'min_version'   => '7.9.0',
 						),
 					),
 
@@ -56,6 +58,7 @@ if ( ! class_exists( 'WpssoJsonConfig' ) ) {
 							'type' => array(
 								'article'             => '(code) Schema Type Article (schema_type:article)',
 								'blog'                => '(code) Schema Type Blog (schema_type:blog)',
+								'book'                => '(code) Schema Type Book (schema_type:book)',
 								'brand'               => '(code) Schema Type Brand (schema_type:brand)',
 								'claimreview'         => '(code) Schema Type Claim Review (schema_type:review.claim)',
 								'collectionpage'      => '(code) Schema Type Collection Page (schema_type:webpage.collection)',
@@ -92,8 +95,8 @@ if ( ! class_exists( 'WpssoJsonConfig' ) ) {
 						),
 						'pro' => array(
 							'admin' => array(
-								'meta-edit'      => 'Extend Meta Edit Settings',
-								'schema-general' => 'Extend Schema Markup Settings',
+								'edit'           => 'Edit Metabox Filters',
+								'schema-general' => 'Schema Markup Filters',
 							),
 						),
 						'shortcode' => array(
@@ -101,8 +104,8 @@ if ( ! class_exists( 'WpssoJsonConfig' ) ) {
 						),
 						'std' => array(
 							'admin' => array(
-								'meta-edit'      => 'Extend Meta Edit Settings',
-								'schema-general' => 'Extend Schema Markup Settings',
+								'edit'           => 'Edit Metabox Filters',
+								'schema-general' => 'Schema Markup Filters',
 							),
 						),
 						'submenu' => array(

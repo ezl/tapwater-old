@@ -13,10 +13,8 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 	class SucomUtil {
 
-		protected $p;
-
-		protected static $cache_locale_names  = array();	// Saved get_locale() values.
-		protected static $cache_filter_values = array();	// Saved filter return values.
+		private static $cache_locale  = array();	// Saved get_locale() values.
+		private static $cache_protect = array();	// Saved protect_filter_value() values.
 
 		private static $currencies = array(
 			'AED' => 'United Arab Emirates dirham',
@@ -1401,117 +1399,43 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 		}
 
 		/**
-		 * Only creates new keys - does not update existing keys.
-		 */
-		public static function add_site_option_key( $name, $key, $value ) {
-
-			return self::update_option_key( $name, $key, $value, $protect = true, $site = true );
-		}
-
-		/**
-		 * Only creates new keys - does not update existing keys.
-		 */
-		public static function add_option_key( $name, $key, $value ) {
-
-			return self::update_option_key( $name, $key, $value, $protect = true, $site = false );
-		}
-
-		public static function update_site_option_key( $name, $key, $value, $protect = false ) {
-
-			return self::update_option_key( $name, $key, $value, $protect, $site = true );
-		}
-
-		public static function update_option_key( $name, $key, $value, $protect = false, $site = false ) {
-
-			if ( true === $site ) {
-				$opts = get_site_option( $name, array() );
-			} else {
-				$opts = get_option( $name, array() );
-			}
-
-			if ( true === $protect && isset( $opts[ $key ] ) ) {
-				return false;
-			}
-
-			$opts[ $key ] = $value;
-
-			if ( true === $site ) {
-				return update_site_option( $name, $opts );
-			} else {
-				return update_option( $name, $opts );
-			}
-		}
-
-		public static function get_site_option_key( $name, $key ) {
-
-			return self::get_option_key( $name, $key, $site = true );
-		}
-
-		public static function get_option_key( $name, $key, $site = false ) {
-
-			if ( true === $site ) {
-				$opts = get_site_option( $name, array() );
-			} else {
-				$opts = get_option( $name, array() );
-			}
-
-			if ( isset( $opts[ $key ] ) ) {
-				return $opts[ $key ];
-			} else {
-				return null;
-			}
-		}
-
-		public static function delete_site_option_key( $name, $key ) {
-
-			return self::delete_option_key( $name, $key, $site = true );
-		}
-
-		public static function delete_option_key( $name, $key, $site = false ) {
-
-			if ( true === $site ) {
-				$opts = get_site_option( $name, array() );
-			} else {
-				$opts = get_option( $name, array() );
-			}
-
-			if ( isset( $opts[ $key ] ) ) {
-
-				unset( $opts[ $key ] );
-
-				if ( true === $site ) {
-					return update_site_option( $name, $opts );
-				} else {
-					return update_option( $name, $opts );
-				}
-			}
-
-			return false;
-		}
-
-		/**
 		 * Check that the id value is not true, false, null, or 'none'.
 		 */
 		public static function is_valid_option_id( $id ) {
 
 			if ( true === $id ) {
+
 				return false;
+
 			} elseif ( empty( $id ) && ! is_numeric( $id ) ) { // Null or false.
+
 				return false;
+
 			} elseif ( $id === 'none' ) {
+
 				return false;
+
 			} else {
+
 				return true;
 			}
 		}
 
+		/**
+		 * Since WPSSO Core v1.21.0.
+		 *
+		 * Note that an empty array is not an associative array (ie. returns false for an empty array).
+		 */
 		public static function is_assoc( $mixed ) {
 
 			$ret = false;
 
 			if ( ! empty( $mixed ) ) {	// Optimize.
+
 				if ( is_array( $mixed ) ) {	// Just in case.
+
 					if ( ! is_numeric( implode( array_keys( $mixed ) ) ) ) {
+
 						$ret = true;
 					}
 				}
@@ -1520,11 +1444,39 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			return $ret;
 		}
 
+		/**
+		 * Since WPSSO Core v7.7.0.
+		 *
+		 * Note that an empty array is not an associative array (ie. returns false for an empty array).
+		 */
+		public static function is_non_assoc( $mixed ) {
+
+			$ret = false;
+
+			if ( is_array( $mixed ) ) {	// Just in case.
+
+				if ( empty( $mixed ) ) {	// Optimize.
+
+					$ret = true;
+
+				} elseif ( is_numeric( implode( array_keys( $mixed ) ) ) ) {
+
+					$ret = true;
+				}
+			}
+
+			return $ret;
+		}
+
+		/**
+		 * Since WPSSO Core v4.17.0.
+		 */
 		public static function a_to_aa( array $arr ) {
 
 			$arr_arr = array();
 
 			foreach ( $arr as $el ) {
+
 				$arr_arr[][] = $el;
 			}
 
@@ -1653,9 +1605,13 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			$pos  = array_search( $needle, $keys );
 
 			if ( false !== $pos ) {
+
 				if ( isset( $keys[ $pos + 1 ] ) ) {
+
 					return $keys[ $pos + 1 ];
+
 				} elseif ( true === $loop ) {
+
 					return $keys[0];
 				}
 			}
@@ -1683,7 +1639,9 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 		public static function move_to_front( array &$arr, $key ) {
 
 			if ( array_key_exists( $key, $arr ) ) {
+
 				$val = $arr[ $key ];
+
 				$arr = array_merge( array( $key => $val ), $arr );
 			}
 
@@ -1691,95 +1649,56 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 		}
 
 		/**
-		 * Returns the modified array.
-		 */
-		public static function get_before_key( array $arr, $match_key, $mixed, $add_value = '' ) {
-
-			return self::insert_in_array( 'before', $arr, $match_key, $mixed, $add_value );
-		}
-
-		/**
-		 * Returns the modified array.
-		 */
-		public static function get_after_key( array $arr, $match_key, $mixed, $add_value = '' ) {
-
-			return self::insert_in_array( 'after', $arr, $match_key, $mixed, $add_value );
-		}
-
-		/**
-		 * Returns the modified array.
-		 */
-		public static function get_replace_key( array $arr, $match_key, $mixed, $add_value = '' ) {
-
-			return self::insert_in_array( 'replace', $arr, $match_key, $mixed, $add_value );
-		}
-
-		/**
 		 * Modifies the referenced array directly, and returns true or false.
 		 */
-		public static function add_before_key( array &$arr, $match_key, $mixed, $add_value = '' ) {
+		public static function add_after_key( array &$arr, $match_key, $mixed, $add_value = null ) {
 
-			return self::insert_in_array( 'before', $arr, $match_key, $mixed, $add_value, $ret_matched = true );
+			return self::insert_in_array( 'after', $arr, $match_key, $mixed, $add_value, $ret_bool = true );
 		}
 
-		/**
-		 * Modifies the referenced array directly, and returns true or false.
-		 */
-		public static function add_after_key( array &$arr, $match_key, $mixed, $add_value = '' ) {
-
-			return self::insert_in_array( 'after', $arr, $match_key, $mixed, $add_value, $ret_matched = true );
-		}
-
-		/**
-		 * Modifies the referenced array directly, and returns true or false.
-		 */
-		public static function do_replace_key( array &$arr, $match_key, $mixed, $add_value = '' ) {
-
-			return self::insert_in_array( 'replace', $arr, $match_key, $mixed, $add_value, $ret_matched = true );
-		}
-
-		private static function insert_in_array( $rel_pos, array &$arr, $match_key, $mixed, $add_value, $ret_matched = false ) {
+		private static function insert_in_array( $pos, array &$arr, $match_key, $mixed, $add_value = null, $ret_bool = false ) {
 
 			$matched = false;
 
 			if ( array_key_exists( $match_key, $arr ) ) {
 
-				$new_array = array();
+				$new_arr = array();
 
-				foreach ( $arr as $key => $value ) {
+				foreach ( $arr as $key => $val ) {
 
-					if ( $rel_pos === 'after' ) {
-						$new_array[ $key ] = $value;
+					if ( 'after' === $pos ) {
+						$new_arr[ $key ] = $val;
 					}
 
 					/**
 					 * Add new value before/after the matched key.
+					 *
 					 * Replace the matched key by default (no test required).
 					 */
 					if ( $key === $match_key ) {
 
 						if ( is_array( $mixed ) ) {
-							$new_array = array_merge( $new_array, $mixed );
+							$new_arr = array_merge( $new_arr, $mixed );
 						} elseif ( is_string( $mixed ) ) {
-							$new_array[ $mixed ] = $add_value;
+							$new_arr[ $mixed ] = $add_value;
 						} else {
-							$new_array[] = $add_value;
+							$new_arr[] = $add_value;
 						}
 
 						$matched = true;
 					}
 
-					if ( $rel_pos === 'before' ) {
-						$new_array[ $key ] = $value;
+					if ( 'before' === $pos ) {
+						$new_arr[ $key ] = $val;
 					}
 				}
 
-				$arr = $new_array;
+				$arr = $new_arr;
 
-				unset( $new_array );
+				unset( $new_arr );
 			}
 
-			return $ret_matched ? $matched : $arr; // Return true/false or the array (default).
+			return $ret_bool ? $matched : $arr; // Return true/false or the array (default).
 		}
 
 		/**
@@ -2004,8 +1923,8 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 				$mt_pre . ':height:units'                    => '',	// Non-standard / internal meta tag (units after value).
 				$mt_pre . ':length:value'                    => '',	// Non-standard / internal meta tag.
 				$mt_pre . ':length:units'                    => '',	// Non-standard / internal meta tag (units after value).
-				$mt_pre . ':volume:value'                    => '',	// Non-standard / internal meta tag.
-				$mt_pre . ':volume:units'                    => '',	// Non-standard / internal meta tag (units after value).
+				$mt_pre . ':fluid_volume:value'              => '',	// Non-standard / internal meta tag.
+				$mt_pre . ':fluid_volume:units'              => '',	// Non-standard / internal meta tag (units after value).
 				$mt_pre . ':weight:value'                    => '',
 				$mt_pre . ':weight:units'                    => '',
 				$mt_pre . ':width:value'                     => '',	// Non-standard / internal meta tag.
@@ -2318,9 +2237,9 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 			$cache_index = is_array( $mixed ) ? $mixed[ 'name' ] . '_' . $mixed[ 'id' ] : $mixed;
 
-			if ( isset( self::$cache_locale_names[ $cache_index ] ) ) {
+			if ( isset( self::$cache_locale[ $cache_index ] ) ) {
 
-				return self::$cache_locale_names[ $cache_index ];
+				return self::$cache_locale[ $cache_index ];
 			}
 
 			if ( $mixed === 'default' ) {
@@ -2367,7 +2286,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 				}
 			}
 
-			return self::$cache_locale_names[ $cache_index ] = apply_filters( 'sucom_locale', $locale, $mixed );
+			return self::$cache_locale[ $cache_index ] = apply_filters( 'sucom_locale', $locale, $mixed );
 		}
 
 		public static function get_available_locales() {
@@ -2661,15 +2580,15 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			/**
 			 * Fallback to null so $use_post = 0 does not match.
 			 */
-			$front_post_id = get_option( 'show_on_front' ) === 'page' ? (int) get_option( 'page_on_front' ) : null;
+			$post_id = get_option( 'show_on_front' ) === 'page' ? (int) get_option( 'page_on_front' ) : null;
 
-			if ( $front_post_id > 0 ) {
+			if ( $post_id > 0 ) {
 
-				if ( is_numeric( $use_post ) && (int) $use_post === $front_post_id ) {
+				if ( is_numeric( $use_post ) && (int) $use_post === $post_id ) {
 
 					$ret = true;
 
-				} elseif ( self::get_post_object( $use_post, 'id' ) === $front_post_id ) {
+				} elseif ( self::get_post_object( $use_post, 'id' ) === $post_id ) {
 
 					$ret = true;
 				}
@@ -2685,13 +2604,13 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			/**
 			 * Fallback to null so $use_post = 0 does not match.
 			 */
-			$front_post_id = get_option( 'show_on_front' ) === 'page' ? (int) get_option( 'page_for_posts' ) : null;
+			$post_id = get_option( 'show_on_front' ) === 'page' ? (int) get_option( 'page_for_posts' ) : null;
 
-			if ( is_numeric( $use_post ) && (int) $use_post === $front_post_id ) {
+			if ( is_numeric( $use_post ) && (int) $use_post === $post_id ) {
 
 				$ret = true;
 
-			} elseif ( $front_post_id > 0 && self::get_post_object( $use_post, 'id' ) === $front_post_id ) {
+			} elseif ( $post_id > 0 && self::get_post_object( $use_post, 'id' ) === $post_id ) {
 
 				$ret = true;
 
@@ -2724,6 +2643,64 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 					return true;
 				}
+			}
+
+			return false;
+		}
+
+		public static function is_mod_current_screen( array $mod ) {
+
+			if ( ! is_admin() ) {	// Front-end does not have a "current screen".
+				return false;
+			}
+
+			if ( empty( $mod[ 'id' ] ) || ! is_numeric( $mod[ 'id' ] ) ) {
+				return false;
+			}
+
+			$screen_base = self::get_screen_base();
+
+			if ( empty( $mod[ 'name' ] ) || $mod[ 'name' ] !== $screen_base ) {
+				return false;
+			}
+
+			switch ( $screen_base ) {
+
+				case 'post':
+
+					$current_id = self::get_request_value( 'post_ID', 'POST' );
+
+					if ( '' === $current_id ) {
+						$current_id = self::get_request_value( 'post', 'GET' );
+					}
+
+					break;
+
+				case 'term':
+
+					$current_id = self::get_request_value( 'tag_ID' );
+
+					break;
+
+				case 'user':
+
+					$current_id = self::get_request_value( 'user_id' );
+
+					break;
+
+				default:
+
+					return false;
+
+					break;
+			}
+
+			if ( ! $current_id || ! is_numeric( $current_id ) ) {
+				return false;
+			}
+
+			if ( (int) $current_id === $mod[ 'id' ] ) {
+				return true;
 			}
 
 			return false;
@@ -2813,12 +2790,12 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 					$ret = true;
 
 				} elseif ( false === $screen_base && // Called too early for screen.
-					( self::get_request_value( 'post_ID', 'POST' ) !== '' || // Uses sanitize_text_field().
-						self::get_request_value( 'post', 'GET' ) !== '' ) ) {
+					( '' !== self::get_request_value( 'post_ID', 'POST' ) || // Uses sanitize_text_field().
+						'' !== self::get_request_value( 'post', 'GET' ) ) ) {
 
 					$ret = true;
 
-				} elseif ( basename( $_SERVER[ 'PHP_SELF' ] ) === 'post-new.php' ) {
+				} elseif ( 'post-new.php' === basename( $_SERVER[ 'PHP_SELF' ] ) ) {
 
 					$ret = true;
 				}
@@ -2871,18 +2848,18 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 				$post_obj = get_queried_object();
 
-			} elseif ( ! is_home() && is_front_page() && get_option( 'show_on_front' ) === 'page' ) { // Static front page.
+			} elseif ( ! is_home() && is_front_page() && 'page' === get_option( 'show_on_front' ) ) { // Static front page.
 
 				$post_obj = get_post( get_option( 'page_on_front' ) );
 
-			} elseif ( is_home() && ! is_front_page() && get_option( 'show_on_front' ) === 'page' ) { // Static posts page.
+			} elseif ( is_home() && ! is_front_page() && 'page' === get_option( 'show_on_front' ) ) { // Static posts page.
 
 				$post_obj = get_post( get_option( 'page_for_posts' ) );
 
 			} elseif ( is_admin() ) {
 
-				if ( ( $post_id = self::get_request_value( 'post_ID', 'POST' ) ) !== '' || // Uses sanitize_text_field().
-					( $post_id = self::get_request_value( 'post', 'GET' ) ) !== '' ) {
+				if ( '' !== ( $post_id = self::get_request_value( 'post_ID', 'POST' ) ) ||
+					'' !== ( $post_id = self::get_request_value( 'post', 'GET' ) ) ) {
 
 					$post_obj = get_post( $post_id );
 				}
@@ -2938,13 +2915,13 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 				$screen_base = self::get_screen_base();
 
-				if ( $screen_base === 'term' ) {	 	// Since WP v4.5.
+				if ( 'term' === $screen_base ) {	 	// Since WP v4.5.
 
 					$ret = true;
 
 				} elseif ( ( false === $screen_base || $screen_base === 'edit-tags' ) &&	
-					( self::get_request_value( 'taxonomy' ) !== '' &&
-						self::get_request_value( 'tag_ID' ) !== '' ) ) {
+					( '' !== self::get_request_value( 'taxonomy' ) &&
+						'' !== self::get_request_value( 'tag_ID' ) ) ) {
 
 					$ret = true;
 				}
@@ -2968,7 +2945,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			} elseif ( is_admin() ) {
 
 				if ( self::is_term_page()
-					&& self::get_request_value( 'taxonomy' ) === 'category' ) {
+					&& 'category' === self::get_request_value( 'taxonomy' ) ) {
 
 					$ret = true;
 				}
@@ -2992,7 +2969,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			} elseif ( is_admin() ) {
 
 				if ( self::is_term_page()
-					&& self::get_request_value( 'taxonomy' ) === '_tag' ) {
+					&& 'post_tag' === self::get_request_value( 'taxonomy' ) ) {
 
 					$ret = true;
 				}
@@ -3015,8 +2992,8 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 			} elseif ( is_admin() ) {
 
-				if ( ( $tax_slug = self::get_request_value( 'taxonomy' ) ) !== '' && // Uses sanitize_text_field().
-					( $term_id = self::get_request_value( 'tag_ID' ) ) !== '' ) {
+				if ( '' !== ( $tax_slug = self::get_request_value( 'taxonomy' ) ) &&
+					'' !== ( $term_id = self::get_request_value( 'tag_ID' ) ) ) {
 
 					$term_obj = get_term( (int) $term_id, (string) $tax_slug, OBJECT, 'raw' );
 				}
@@ -3073,18 +3050,18 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 					switch ( $screen_base ) {
 
-						case 'profile':
-						case 'user-edit':
-						case ( strpos( $screen_base, 'profile_page_' ) === 0 ? true : false ):
-						case ( strpos( $screen_base, 'users_page_' ) === 0 ? true : false ):
+						case 'profile':		// User profile page.
+						case 'user-edit':	// User editing page.
+						case ( 0 === strpos( $screen_base, 'profile_page_' ) ? true : false ):	// Your profile page.
+						case ( 0 === strpos( $screen_base, 'users_page_' ) ? true : false ):	// Users settings page.
 
 							$ret = true;
 
 							break;
 					}
 
-				} elseif ( self::get_request_value( 'user_id' ) !== '' ||  // Called too early for screen.
-					basename( $_SERVER[ 'PHP_SELF' ] ) === 'profile.php' ) {
+				} elseif ( '' !== self::get_request_value( 'user_id' ) ||  // Called too early for screen.
+					'profile.php' === basename( $_SERVER[ 'PHP_SELF' ] ) ) {
 
 					$ret = true;
 				}
@@ -3110,11 +3087,11 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 				$user_obj = get_query_var( 'author_name' ) ?
 					get_user_by( 'slug', get_query_var( 'author_name' ) ) :
-					get_userdata( get_query_var( 'author' ) );
+						get_userdata( get_query_var( 'author' ) );
 
 			} elseif ( is_admin() ) {
 
-				if ( ( $user_id = self::get_request_value( 'user_id' ) ) === '' ) { // Uses sanitize_text_field().
+				if ( '' === ( $user_id = self::get_request_value( 'user_id' ) ) ) { // Uses sanitize_text_field().
 					$user_id = get_current_user_id();
 				}
 
@@ -3523,8 +3500,8 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 				'blog_id' => $blog_id,
 				'offset'  => $offset,
 				'number'  => $limit,
-				'orderby' => 'ID',
 				'order'   => 'DESC',	// Newest users first.
+				'orderby' => 'ID',
 				'role'    => $role,
 				'fields'  => array(	// Save memory and only return only specific fields.
 					'ID',
@@ -3793,19 +3770,26 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 		/**
 		 * Wrap a filter to return its original / unchanged value.
+		 *
 		 * Returns true if protection filters were added, false if protection filters are not required.
 		 */
 		public static function protect_filter_value( $filter_name, $auto_unprotect = true ) {
 
-			unset( self::$cache_filter_values[ $filter_name ] );	// Just in case.
+			unset( self::$cache_protect[ $filter_name ] );	// Just in case.
 
-			if ( ! has_filter( $filter_name ) ) {			// No protection required.
+			/**
+			 * Don't bother if there's nothing to protect.
+			 */
+			if ( false === has_filter( $filter_name ) ) {
 				return false;
 			}
 
-			self::$cache_filter_values[ $filter_name ][ 'auto_unprotect' ] = $auto_unprotect;
+			self::$cache_protect[ $filter_name ][ 'auto_unprotect' ] = $auto_unprotect;
 
-			if ( ! has_filter( $filter_name, array( __CLASS__, '__save_current_filter_value' ) ) ) {
+			/**
+			 * Only hook the save/restore protection filters once.
+			 */
+			if ( false === has_filter( $filter_name, array( __CLASS__, '__save_current_filter_value' ) ) ) {	// Can return a priority of 0.
 
 				$min_int = self::get_min_int();
 				$max_int = self::get_max_int();
@@ -3819,7 +3803,10 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 		public static function unprotect_filter_value( $filter_name ) {
 
-			if ( ! has_filter( $filter_name, array( __CLASS__, '__save_current_filter_value' ) ) ) {
+			/**
+			 * Don't bother if there are no protection filters.
+			 */
+			if ( false === has_filter( $filter_name, array( __CLASS__, '__save_current_filter_value' ) ) ) {	// Can return a priority of 0.
 				return false;
 			}
 
@@ -3834,8 +3821,8 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 		public static function get_original_filter_value( $filter_name ) {
 
-			if ( isset( self::$cache_filter_values[ $filter_name ][ 'original_value' ] ) ) {
-				return self::$cache_filter_values[ $filter_name ][ 'original_value' ];
+			if ( isset( self::$cache_protect[ $filter_name ][ 'original_value' ] ) ) {
+				return self::$cache_protect[ $filter_name ][ 'original_value' ];
 			}
 
 			return null;
@@ -3843,8 +3830,8 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 		public static function get_modified_filter_value( $filter_name ) {
 
-			if ( isset( self::$cache_filter_values[ $filter_name ][ 'modified_value' ] ) ) {
-				return self::$cache_filter_values[ $filter_name ][ 'modified_value' ];
+			if ( isset( self::$cache_protect[ $filter_name ][ 'modified_value' ] ) ) {
+				return self::$cache_protect[ $filter_name ][ 'modified_value' ];
 			}
 
 			return null;
@@ -3854,8 +3841,8 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 			$filter_name = current_filter();
 
-			self::$cache_filter_values[ $filter_name ][ 'original_value' ] = $value;	// Save value to static cache.
-			self::$cache_filter_values[ $filter_name ][ 'modified_value' ] = $value;	// Save value to static cache.
+			self::$cache_protect[ $filter_name ][ 'original_value' ] = $value;	// Save value to static cache.
+			self::$cache_protect[ $filter_name ][ 'modified_value' ] = $value;	// Save value to static cache.
 
 			return $value;
 		}
@@ -3864,16 +3851,16 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 
 			$filter_name = current_filter();
 
-			if ( isset( self::$cache_filter_values[ $filter_name ][ 'original_value' ] ) ) {		// Just in case.
+			if ( isset( self::$cache_protect[ $filter_name ][ 'original_value' ] ) ) {		// Just in case.
 
-				self::$cache_filter_values[ $filter_name ][ 'modified_value' ] = $value;		// Save for get_modified_filter_value().
+				self::$cache_protect[ $filter_name ][ 'modified_value' ] = $value;		// Save for get_modified_filter_value().
 
-				if ( $value !== self::$cache_filter_values[ $filter_name ][ 'original_value' ] ) {
-					$value = self::$cache_filter_values[ $filter_name ][ 'original_value' ];	// Restore value from static cache.
+				if ( $value !== self::$cache_protect[ $filter_name ][ 'original_value' ] ) {
+					$value = self::$cache_protect[ $filter_name ][ 'original_value' ];	// Restore value from static cache.
 				}
 			}
 
-			if ( ! empty( self::$cache_filter_values[ $filter_name ][ 'auto_unprotect' ] ) ) {
+			if ( ! empty( self::$cache_protect[ $filter_name ][ 'auto_unprotect' ] ) ) {
 
 				$min_int = self::get_min_int();
 				$max_int = self::get_max_int();
@@ -3932,6 +3919,7 @@ if ( ! class_exists( 'SucomUtil' ) ) {
 			 * Only restore option values that were changed.
 			 */
 			foreach ( $ini_saved as $name => $value ) {
+
 				ini_set( $name, $value );
 			}
 		}

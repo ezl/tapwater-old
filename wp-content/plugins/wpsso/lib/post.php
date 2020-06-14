@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
+if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+	die( 'Do. Or do not. There is no try.' );
+}
+
 if ( ! class_exists( 'WpssoPost' ) ) {
 
 	class WpssoPost extends WpssoWpMeta {
@@ -57,16 +61,17 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 
 				$mb_container_id = $this->p->lca . '_metabox_' . $metabox_id . '_inside';
 
-				add_action( 'wp_ajax_update_container_id_' . $mb_container_id, array( $this, 'ajax_metabox_document_meta' ) );
+				add_action( 'wp_ajax_get_container_id_' . $mb_container_id, array( $this, 'ajax_get_metabox_document_meta' ) );
 
 				if ( ! empty( $_GET ) || basename( $_SERVER[ 'PHP_SELF' ] ) === 'post-new.php' ) {
 
 					/**
 					 * load_meta_page() priorities: 100 post, 200 user, 300 term.
 					 *
-					 * Sets the WpssoWpMeta::$head_tags and WpssoWpMeta::$head_info class properties.
+					 * Sets the parent::$head_tags and parent::$head_info class properties.
 					 */
 					add_action( 'current_screen', array( $this, 'load_meta_page' ), 100, 1 );
+
 					add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 				}
 
@@ -74,20 +79,20 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				 * The 'save_post' action is run after other post type specific actions,
 				 * so we can use it to save post meta for any post type.
 				 */
-				add_action( 'save_post', array( $this, 'save_options' ), WPSSO_META_SAVE_PRIORITY );	// Default is -10.
+				add_action( 'save_post', array( $this, 'save_options' ), WPSSO_META_SAVE_PRIORITY );	// Default is -100.
 
 				/**
 				 * Don't hook the 'clean_post_cache' action since 'save_post' is run after
 				 * 'clean_post_cache' and our custom post meta has not been saved yet.
 				 */
-				add_action( 'save_post', array( $this, 'clear_cache' ), WPSSO_META_CACHE_PRIORITY );	// Default is 0.
+				add_action( 'save_post', array( $this, 'clear_cache' ), WPSSO_META_CACHE_PRIORITY );	// Default is -10.
 
 				/**
 				 * The wp_insert_post() function returns after running the 'edit_attachment' action,
 				 * so the 'save_post' action is never run for attachments.
 				 */
-				add_action( 'edit_attachment', array( $this, 'save_options' ), WPSSO_META_SAVE_PRIORITY );	// Default is -10.
-				add_action( 'edit_attachment', array( $this, 'clear_cache' ), WPSSO_META_CACHE_PRIORITY );	// Default is 0.
+				add_action( 'edit_attachment', array( $this, 'save_options' ), WPSSO_META_SAVE_PRIORITY );	// Default is -100.
+				add_action( 'edit_attachment', array( $this, 'clear_cache' ), WPSSO_META_CACHE_PRIORITY );	// Default is -10.
 
 				if ( ! empty( $this->p->options[ 'add_meta_name_robots' ] ) ) {
 
@@ -102,7 +107,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			 */
 			if ( $is_admin || $doing_ajax ) {
 
-				$post_type_names = $this->p->util->get_post_types( 'names' );
+				$post_type_names = SucomUtilWP::get_post_types( 'names' );
 
 				if ( is_array( $post_type_names ) ) {
 
@@ -196,14 +201,15 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				$this->p->debug->mark();
 			}
 
-			$mod = WpssoWpMeta::$mod_defaults;
+			$mod = parent::$mod_defaults;
 
 			/**
 			 * Common elements.
 			 */
-			$mod[ 'id' ]   = is_numeric( $mod_id ) ? (int) $mod_id : 0;	// Cast as integer.
-			$mod[ 'name' ] = 'post';
-			$mod[ 'obj' ]  =& $this;
+			$mod[ 'id' ]          = is_numeric( $mod_id ) ? (int) $mod_id : 0;	// Cast as integer.
+			$mod[ 'name' ]        = 'post';
+			$mod[ 'name_transl' ] = _x( 'post', 'module name', 'wpsso' );
+			$mod[ 'obj' ]         =& $this;
 
 			/**
 			 * Post elements.
@@ -224,13 +230,13 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 
 				$mod[ 'is_post_type_archive' ] = SucomUtil::is_post_type_archive( $mod[ 'post_type' ], $mod[ 'post_slug' ] );
 
-				/**
-				 * Check if the post type is publicly available.
-				 */
 				if ( $post_type_object = get_post_type_object( $mod[ 'post_type' ] ) ) {
 
-					if ( isset( $post_type_object->public ) ) {
+					if ( isset( $post_type_object->labels->singular_name ) ) {
+						$mod[ 'post_type_label' ] = $post_type_object->labels->singular_name;
+					}
 
+					if ( isset( $post_type_object->public ) ) {
 						$mod[ 'is_public' ] = $post_type_object->public ? true : false;
 					}
 				}
@@ -296,7 +302,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			static $local_cache = array();
 
 			/**
-			 * Do not add $pad_opts to the $cache_id string.
+			 * Use $post_id and $filter_opts to create the cache ID string, but do not add $pad_opts.
 			 */
 			$cache_id = SucomUtil::get_assoc_salt( array( 'id' => $post_id, 'filter' => $filter_opts ) );
 
@@ -304,6 +310,8 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			 * Maybe initialize the cache.
 			 */
 			if ( ! isset( $local_cache[ $cache_id ] ) ) {
+				$local_cache[ $cache_id ] = false;
+			} elseif ( $this->md_cache_disabled ) {
 				$local_cache[ $cache_id ] = false;
 			}
 
@@ -353,7 +361,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 						$this->p->debug->log( 'applying get_post_options filters for post id ' . $post_id . ' metadata' );
 					}
 
-					$md_opts[ 'options_filtered' ] = true;	// Set before calling filter to prevent recursion.
+					$md_opts[ 'options_filtered' ] = 1;	// Set before calling filter to prevent recursion.
 
 					/**
 					 * Since WPSSO Core v7.1.0.
@@ -382,9 +390,11 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				$this->p->debug->mark();
 			}
 
-			if ( ! $this->user_can_edit( $post_id, $rel_id ) ) {
+			if ( ! $this->user_can_save( $post_id, $rel_id ) ) {
 				return;
 			}
+
+			$this->md_cache_disabled = true;	// Disable local cache for get_defaults() and get_options().
 
 			$mod = $this->get_mod( $post_id );
 
@@ -395,13 +405,6 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			 */
 			if ( ! empty( $this->p->avail[ 'seo' ][ 'any' ] ) ) {
 				unset( $opts[ 'seo_desc' ] );
-			}
-
-			/**
-			 * Just in case - do not save the product availability if an e-commerce plugin is active.
-			 */
-			if ( ! empty( $this->p->avail[ 'ecom' ][ 'any' ] ) ) {
-				unset( $opts[ 'product_avail' ] );
 			}
 
 			$opts = apply_filters( $this->p->lca . '_save_md_options', $opts, $mod );
@@ -429,8 +432,8 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 
 			$posts_args = array(
 				'has_password'   => false,
-				'orderby'        => 'date',
 				'order'          => 'DESC',	// Newest first.
+				'orderby'        => 'date',
 				'paged'          => false,
 				'post_status'    => 'publish',	// Only 'publish' (not 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', or 'trash').
 				'post_type'      => 'any',	// Return any post, page, or custom post type.
@@ -469,8 +472,8 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 
 			$posts_args = array_merge( array(
 				'has_password'   => false,
-				'orderby'        => 'date',
 				'order'          => 'DESC',		// Newest first.
+				'orderby'        => 'date',
 				'paged'          => $paged,
 				'post_status'    => 'publish',		// Only 'publish', not 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', or 'trash'.
 				'post_type'      => 'any',		// Return post, page, or any custom post type.
@@ -544,7 +547,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 
 		public function get_column_content( $value, $column_name, $post_id ) {
 
-			if ( ! empty( $post_id ) && strpos( $column_name, $this->p->lca . '_' ) === 0 ) {	// Just in case.
+			if ( ! empty( $post_id ) && 0 === strpos( $column_name, $this->p->lca . '_' ) ) {	// Just in case.
 
 				$col_key = str_replace( $this->p->lca . '_', '', $column_name );
 
@@ -608,6 +611,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			 * Example $meta_key value: '_wpsso_head_info_og_img_thumb'.
 			 */
 			if ( 0 !== strpos( $meta_key, '_' . $this->p->lca . '_head_info_' ) ) {
+
 				return $value;	// Return null.
 			}
 
@@ -618,12 +622,14 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			static $local_recursion = array();
 
 			if ( isset( $local_recursion[ $post_id ][ $meta_key ] ) ) {
+
 				return $value;	// Return null.
 			}
 
 			$local_recursion[ $post_id ][ $meta_key ] = true;			// Prevent recursion.
 
 			if ( get_post_meta( $post_id, $meta_key, $single = true ) === '' ) {	// Returns empty string if meta not found.
+
 				$this->get_head_info( $post_id, $read_cache = true );
 			}
 
@@ -635,7 +641,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 		/**
 		 * Hooked into the current_screen action.
 		 *
-		 * Sets the WpssoWpMeta::$head_tags and WpssoWpMeta::$head_info class properties.
+		 * Sets the parent::$head_tags and parent::$head_info class properties.
 		 */
 		public function load_meta_page( $screen = false ) {
 
@@ -646,7 +652,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			/**
 			 * All meta modules set this property, so use it to optimize code execution.
 			 */
-			if ( false !== WpssoWpMeta::$head_tags || ! isset( $screen->id ) ) {
+			if ( false !== parent::$head_tags || ! isset( $screen->id ) ) {
 				return;
 			}
 
@@ -657,7 +663,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			switch ( $screen->id ) {
 
 				case 'upload':
-				case ( strpos( $screen->id, 'edit-' ) === 0 ? true : false ):	// Posts list table.
+				case ( 0 === strpos( $screen->id, 'edit-' ) ? true : false ):	// Posts list table.
 
 					if ( $this->p->debug->enabled ) {
 						$this->p->debug->log( 'exiting early: not a recognized post page' );
@@ -667,13 +673,14 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			}
 
 			/**
-			 * Get post object for sanity checks.
+			 * Get the post object for sanity checks.
 			 */
 			$post_obj = SucomUtil::get_post_object( true );
-			$post_id  = empty( $post_obj->ID ) ? 0 : $post_obj->ID;
+
+			$post_id = empty( $post_obj->ID ) ? 0 : $post_obj->ID;
 
 			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'showing metabox for post ID ' . $post_id );
+				$this->p->debug->log( 'post ID = ' . $post_id );
 			}
 
 			/**
@@ -714,7 +721,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				$this->p->debug->log( SucomUtil::pretty_array( $mod ) );
 			}
 
-			WpssoWpMeta::$head_tags = array();
+			parent::$head_tags = array();
 
 			if ( $post_obj->post_status === 'auto-draft' ) {
 
@@ -740,75 +747,68 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 					$this->p->debug->log( 'head meta skipped: doing block editor for meta box' );
 				}
 
-			} else {
+			} elseif ( ! empty( $this->p->options[ 'plugin_add_to_' . $post_obj->post_type ] ) ) {
 
-				$add_metabox = empty( $this->p->options[ 'plugin_add_to_' . $post_obj->post_type ] ) ? false : true;
-
-				$add_metabox = apply_filters( $this->p->lca . '_add_metabox_post', $add_metabox, $post_id, $post_obj->post_type );
+				/**
+				 * Hooked by woocommerce module to load front-end libraries and start a session.
+				 */
+				do_action( $this->p->lca . '_admin_post_head', $mod );
 
 				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'add metabox for post ID ' . $post_id . ' of type ' . $post_obj->post_type . ' is ' . 
-						( $add_metabox ? 'true' : 'false' ) );
+					$this->p->debug->log( 'setting head_meta_info static property' );
 				}
 
-				if ( $add_metabox ) {
+				/**
+				 * $read_cache is false to generate notices etc.
+				 */
+				parent::$head_tags = $this->p->head->get_head_array( $post_id, $mod, $read_cache = false );
 
-					/**
-					 * Hooked by woocommerce module to load front-end libraries and start a session.
-					 */
-					do_action( $this->p->lca . '_admin_post_head', $mod );
+				parent::$head_info = $this->p->head->extract_head_info( $mod, parent::$head_tags );
 
-					if ( $this->p->debug->enabled ) {
-						$this->p->debug->log( 'setting head_meta_info static property' );
-					}
+				/**
+				 * Check for missing open graph image and description values.
+				 */
+				if ( $mod[ 'is_public' ] && 'publish' === $mod[ 'post_status' ] ) {
 
-					/**
-					 * $read_cache is false to generate notices etc.
-					 */
-					WpssoWpMeta::$head_tags = $this->p->head->get_head_array( $post_id, $mod, $read_cache = false );
+					$ref_url = empty( parent::$head_info[ 'og:url' ] ) ? null : parent::$head_info[ 'og:url' ];
 
-					WpssoWpMeta::$head_info = $this->p->head->extract_head_info( $mod, WpssoWpMeta::$head_tags );
+					$ref_url = $this->p->util->maybe_set_ref( $ref_url, $mod, __( 'checking meta tags', 'wpsso' ) );
 
-					/**
-					 * Check for missing open graph image and description values.
-					 */
-					if ( $mod[ 'is_public' ] && 'publish' === $mod[ 'post_status' ] ) {
+					foreach ( array( 'image', 'description' ) as $mt_suffix ) {
 
-						$ref_url = empty( WpssoWpMeta::$head_info[ 'og:url' ] ) ? null : WpssoWpMeta::$head_info[ 'og:url' ];
+						if ( empty( parent::$head_info[ 'og:' . $mt_suffix ] ) ) {
 
-						$ref_url = $this->p->util->maybe_set_ref( $ref_url, $mod, __( 'checking meta tags', 'wpsso' ) );
+							if ( $this->p->debug->enabled ) {
+								$this->p->debug->log( 'og:' . $mt_suffix . ' meta tag is value empty and required' );
+							}
 
-						foreach ( array( 'image', 'description' ) as $mt_suffix ) {
+							if ( $this->p->notice->is_admin_pre_notices() ) {
 
-							if ( empty( WpssoWpMeta::$head_info[ 'og:' . $mt_suffix ] ) ) {
+								$notice_msg = $this->p->msgs->get( 'notice-missing-og-' . $mt_suffix );
 
-								if ( $this->p->debug->enabled ) {
-									$this->p->debug->log( 'og:' . $mt_suffix . ' meta tag is value empty and required' );
-								}
+								$notice_key = $mod[ 'name' ] . '-' . $mod[ 'id' ] . '-notice-missing-og-' . $mt_suffix;
 
-								if ( $this->p->notice->is_admin_pre_notices() ) {
-
-									$notice_msg = $this->p->msgs->get( 'notice-missing-og-' . $mt_suffix );
-
-									$notice_key = $mod[ 'name' ] . '-' . $mod[ 'id' ] . '-notice-missing-og-' . $mt_suffix;
-
-									$this->p->notice->err( $notice_msg, null, $notice_key );
-								}
+								$this->p->notice->err( $notice_msg, null, $notice_key );
 							}
 						}
+					}
 
-						$this->p->util->maybe_unset_ref( $ref_url);
+					$this->p->util->maybe_unset_ref( $ref_url);
 
-						/**
-						 * Check duplicates only when the post is available publicly and we have a valid permalink.
-						 */
-						if ( current_user_can( 'manage_options' ) ) {
+					/**
+					 * Check duplicates only when the post is available publicly and we have a valid permalink.
+					 */
+					if ( current_user_can( 'manage_options' ) ) {
 
-							if ( apply_filters( $this->p->lca . '_check_post_head',
-								$this->p->options[ 'plugin_check_head' ], $post_id, $post_obj ) ) {
+						$check_head = empty( $this->p->options[ 'plugin_check_head' ] ) ? false : true;
 
-								$this->check_post_head( $post_id, $post_obj );
+						if ( apply_filters( $this->p->lca . '_check_post_head', $check_head, $post_id, $post_obj ) ) {
+
+							if ( $this->p->debug->enabled ) {
+								$this->p->debug->log( 'checking post head' );
 							}
+
+							$this->check_post_head( $post_id, $post_obj );
 						}
 					}
 				}
@@ -996,7 +996,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 					$this->p->debug->log( 'size of ' . $check_url . ' is ' . $html_size . ' bytes' );
 				}
 
-				if ( $is_admin ) {
+				if ( $is_admin && ! $this->p->debug->enabled ) {
 
 					$this->p->notice->err(
 						sprintf( __( 'The webpage HTML retrieved from %1$s is %2$s bytes.', 'wpsso' ),
@@ -1247,58 +1247,35 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 
 		public function add_meta_boxes() {
 
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->mark();
-			}
-
-			if ( ( $post_obj = SucomUtil::get_post_object( true ) ) === false || empty( $post_obj->post_type ) ) {
-
-				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'exiting early: object without post type' );
-				}
-
+			if ( false === ( $post_obj = SucomUtil::get_post_object( true ) ) || empty( $post_obj->post_type ) ) {
 				return;
-
-			} else {
-				$post_id = empty( $post_obj->ID ) ? 0 : $post_obj->ID;
 			}
+
+			$post_id = empty( $post_obj->ID ) ? 0 : $post_obj->ID;
 
 			if ( ( $post_obj->post_type === 'page' && ! current_user_can( 'edit_page', $post_id ) ) || ! current_user_can( 'edit_post', $post_id ) ) {
-
-				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'insufficient privileges to add metabox for ' . $post_obj->post_type . ' ID ' . $post_id );
-				}
-
 				return;
 			}
 
-			$add_metabox = empty( $this->p->options[ 'plugin_add_to_' . $post_obj->post_type ] ) ? false : true;
-
-			$add_metabox = apply_filters( $this->p->lca . '_add_metabox_post', $add_metabox, $post_id, $post_obj->post_type );
-
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'add metabox for post ID ' . $post_id . ' of type ' . $post_obj->post_type . ' is ' . 
-					( $add_metabox ? 'true' : 'false' ) );
+			if ( empty( $this->p->options[ 'plugin_add_to_' . $post_obj->post_type ] ) ) {
+				return;
 			}
 
-			if ( $add_metabox ) {
+			$metabox_id      = $this->p->cf[ 'meta' ][ 'id' ];
+			$metabox_title   = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+			$metabox_screen  = $post_obj->post_type;
+			$metabox_context = 'normal';
+			$metabox_prio    = 'default';
+			$callback_args   = array(	// Second argument passed to the callback function / method.
+				'__block_editor_compatible_meta_box' => true,
+			);
 
-				$metabox_id      = $this->p->cf[ 'meta' ][ 'id' ];
-				$metabox_title   = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
-				$metabox_screen  = $post_obj->post_type;
-				$metabox_context = 'normal';
-				$metabox_prio    = 'default';
-				$callback_args   = array(	// Second argument passed to the callback function / method.
-					'__block_editor_compatible_meta_box' => true,
-				);
-
-				add_meta_box( $this->p->lca . '_' . $metabox_id, $metabox_title,
-					array( $this, 'show_metabox_document_meta' ), $metabox_screen,
-						$metabox_context, $metabox_prio, $callback_args );
-			}
+			add_meta_box( $this->p->lca . '_' . $metabox_id, $metabox_title,
+				array( $this, 'show_metabox_document_meta' ), $metabox_screen,
+					$metabox_context, $metabox_prio, $callback_args );
 		}
 
-		public function ajax_metabox_document_meta() {
+		public function ajax_get_metabox_document_meta() {
 
 			$doing_ajax = SucomUtil::get_const( 'DOING_AJAX' );
 
@@ -1335,22 +1312,22 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			/**
 			 * $read_cache is false to generate notices etc.
 			 */
-			WpssoWpMeta::$head_tags = $this->p->head->get_head_array( $post_id, $mod, $read_cache = false );
+			parent::$head_tags = $this->p->head->get_head_array( $post_id, $mod, $read_cache = false );
 
-			WpssoWpMeta::$head_info = $this->p->head->extract_head_info( $mod, WpssoWpMeta::$head_tags );
+			parent::$head_info = $this->p->head->extract_head_info( $mod, parent::$head_tags );
 
 			/**
 			 * Check for missing open graph image and description values.
 			 */
 			if ( $mod[ 'is_public' ] && 'publish' === $mod[ 'post_status' ] ) {
 
-				$ref_url = empty( WpssoWpMeta::$head_info[ 'og:url' ] ) ? null : WpssoWpMeta::$head_info[ 'og:url' ];
+				$ref_url = empty( parent::$head_info[ 'og:url' ] ) ? null : parent::$head_info[ 'og:url' ];
 
 				$ref_url = $this->p->util->maybe_set_ref( $ref_url, $mod, __( 'checking meta tags', 'wpsso' ) );
 
 				foreach ( array( 'image', 'description' ) as $mt_suffix ) {
 
-					if ( empty( WpssoWpMeta::$head_info[ 'og:' . $mt_suffix ] ) ) {
+					if ( empty( parent::$head_info[ 'og:' . $mt_suffix ] ) ) {
 
 						if ( $this->p->notice->is_admin_pre_notices() ) {
 
@@ -1386,6 +1363,8 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 
 			$is_auto_draft = SucomUtil::is_auto_draft( $mod );
 
+			$this->p->admin->plugin_pkg_info();
+
 			$this->form = new SucomForm( $this->p, WPSSO_META_NAME, $opts, $def_opts, $this->p->lca );
 
 			wp_nonce_field( WpssoAdmin::get_nonce_action(), WPSSO_NONCE_NAME );
@@ -1405,12 +1384,14 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 
 				} else {
 
-					$filter_name = $this->p->lca . '_' . $mod[ 'name' ] . '_' . $tab_key . '_rows';
+					$mb_filter_name  = $this->p->lca . '_metabox_' . $metabox_id . '_' . $tab_key . '_rows';
+					$mod_filter_name = $this->p->lca . '_' . $mod[ 'name' ] . '_' . $tab_key . '_rows';
 
-					$table_rows[ $tab_key ] = array_merge(
-						$this->get_table_rows( $metabox_id, $tab_key, WpssoWpMeta::$head_info, $mod ),
-						(array) apply_filters( $filter_name, array(), $this->form, WpssoWpMeta::$head_info, $mod )
-					);
+					$table_rows[ $tab_key ] = (array) apply_filters( $mb_filter_name,
+						array(), $this->form, parent::$head_info, $mod );
+
+					$table_rows[ $tab_key ] = (array) apply_filters( $mod_filter_name,
+						$table_rows[ $tab_key ], $this->form, parent::$head_info, $mod );
 				}
 			}
 
@@ -1436,6 +1417,115 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			}
 
 			return $metabox_html;
+		}
+
+		public function clear_cache( $post_id, $rel_id = false ) {
+
+			if ( $this->p->debug->enabled ) {
+				$this->p->debug->mark();
+			}
+			
+			static $do_once = array();
+
+			if ( isset( $do_once[ $post_id ][ $rel_id ] ) ) {
+				return;
+			}
+
+			$do_once[ $post_id ][ $rel_id ] = true;
+
+			$post_status = get_post_status( $post_id );
+
+			switch ( $post_status ) {
+
+				case 'draft':
+				case 'pending':
+				case 'future':
+				case 'private':
+				case 'publish':
+
+					break;	// Cache clearing allowed.
+
+				case 'auto-draft':
+				case 'trash':
+				default:
+
+					return;	// Stop here.
+			}
+
+			$mod           = $this->get_mod( $post_id );
+			$permalink     = get_permalink( $post_id );
+			$col_meta_keys = parent::get_column_meta_keys();
+			$cache_types   = array();
+			$cache_md5_pre = $this->p->lca . '_';
+
+			foreach ( $col_meta_keys as $col_key => $meta_key ) {
+
+				delete_post_meta( $post_id, $meta_key );
+			}
+
+			if ( ini_get( 'open_basedir' ) ) {
+				$check_url = $this->p->util->get_sharing_url( $post_id, $add_page = false );
+			} else {
+				$check_url = SucomUtilWP::wp_get_shortlink( $post_id, $context = 'post' );
+			}
+
+			$cache_types[ 'transient' ][] = array(
+				'id'   => $cache_md5_pre . md5( 'SucomCache::get(url:' . $permalink . ')' ),
+				'pre'  => $cache_md5_pre,
+				'salt' => 'SucomCache::get(url:' . $permalink . ')',
+			);
+
+			if ( $permalink !== $check_url ) {
+
+				$cache_types[ 'transient' ][] = array(
+					'id'   => $cache_md5_pre . md5( 'SucomCache::get(url:' . $check_url . ')' ),
+					'pre'  => $cache_md5_pre,
+					'salt' => 'SucomCache::get(url:' . $check_url . ')',
+				);
+			}
+
+			$this->clear_mod_cache( $mod, $cache_types );
+
+			/**
+			 * Clear the post terms (categories, tags, etc.) for published (aka public) posts.
+			 */
+			if ( $post_status === 'publish' ) {
+
+				if ( ! empty( $this->p->options[ 'plugin_clear_post_terms' ] ) ) {
+
+					$post_taxonomies = get_post_taxonomies( $post_id );
+
+					foreach ( $post_taxonomies as $tax_slug ) {
+
+						$post_terms = wp_get_post_terms( $post_id, $tax_slug );
+
+						foreach ( $post_terms as $post_term ) {
+
+							$this->p->term->clear_cache( $post_term->term_id, $post_term->term_taxonomy_id );
+						}
+					}
+				}
+			}
+
+			if ( function_exists( 'w3tc_pgcache_flush_post' ) ) {	// Clear W3 Total Cache.
+				w3tc_pgcache_flush_post( $post_id );
+			}
+
+			/**
+			 * The question shortcode (in the WPSSO FAQ add-on) attaches the post ID to the question so the post cache
+			 * can be cleared when the question is updated.
+			 */
+			foreach ( array( 'post' ) as $attach_type ) {
+
+				$attached_ids = $this->get_attached( $post_id, $attach_type );
+
+				foreach ( $attached_ids as $post_id => $bool ) {
+				
+					if ( $bool ) {
+						$this->p->$attach_type->clear_cache( $post_id );
+					}
+				}
+			}
 		}
 
 		public function clear_cache_for_new_comment( $comment_id, $comment_approved ) {
@@ -1477,88 +1567,6 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 
 					$this->clear_cache( $post_id );
 				}
-			}
-		}
-
-		public function clear_cache( $post_id, $rel_id = false ) {
-
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->mark();
-			}
-
-			$post_status = get_post_status( $post_id );
-
-			switch ( $post_status ) {
-
-				case 'draft':
-				case 'pending':
-				case 'future':
-				case 'private':
-				case 'publish':
-
-					break;	// Cache clearing allowed.
-
-				case 'auto-draft':
-				case 'trash':
-				default:
-
-					return;	// Stop here.
-			}
-
-			$mod           = $this->get_mod( $post_id );
-			$permalink     = get_permalink( $post_id );
-			$col_meta_keys = WpssoWpMeta::get_column_meta_keys();
-			$cache_types   = array();
-			$cache_md5_pre = $this->p->lca . '_';
-
-			foreach ( $col_meta_keys as $col_key => $meta_key ) {
-				delete_post_meta( $post_id, $meta_key );
-			}
-
-			if ( ini_get( 'open_basedir' ) ) {
-				$check_url = $this->p->util->get_sharing_url( $post_id, $add_page = false );
-			} else {
-				$check_url = SucomUtilWP::wp_get_shortlink( $post_id, $context = 'post' );
-			}
-
-			$cache_types[ 'transient' ][] = array(
-				'id'   => $cache_md5_pre . md5( 'SucomCache::get(url:' . $permalink . ')' ),
-				'pre'  => $cache_md5_pre,
-				'salt' => 'SucomCache::get(url:' . $permalink . ')',
-			);
-
-			if ( $permalink !== $check_url ) {
-				$cache_types[ 'transient' ][] = array(
-					'id'   => $cache_md5_pre . md5( 'SucomCache::get(url:' . $check_url . ')' ),
-					'pre'  => $cache_md5_pre,
-					'salt' => 'SucomCache::get(url:' . $check_url . ')',
-				);
-			}
-
-			$this->clear_mod_cache( $mod, $cache_types );
-
-			/**
-			 * Clear the post terms (categories, tags, etc.) for published (aka public) posts.
-			 */
-			if ( $post_status === 'publish' ) {
-
-				if ( ! empty( $this->p->options[ 'plugin_clear_post_terms' ] ) ) {
-
-					$post_taxonomies = get_post_taxonomies( $post_id );
-
-					foreach ( $post_taxonomies as $tax_slug ) {
-
-						$post_terms = wp_get_post_terms( $post_id, $tax_slug );
-
-						foreach ( $post_terms as $post_term ) {
-							$this->p->term->clear_cache( $post_term->term_id, $post_term->term_taxonomy_id );
-						}
-					}
-				}
-			}
-
-			if ( function_exists( 'w3tc_pgcache_flush_post' ) ) {	// Clear W3 Total Cache.
-				w3tc_pgcache_flush_post( $post_id );
 			}
 		}
 
@@ -1662,7 +1670,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				$this->p->debug->mark();
 			}
 
-			if ( ! $this->user_can_edit( $post_id, $rel_id ) ) {
+			if ( ! $this->user_can_save( $post_id, $rel_id ) ) {
 				return;
 			}
 
@@ -1713,15 +1721,17 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			}
 		}
 
-		public function user_can_edit( $post_id, $rel_id = false ) {
+		public function user_can_save( $post_id, $rel_id = false ) {
 
-			$user_can_edit = false;
+			$user_can_save = false;
 
 			if ( ! $this->verify_submit_nonce() ) {
+
 				if ( $this->p->debug->enabled ) {
 					$this->p->debug->log( 'exiting early: verify_submit_nonce failed' );
 				}
-				return $user_can_edit;
+
+				return $user_can_save;
 			}
 
 			if ( ! $post_type = SucomUtil::get_request_value( 'post_type', 'POST' ) ) {	// Uses sanitize_text_field.
@@ -1729,15 +1739,22 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			}
 
 			switch ( $post_type ) {
-				case 'page' :
-					$user_can_edit = current_user_can( 'edit_' . $post_type, $post_id );
+
+				case 'page':
+
+					$user_can_save = current_user_can( 'edit_' . $post_type, $post_id );
+
 					break;
-				default :
-					$user_can_edit = current_user_can( 'edit_post', $post_id );
+
+				default:
+
+					$user_can_save = current_user_can( 'edit_post', $post_id );
+
 					break;
+
 			}
 
-			if ( ! $user_can_edit ) {
+			if ( ! $user_can_save ) {
 
 				if ( $this->p->debug->enabled ) {
 					$this->p->debug->log( 'insufficient privileges to save settings for ' . $post_type . ' ID ' . $post_id );
@@ -1753,7 +1770,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				}
 			}
 
-			return $user_can_edit;
+			return $user_can_save;
 		}
 
 		/**
@@ -1777,8 +1794,8 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				'post_id' => $post_id,
 				'status'  => 'approve',
 				'parent'  => 0,					// Parent ID of comment to retrieve children of (0 = don't get replies).
-				'orderby' => 'date',
 				'order'   => 'DESC',				// Newest first.
+				'orderby' => 'date',
 				'number'  => get_option( 'comments_per_page' ),	// Maximum number of comments to retrieve.
 			) );
 
@@ -1843,6 +1860,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 		 * WpssoPost class specific methods.
 		 *
 		 * Filters the wp shortlink for a post - returns the shortened sharing URL.
+		 *
 		 * The wp_shortlink_wp_head() function calls wp_get_shortlink( 0, 'query' );
 		 */
 		public function get_sharing_shortlink( $shortlink = false, $post_id = 0, $context = 'post', $allow_slugs = true ) {
@@ -1881,16 +1899,16 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			}
 
 			/**
-			 * The WordPress link-template.php functions call wp_get_shortlink() with a post ID of 0.
-			 * Recreate the same code here to get a real post ID and create a default shortlink (if required).
+			 * The WordPress link-template.php functions call wp_get_shortlink() with a post ID of 0. Recreate the same
+			 * code here to get a real post ID and create a default shortlink (if required).
 			 */
-			if ( $post_id === 0 ) {
+			if ( 0 === $post_id ) {
 
 				if ( $this->p->debug->enabled ) {
 					$this->p->debug->log( 'provided post id is 0 (current post)' );
 				}
 
-				if ( $context === 'query' && is_singular() ) {	// wp_get_shortlink() uses the same logic.
+				if ( 'query' === $context && is_singular() ) {	// wp_get_shortlink() uses the same logic.
 
 					$post_id = get_queried_object_id();
 
@@ -1898,7 +1916,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 						$this->p->debug->log( 'setting post id ' . $post_id . ' from queried object' );
 					}
 
-				} elseif ( $context === 'post' ) {
+				} elseif ( 'post' === $context ) {
 
 					$post_obj = get_post();
 
@@ -1930,7 +1948,11 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 				}
 
 				if ( empty( $shortlink ) ) {
-					if ( get_post_type( $post_id ) === 'page' && get_option( 'page_on_front' ) == $post_id && get_option( 'show_on_front' ) == 'page' ) {
+
+					if ( 'page' === get_post_type( $post_id ) &&
+						$post_id === (int) get_option( 'page_on_front' ) &&
+							'page' === get_option( 'show_on_front' ) ) {
+
 						$shortlink = home_url( '/' );
 					} else {
 						$shortlink = home_url( '?p=' . $post_id );
@@ -1983,8 +2005,7 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 
 			$sharing_url = $this->p->util->get_sharing_url( $mod, $add_page = false );
 
-			$short_url = apply_filters( $this->p->lca . '_get_short_url', $sharing_url,
-				$this->p->options[ 'plugin_shortener' ], $mod );
+			$short_url = apply_filters( $this->p->lca . '_get_short_url', $sharing_url, $this->p->options[ 'plugin_shortener' ], $mod );
 
 			if ( filter_var( $short_url, FILTER_VALIDATE_URL ) === false ) {	// Invalid url.
 
@@ -2030,5 +2051,58 @@ if ( ! class_exists( 'WpssoPost' ) ) {
 			return $shortlink;
 		}
 
+		/**
+		 * Since WPSSO Core v7.6.0.
+		 */
+		public function add_attached( $post_id, $attach_type, $attach_id ) {
+
+			$opts = get_post_meta( $post_id, WPSSO_META_ATTACHED_NAME, $single = true );
+
+			if ( ! isset( $opts[ $attach_type ][ $attach_id ] ) ) {
+
+				if ( ! is_array( $opts ) ) {
+					$opts = array();
+				}
+
+				$opts[ $attach_type ][ $attach_id ] = true;
+			
+				return update_post_meta( $post_id, WPSSO_META_ATTACHED_NAME, $opts );
+			}
+
+			return false;	// No addition.
+		}
+
+		public function delete_attached( $post_id, $attach_type, $attach_id ) {
+
+			$opts = get_post_meta( $post_id, WPSSO_META_ATTACHED_NAME, $single = true );
+
+			if ( isset( $opts[ $attach_type ][ $attach_id ] ) ) {
+
+				unset( $opts[ $attach_type ][ $attach_id ] );
+
+				if ( empty( $opts ) ) {	// Cleanup.
+					return delete_post_meta( $post_id, WPSSO_META_ATTACHED_NAME );
+				}
+
+				return update_post_meta( $post_id, WPSSO_META_ATTACHED_NAME, $opts );
+			}
+
+			return false;	// No delete.
+		}
+
+		public function get_attached( $post_id, $attach_type ) {
+
+			$opts = get_post_meta( $post_id, WPSSO_META_ATTACHED_NAME, $single = true );
+
+			if ( isset( $opts[ $attach_type ] ) ) {
+
+				if ( is_array( $opts[ $attach_type ] ) ) {	// Just in case.
+
+					return $opts[ $attach_type ];
+				}
+			}
+
+			return array();	// No values.
+		}
 	}
 }

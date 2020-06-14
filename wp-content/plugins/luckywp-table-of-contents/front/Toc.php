@@ -308,6 +308,7 @@ class Toc
         static::$currentOutputDepth = -1;
         return Core::$plugin->front->render('body', [
             'title' => ArrayHelper::getValue($attrs, 'title', Core::$plugin->settings->getGeneralTitle()),
+            'titleTag' => apply_filters('lwptoc_title_tag', 'b'),
             'toggle' => $toggle,
             'labelShow' => $labelShow,
             'labelHide' => $labelHide,

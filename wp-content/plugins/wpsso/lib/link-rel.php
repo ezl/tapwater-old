@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
+if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+	die( 'Do. Or do not. There is no try.' );
+}
+
 if ( ! class_exists( 'WpssoLinkRel' ) ) {
 
 	class WpssoLinkRel {
@@ -94,35 +98,27 @@ if ( ! class_exists( 'WpssoLinkRel' ) ) {
 			$add_link_rel_canonical = empty( $this->p->options[ 'add_link_rel_canonical' ] ) ? false : true;
 
 			if ( apply_filters( $this->p->lca . '_add_link_rel_canonical', $add_link_rel_canonical, $mod ) ) {
+
 				$link_rel[ 'canonical' ] = $this->p->util->get_canonical_url( $mod );
 			}
 
 			/**
 			 * Link rel shortlink.
 			 */
-			$add_link_rel_shortlink = empty( $this->p->options[ 'add_link_rel_shortlink' ] ) ||
-				is_404() || is_search() ? false : true;
-
-			if ( $add_link_rel_shortlink ) {
-
-				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( 'pre-filter add_link_rel_shortlink is true' );
-				}
-
-			} elseif ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'pre-filter add_link_rel_shortlink is false' );
-			}
+			$add_link_rel_shortlink = empty( $this->p->options[ 'add_link_rel_shortlink' ] ) ? false : true;
 
 			if ( apply_filters( $this->p->lca . '_add_link_rel_shortlink', $add_link_rel_shortlink, $mod ) ) {
 
 				$shortlink = '';
 
-				if ( $mod[ 'is_post' ] ) {
+				if ( $mod[ 'is_post' ] && $mod[ 'id' ] ) {
 
 					$shortlink = SucomUtilWP::wp_get_shortlink( $mod[ 'id' ], $context = 'post' );
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'WordPress wp_get_shortlink() = ' . wp_get_shortlink( $mod[ 'id' ], 'post' ) );
+
 						$this->p->debug->log( 'SucomUtilWP::wp_get_shortlink() = ' . $shortlink );
 					}
 
@@ -135,8 +131,9 @@ if ( ! class_exists( 'WpssoLinkRel' ) ) {
 						$this->p->debug->log( 'using ' . $this->p->lca . '_get_short_url filters to get shortlink' );
 					}
 
-					$shortlink = apply_filters( $this->p->lca . '_get_short_url', $sharing_url,
-						$this->p->options[ 'plugin_shortener' ], $mod );
+					$shortener = $this->p->options[ 'plugin_shortener' ];
+
+					$shortlink = apply_filters( $this->p->lca . '_get_short_url', $sharing_url, $shortener, $mod, $is_main = true );
 				}
 
 				if ( empty( $shortlink ) ) {

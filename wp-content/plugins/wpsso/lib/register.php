@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
+if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+	die( 'Do. Or do not. There is no try.' );
+}
+
 if ( ! class_exists( 'WpssoRegister' ) ) {
 
 	class WpssoRegister {
@@ -129,7 +133,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 			 * Add the "person" role for all WpssoUser::get_public_ids(). 
 			 */
 			if ( $new_install ) {
-				$this->p->util->schedule_add_user_roles();
+				$this->p->user->schedule_add_person_role();
 			}
 
 			/**
@@ -153,7 +157,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 					sprintf( __( 'A background task will begin shortly to clear all caches (%s is enabled).',
 						'wpsso' ), $settings_page_link ) );
 
-				$this->p->util->schedule_clear_all_cache( $user_id = get_current_user_id(), $clear_other = true );
+				$this->p->util->cache->schedule_clear( $user_id = get_current_user_id(), $clear_other = true );
 			}
 
 			/**
@@ -169,13 +173,13 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 			/**
 			 * Clear all caches on deactivate.
 			 *
-			 * Do not call the schedule_clear_all_cache() method since WPSSO will be deactivated before the scheduled task can begin.
+			 * Do not call the WpssoUtilCache->schedule_clear() method since WPSSO will be deactivated before the scheduled task can begin.
 			 *
 			 * If 'plugin_clear_on_deactivate' is empty, then at least clear the disk cache.
 			 */
 			if ( ! empty( $this->p->options[ 'plugin_clear_on_deactivate' ] ) ) {
 
-				$this->p->util->clear_all_cache( $user_id = 0, $clear_other = true, $clear_short = true, $refresh_all = false );
+				$this->p->util->cache->clear( $user_id = 0, $clear_other = true, $clear_short = true, $refresh = false );
 
 			} else {
 
@@ -222,35 +226,42 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 				 */
 				delete_metadata( $meta_type = 'post', $object_id = null, WPSSO_META_NAME, $meta_value = null, $delete_all = true );
 
+				delete_metadata( $meta_type = 'post', $object_id = null, WPSSO_META_ATTACHED_NAME, $meta_value = null, $delete_all = true );
+
 				delete_post_meta_by_key( '_wpsso_wpproductreview' );	// Re-created automatically.
+
 				delete_post_meta_by_key( '_wpsso_wprecipemaker' );	// Re-created automatically.
+
 				delete_post_meta_by_key( '_wpsso_wpultimaterecipe' );	// Re-created automatically.
 
 				/**
 				 * Delete term settings and meta.
 				 */
-				foreach ( WpssoTerm::get_public_ids() as $term_id ) {
+				foreach ( WpssoTerm::get_public_ids() as $id ) {
 
-					WpssoTerm::delete_term_meta( $term_id, WPSSO_META_NAME );
+					WpssoTerm::delete_term_meta( $id, WPSSO_META_NAME );
+
+					WpssoTerm::delete_term_meta( $id, WPSSO_META_ATTACHED_NAME );
 				}
 
 				/**
 				 * Delete user settings and meta.
 				 */
 				delete_metadata( $meta_type = 'user', $object_id = null, WPSSO_META_NAME, $meta_value = null, $delete_all = true );
+
+				delete_metadata( $meta_type = 'user', $object_id = null, WPSSO_META_ATTACHED_NAME, $meta_value = null, $delete_all = true );
+
 				delete_metadata( $meta_type = 'user', $object_id = null, WPSSO_PREF_NAME, $meta_value = null, $delete_all = true );
 
-				while ( $user_ids = SucomUtil::get_user_ids( $blog_id, '', 1000 ) ) {	// Get a maximum of 1000 user IDs at a time.
+				while ( $blog_user_ids = SucomUtil::get_user_ids( $blog_id, '', 1000 ) ) {	// Get a maximum of 1000 user IDs at a time.
 
-					foreach ( $user_ids as $user_id ) {
+					foreach ( $blog_user_ids as $id ) {
 
-						delete_user_option( $user_id, WPSSO_DISMISS_NAME );
+						delete_user_option( $id, WPSSO_DISMISS_NAME );
 	
-						WpssoUser::delete_metabox_prefs( $user_id );
+						WpssoUser::delete_metabox_prefs( $id );
 
-						$user_obj = get_user_by( 'ID', $user_id );
-
-						$user_obj->remove_role( 'person' );
+						WpssoUser::remove_role_by_id( $id, $role = 'person' );
 					}
 				}
 
@@ -284,7 +295,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 
 			foreach ( array( 'wp', 'php' ) as $key ) {
 
-				if ( empty( $cf[$key][ 'min_version' ] ) ) {
+				if ( empty( $cf[ $key ][ 'min_version' ] ) ) {
 					return;
 				}
 
@@ -314,6 +325,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 				}
 
 				if ( ! function_exists( 'deactivate_plugins' ) ) {
+
 					require_once trailingslashit( ABSPATH ) . 'wp-admin/includes/plugin.php';
 				}
 
@@ -322,6 +334,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 				if ( method_exists( 'SucomUtil', 'safe_error_log' ) ) {
 
 					$error_pre = sprintf( __( '%s warning:', 'wpsso' ), __METHOD__ );
+
 					$error_msg = sprintf( __( '%1$s requires %2$s version %3$s or higher and has been deactivated.',
 						'wpsso' ), $plugin_name, $app_label, $min_version );
 

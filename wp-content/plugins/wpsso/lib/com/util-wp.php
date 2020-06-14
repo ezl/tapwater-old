@@ -15,6 +15,51 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 
 		protected static $cache_user_exists = array();	// Saved user_exists() values.
 
+		public static function get_db_transient_keys( $only_expired = false, $transient_prefix = '' ) {
+
+			global $wpdb;
+
+			$transient_keys = array();
+			$opt_row_prefix = $only_expired ? '_transient_timeout_' : '_transient_';
+			$current_time   = isset( $_SERVER[ 'REQUEST_TIME' ] ) ? (int) $_SERVER[ 'REQUEST_TIME' ] : time() ;
+
+			$db_query = 'SELECT option_name';
+			$db_query .= ' FROM ' . $wpdb->options;
+			$db_query .= ' WHERE option_name LIKE \'' . $opt_row_prefix . $transient_prefix . '%\'';
+
+			if ( $only_expired ) {
+				$db_query .= ' AND option_value < ' . $current_time;	// Expiration time older than current time.
+			}
+
+			$db_query .= ';';	// End of query.
+
+			$result = $wpdb->get_col( $db_query );
+
+			/**
+			 * Remove '_transient_' or '_transient_timeout_' prefix from option name.
+			 */
+			foreach( $result as $option_name ) {
+				$transient_keys[] = str_replace( $opt_row_prefix, '', $option_name );
+			}
+
+			return $transient_keys;
+		}
+
+		public static function get_db_transient_size_mb( $decimals = 2, $dec_point = '.', $thousands_sep = ',', $transient_prefix = '' ) {
+
+			global $wpdb;
+
+			$db_query = 'SELECT CHAR_LENGTH( option_value ) / 1024 / 1024';
+			$db_query .= ', CHAR_LENGTH( option_value )';
+			$db_query .= ' FROM ' . $wpdb->options;
+			$db_query .= ' WHERE option_name LIKE \'_transient_' . $transient_prefix . '%\'';
+			$db_query .= ';';	// End of query.
+
+			$result = $wpdb->get_col( $db_query );
+
+			return number_format( array_sum( $result ), $decimals, $dec_point, $thousands_sep );
+		}
+
 		public static function do_shortcode_names( array $shortcode_names, $content, $ignore_html = false ) {
 
 			if ( ! empty( $shortcode_names ) ) {		// Just in case.
@@ -864,8 +909,8 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 				'blog_id' => $blog_id,
 				'offset'  => $offset,
 				'number'  => $limit,
-				'orderby' => 'display_name',
 				'order'   => 'ASC',
+				'orderby' => 'display_name',
 				'role'    => $role,
 				'fields'  => array(	// Save memory and only return only specific fields.
 					'ID',
@@ -992,21 +1037,25 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 
 		public static function is_post_type_public( $mixed ) {
 
-			$name = null;
+			$post_type_name = null;
 
-			if ( is_object( $mixed ) || is_numeric( $mixed ) ) {	// Post object or ID.
-				$name = get_post_type( $mixed );
+			if ( is_object( $mixed ) || is_numeric( $mixed ) ) {
+
+				$post_type_name = get_post_type( $mixed );	// Post object or ID.
+
 			} else {
-				$name = $mixed;					// Post type name.
+
+				$post_type_name = $mixed;			// Post type name.
 			}
 
-			if ( $name ) {
+			if ( $post_type_name ) {
 
-				$args = array( 'name' => $name, 'public'  => 1 );
+				$args = array( 'name' => $post_type_name, 'public'  => 1 );
 
 				$post_types = get_post_types( $args, $output = 'names', $operator = 'and' );
 			
-				if ( isset( $post_types[ 0 ] ) && $post_types[ 0 ] === $name ) {
+				if ( isset( $post_types[ 0 ] ) && $post_types[ 0 ] === $post_type_name ) {
+
 					return true;
 				}
 			}
@@ -1014,15 +1063,36 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 			return false;
 		}
 
+		/**
+		 * $output = objects | names
+		 */
+		public static function get_post_types( $output = 'objects' ) {
+
+			/**
+			 * Some post types, like visual editor blocks, show in the UI but not in the main WordPress admin menu, so
+			 * require 'show_in_menu' to exclude the visual editor blocks.
+			 */
+			$args = array( 'show_ui' => 1, 'show_in_menu' => 1 );
+
+			$operator = 'and';
+
+			$post_types = get_post_types( $args, $output, $operator );
+
+			if ( $output === 'objects' ) {
+
+				self::sort_objects_by_label( $post_types );
+			}
+
+			return apply_filters( 'sucom_get_post_types', $post_types, $output );
+		}
+
 		public static function get_post_type_labels( array $values = array(), $val_prefix = '', $label_prefix = '' ) {
 
-			$args = array( 'show_in_menu' => 1, 'show_ui' => 1 );
-
-			$objects = get_post_types( $args, $output = 'objects', $operator = 'and' );
+			$objects = self::get_post_types( 'objects' );
 
 			foreach ( $objects as $obj ) {
 
-				$obj_label = SucomUtilWP::get_object_label( $obj );
+				$obj_label = self::get_object_label( $obj );
 
 				$values[ $val_prefix . $obj->name ] = trim( $label_prefix . ' ' . $obj_label );
 			}
@@ -1032,15 +1102,36 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 			return $values;
 		}
 
+		/**
+		 * $output = objects | names
+		 */
+		public static function get_taxonomies( $output = 'objects' ) {
+
+			/**
+			 * Some taxonomies, like WooCommerce product attributes, do not show in the main WordPress admin menu, so
+			 * do not require 'show_in_menu' for taxonomies.
+			 */
+			$args = array( 'show_ui' => 1 );
+
+			$operator = 'and';
+
+			$taxonomies = get_taxonomies( $args, $output, $operator );
+
+			if ( $output === 'objects' ) {
+
+				self::sort_objects_by_label( $taxonomies );
+			}
+
+			return apply_filters( 'sucom_get_taxonomies', $taxonomies, $output );
+		}
+
 		public static function get_taxonomy_labels( array $values = array(), $val_prefix = '', $label_prefix = '' ) {
 
-			$args = array( 'show_in_menu' => 1, 'show_ui' => 1 );
-
-			$objects = get_taxonomies( $args, $output = 'objects', $operator = 'and' );
+			$objects = self::get_taxonomies( 'objects' );
 
 			foreach ( $objects as $obj ) {
 
-				$obj_label = SucomUtilWP::get_object_label( $obj );
+				$obj_label = self::get_object_label( $obj );
 
 				$values[ $val_prefix . $obj->name ] = trim( $label_prefix . ' ' . $obj_label );
 			}
@@ -1072,15 +1163,20 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 
 		public static function sort_objects_by_label( array &$objects ) {
 
-			$sorted  = array();
+			$sorted = array();
+
 			$by_name = array();
 
 			foreach ( $objects as $num => $obj ) {
 
 				if ( ! empty( $obj->labels->name ) ) {
+
 					$sort_key = $obj->labels->name . '-' . $num;
+
 				} elseif ( ! empty( $obj->label ) ) {
+
 					$sort_key = $obj->label . '-' . $num;
+
 				} else {
 					$sort_key = $obj->name . '-' . $num;
 				}
@@ -1091,10 +1187,109 @@ if ( ! class_exists( 'SucomUtilWP' ) ) {
 			ksort( $by_name );
 
 			foreach ( $by_name as $sort_key => $num ) {
+
 				$sorted[] = $objects[ $num ];
 			}
 
 			return $objects = $sorted;
+		}
+
+		/**
+		 * Only creates new keys - does not update existing keys.
+		 */
+		public static function add_site_option_key( $opt_name, $key, $value ) {
+
+			return self::update_option_key( $opt_name, $key, $value, $protect = true, $site = true );
+		}
+
+		/**
+		 * Only creates new keys - does not update existing keys.
+		 */
+		public static function add_option_key( $opt_name, $key, $value ) {
+
+			return self::update_option_key( $opt_name, $key, $value, $protect = true, $site = false );
+		}
+
+		public static function update_site_option_key( $opt_name, $key, $value, $protect = false ) {
+
+			return self::update_option_key( $opt_name, $key, $value, $protect, $site = true );
+		}
+
+		public static function update_option_key( $opt_name, $key, $value, $protect = false, $site = false ) {
+
+			if ( $site ) {
+				$opts = get_site_option( $opt_name, array() );
+			} else {
+				$opts = get_option( $opt_name, array() );
+			}
+
+			if ( $protect && isset( $opts[ $key ] ) ) {
+
+				return false;	// No update.
+			}
+
+			$opts[ $key ] = $value;
+
+			if ( $site ) {
+				return update_site_option( $opt_name, $opts );
+			} else {
+				return update_option( $opt_name, $opts );
+			}
+		}
+
+		public static function get_site_option_key( $opt_name, $key ) {
+
+			return self::get_option_key( $opt_name, $key, $site = true );
+		}
+
+		public static function get_option_key( $opt_name, $key, $site = false ) {
+
+			if ( $site ) {
+				$opts = get_site_option( $opt_name, array() );
+			} else {
+				$opts = get_option( $opt_name, array() );
+			}
+
+			if ( isset( $opts[ $key ] ) ) {
+				return $opts[ $key ];
+			}
+
+			return null;	// No value.
+		}
+
+		public static function delete_site_option_key( $opt_name, $key ) {
+
+			return self::delete_option_key( $opt_name, $key, $site = true );
+		}
+
+		public static function delete_option_key( $opt_name, $key, $site = false ) {
+
+			if ( $site ) {
+				$opts = get_site_option( $opt_name, array() );
+			} else {
+				$opts = get_option( $opt_name, array() );
+			}
+
+			if ( isset( $opts[ $key ] ) ) {
+
+				unset( $opts[ $key ] );
+
+				if ( empty( $opts ) ) {	// Cleanup.
+					if ( $site ) {
+						return delete_site_option( $opt_name );
+					} else {
+						return delete_option( $opt_name );
+					}
+				}
+
+				if ( $site ) {
+					return update_site_option( $opt_name, $opts );
+				} else {
+					return update_option( $opt_name, $opts );
+				}
+			}
+
+			return false;	// No delete.
 		}
 	}
 }

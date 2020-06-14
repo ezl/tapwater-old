@@ -1,6 +1,7 @@
 <?php
 /**
  * @var $title string
+ * @var $titleTag string
  * @var $toggle bool
  * @var $labelShow string
  * @var $labelHide string
@@ -21,7 +22,14 @@ echo $before . Html::beginTag('div', $containerOptions) . Html::beginTag('div', 
 ?>
 <?php if ($toggle || $title) { ?>
     <div class="lwptoc_header"<?= $headerStyles ? ' style="' . implode('', $headerStyles) . '"' : '' ?>>
-        <?= $title ? '<b class="lwptoc_title"' . ($titleStyles ? ' style="' . implode('', $titleStyles) . '"' : '') . '>' . $title . '</b>' : '' ?>
+        <?php
+        if ($title) {
+            echo Html::tag($titleTag, $title, [
+                'class' => 'lwptoc_title',
+                'style' => $titleStyles ? implode('', $titleStyles) : null,
+            ]);
+        }
+        ?>
         <?php if ($toggle) { ?>
             <span class="lwptoc_toggle">
                 <a href="#" class="lwptoc_toggle_label" data-label="<?= $hideItems ? $labelHide : $labelShow ?>"><?= $hideItems ? $labelShow : $labelHide ?></a>
@@ -29,7 +37,7 @@ echo $before . Html::beginTag('div', $containerOptions) . Html::beginTag('div', 
         <?php } ?>
     </div>
 <?php } ?>
-<div class="lwptoc_items<?= $hideItems ? '' : ' lwptoc_items-visible'?>"<?= $itemsStyles ? ' style="' . implode('', $itemsStyles) . '"' : '' ?>>
+<div class="lwptoc_items<?= $hideItems ? '' : ' lwptoc_items-visible' ?>"<?= $itemsStyles ? ' style="' . implode('', $itemsStyles) . '"' : '' ?>>
     <?php lwptoc_items($items) ?>
 </div>
 <?= '</div></div>' . $after ?>

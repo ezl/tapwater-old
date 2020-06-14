@@ -1,33 +1,35 @@
-<h1>The WordPress Social and Search Optimizer</h1><h3>WPSSO Core</h3>
+<h1>WPSSO Core (The Complete Meta Tag and Schema Markup Solution)</h1>
 
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Core</td></tr>
 <tr><th align="right" valign="top" nowrap>Summary</th><td>Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>7.2.0</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>7.9.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>5.6 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>4.2 or newer</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.4.1</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>4.0.1</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.4.2</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>4.2.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://www.gnu.org/licenses/gpl.txt">GPLv3</a></td></tr>
-<tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>optimize, open graph, meta tags, rich pins, twitter cards, schema, seo, social sharing, structured data, rich snippets, facebook, linkedin</td></tr>
+<tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>optimize, social, search, meta tags, schema, open graph, rich pins, twitter cards, seo, social sharing, structured data, rich snippets, facebook, linkedin</td></tr>
 </table>
 
 <h2>Description</h2>
 
 <p style="margin:0;"><img class="readme-icon" src="https://surniaulula.github.io/wpsso/assets/icon-256x256.png"></p>
 
+<h3>The Complete Meta Tag and Schema Markup Solution</h3>
+
 <p><strong>Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded:</strong></p>
 
-<p>WPSSO Core and its complementary add-ons create meta tags and Schema markup for Facebook / Open Graph, Google's Knowledge Graph, Google Rich Results (aka Rich Snippets, Structured Data), Mobile Web Browsers, oEmbed data for LinkedIn, Pinterest Rich Pins, Twitter Cards &mdash; including complete markup for image SEO, video SEO, extensive e-Commerce product markup (for WooCommerce and others), mobile store apps, author profile / authorship, co-authors, publisher information, local business markup, aggregate ratings, reviews, recipe information, event details, and much, much more &mdash; all from your existing WordPress content, supported plugin data, and service API data.</p>
+<p>WPSSO creates meta tags and Schema markup for Facebook / Open Graph, Google's Knowledge Graph, Google Rich Results (aka Rich Snippets, Structured Data), Mobile Web Browsers, oEmbed data for LinkedIn, Pinterest Rich Pins, Twitter Cards &mdash; including complete markup for image SEO, video SEO, extensive e-Commerce product markup (for WooCommerce and others), mobile store apps, author profile / authorship, co-authors, publisher information, local business markup, aggregate ratings, reviews, recipe information, event details, and much, much more &mdash; all from your existing WordPress content, supported plugin data, and service API data.</p>
 
-<p>There's no need to manually re-enter descriptions, titles, product information, re-select images / videos, etc. like other meta tag and Schema markup plugins &mdash; WPSSO Core reads all your existing post, page, image, video, e-commerce product, recipe, rating, review, event, and SEO content automatically.</p>
+<p>There's no need to manually re-enter descriptions, titles, product information, re-select images / videos, etc. like other meta tag and Schema markup plugins &mdash; WPSSO reads all your existing post, page, image, video, e-commerce product, recipe, rating, review, event, and SEO content automatically.</p>
 
-<p>WPSSO Core is also language / locale aware, which means you can customize several option values for different webpage languages.</p>
+<p>WPSSO is also language / locale aware, which means you can customize several option values for different webpage languages.</p>
 
 <p><strong>Coded for maximum performance:</strong></p>
 
-<p>WPSSO Core makes full use of all available caching methods &mdash; along with offering advanced caching features like pre-seeding in background. WPSSO Core and its complementary add-ons load only the libraries and classes they need, keeping their code small, fast and light. All code is fully tested and compatible with the latest version of WordPress and PHP v7.x (WordPress v4.2 and PHP v5.6 or newer required).</p>
+<p>WPSSO makes full use of all available caching methods &mdash; along with offering advanced caching features like pre-seeding in background. WPSSO Core and its complementary add-ons load only the libraries and classes they need, keeping their code small, fast and light. All code is fully tested and compatible with the latest version of WordPress and PHP v7.x (WordPress v4.2 and PHP v5.6 or newer required).</p>
 
 <h3>Users Love the WPSSO Core Plugin</h3>
 
@@ -42,7 +44,7 @@
 <h3>WPSSO Core Standard Features</h3>
 
 <ul>
-<li><p>Complete and accurate meta tags for all social sites, search engines, web browser extensions, mail and messaging apps, and embedded object / iframe content.</p></li>
+<li><p>Complete and accurate meta tags for ALL social sites, search engines, web browser extensions, mail and messaging apps, and embedded object / iframe content.</p></li>
 <li><p>Updates WordPress oEmbed data with the Open Graph title, description, and image for posts, pages, and custom post types.</p></li>
 <li><p>Provides WordPress image size settings for:</p>
 
@@ -59,7 +61,7 @@
 <li>Twitter Large Image Summary Card</li>
 </ul></li>
 <li><p>Locates images from numerous sources, including featured, attached, gallery shortcode, content images, or a custom fallback image.</p></li>
-<li><p>Offers meta tags and markup for all webpages, including:</p>
+<li><p>Offers meta tags and optional Schema markup for all webpages, including:</p>
 
 <ul>
 <li>Home Page (static page or blog)</li>
@@ -70,43 +72,7 @@
 <li>Search Result Pages</li>
 <li>Archive Pages</li>
 </ul></li>
-<li><p>Customize values in the Document SSO metabox when editing posts, pages, custom post types, terms (categories and tags), custom post types, and user profiles:</p>
-
-<ul>
-<li>Customize Text
-
-<ul>
-<li>Preferred Cropping (image editing page) </li>
-<li>Schema Type</li>
-<li>Open Graph Type</li>
-<li>Default Title</li>
-<li>Default Description</li>
-<li>Pinterest Description</li>
-<li>Twitter Card Description</li>
-<li>Search Description</li>
-<li>Sharing URL</li>
-<li>Canonical URL</li>
-<li>Article Information
-
-<ul>
-<li>Article Section</li>
-</ul></li>
-</ul></li>
-<li>Priority Media
-
-<ul>
-<li>Facebook / Open Graph and Default Media
-
-<ul>
-<li>Priority Image Information
-
-<ul>
-<li>Maximum Images</li>
-<li>Image ID or an Image URL</li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul></li>
+<li><p>Customize values in the Document SSO metabox when editing posts, pages, custom post types, terms (categories and tags), custom post types, and user profiles.</p></li>
 <li><p>Built-in support for AMP plugins:</p>
 
 <ul>
@@ -148,11 +114,9 @@
 <li><p>Contextual help for every plugin option and <a href="https://wpsso.com/docs/plugins/wpsso/">comprehensive online documentation</a>.</p></li>
 </ul>
 
-<h3>Free Complementary Add-ons</h3>
+<h3>Free Complementary Add-ons for WPSSO Core</h3>
 
-<p>Need even more features?</p>
-
-<p>Simply activate the free complementary add-on(s) you need:</p>
+<p>Optionally activate free complementary add-on(s) for non-standard features:</p>
 
 <ul>
 <li><a href="https://wordpress.org/plugins/wpsso-faq/">WPSSO FAQ Manager</a> to manage FAQ categories with Question and Answer pages.</li>
@@ -160,15 +124,15 @@
 <li><a href="https://wordpress.org/plugins/wpsso-am/">WPSSO Mobile App Meta Tags</a> to manage mobile App information.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-organization/">WPSSO Organization Markup</a> to manage multiple Organizations.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-plm/">WPSSO Place and Local SEO Markup</a> to manage multiple locations.</li>
+<li><a href="https://wordpress.org/plugins/wpsso-wc-metadata/">WPSSO Product Metadata for WooCommerce</a> to manage GTIN, GTIN-8, GTIN-12 (UPC), GTIN-13 (EAN), GTIN-14, ISBN, MPN, Depth, and Volume product information in WooCommerce.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-ratings-and-reviews/">WPSSO Ratings and Reviews</a> to add ratings in WordPress comments.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-rest-api/">WPSSO REST API</a> to add meta tags and Schema markup in REST API queries.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-rrssb/">WPSSO Ridiculously Responsive Social Sharing Buttons</a> to add responsive share buttons.</li>
 <li><a href="https://wordpress.org/plugins/wpsso-breadcrumbs/">WPSSO Schema Breadcrumbs Markup</a> to add Breadcrumbs markup for Google.</li>
-<li><a href="https://wordpress.org/plugins/wpsso-schema-json-ld/">WPSSO Schema JSON-LD Markup</a> to add JSON-LD for Google.</li>
-<li><a href="https://wordpress.org/plugins/wpsso-strip-schema-microdata">WPSSO Strip Schema Microdata</a> to strip incorrect markup from templates.</li>
-<li><a href="https://wordpress.org/plugins/wpsso-tune-image-editors">WPSSO Tune Image Editors</a> for better looking WordPress thumbnails.</li>
-<li><a href="https://wordpress.org/plugins/wpsso-tweet-a-quote">WPSSO Tweet a Quote</a> to add tweetable quotes to your content.</li>
-<li><a href="https://wordpress.org/plugins/wpsso-user-locale">WPSSO User Locale Selector</a> to switch languages quickly and easily.</li>
+<li><a href="https://wordpress.org/plugins/wpsso-schema-json-ld/">WPSSO Schema JSON-LD Markup</a> to provide Google with Schema markup in its preferred format.</li>
+<li><a href="https://wordpress.org/plugins/wpsso-strip-schema-microdata/">WPSSO Strip Schema Microdata</a> to strip incorrect markup from templates.</li>
+<li><a href="https://wordpress.org/plugins/wpsso-tune-image-editors/">WPSSO Tune Image Editors</a> for better looking WordPress thumbnails.</li>
+<li><a href="https://wordpress.org/plugins/wpsso-user-locale/">WPSSO User Locale Selector</a> to switch languages quickly and easily.</li>
 </ul>
 
 <h3>WPSSO Core Premium Features</h3>
@@ -237,257 +201,7 @@
 <li>YouTube Videos and Playlists</li>
 </ul></li>
 </ul></li>
-<li><p>Customize additional option values in the Document SSO metabox when editing posts, pages, custom post types, terms (categories and tags), custom post types, and user profiles:</p>
-
-<ul>
-<li>Customize Text
-
-<ul>
-<li>Basic Product Information
-
-<ul>
-<li>Product Brand</li>
-<li>Product Price and Currency</li>
-<li>Product Availability</li>
-<li>Product Condition</li>
-<li>Product Material</li>
-<li>Product Color</li>
-<li>Product Target Gender</li>
-<li>Product Size</li>
-<li>Product Weight (kg)</li>
-<li>Product SKU</li>
-<li>Product MPN</li>
-<li>Product ISBN</li>
-</ul></li>
-</ul></li>
-<li>Priority Media
-
-<ul>
-<li>Facebook / Open Graph and Default Media
-
-<ul>
-<li>Priority Video Information
-
-<ul>
-<li>Include Preview Images</li>
-<li>Maximum Videos</li>
-<li>Video Dimensions</li>
-<li>Video Embed HTML or Video URL</li>
-<li>Video Name / Title</li>
-<li>Video Description</li>
-</ul></li>
-</ul></li>
-<li>Pinterest Pin It
-
-<ul>
-<li>Image ID or an Image URL</li>
-</ul></li>
-<li>Twitter Card
-
-<ul>
-<li>Image ID or an Image URL</li>
-</ul></li>
-<li>Schema JSON-LD Markup / Rich Results
-
-<ul>
-<li>Maximum Images</li>
-<li>Image ID or an Image URL</li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li><p>Additional customizable option values in the Document SSO metabox are available from the <a href="https://wpsso.com/extend/plugins/wpsso-schema-json-ld/">WPSSO Schema JSON-LD Markup Premium add-on</a>:</p>
-
-<ul>
-<li>All Schema Types
-
-<ul>
-<li>Name / Title</li>
-<li>Alternate Name</li>
-<li>Description</li>
-<li>Microdata Type URLs</li>
-<li>Same-As URLs</li>
-</ul></li>
-<li>Creative Work Information
-
-<ul>
-<li>Is Part of URL</li>
-<li>Headline</li>
-<li>Full Text</li>
-<li>Keywords</li>
-<li>Language</li>
-<li>Family Friendly</li>
-<li>Copyright Year</li>
-<li>License URL</li>
-<li>Publisher</li>
-<li>Service Provider</li>
-</ul></li>
-<li>Event Information
-
-<ul>
-<li>Event Language</li>
-<li>Event Attendance</li>
-<li>Event Online URL</li>
-<li>Event Physical Venue</li>
-<li>Event Organizer Organization</li>
-<li>Event Organizer Person</li>
-<li>Event Performer Organization</li>
-<li>Event Performer Person</li>
-<li>Event Start (date, time, timezone)</li>
-<li>Event End (date, time, timezone)</li>
-<li>Event Offers Start (date, time, timezone)</li>
-<li>Event Offers End (date, time, timezone)</li>
-<li>Event Offers (name, price, currency, availability)</li>
-</ul></li>
-<li>How-To
-
-<ul>
-<li>How-To Makes </li>
-<li>How-To Preparation Time </li>
-<li>How-To Total Time </li>
-<li>How-To Supplies </li>
-<li>How-To Tools </li>
-<li>How-To Steps (section name, section description, step name, direction text and image)</li>
-</ul></li>
-<li>Job Posting Information
-
-<ul>
-<li>Job Title</li>
-<li>Hiring Organization</li>
-<li>Job Location</li>
-<li>Base Salary</li>
-<li>Employment Type</li>
-<li>Jpb Posting Expires</li>
-</ul></li>
-<li>Movie Information
-
-<ul>
-<li>Cast Names</li>
-<li>Director Names</li>
-<li>Production Company</li>
-<li>Movie Runtime</li>
-</ul></li>
-<li>Organization Information
-
-<ul>
-<li>Select an Organization</li>
-</ul></li>
-<li>Person Information
-
-<ul>
-<li>Select a Person</li>
-</ul></li>
-<li>Product Information (Additional)
-
-<ul>
-<li>Product Length (cm)</li>
-<li>Product Width (cm)</li>
-<li>Product Height (cm)</li>
-<li>Product Depth (cm)</li>
-<li>Product Fluid Volume (ml)</li>
-<li>Product GTIN-14</li>
-<li>Product GTIN-13 (EAN)</li>
-<li>Product GTIN-12 (UPC)</li>
-<li>Product GTIN-8</li>
-<li>Product GTIN</li>
-</ul></li>
-<li>QA Page Information
-
-<ul>
-<li>QA Heading</li>
-</ul></li>
-<li>Recipe Information
-
-<ul>
-<li>Recipe Cuisine </li>
-<li>Recipe Course </li>
-<li>Recipe Makes </li>
-<li>Cooking Method </li>
-<li>Preparation Time </li>
-<li>Cooking Time </li>
-<li>Total Time </li>
-<li>Recipe Ingredients </li>
-<li>Recipe Instructions </li>
-<li>Nutrition Information per Serving 
-
-<ul>
-<li>Serving Size</li>
-<li>Calories</li>
-<li>Protein</li>
-<li>Fiber</li>
-<li>Carbohydrates</li>
-<li>Sugar</li>
-<li>Sodium</li>
-<li>Fat</li>
-<li>Saturated Fat</li>
-<li>Unsaturated Fat</li>
-<li>Trans Fat</li>
-<li>Cholesterol</li>
-</ul></li>
-</ul></li>
-<li>Review Information
-
-<ul>
-<li>Review Rating </li>
-<li>Rating Value Name</li>
-<li>Subject of the Review
-
-<ul>
-<li>Subject Webpage Type </li>
-<li>Subject Webpage URL </li>
-<li>Subject Same-As URL </li>
-<li>Subject Name </li>
-<li>Subject Description </li>
-<li>Subject Image ID or URL </li>
-<li>Claim Subject Information (for Claim Review)
-
-<ul>
-<li>Short Summary of Claim</li>
-<li>First Appearance URL</li>
-</ul></li>
-<li>Creative Work Subject Information
-
-<ul>
-<li>C.W. Author Type</li>
-<li>C.W. Author Name</li>
-<li>C.W. Author URL</li>
-<li>C.W. Published Date</li>
-<li>C.W. Created Date</li>
-</ul></li>
-<li>Book Subject Information
-
-<ul>
-<li>Book ISBN</li>
-</ul></li>
-<li>Movie Subject Information
-
-<ul>
-<li>Movie Cast Names</li>
-<li>Movie Director Names</li>
-</ul></li>
-<li>Product Subject Information
-
-<ul>
-<li>Product Brand</li>
-<li>Product Offers (name, price, currency, availability)</li>
-<li>Product SKU</li>
-<li>Product MPN</li>
-</ul></li>
-<li>Software App Subject Information
-
-<ul>
-<li>Operating System</li>
-<li>Application Category</li>
-<li>Software App Offers (name, price, currency, availability)</li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li>Software Application Information
-
-<ul>
-<li>Operating System</li>
-<li>Application Category</li>
-</ul></li>
-</ul></li>
+<li><p>Customize additional option values in the Document SSO metabox when editing posts, pages, custom post types, terms (categories and tags), custom post types, and user profiles.</p></li>
 </ul>
 
 
@@ -514,7 +228,6 @@
 <li><a href="https://wpsso.com/docs/plugins/wpsso/installation/integration/wp-ecommerce-integration/">WP eCommerce Integration Notes</a></li>
 </ul></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/installation/troubleshooting-guide/">Troubleshooting Guide</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/installation/performance-tuning/">Performance Tuning</a></li>
 </ul>
 
 
@@ -548,22 +261,9 @@
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/why-shouldnt-i-upload-small-images-to-the-media-library/">Why shouldn't I upload small images to the Media library?</a></li>
 </ul>
 
-<h3>Advanced Documentation and Notes</h3>
+<h3>Notes and Documentation</h3>
 
 <ul>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/notes/modules/">About WPSSO Core Premium Integration Modules</a>
-
-<ul>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/notes/modules/author-gravatar/">Author Gravatar</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/notes/modules/co-author-plus/">Co-Author Plus</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/notes/modules/easy-digital-downloads/">Easy Digital Downloads</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/notes/modules/facebook-slideshare-vimeo-wistia-youtube-video-apis/">Facebook, Slideshare, Vimeo, Wistia, Youtube Video APIs</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/notes/modules/nextcellent-gallery-and-nextgen-gallery/">NextCellent Gallery and NextGEN Gallery</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/notes/modules/polylang/">Polylang</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/notes/modules/the-events-calendar/">The Events Calendar</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/notes/modules/woocommerce/">WooCommerce</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/notes/modules/yoast-seo-aka-wordpress-seo/">Yoast SEO (aka WordPress SEO)</a></li>
-</ul></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/notes/developer/">Developer Resources</a>
 
 <ul>

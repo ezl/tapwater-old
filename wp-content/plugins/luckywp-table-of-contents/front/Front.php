@@ -8,6 +8,7 @@ use luckywp\tableOfContents\core\front\BaseFront;
 use luckywp\tableOfContents\core\helpers\ArrayHelper;
 use luckywp\tableOfContents\plugin\dom\Dom;
 use luckywp\tableOfContents\plugin\PostSettings;
+use luckywp\tableOfContents\plugin\Shortcode;
 
 class Front extends BaseFront
 {
@@ -99,7 +100,7 @@ class Front extends BaseFront
     {
         global $post;
 
-        if (!is_single($post) && !is_page($post)) {
+        if (!Shortcode::allow()) {
             return $content;
         }
 

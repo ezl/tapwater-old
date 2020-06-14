@@ -9,9 +9,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
-if ( ! class_exists( 'WpssoOptionsUpgrade' ) && class_exists( 'WpssoOptions' ) ) {
+if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+	die( 'Do. Or do not. There is no try.' );
+}
 
-	class WpssoOptionsUpgrade extends WpssoOptions {
+if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
+
+	class WpssoOptionsUpgrade {
+
+		private $p;		// Wpsso class object.
 
 		private static $rename_options_keys = array(
 			'wpsso' => array(	// WPSSO Core plugin.
@@ -141,7 +147,7 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) && class_exists( 'WpssoOptions' ) )
 					'plugin_cf_add_type_urls'  => 'plugin_cf_addl_type_urls',
 					'schema_organization_json' => 'schema_add_home_organization',
 					'schema_person_json'       => 'schema_add_home_person',
-					'schema_website_json'      => 'schema_add_home_website',
+					'schema_website_json'      => '',
 					'schema_person_id'         => 'schema_home_person_id',
 				),
 				574 => array(
@@ -226,8 +232,8 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) && class_exists( 'WpssoOptions' ) )
 					'plugin_cf_product_ean' => 'plugin_cf_product_gtin13',
 				),
 				650 => array(
-					'plugin_product_attr_volume' => 'plugin_attr_product_volume_value',
-					'plugin_cf_product_volume'   => 'plugin_cf_product_volume_value',
+					'plugin_product_attr_volume' => 'plugin_attr_product_fluid_volume_value',
+					'plugin_cf_product_volume'   => 'plugin_cf_product_fluid_volume_value',
 				),
 				651 => array(
 					'plugin_honor_force_ssl' => '',
@@ -393,12 +399,14 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) && class_exists( 'WpssoOptions' ) )
 					'plugin_product_attr_mfr_part_no'   => 'plugin_attr_product_mfr_part_no',
 					'plugin_product_attr_size'          => 'plugin_attr_product_size',
 					'plugin_product_attr_target_gender' => 'plugin_attr_product_target_gender',
-					'plugin_product_attr_volume_value'  => 'plugin_attr_product_volume_value',
+					'plugin_product_attr_volume_value'  => 'plugin_attr_product_fluid_volume_value',
+				),
+				725 => array(
+					'plugin_attr_product_volume_value' => 'plugin_attr_product_fluid_volume_value',
+					'plugin_cf_product_volume_value'   => 'plugin_cf_product_fluid_volume_value',
 				),
 			),
 		);
-
-		protected $p;
 
 		public function __construct( &$plugin ) {
 
@@ -410,9 +418,9 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) && class_exists( 'WpssoOptions' ) )
 		}
 
 		/**
-		 * The $def_opts argument accepts output from functions, so don't force reference.
+		 * The $defs argument accepts output from functions, so don't force reference.
 		 */
-		public function options( $options_name, &$opts = array(), $def_opts = array(), $network = false ) {
+		public function options( $options_name, &$opts = array(), $defs = array(), $network = false ) {
 
 			/**
 			 * Save / create the current options version number for version checks to follow.
@@ -434,7 +442,8 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) && class_exists( 'WpssoOptions' ) )
 
 			if ( $options_name === constant( 'WPSSO_OPTIONS_NAME' ) ) {
 
-				$rename_filter_name   = $this->p->lca . '_rename_options_keys';
+				$rename_filter_name = $this->p->lca . '_rename_options_keys';
+
 				$upgraded_filter_name = $this->p->lca . '_upgraded_options';
 
 				$rename_options_keys = apply_filters( $rename_filter_name, self::$rename_options_keys );
@@ -612,15 +621,18 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) && class_exists( 'WpssoOptions' ) )
 
 			} elseif ( $options_name === constant( 'WPSSO_SITE_OPTIONS_NAME' ) ) {
 
-				$rename_filter_name   = $this->p->lca . '_rename_site_options_keys';
+				$rename_filter_name = $this->p->lca . '_rename_site_options_keys';
+
 				$upgraded_filter_name = $this->p->lca . '_upgraded_site_options';
 
 				$this->p->util->rename_opts_by_ext( $opts, apply_filters( $rename_filter_name, self::$rename_site_options_keys ) );
 			}
 
-			$opts = apply_filters( $upgraded_filter_name, $opts, $def_opts );
+			$opts = apply_filters( $upgraded_filter_name, $opts, $defs );
 
-			return $this->sanitize( $opts, $def_opts, $network );	// Cleanup options and sanitize.
+			$opts = $this->p->opt->sanitize( $opts, $defs, $network );	// Create any new / missing options.
+
+			return $opts;
 		}
 	}
 }

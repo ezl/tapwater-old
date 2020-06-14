@@ -61,8 +61,7 @@ class Shortcode extends BaseObject
         global $post;
         if ($this->isDiactivated() ||
             ($this->theContentApplied && $this->headingsCache === null) ||
-            (!is_single($post) && !is_page($post)) ||
-            !$this->isMainQueryPost()
+            !static::allow()
         ) {
             return '';
         }
@@ -220,7 +219,7 @@ class Shortcode extends BaseObject
     {
         global $post;
 
-        if (!$this->isMainQueryPost()) {
+        if (!static::allow()) {
             return false;
         }
 
@@ -244,11 +243,17 @@ class Shortcode extends BaseObject
     /**
      * @return bool
      */
-    protected function isMainQueryPost()
+    public static function allow()
     {
         global $post, $wp_query;
-        return ($post instanceof WP_Post) &&
-            $post->ID == $wp_query->get_queried_object_id();
+        if (!($post instanceof WP_Post)) {
+            return false;
+        }
+
+        $allow = (is_single($post->ID) || is_page($post->ID)) && // Это страница записи
+            ($post->ID == $wp_query->get_queried_object_id()); // Это главный запрос на странице
+
+        return apply_filters('lwptoc_allow', $allow, $post);
     }
 
     private $_tag;

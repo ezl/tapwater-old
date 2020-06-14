@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
+if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+	die( 'Do. Or do not. There is no try.' );
+}
+
 /**
  * The wpsso_error_handler() function can be used for cases where errors need
  * to be captured and sent to the toolbar notification area. Example:
@@ -88,9 +92,20 @@ if ( ! function_exists( 'wpsso_show_head' ) ) {
 	}
 }
 
+/**
+ * Deprecated on 2020/05/05.
+ */
 if ( ! function_exists( 'wpsso_clear_all_cache' ) ) {
 
 	function wpsso_clear_all_cache( $clear_other = false ) {
+
+		return wpsso_clear_cache( $clear_other );
+	}
+}
+
+if ( ! function_exists( 'wpsso_clear_cache' ) ) {
+
+	function wpsso_clear_cache( $clear_other = false ) {
 
 		$wpsso =& Wpsso::get_instance();
 
@@ -98,7 +113,7 @@ if ( ! function_exists( 'wpsso_clear_all_cache' ) ) {
 
 			$user_id = get_current_user_id();
 
-			return $wpsso->util->schedule_clear_all_cache( $user_id, $clear_other );
+			return $wpsso->util->cache->schedule_clear( $user_id, $clear_other );
 		}
 	}
 }
@@ -242,6 +257,7 @@ if ( ! function_exists( 'wpsso_get_user_og_image' ) ) {
 	function wpsso_get_user_og_image( $user_id, $size_name = 'thumbnail' ) {
 
 		if ( $mod = wpsso_get_user_mod( $user_id ) ) {
+
 			return wpsso_get_mod_og_image( $mod, $size_name );
 		}
 
@@ -256,6 +272,7 @@ if ( ! function_exists( 'wpsso_get_canonical_url' ) ) {
 		$wpsso =& Wpsso::get_instance();
 
 		if ( ! empty( $wpsso->util ) ) {	// Just in case.
+
 			return $wpsso->util->get_canonical_url( $mod, $add_page );
 		}
 
@@ -270,6 +287,7 @@ if ( ! function_exists( 'wpsso_get_sharing_url' ) ) {
 		$wpsso =& Wpsso::get_instance();
 
 		if ( ! empty( $wpsso->util ) ) {	// Just in case.
+
 			return $wpsso->util->get_sharing_url( $mod, $add_page );
 		}
 
