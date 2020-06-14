@@ -181,7 +181,7 @@ endif;
 
 
 <!-- wp:heading -->
-<h2>How Do People In <?php the_field('country_name'); ?> Rate The Water?</h2>
+<h2>What Do People In <?php the_field('country_name'); ?> Think About The Tap Water?</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->

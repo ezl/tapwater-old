@@ -238,7 +238,7 @@ get_template_part('world', 'map');
 <!-- /wp:html -->
 
 <!-- wp:heading -->
-<h2>How Do People In <?php echo $state_name; ?> Rate The Water?</h2>
+<h2>What Do People In <?php echo $state_name; ?> Think About The Tap Water?</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
