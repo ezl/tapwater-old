@@ -6,10 +6,12 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
 if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+
 	die( 'Do. Or do not. There is no try.' );
 }
 
@@ -24,6 +26,7 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -123,9 +126,9 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 						$is_assoc = true, $is_disabled = false, $selected = false, $event_names = array( 'on_focus_load_json', 'on_change_unhide_rows' ),
 							$event_args = array(
 								'json_var'  => 'schema_types',
-								'exp_secs'  => $schema_exp_secs,
-								'is_transl' => true,	// No label translation required.
-								'is_sorted' => true,	// No label sorting required.
+								'exp_secs'  => $schema_exp_secs,	// Create and read from a javascript URL.
+								'is_transl' => true,			// No label translation required.
+								'is_sorted' => true,			// No label sorting required.
 							)
 						),
 				),
@@ -209,9 +212,9 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 						$is_assoc = true, $is_disabled = false, $selected = false, $event_names = array( 'on_focus_load_json' ),
 							$event_args = array(
 								'json_var'  => 'article_sections',
-								'exp_secs'  => $select_exp_secs,
-								'is_transl' => true,	// No label translation required.
-								'is_sorted' => true,	// No label sorting required.
+								'exp_secs'  => $select_exp_secs,	// Create and read from a javascript URL.
+								'is_transl' => true,			// No label translation required.
+								'is_sorted' => true,			// No label sorting required.
 							)
 						),
 				),
@@ -241,14 +244,18 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 		public function filter_metabox_sso_media_rows( $table_rows, $form, $head_info, $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			$max_media_items = $this->p->cf[ 'form' ][ 'max_media_items' ];
 
-			$size_name = $this->p->lca . '-opengraph';
-
-			$media_info = $this->p->og->get_media_info( $size_name, array( 'pid', 'img_url' ), $mod, $md_pre = 'none', $mt_pre = 'og' );
+			/**
+			 * Get the default Open Graph image pid and URL.
+			 */
+			$size_name       = $this->p->lca . '-opengraph';
+			$media_request   = array( 'pid', 'img_url' );
+			$media_info      = $this->p->og->get_media_info( $size_name, $media_request, $mod, $md_pre = 'none' );
 
 			/**
 			 * Metabox form rows.
@@ -299,7 +306,7 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 			 *
 			 * 	Twitter Card
 			 *
-			 * 	Schema JSON-LD Markup / Rich Results
+			 * 	Schema JSON-LD Markup / Google Rich Results
 			 */
 
 			return $form->get_md_form_rows( $table_rows, $form_rows, $head_info, $mod );
@@ -308,19 +315,21 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 		public function filter_metabox_sso_preview_rows( $table_rows, $form, $head_info, $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			$og_prev_width    = 600;
 			$og_prev_height   = 315;
 			$og_prev_img_html = '';
-			$media_url        = SucomUtil::get_mt_media_url( $head_info );
+			$image_url        = SucomUtil::get_first_mt_media_url( $head_info );
 			$sharing_url      = $this->p->util->get_sharing_url( $mod, $add_page = false );
 			$canonical_url    = $this->p->util->get_canonical_url( $mod, $add_page = false );
 
 			if ( $mod[ 'is_post' ] ) {
 
 				$shortlink_url = SucomUtilWP::wp_get_shortlink( $mod[ 'id' ], $context = 'post' );
+
 			} else {
 
 				$shortlink_url = apply_filters( $this->p->lca . '_get_short_url', $sharing_url,
@@ -333,21 +342,25 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 			$is_sufficient = true === $have_sizes && $head_info[ 'og:image:width' ] >= $og_prev_width && 
 				$head_info[ 'og:image:height' ] >= $og_prev_height ? true : false;
 
-			if ( ! empty( $media_url ) ) {
+			if ( ! empty( $image_url ) ) {
 
 				if ( $have_sizes ) {
 
 					$og_prev_img_html .= '<div class="preview_img" style=" background-size:' ;
 
 					if ( $is_sufficient ) {
+
 						$og_prev_img_html .= 'cover';
+
 					} else {
+
 						$og_prev_img_html .= $head_info[ 'og:image:width' ] . 'px ' . $head_info[ 'og:image:height' ] . 'px';
 					}
 
-					$og_prev_img_html .= '; background-image:url(' . $media_url . ');" />';
+					$og_prev_img_html .= '; background-image:url(' . $image_url . ');" />';
 
 					if ( ! $is_sufficient ) {
+
 						$og_prev_img_html .= '<p>' . sprintf( _x( 'Image Size Smaller<br/>than Suggested Minimum<br/>of %s',
 							'preview image error', 'wpsso' ), $og_prev_width . 'x' . $og_prev_height . 'px' ) . '</p>';
 					}
@@ -356,7 +369,7 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 
 				} else {
 
-					$og_prev_img_html .= '<div class="preview_img" style="background-image:url(' . $media_url . ');" />';
+					$og_prev_img_html .= '<div class="preview_img" style="background-image:url(' . $image_url . ');" />';
 					$og_prev_img_html .= '<p>' . _x( 'Image Size Unknown<br/>or Not Available', 'preview image error', 'wpsso' ) . '</p>';
 					$og_prev_img_html .= '</div>';
 				}
@@ -416,6 +429,7 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 		public function filter_metabox_sso_oembed_rows( $table_rows, $form, $head_info, $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -474,6 +488,7 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 		public function filter_metabox_sso_head_rows( $table_rows, $form, $head_info, $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -491,14 +506,18 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 				if ( 1 === count( $parts ) ) {
 
 					if ( 0 === strpos( $parts[0], '<script ' ) ) {
+
 						$script_class = 'script';
+
 					} elseif ( 0 === strpos( $parts[0], '<noscript ' ) ) {
+
 						$script_class = 'noscript';
 					}
 
 					$table_rows[] = '<td colspan="5" class="html ' . $script_class . '"><pre>' . esc_html( $parts[0] ) . '</pre></td>';
 
 					if ( 'script' === $script_class || 0 === strpos( $parts[0], '</noscript>' ) ) {
+
 						$script_class = '';
 					}
 
@@ -510,6 +529,7 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 					if ( $parts[5] === WPSSO_UNDEF || $parts[5] === (string) WPSSO_UNDEF ) {
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( $parts[3] . ' value is ' . WPSSO_UNDEF . ' (skipped)' );
 						}
 
@@ -517,8 +537,11 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 					}
 
 					if ( $parts[1] === 'meta' && $parts[2] === 'itemprop' && strpos( $parts[3], '.' ) !== 0 ) {
+
 						$match_name = preg_replace( '/^.*\./', '', $parts[3] );
+
 					} else {
+
 						$match_name = $parts[3];
 					}
 
@@ -533,8 +556,11 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 					 * then mark the meta tag as disabled and hide it in basic view.
 					 */
 					if ( empty( $parts[ 0 ] ) ) {
+
 						$tr_class .= ' is_disabled hide_row_in_basic';
+
 					} else {
+
 						$tr_class .= ' is_enabled';
 					}
 
@@ -542,6 +568,7 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 					 * The meta tag is enabled, but its value is empty (and not 0).
 					 */
 					if ( $opt_enabled && isset( $parts[ 5 ] ) && empty( $parts[ 5 ] ) && ! is_numeric( $parts[ 5 ] ) ) {
+
 						$tr_class .= ' is_empty';
 					}
 
@@ -566,6 +593,7 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 		public function filter_metabox_sso_validate_rows( $table_rows, $form, $head_info, $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -597,15 +625,15 @@ if ( ! class_exists( 'WpssoEdit' ) ) {
 					'label' => _x( 'Validate PageSpeed', 'submit button', 'wpsso' ),
 					'url'   => 'https://developers.google.com/speed/pagespeed/insights/?url=' . $sharing_url_encoded,
 				),
-				'google-testing-tool' => array(
-					'title' => _x( 'Google Structured Data Test', 'option label', 'wpsso' ),
-					'label' => _x( 'Validate Structured Data', 'submit button', 'wpsso' ) . ( $have_schema ? '' : ' *' ),
-					'url'   => $have_schema ? 'https://search.google.com/structured-data/testing-tool/u/0/#url=' . $sharing_url_encoded : '',
-				),
 				'google-rich-results' => array(
 					'title' => _x( 'Google Rich Results Test', 'option label', 'wpsso' ),
 					'label' => _x( 'Validate Rich Results', 'submit button', 'wpsso' ) . ( $have_schema ? '' : ' *' ),
 					'url'   => $have_schema ? 'https://search.google.com/test/rich-results?url=' . $sharing_url_encoded : '',
+				),
+				'google-testing-tool' => array(
+					'title' => _x( 'Google Structured Data Test (Deprecated)', 'option label', 'wpsso' ),
+					'label' => _x( 'Validate Structured Data', 'submit button', 'wpsso' ) . ( $have_schema ? '' : ' *' ),
+					'url'   => $have_schema ? 'https://search.google.com/structured-data/testing-tool/u/0/#url=' . $sharing_url_encoded : '',
 				),
 				'linkedin' => array(
 					'title' => _x( 'LinkedIn Post Inspector', 'option label', 'wpsso' ),

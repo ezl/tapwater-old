@@ -6,10 +6,12 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
 if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+
 	die( 'Do. Or do not. There is no try.' );
 }
 
@@ -114,9 +116,9 @@ if ( ! class_exists( 'WpssoPinterest' ) ) {
 
 			if ( ! empty( $this->p->options[ 'p_add_img_html' ] ) ) {	// Just in case.
 
-				$sizes[ 'p' ] = array(	// Option prefix.
-					'name'  => 'pinterest',
-					'label' => _x( 'Pinterest Pin It Image', 'image size label', 'wpsso' ),
+				$sizes[ 'p' ] = array(		// Option prefix.
+					'name'         => 'pinterest',
+					'label_transl' => _x( 'Pinterest Pin It', 'option label', 'wpsso' ),
 				);
 			}
 
@@ -186,9 +188,9 @@ if ( ! class_exists( 'WpssoPinterest' ) ) {
 
 			$size_name = $this->p->lca . '-pinterest';
 
-			$og_images = $this->p->og->get_all_images( 1, $size_name, $mod, false, $md_pre = array( 'p', 'schema', 'og' ) );
+			$mt_images = $this->p->og->get_all_images( 1, $size_name, $mod, false, $md_pre = array( 'p', 'schema', 'og' ) );
 
-			$image_url = SucomUtil::get_mt_media_url( $og_images );
+			$image_url = SucomUtil::get_first_mt_media_url( $mt_images );
 
 			$image_html = "\n" . '<!-- ' . $this->p->lca . ' pinterest pin it image added on ' . date( 'c' ) . ' -->' . "\n";
 

@@ -1,0 +1,4 @@
+# Remove local/mounted db directory
+# Export and download production db to ./dump.sql
+# Tear down mysql container, with docker-compose down
+# Rebuild containers, with docker-compose up

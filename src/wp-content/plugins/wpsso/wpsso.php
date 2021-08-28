@@ -10,12 +10,12 @@
  * Author URI: https://wpsso.com/
  * License: GPLv3
  * License URI: https://www.gnu.org/licenses/gpl.txt
- * Description: Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted or embedded.
+ * Description: Make sure your content looks great on social sites and search results, no matter how your URLs are crawled, shared, re-shared, posted or embedded.
  * Requires PHP: 5.6
  * Requires At Least: 4.2
- * Tested Up To: 5.4.2
- * WC Tested Up To: 4.2.0
- * Version: 7.9.0
+ * Tested Up To: 5.5
+ * WC Tested Up To: 4.4.1
+ * Version: 8.3.0
  *
  * Version Numbering: {major}.{minor}.{bugfix}[-{stage}.{level}]
  *
@@ -28,6 +28,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -42,6 +43,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 		public $cache;		// SucomCache (object and file caching).
 		public $check;		// WpssoCheck.
 		public $conflict;	// WpssoConflict (admin plugin conflict checks).
+		public $compat;		// WpssoCompat (3rd party plugin and theme compatibility actions and filters).
 		public $debug;		// SucomDebug or SucomNoDebug.
 		public $edit;		// WpssoEdit
 		public $head;		// WpssoHead.
@@ -123,7 +125,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			 * Hooks the 'override_textdomain_mofile' filter (if debug is enabled) to use the local translation files
 			 * instead of those from wordpress.org.
 			 */
-			add_action( 'wpsso_init_textdomain', array( __CLASS__, 'init_textdomain' ), -10, 1 );
+			add_action( 'wpsso_init_textdomain', array( __CLASS__, 'init_textdomain' ), -1000, 1 );
 		}
 
 		public static function &get_instance() {
@@ -152,6 +154,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			$classnames = $this->get_lib_classnames( 'widget' );	// Always returns an array.
 
 			foreach ( $classnames as $id => $classname ) {
+
 				register_widget( $classname );
 			}
 		}
@@ -179,8 +182,11 @@ if ( ! class_exists( 'Wpsso' ) ) {
 				 * directly from the config array.
 				 */
 				if ( isset( $this->cf[ 'opt' ][ 'defaults' ] ) ) {	// just in case.
+
 					$this->options = $this->cf[ 'opt' ][ 'defaults' ];
+
 				} else {
+
 					$this->options = array();
 				}
 
@@ -194,8 +200,11 @@ if ( ! class_exists( 'Wpsso' ) ) {
 				if ( ! is_array( $this->site_options ) ) {
 
 					if ( isset( $this->cf[ 'opt' ][ 'site_defaults' ] ) ) {	// Just in case.
+
 						$this->site_options = $this->cf[ 'opt' ][ 'site_defaults' ];
+
 					} else {
+
 						$this->site_options = array();
 					}
 
@@ -214,6 +223,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 					foreach ( $this->site_options as $key => $val ) {
 
 						if ( false !== strpos( $key, ':use' ) ) {
+
 							continue;
 						}
 
@@ -256,14 +266,9 @@ if ( ! class_exists( 'Wpsso' ) ) {
 		 */
 		public function set_objects( $activate = false ) {
 
-			$is_admin = is_admin() ? true : false;
-
-			$network = is_multisite() ? true : false;
-
+			$is_admin   = is_admin() ? true : false;
 			$doing_cron = defined( 'DOING_CRON' ) ? DOING_CRON : false;
-
-			$debug_log = false;
-
+			$debug_log  = false;
 			$debug_html = false;
 
 			if ( defined( 'WPSSO_DEBUG_LOG' ) && WPSSO_DEBUG_LOG ) {
@@ -300,7 +305,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			 *	$opt
 			 *	$script
 			 *	$style
-			 *	$filters
+			 *	$compat
 			 *	$msgs
 			 *	$admin
 			 */
@@ -358,18 +363,20 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			$this->opt   = new WpssoOptions( $this );
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init options do action' );	// Begin timer.
 			}
 
 			do_action( 'wpsso_init_options', $activate );
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init options do action' );	// End timer.
 			}
 
-			$this->filters = new WpssoFilters( $this );
-			$this->script  = new WpssoScript( $this );
-			$this->style   = new WpssoStyle( $this );
+			$this->compat = new WpssoCompat( $this );	// Actions and filters for compatibility.
+			$this->script = new WpssoScript( $this );
+			$this->style  = new WpssoStyle( $this );
 
 			if ( $is_admin ) {
 
@@ -439,6 +446,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			$this->loader = new WpssoLoader( $this );		// Module loader.
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init objects do action' );	// Begin timer.
 			}
 
@@ -448,6 +456,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			do_action( 'wpsso_init_objects', $activate );
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init objects do action' );	// End timer.
 			}
 
@@ -461,22 +470,34 @@ if ( ! class_exists( 'Wpsso' ) ) {
 				$this->options = $this->opt->get_defaults();
 			}
 
-			$this->options = $this->opt->check_options( WPSSO_OPTIONS_NAME, $this->options, $network, $activate );
+			if ( $this->debug->enabled ) {
+
+				$this->debug->log( 'checking ' . WPSSO_OPTIONS_NAME . ' options' );
+			}
+
+			$this->options = $this->opt->check_options( WPSSO_OPTIONS_NAME, $this->options, $network = false, $activate );
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->log( 'options array len is ' . SucomUtil::serialized_len( $this->options ) . ' bytes' );
 			}
 
-			if ( $network ) {
+			if ( is_multisite() ) {	// Load the site options array.
 
 				if ( ! empty( $this->site_options[ '__reload_defaults' ] ) ) {
 
 					$this->site_options = $this->opt->get_site_defaults();
 				}
 
-				$this->site_options = $this->opt->check_options( WPSSO_SITE_OPTIONS_NAME, $this->site_options, $network, $activate );
+				if ( $this->debug->enabled ) {
+
+					$this->debug->log( 'checking ' . WPSSO_SITE_OPTIONS_NAME . ' options' );
+				}
+
+				$this->site_options = $this->opt->check_options( WPSSO_SITE_OPTIONS_NAME, $this->site_options, $network = true, $activate );
 
 				if ( $this->debug->enabled ) {
+
 					$this->debug->log( 'site options array len is ' . SucomUtil::serialized_len( $this->options ) . ' bytes' );
 				}
 			}
@@ -539,6 +560,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			}
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->log( 'done setting objects' );
 			}
 		}
@@ -549,6 +571,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 		public function init_hooks() {
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init hooks' );	// Begin timer.
 			}
 
@@ -562,6 +585,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			}
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init hooks' );	// End timer.
 			}
 		}
@@ -572,6 +596,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 		public function init_shortcodes() {
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init shortcodes' );	// Begin timer.
 			}
 
@@ -582,6 +607,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			}
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init shortcodes' );	// End timer.
 			}
 		}
@@ -592,6 +618,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 		public function init_plugin() {
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init plugin' );	// Begin timer.
 			}
 
@@ -669,6 +696,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			}
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init plugin do action' );	// Begin timer.
 			}
 
@@ -678,10 +706,12 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			do_action( 'wpsso_init_plugin', $is_admin, $doing_ajax );
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init plugin do action' );	// End timer.
 			}
 
 			if ( $this->debug->enabled ) {
+
 				$this->debug->mark( 'init plugin' );	// End timer.
 			}
 		}
@@ -699,12 +729,14 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			static $loaded = null;
 
 			if ( null !== $loaded ) {
+
 				return;
 			}
 
 			$loaded = true;
 
 			if ( $debug_enabled ) {
+
 				add_filter( 'load_textdomain_mofile', array( self::get_instance(), 'override_textdomain_mofile' ), 10, 3 );
 			}
 
@@ -720,8 +752,11 @@ if ( ! class_exists( 'Wpsso' ) ) {
 			foreach ( $this->cf[ 'plugin' ] as $ext => $info ) {
 
 				if ( ! isset( $info[ 'lib' ][ $type_dir ] ) ) {
+
 					continue;
+
 				} elseif ( ! is_array( $info[ 'lib' ][ $type_dir ] ) ) {
+
 					continue;
 				}
 
@@ -733,6 +768,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 						 * Skip loading admin library modules if not in admin back-end.
 						 */
 						if ( 'admin' === $sub_dir && ! $is_admin ) {
+
 							continue;
 						}
 
@@ -742,6 +778,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 							$classname = apply_filters( $ext . '_load_lib', false, $lib_path );
 
 							if ( is_string( $classname ) && class_exists( $classname ) ) {
+
 								$classnames[ $sub_dir . '-' . $id ] = $classname;
 							}
 						}
@@ -754,6 +791,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 						$classname = apply_filters( $ext . '_load_lib', false, $lib_path );
 
 						if ( is_string( $classname ) && class_exists( $classname ) ) {
+
 							$classnames[ $id ] = $classname;
 						}
 					}
@@ -807,6 +845,7 @@ if ( ! class_exists( 'Wpsso' ) ) {
 		public function show_config() {
 
 			if ( ! $this->debug->enabled ) {	// Just in case.
+
 				return;
 			}
 

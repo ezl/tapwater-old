@@ -82,7 +82,7 @@ if ( ! class_exists( 'WpssoSubmenuGeneral' ) && class_exists( 'WpssoAdmin' ) ) {
 				$table_rows[ $tab_key ] = apply_filters( $filter_name, $this->get_table_rows( $metabox_id, $tab_key ), $this->form );
 			}
 
-			$this->p->util->do_metabox_tabbed( $metabox_id, $tabs, $table_rows );
+			$this->p->util->metabox->do_tabbed( $metabox_id, $tabs, $table_rows );
 		}
 
 		public function show_metabox_social_and_search() {
@@ -106,7 +106,7 @@ if ( ! class_exists( 'WpssoSubmenuGeneral' ) && class_exists( 'WpssoAdmin' ) ) {
 				$table_rows[ $tab_key ] = apply_filters( $filter_name, $this->get_table_rows( $metabox_id, $tab_key ), $this->form );
 			}
 
-			$this->p->util->do_metabox_tabbed( $metabox_id, $tabs, $table_rows );
+			$this->p->util->metabox->do_tabbed( $metabox_id, $tabs, $table_rows );
 		}
 
 		protected function get_table_rows( $metabox_id, $tab_key ) {
@@ -148,9 +148,9 @@ if ( ! class_exists( 'WpssoSubmenuGeneral' ) && class_exists( 'WpssoAdmin' ) ) {
 						$is_assoc = true, $is_disabled = false, $selected = false, $event_names = array( 'on_focus_load_json' ),
 							$event_args = array(
 								'json_var'  => 'article_sections',
-								'exp_secs'  => $select_exp_secs,
-								'is_transl' => true,	// No label translation required.
-								'is_sorted' => true,	// No label sorting required.
+								'exp_secs'  => $select_exp_secs,	// Create and read from a javascript URL.
+								'is_transl' => true,			// No label translation required.
+								'is_sorted' => true,			// No label sorting required.
 							)
 						) .
 					'</td>';
@@ -163,9 +163,9 @@ if ( ! class_exists( 'WpssoSubmenuGeneral' ) && class_exists( 'WpssoAdmin' ) ) {
 						$is_assoc = true, $is_disabled = false, $selected = false, $event_names = array( 'on_focus_load_json' ),
 							$event_args = array(
 								'json_var'  => 'product_categories',
-								'exp_secs'  => $select_exp_secs,
-								'is_transl' => true,	// No label translation required.
-								'is_sorted' => true,	// No label sorting required.
+								'exp_secs'  => $select_exp_secs,	// Create and read from a javascript URL.
+								'is_transl' => true,			// No label translation required.
+								'is_sorted' => true,			// No label sorting required.
 							)
 						) .
 					'</td>';
@@ -282,8 +282,6 @@ if ( ! class_exists( 'WpssoSubmenuGeneral' ) && class_exists( 'WpssoAdmin' ) ) {
 					$this->form->get_th_html( _x( 'Google Website Verification ID', 'option label', 'wpsso' ),
 						$css_class = '', $css_id = 'g_site_verify' ) . 
 					'<td>' . $this->form->get_input( 'g_site_verify', 'api_key' ) . '</td>';
-
-					$this->add_schema_knowledge_graph_table_rows( $table_rows, $this->form );
 
 					$this->add_schema_item_props_table_rows( $table_rows, $this->form );
 

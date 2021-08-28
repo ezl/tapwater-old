@@ -4,7 +4,7 @@
   Plugin URI: https://underconstructionpage.com/
   Description: Put your site behind a great looking under construction, coming soon, maintenance mode or landing page.
   Author: WebFactory Ltd
-  Version: 3.75
+  Version: 3.81
   Author URI: https://www.webfactoryltd.com/
   Text Domain: under-construction-page
 
@@ -85,7 +85,6 @@ class UCP {
       add_action('admin_action_ucp_dismiss_notice', array(__CLASS__, 'dismiss_notice'));
       add_action('admin_action_ucp_change_status', array(__CLASS__, 'change_status'));
       add_action('admin_action_ucp_reset_settings', array(__CLASS__, 'reset_settings'));
-      add_action('admin_action_install_mailoptin', array(__CLASS__, 'install_mailoptin'));
       add_action('admin_action_install_weglot', array(__CLASS__, 'install_weglot'));
 
       // enqueue admin scripts
@@ -98,6 +97,7 @@ class UCP {
       add_action('wp_ajax_ucp_submit_support_message', array(__CLASS__, 'submit_support_message_ajax'));
 
       add_filter('install_plugins_table_api_args_featured', array(__CLASS__, 'featured_plugins_tab'));
+      add_filter('install_plugins_table_api_args_recommended', array(__CLASS__, 'featured_plugins_tab'));
     } else {
       // main plugin logic
       add_action('wp', array(__CLASS__, 'display_construction_page'), 0, 1);
@@ -322,9 +322,7 @@ class UCP {
                          'promo_countdown' => $countdown,
                          'is_activated' => UCP_license::is_activated(),
                          'dialog_upsell_title' => '<img alt="' . __('UnderConstructionPage PRO', 'under-construction-page') . '" title="' . __('UnderConstructionPage PRO', 'under-construction-page') . '" src="' . UCP_PLUGIN_URL . 'images/ucp_pro_logo_white.png' . '">',
-                         'mailoptin_dialog_upsell_title' => '<img alt="' . __('MailOptin', 'under-construction-page') . '" title="' . __('MailOptin', 'under-construction-page') . '" src="' . UCP_PLUGIN_URL . 'images/mailoptin-logo-white.png' . '">',
                          'weglot_dialog_upsell_title' => '<img alt="' . __('Weglot', 'under-construction-page') . '" title="' . __('Weglot', 'under-construction-page') . '" src="' . UCP_PLUGIN_URL . 'images/weglot-logo-white.png' . '">',
-                         'mailoptin_install_url' => add_query_arg(array('action' => 'install_mailoptin'), admin_url('admin.php')),
                          'weglot_install_url' => add_query_arg(array('action' => 'install_weglot'), admin_url('admin.php')),
                          'nonce_dismiss_survey' => wp_create_nonce('ucp_dismiss_survey'),
                          'nonce_submit_survey' => wp_create_nonce('ucp_submit_survey'),
@@ -365,7 +363,7 @@ class UCP {
       wp_enqueue_script('ucp-pointers', plugins_url('js/ucp-admin-pointers.js', __FILE__), array('jquery'), self::$version, true);
       wp_enqueue_style('wp-pointer');
       wp_localize_script('wp-pointer', 'ucp_pointers', $pointers);
-      wp_localize_script('jquery', 'ucp', $js_localize);
+      wp_localize_script('wp-pointer', 'ucp', $js_localize);
     }
   } // admin_enqueue_scripts
 
@@ -593,26 +591,6 @@ class UCP {
       $out .= '<script src="' . WEGLOT_URL_DIST . '/front-js.js?v=' . WEGLOT_VERSION . '"></script>';
     }
 
-    if (self::is_mailoptin_active()) {
-      $out .= '<script src="' . includes_url('/js/jquery/jquery.js') . '"></script>';
-      $out .= '<script type="text/javascript">
-                  var mailoptin_globals = {
-                      "admin_url":"' . admin_url() . '",
-                      "public_js":"' . MAILOPTIN_ASSETS_URL . 'js/src",
-                      "nonce":"' . wp_create_nonce('mailoptin-admin-nonce') . '",
-                      "mailoptin_ajaxurl":"' . MailOptin\Core\AjaxHandler::get_endpoint() . '",
-                      "ajaxurl":"' . admin_url('admin-ajax.php') . '",
-                      "split_test_start_label":"Start Test",
-                      "split_test_pause_label":"Pause Test",
-                      "is_customize_preview":"false",
-                      "disable_impression_tracking":"false",
-                      "chosen_search_placeholder":"Type to search",
-                      "js_confirm_text":"Are you sure you want to do this?",
-                      "js_clear_stat_text":"Are you sure you want to do this? Clicking OK will delete all your optin analytics records."};
-              </script>';
-      $out .= '<script src="' . MAILOPTIN_ASSETS_URL . '/js/mailoptin.min.js"></script>';
-    }
-
     if (!empty($options['ga_tracking_id'])) {
       $out .= "
       <script>
@@ -639,7 +617,6 @@ class UCP {
   static function generate_footer($options, $template_id) {
     $out = '';
 
-    // todo translate
     if ($options['linkback'] == '1') {
       $tmp = md5(get_site_url());
       if ($tmp[0] < '4') {
@@ -649,7 +626,7 @@ class UCP {
       } elseif ($tmp[0] < 'c') {
         $out .= '<p id="linkback">Join more than 400,000 happy people using the <a href="https://wordpress.org/plugins/under-construction-page/" target="_blank">free Under Construction Page plugin for WordPress</a>.</p>';
       } else {
-        $out .= '<p id="linkback">Create free <a href="' . self::generate_web_link('show-love-3')  . '" target="_blank">maintenance mode pages for WordPress</a>.</p>';
+        $out .= '<p id="linkback">Create free <a href="' . self::generate_web_link('show-love-3')  . '" target="_blank">under construction pages for WordPress</a>.</p>';
       }
     }
 
@@ -694,10 +671,6 @@ class UCP {
     ob_start();
     require UCP_PLUGIN_DIR . 'themes/' . $template_id . '/index.php';
     $template = ob_get_clean();
-
-    if (self::is_mailoptin_active() && $options['mailoptin_campaign'] > 0){
-      $vars['content'] .= MailOptin\Core\Admin\Customizer\OptinForm\OptinFormFactory::build($options['mailoptin_campaign']);
-    }
 
     foreach ($vars as $var_name => $var_value) {
       $var_name = '[' . $var_name . ']';
@@ -1110,7 +1083,6 @@ class UCP {
                       'description' => '[site-tagline]',
                       'heading1' => __('Sorry, we\'re doing some work on the site', 'under-construction-page'),
                       'content' => __('Thank you for being patient. We are doing some work on the site and will be back shortly.', 'under-construction-page'),
-                      'mailoptin_campaign' => '-1',
                       'social_facebook' => '',
                       'social_twitter' => '',
                       'social_google' => '',
@@ -1188,6 +1160,8 @@ class UCP {
         case 'description':
         case 'heading1':
         case 'content':
+          $options[$key] = trim($value);
+        break;
         case 'custom_css':
         case 'social_facebook':
         case 'social_twitter':
@@ -1206,7 +1180,7 @@ class UCP {
         case 'social_telegram':
         case 'social_whatsapp':
         case 'license_key':
-          $options[$key] = trim($value);
+          $options[$key] = trim(strip_tags($value));
         break;
         case 'ga_tracking_id':
           $options[$key] = substr(strtoupper(trim($value)), 0, 15);
@@ -1216,6 +1190,11 @@ class UCP {
         break;
       } // switch
     } // foreach
+
+    $options['title'] = strip_tags($options['title']);
+    $options['description'] = strip_tags($options['description']);
+    $options['heading1'] = strip_tags($options['heading1'], '<br><a><b><strong><i><em><p><del><img>');
+    $options['content'] = strip_tags($options['content'], '<br><a><b><strong><i><em><p><del><img><ul><ol><li><blockquote><ins><code><hr><h2><h3><h4><span><div><iframe>');
 
     $options['whitelisted_roles'] = empty($options['whitelisted_roles'])? array(): $options['whitelisted_roles'];
     $options['whitelisted_users'] = empty($options['whitelisted_users'])? array(): $options['whitelisted_users'];
@@ -1303,6 +1282,9 @@ class UCP {
     }
     if (is_callable(array('Hummingbird\WP_Hummingbird', 'flush_cache'))) {
       Hummingbird\WP_Hummingbird::flush_cache(true, false);
+    }
+    if (function_exists('rocket_clean_domain')) {
+      rocket_clean_domain();
     }
   } // empty_cache
 
@@ -1562,49 +1544,6 @@ class UCP {
     echo '<p class="description">Please help others learn about this free plugin by placing a small link in the footer. Thank you very much!</p>';
     echo '</td></tr>';
 
-    if (self::is_mailoptin_active()) {
-      $mailoptin_campaigns = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'mo_optin_campaigns');
-      $campaigns = array();
-
-      if (!empty($mailoptin_campaigns)) {
-        $campaigns[] = array('val' => -1, 'label' => 'Disable optins');
-        foreach ($mailoptin_campaigns as $mailoptin_campaign) {
-          if ($mailoptin_campaign->optin_type == 'lightbox') {
-            $type = 'lightbox optin';
-          } else {
-            $type = 'content box optin';
-          }
-          $campaigns[] = array('val' => $mailoptin_campaign->id, 'label' => $mailoptin_campaign->name . ' - ' . $type);
-        } // foreach
-      } // if campaigns
-
-      echo '<tr id="mailoptin-settings">';
-      echo '<th><label for="mailoptin_campaign">Optin Boxes &amp; Popups</label></th>';
-      echo '<td>';
-      if ($campaigns) {
-        echo '<select name="' . UCP_OPTIONS_KEY . '[mailoptin_campaign]" id="mailoptin_campaign">';
-        echo self::create_select_options($campaigns, $options['mailoptin_campaign']);
-        echo '</select>';
-      } else {
-        echo '<p><a href="' . admin_url('admin.php?page=mailoptin-optin-campaigns') . '">Create your first optin</a> to start collecting leads and subscribers</p>';
-      }
-      echo '<p class="description">Create, edit and manage optins on the <a href="' . admin_url('admin.php?page=mailoptin-optin-campaigns') . '">MailOptin campaigns page</a>. Lightbox optins are more prominent but some users find them annoying. Content box optins tend to generate leads of higher quality.</p>';
-      echo '</td>';
-      echo '</tr>';
-    } else {
-      echo '<tr>';
-      echo '<th><label for="">Optin Boxes &amp; Popups</label></th>';
-      echo '<td>';
-      echo '<div class="toggle-wrapper">
-            <input type="checkbox" id="mailoptin_support" type="checkbox" value="1" class="skip-save open-mailoptin-upsell">
-            <label for="mailoptin_support" class="toggle"><span class="toggle_handler"></span></label>
-        </div>';
-      echo '<p class="description">Collecting leads and subscribers is one of the most important aspect of any under construction page. ';
-      echo 'To add optin boxes &amp; optin popups compatible with Mailchimp and many other autoresponders <a href="#" class="open-mailoptin-upsell">install the free MailOptin plugin</a>. It seamlessly integrates with UCP, offers numerous options and will enable you to collect leads without any additional costs.</p>';
-      echo '</td>';
-      echo '</tr>';
-    } // mailoptin not active
-
     echo '<tr>';
     echo '<th><label for="content_font">Content Font</label></th>';
     echo '<td><select class="skip-save open-ucp-upsell" id="content_font">';
@@ -1758,10 +1697,11 @@ class UCP {
   static function get_themes() {
     $themes = array('_pro_custom' => __('Build Your Own Custom Theme', 'under-construction-page'),
                     'mad_designer' => __('Mad Designer', 'under-construction-page'),
-                    '_pro_relaxing-screensaver' => __('Fireworks Video Background', 'under-construction-page'),
+                    '_pro_simple-beige' => __('Simple Beige Text', 'under-construction-page'),
                     'plain_text' => __('Plain Text', 'under-construction-page'),
                     '_pro_simple-office-theme' => __('Simple Office', 'under-construction-page'),
                     'under_construction' => __('Under Construction', 'under-construction-page'),
+                    '_pro_model-portfolio' => __('Model Portfolio', 'under-construction-page'),
                     'dark' => __('Things Went Dark', 'under-construction-page'),
                     '_pro_watch-company' => __('The Watch Store', 'under-construction-page'),
                     'forklift' => __('Forklift at Work', 'under-construction-page'),
@@ -1781,7 +1721,7 @@ class UCP {
                     '_pro-soothing-nature' => __('Soothing Nature', 'under-construction-page'),
                     'lighthouse' => __('Lighthouse', 'under-construction-page'),
                     'hot_air_baloon' => __('Hot Air Balloon', 'under-construction-page'),
-                    '_pro_simple-beige' => __('Simple Beige Text', 'under-construction-page'),
+                    '_pro_business-statistics' => __('Business Statistics', 'under-construction-page'),
                     'people_2' => __('People at Work #2', 'under-construction-page'),
                     'rocket_2' => __('Rocket Launch #2', 'under-construction-page'),
                     '_pro_travel-blog' => __('Travel Blog', 'under-construction-page'),
@@ -1807,7 +1747,8 @@ class UCP {
                     '000webhost' => __('000webhost', 'under-construction-page'),
                     '_pro_grayscale-city' => __('Grayscale City', 'under-construction-page'),
                     'work_desk' => __('Work Desk', 'under-construction-page'),
-                    'research' => __('Research', 'under-construction-page'));
+                    'research' => __('Research', 'under-construction-page'),
+                    '_pro_wedding' => __('Wedding', 'under-construction-page'));
 
     $themes = apply_filters('ucp_themes', $themes);
 
@@ -1821,17 +1762,9 @@ class UCP {
     $img_path = UCP_PLUGIN_URL . 'images/thumbnails/';
     $themes = self::get_themes();
 
-    echo '<div class="ucp-notice-small"><p>All themes come with <b>optin boxes</b> &amp; <b>optin popups</b> that you can connect to Mailchimp and other autoresponders to collect leads &amp; subscribers.';
-    if (self::is_mailoptin_active()) {
-      echo '<br>Configure them in <a href="#mailoptin-settings" class="change_tab" data-tab="2">Content - MailOptin</a> settings.';
-    } else {
-      echo '<br>To enable this feature <a class="open-mailoptin-upsell" href="#">install the free MailOptin plugin</a>.';
-    }
-    echo '</p></div>';
-
     echo '<table class="form-table">';
     echo '<tr valign="top">
-    <td colspan="2"><b style="margin-bottom: 10px; display: inline-block;">' . __('Theme', 'under-construction-page') . '</b> (<a target="_blank" href="' . self::generate_web_link('themes-browse-premium', 'templates') . '">browse 220+ premium themes</a>)<br>';
+    <td colspan="2"><b style="margin-bottom: 10px; display: inline-block;">' . __('Theme', 'under-construction-page') . '</b> (<a target="_blank" href="' . self::generate_web_link('themes-browse-premium', 'templates') . '">browse 230+ premium themes</a>)<br>';
     echo '<input type="hidden" id="theme_id" name="' . UCP_OPTIONS_KEY . '[theme]" value="' . $options['theme'] . '">';
 
     foreach ($themes as $theme_id => $theme_name) {
@@ -1848,7 +1781,7 @@ class UCP {
           echo '<a href="https://templates.underconstructionpage.com/?ucp_template_preview&template=' . $theme_id . '&utm_source=ucp-free&utm_medium=plugin&utm_content=design-preview-' . $theme_id . '&utm_campaign=ucp-free-v' . self::$version . '" class="button-secondary" target="_blank">Preview</a>';
         }
         echo '</div>';
-        echo '<div class="ribbon"><i><span class="dashicons dashicons-star-filled"></span></i></div></div>';
+        echo '<div title="PRO template" class="ribbon"><i><span class="dashicons dashicons-star-filled"></span></i></div></div>';
       } else {
         echo '<div class="ucp-thumb' . $class . '" data-theme-id="' . $theme_id . '"><img src="' . $img_path . $theme_id . '.png" alt="' . $theme_name . '" title="' . $theme_name . '"><span>' . $theme_name . '</span>';
         echo '<div class="buttons">';
@@ -2148,22 +2081,6 @@ class UCP {
     echo '</form>'; // ucp_tabs
     echo '</div>'; // wrap
 
-    // mailoptin install dialog
-    echo '<div id="mailoptin-upsell-dialog" style="display: none;" title="MailOptin"><span class="ui-helper-hidden-accessible"><input type="text"/></span>';
-    echo '<div style="padding: 20px; font-size: 14px;">';
-    echo '<ul class="ucp-list">';
-    echo '<li>completely free plugin that integrates with UCP</li>';
-    echo '<li>instantly start collecting leads &amp; subscribers</li>';
-    echo '<li>use an optin form on the bottom of UCP content</li>';
-    echo '<li>or try a popup/lightbox optin</li>';
-    echo '<li>easily connect with Mailchimp and other leading autoresponder services</li>';
-    echo '<li>completely customize the look &amp; feel of the optin form</li>';
-    echo '</ul>';
-    echo '<p class="upsell-footer"><a class="button button-primary" id="install-mailoptin">Install &amp; activate MailOptin to start collecting leads</a></p>';
-    echo '</div>';
-    echo '</div>';
-    // mailoptin install dialog
-
     // weglot install dialog
     echo '<div id="weglot-upsell-dialog" style="display: none;" title="Weglot"><span class="ui-helper-hidden-accessible"><input type="text"/></span>';
     echo '<div style="padding: 20px; font-size: 15px;">';
@@ -2264,7 +2181,7 @@ class UCP {
     </tr>
     <tr>
       <td>100 Client or Personal Sites<br>(licenses are transferable between sites)</td>
-      <td>1 Personal or Client Site</td>
+      <td>3 Personal or Client Sites</td>
       <td>3 Personal Sites</td>
     </tr>
     <tr>
@@ -2288,12 +2205,12 @@ class UCP {
       <td>Drag&amp;Drop Builder</td>
     </tr>
     <tr>
-      <td>120+ PRO Templates</td>
-      <td>120+ PRO Templates</td>
-      <td>120+ PRO Templates</td>
+      <td>130+ PRO Templates</td>
+      <td>130+ PRO Templates</td>
+      <td>130+ PRO Templates</td>
     </tr>
     <tr>
-      <td>80+ Agency Templates</td>
+      <td>90+ Agency Templates</td>
       <td><span class="dashicons dashicons-no"></td>
       <td><span class="dashicons dashicons-no"></td>
     </tr>
@@ -2360,64 +2277,6 @@ class UCP {
 
     update_option(UCP_POINTERS_KEY, $pointers);
   } // reset_pointers
-
-
-  // auto download / install / activate MailOptin plugin
-  static function install_mailoptin() {
-    if (false === current_user_can('administrator')) {
-      wp_die('Sorry, you have to be an admin to run this action.');
-    }
-
-    $plugin_slug = 'mailoptin/mailoptin.php';
-    $plugin_zip = 'https://downloads.wordpress.org/plugin/mailoptin.latest-stable.zip';
-
-    @include_once ABSPATH . 'wp-admin/includes/plugin.php';
-    @include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-    @include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
-    @include_once ABSPATH . 'wp-admin/includes/file.php';
-    @include_once ABSPATH . 'wp-admin/includes/misc.php';
-		echo '<style>
-		body{
-			font-family: sans-serif;
-			font-size: 14px;
-			line-height: 1.5;
-			color: #444;
-		}
-		</style>';
-
-    echo '<div style="margin: 20px; color:#444;">';
-    echo 'If things are not done in a minute <a target="_parent" href="' . admin_url('plugin-install.php?s=mailoptin&tab=search&type=term') .'">install the plugin manually via Plugins page</a><br><br>';
-    echo 'Starting ...<br><br>';
-
-		wp_cache_flush();
-    $upgrader = new Plugin_Upgrader();
-    echo 'Check if MailOptin is already installed ... <br />';
-    if (self::is_plugin_installed($plugin_slug)) {
-      echo 'MailOptin is already installed! <br /><br />Making sure it\'s the latest version.<br />';
-      $upgrader->upgrade($plugin_slug);
-      $installed = true;
-    } else {
-      echo 'Installing MailOptin.<br />';
-      $installed = $upgrader->install($plugin_zip);
-    }
-    wp_cache_flush();
-
-    if (!is_wp_error($installed) && $installed) {
-      echo 'Activating MailOptin.<br />';
-      $activate = activate_plugin($plugin_slug);
-
-      if (is_null($activate)) {
-        echo 'MailOptin Activated.<br />';
-
-        echo '<script>setTimeout(function() { top.location = "options-general.php?page=ucp"; }, 1000);</script>';
-        echo '<br>If you are not redirected in a few seconds - <a href="options-general.php?page=ucp" target="_parent">click here</a>.';
-      }
-    } else {
-      echo 'Could not install MailOptin. You\'ll have to <a target="_parent" href="' . admin_url('plugin-install.php?s=mailoptin&tab=search&type=term') .'">download and install manually</a>.';
-    }
-
-    echo '</div>';
-  } // install_mailoptin
 
 
   // auto download / install / activate Weglot plugin
@@ -2490,25 +2349,6 @@ class UCP {
 			return false;
 		}
   } // is_plugin_installed
-
-
-  // check if MailOptin plugin is active and min version installed
-  static function is_mailoptin_active() {
-    if (!function_exists('is_plugin_active') || !function_exists('get_plugin_data')) {
-     require_once ABSPATH . 'wp-admin/includes/plugin.php';
-    }
-
-    if (is_plugin_active('mailoptin/mailoptin.php')) {
-      $mailoptin_info = get_plugin_data(ABSPATH . 'wp-content/plugins/mailoptin/mailoptin.php');
-      if( version_compare($mailoptin_info['Version'], '1.2.10.1', '<')) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return false;
-    }
-  } // is_mailoptin_active
 
 
   // check if Weglot plugin is active and min version installed
@@ -2598,13 +2438,11 @@ class UCP {
   // add our plugins to recommended list
   static function plugins_api_result($res, $action, $args) {
     remove_filter('plugins_api_result', array(__CLASS__, 'plugins_api_result'), 10, 3);
-
+    
     $res = self::add_plugin_favs('eps-301-redirects', $res);
-    $res = self::add_plugin_favs('wp-force-ssl', $res);
-    $res = self::add_plugin_favs('wp-external-links', $res);
-    $res = self::add_plugin_favs('wp-reset', $res);
-    $res = self::add_plugin_favs('mailoptin', $res);
-
+    $res = self::add_plugin_favs('simple-author-box', $res);
+    $res = self::add_plugin_favs('security-ninja', $res);
+    
     return $res;
   } // plugins_api_result
 
@@ -2630,6 +2468,7 @@ class UCP {
     delete_option(UCP_META_KEY);
     delete_option(UCP_POINTERS_KEY);
     delete_option(UCP_NOTICES_KEY);
+    self::empty_cache();
   } // uninstall
 } // class UCP
 

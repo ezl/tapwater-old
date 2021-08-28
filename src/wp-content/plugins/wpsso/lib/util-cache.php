@@ -10,10 +10,12 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
 if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+
 	die( 'Do. Or do not. There is no try.' );
 }
 
@@ -31,6 +33,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -60,12 +63,14 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 		public function clear( $user_id = null, $clear_other = false, $clear_short = null, $refresh = true ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			static $have_cleared = null;
 
 			if ( null !== $have_cleared ) {	// Already run once.
+
 				return;
 			}
 
@@ -116,16 +121,21 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 				$notice_msg = sprintf( __( 'A task to clear the cache was started at %s.', 'wpsso' ), gmdate( 'c' ) );
 
-				$this->p->notice->upd( $notice_msg, $user_id, $notice_key . '-begin' );
+				$this->p->notice->inf( $notice_msg, $user_id, $notice_key );
 			}
 
 			$this->stop_refresh();	// Just in case.
 
 			if ( 0 === get_current_user_id() ) {		// User is the scheduler.
+
 				set_time_limit( HOUR_IN_SECONDS );	// Set maximum PHP execution time to one hour.
 			}
 
 			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+
+				/**
+				 * Register image sizes and include WooCommerce front-end libs.
+				 */
 				do_action( $this->p->lca . '_scheduled_task_started', $user_id );
 			}
 
@@ -151,14 +161,16 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 				$notice_msg .= sprintf( __( 'The total execution time for this task was %0.3f seconds.', 'wpsso' ), $mtime_total ) . ' ';
 
 				if ( $refresh ) {
+
 					$notice_msg .= '<strong>' . __( 'A background task will begin shortly to refresh the post, term and user transient cache objects.',
 						'wpsso' ) . '</strong>';
 				}
 
-				$this->p->notice->upd( $notice_msg, $user_id, $notice_key . '-end' );
+				$this->p->notice->inf( $notice_msg, $user_id, $notice_key );
 			}
 
 			if ( $refresh ) {
+
 				$this->schedule_refresh( $user_id, $read_cache = true );	// Run in the next minute.
 			}
 
@@ -168,6 +180,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 		public function clear_cache_dir() {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -178,6 +191,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 			if ( ! $dh = @opendir( $cache_dir ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'failed to open the cache folder ' . $cache_dir . ' for reading' );
 				}
 
@@ -200,6 +214,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 						if ( @unlink( $cache_file ) ) {
 
 							if ( $this->p->debug->enabled ) {
+
 								$this->p->debug->log( 'removed the cache file ' . $cache_file );
 							}
 
@@ -208,6 +223,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 						} else {	
 
 							if ( $this->p->debug->enabled ) {
+
 								$this->p->debug->log( 'error removing cache file ' . $cache_file );
 							}
 
@@ -231,6 +247,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 		public function clear_db_transients( $clear_short = false, $transient_prefix = '' ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -246,6 +263,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 					 * Preserve transients that begin with "wpsso_!_".
 					 */
 					if ( 0 === strpos( $cache_id, $this->p->lca . '_!_' ) ) {
+
 						continue;
 					}
 
@@ -253,7 +271,9 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 					 * Maybe delete shortened urls.
 					 */
 					if ( ! $clear_short ) {							// If not clearing short URLs.
+
 						if ( 0 === strpos( $cache_id, $this->p->lca . '_s_' ) ) {	// This is a shortened URL.
+
 							continue;						// Get the next transient.
 						}
 					}
@@ -263,12 +283,15 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 				 * Maybe only clear a specific transient ID prefix.
 				 */
 				if ( $transient_prefix ) {					// We're only clearing a specific prefix.
+
 					if ( 0 !== strpos( $cache_id, $transient_prefix ) ) {	// The cache ID does not match that prefix.
+
 						continue;					// Get the next transient.
 					}
 				}
 
 				if ( delete_transient( $cache_id ) ) {
+
 					$cleared_count++;
 				}
 			}
@@ -279,6 +302,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 		public function clear_expired_db_transients() {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -302,6 +326,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 		public function clear_column_meta() {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -313,6 +338,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 			 * Delete post meta.
 			 */
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'deleting post column meta' );
 			}
 
@@ -327,6 +353,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 			 * Delete term meta.
 			 */
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'deleting term column meta' );
 			}
 
@@ -335,6 +362,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 				foreach ( WpssoTerm::get_public_ids() as $term_id ) {
 
 					if ( WpssoTerm::delete_term_meta( $term_id, $meta_key ) ) {
+
 						$cleared_count++;
 					}
 				}
@@ -344,6 +372,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 			 * Delete user meta.
 			 */
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'deleting user column meta' );
 			}
 
@@ -456,6 +485,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 				w3tc_pgcache_flush();
 
 				if ( function_exists( 'w3tc_objectcache_flush' ) ) {
+
 					w3tc_objectcache_flush();
 				}
 
@@ -468,10 +498,12 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 			if ( class_exists( 'WpeCommon' ) ) {
 
 				if ( method_exists( 'WpeCommon', 'purge_memcached' ) ) {
+
 					WpeCommon::purge_memcached();
 				}
 
 				if ( method_exists( 'WpeCommon', 'purge_varnish_cache' ) ) {
+
 					WpeCommon::purge_varnish_cache();
 				}
 
@@ -546,6 +578,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 		public function refresh( $user_id = null, $read_cache = false ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -585,16 +618,38 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 				$notice_msg = sprintf( __( 'A task to refresh the transient cache was started at %s.', 'wpsso' ), gmdate( 'c' ) );
 
-				$this->p->notice->upd( $notice_msg, $user_id, $notice_key . '-begin' );
+				$this->p->notice->inf( $notice_msg, $user_id, $notice_key );
 			}
 
 			if ( 0 === get_current_user_id() ) {		// User is the scheduler.
+
 				set_time_limit( HOUR_IN_SECONDS );	// Set maximum PHP execution time to one hour.
 			}
 
 			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+
+				/**
+				 * Register image sizes and include WooCommerce front-end libs.
+				 */
 				do_action( $this->p->lca . '_scheduled_task_started', $user_id );
 			}
+
+			$size_names = $this->p->util->get_image_size_names();
+
+			$post_ids = call_user_func( array( $this->p->lca . 'post', 'get_public_ids' ) );	// Call static method.
+
+			foreach ( $post_ids as $post_id ) {
+
+				foreach ( $size_names as $size_name ) {
+
+					/**
+					 * get_mt_single_image_src() returns an og:image:url value, not an og:image:secure_url.
+					 */
+					$mt_ret = $this->p->media->get_featured( $num = 1, $size_name, $post_id, $check_dupes = false );
+				}
+			}
+
+			unset( $post_ids );
 
 			$total_count = array(
 				'post' => 0,
@@ -635,7 +690,7 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 
 				$notice_msg .= sprintf( __( 'The total execution time for this task was %0.3f seconds.', 'wpsso' ), $mtime_total );
 
-				$this->p->notice->upd( $notice_msg, $user_id, $notice_key . '-end' );
+				$this->p->notice->inf( $notice_msg, $user_id, $notice_key );
 			}
 
 			delete_transient( $cache_id );
@@ -645,8 +700,6 @@ if ( ! class_exists( 'WpssoUtilCache' ) ) {
 		 * Called by refresh_cache().
 		 */
 		private function refresh_mod_head_meta( array $mod, $read_cache = false ) {
-
-			$this->p->util->add_plugin_image_sizes( $wp_obj = false, $image_sizes = array(), $filter_sizes = true );
 
 			$head_tags = $this->p->head->get_head_array( $use_post = false, $mod, $read_cache );
 

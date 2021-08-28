@@ -11,6 +11,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -25,6 +26,7 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeItemList' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -36,12 +38,13 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeItemList' ) ) {
 		public function filter_json_data_https_schema_org_itemlist( $json_data, $mod, $mt_og, $page_type_id, $is_main ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			$ppp = SucomUtil::get_const( 'WPSSO_SCHEMA_ITEMS_PER_LIST_MAX', 100 );
 
-			WpssoSchema::add_itemlist_data( $json_data, $mod, $mt_og, $page_type_id, $is_main, $ppp );
+			$item_count = WpssoSchema::add_itemlist_data( $json_data, $mod, $mt_og, $page_type_id, $is_main, $ppp );
 
 			return $json_data;
 		}

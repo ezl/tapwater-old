@@ -6,10 +6,12 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
 if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+
 	die( 'Do. Or do not. There is no try.' );
 }
 
@@ -33,7 +35,7 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 			),
 			'seo' => array(
 				'jetpack-seo' => 'Jetpack SEO Tools',
-				'rankmath'    => 'SEO by Rank Math',
+				'rankmath'    => 'Rank Math',
 				'seou'        => 'SEO Ultimate',
 				'sq'          => 'Squirrly SEO',
 				'wpseo-wc'    => 'Yoast WooCommerce SEO',
@@ -152,12 +154,6 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 								case 'woo-add-gtin':
 
 									$chk[ 'class' ] = 'Woo_GTIN';
-
-									break;
-
-								case 'wpecommerce':
-
-									$chk[ 'class' ] = 'WP_eCommerce';
 
 									break;
 
@@ -395,15 +391,24 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 
 							switch ( $id ) {
 
-								case 'yotpowc':
+								case 'shopperapproved':
 
-									$chk[ 'function' ] = 'wc_yotpo_init';
+									$chk[ 'opt_key' ] = array(
+										'plugin_shopperapproved_site_id',
+										'plugin_shopperapproved_token',
+									);
 
 									break;
 
 								case 'wpproductreview':
 
 									$chk[ 'class' ] = 'WPPR';
+
+									break;
+
+								case 'yotpowc':
+
+									$chk[ 'function' ] = 'wc_yotpo_init';
 
 									break;
 							}
@@ -556,29 +561,44 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 								( ! empty( $chk[ 'function' ] ) && function_exists( $chk[ 'function' ] ) ) ||
 								( ! empty( $chk[ 'plugin' ] ) && SucomPlugin::is_plugin_active( $chk[ 'plugin' ], $use_cache = true ) ) ) {
 
-								/**
-								 * Check if an option value is also required.
-								 */
-								if ( isset( $chk[ 'opt_key' ] ) ) {
-
-									if ( $this->is_opt_enabled( $chk[ 'opt_key' ] ) ) {
-										$get_avail[ $sub ][ 'any' ] = $get_avail[ $sub ][ $id ] = true;
-									}
-
-								} else {
-									$get_avail[ $sub ][ 'any' ] = $get_avail[ $sub ][ $id ] = true;
-								}
+								$get_avail[ $sub ][ 'any' ] = $get_avail[ $sub ][ $id ] = true;
 							}
 
 						} elseif ( isset( $chk[ 'opt_key' ] ) ) {
 
-							if ( $this->is_opt_enabled( $chk[ 'opt_key' ] ) ) {
+
+							if ( is_array( $chk[ 'opt_key' ] ) ) {
+
+								$all_enabled = false;
+
+								foreach ( $chk[ 'opt_key' ] as $key ) {
+							
+									if ( $this->is_opt_enabled( $key ) ) {
+
+										$all_enabled = true;
+
+										continue;
+									}
+
+									$all_enabled = false;
+
+									break;
+								}
+
+								if ( $all_enabled ) {
+
+									$get_avail[ $sub ][ 'any' ] = $get_avail[ $sub ][ $id ] = true;
+								}
+
+							} elseif ( $this->is_opt_enabled( $chk[ 'opt_key' ] ) ) {
+
 								$get_avail[ $sub ][ 'any' ] = $get_avail[ $sub ][ $id ] = true;
 							}
 
 						} elseif ( isset( $chk[ 'constant' ] ) ) {
 
 							if ( defined( $chk[ 'constant' ] ) ) {
+
 								$get_avail[ $sub ][ 'any' ] = $get_avail[ $sub ][ $id ] = true;
 							}
 						}
@@ -613,10 +633,15 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 			$rv  = null === $mx ? $rv : $rv * $mx;
 
 			if ( $rc && isset( $lc[ $id ] ) ) {
+
 				return $lc[ $id ];
+
 			} elseif ( defined( 'WPSSO_PRO_DISABLE' ) && WPSSO_PRO_DISABLE ) {
+
 				return $lc[ $id ] = false;
+
 			} elseif ( ! $ext_dir = WpssoConfig::get_ext_dir( $ext ) ) {
+
 				return $lc[ $id ] = false;
 			}
 
@@ -632,6 +657,7 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 			static $local_cache = null;
 
 			if ( null !== $local_cache ) {
+
 				return $local_cache;
 			}
 
@@ -641,6 +667,7 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 			foreach ( $ext_sorted as $ext => $info ) {
 
 				if ( empty( $info[ 'version' ] ) ) {	// Include only active add-ons.
+
 					continue;
 				}
 
@@ -675,6 +702,7 @@ if ( ! class_exists( 'WpssoCheck' ) ) {
 				if ( ! empty( $this->p->options[ $opt_key ] ) ) {	// Not 0 or empty string.
 
 					if ( $this->p->options[ $opt_key ] !== 'none' ) {
+
 						return true;
 					}
 				}

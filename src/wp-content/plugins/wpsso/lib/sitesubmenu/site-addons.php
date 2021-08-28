@@ -6,6 +6,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -23,6 +24,7 @@ if ( ! class_exists( 'WpssoSiteSubmenuSiteAddons' ) && class_exists( 'WpssoAdmin
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -39,9 +41,14 @@ if ( ! class_exists( 'WpssoSiteSubmenuSiteAddons' ) && class_exists( 'WpssoAdmin
 		 */
 		protected function add_plugin_hooks() {
 
+			/**
+			 * Make sure this filter runs last as it removed all form buttons.
+			 */
+			$max_int = SucomUtil::get_max_int();
+
 			$this->p->util->add_plugin_filters( $this, array(
-				'form_button_rows' => 1,
-			) );
+				'form_button_rows' => 1,	// Filter form buttons for this settings page only.
+			), $max_int );
 		}
 
 		/**
@@ -55,6 +62,7 @@ if ( ! class_exists( 'WpssoSiteSubmenuSiteAddons' ) && class_exists( 'WpssoAdmin
 		protected function set_form_object( $menu_ext ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'setting site form object for '.$menu_ext );
 			}
 

@@ -14,6 +14,8 @@
  * @since Twenty Fifteen 1.0
  */
 
+<?php echo do_shortcode("[wp1s id='2755']"); ?>
+
 get_header(); ?>
 
 	<div id="primary" class="content-area">
@@ -33,12 +35,14 @@ get_header(); ?>
 				the_post();
 
 				/*
-				 * Include the post format-specific template for the content. If you want
-				 * to use this in a child theme, then include a file called content-___.php
-				 * (where ___ is the post format) and that will be used instead.
+				 * Include the Post-Format-specific template for the content.
+				 * If you want to override this in a child theme, then include a file
+				 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
 				 */
 				get_template_part( 'content', get_post_format() );
-
+// Show categories subnav
+                
+               
 				// End the loop.
 			endwhile;
 

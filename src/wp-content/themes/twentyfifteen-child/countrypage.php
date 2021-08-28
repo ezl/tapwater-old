@@ -32,13 +32,7 @@ $curID = $post->ID;
         <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
         <div class="toc"></div>
 	</header><!-- .entry-header -->
-<?php
-    if($curID == 5233){
 
-get_template_part('usa', 'map'); 
-
-}
-?>
 
 	<div class="entry-content">
 
@@ -388,6 +382,14 @@ if(get_field('water_quality') < 30){
 </table>
 </figure>
 <!-- /wp:html -->
+
+<?php
+    if($curID == 5233){
+
+get_template_part('usa', 'map'); 
+
+}
+?>
 
 <!-- end content -->
         

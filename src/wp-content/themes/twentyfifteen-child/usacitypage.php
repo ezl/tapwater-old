@@ -213,15 +213,11 @@ endif;
 
 ?>
 
-<!-- wp:heading -->
-<h2>Tap water by country</h2>
-<!-- /wp:heading -->
 
-<?php 
 
-get_template_part('world', 'map'); 
 
-?>
+
+
 <!-- wp:heading -->
 <!--/*
 <h2>Current Weather in <?php the_field('city_name'); ?></h2>
@@ -434,6 +430,14 @@ if($waterquality < 20){
 </div>
 
 <?php endif; ?>
+
+<h2>Tap water by country</h2>
+
+<?php 
+
+get_template_part('world', 'map'); 
+
+?>
 
 
 <p>

@@ -740,8 +740,8 @@ $("path").hover(function() {
 $(document).on('mousemove', function(e){
 
 $description.css({
-  left: e.pageX - $('div.usa-map').offset().left + 50,
-  top: e.pageY - ($('div.usa-map').offset().top / 2.4)
+  left: e.pageX - $('div.usa-map').offset().left + 100,
+  top: e.pageY - ($('div.usa-map').offset().top / 13.4)
 });
 
 });

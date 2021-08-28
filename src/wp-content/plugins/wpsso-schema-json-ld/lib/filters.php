@@ -6,6 +6,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -20,12 +21,10 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 
 		public function __construct( &$plugin ) {
 
-			/**
-			 * Just in case - prevent filters from being hooked and executed more than once.
-			 */
 			static $do_once = null;
 
 			if ( true === $do_once ) {
+
 				return;	// Stop here.
 			}
 
@@ -34,6 +33,7 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -41,6 +41,7 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 			 * Instantiate the WpssoJsonFiltersSchema class object.
 			 */
 			if ( ! class_exists( 'WpssoJsonFiltersSchema' ) ) {
+
 				require_once WPSSOJSON_PLUGINDIR . 'lib/filters-schema.php';
 			}
 
@@ -50,16 +51,19 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 			 * Instantiate the WpssoJsonFiltersUpgrade class object.
 			 */
 			if ( ! class_exists( 'WpssoJsonFiltersUpgrade' ) ) {
+
 				require_once WPSSOJSON_PLUGINDIR . 'lib/filters-upgrade.php';
 			}
 
 			$this->upg = new WpssoJsonFiltersUpgrade( $plugin );
 
 			$this->p->util->add_plugin_filters( $this, array(
-				'option_type'     => 2,
-				'save_options'    => 4,
-				'save_md_options' => 2,
-				'get_md_defaults' => 2,
+				'option_type'          => 2,
+				'get_defaults'         => 2,
+				'save_setting_options' => 3,
+				'get_md_defaults'      => 2,
+				'save_md_options'      => 2,
+				'sanitize_md_options'  => 2,
 			) );
 
 			if ( is_admin() ) {
@@ -68,6 +72,7 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 				 * Instantiate the WpssoJsonFiltersMessages class object.
 				 */
 				if ( ! class_exists( 'WpssoJsonFiltersMessages' ) ) {
+
 					require_once WPSSOJSON_PLUGINDIR . 'lib/filters-messages.php';
 				}
 
@@ -78,20 +83,28 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 				) );
 
 				$this->p->util->add_plugin_filters( $this, array(
-					'status_std_features' => 4,
-				), $prio = 10, $ext = 'wpssojson' );	// Hook to wpssojson filters.
+					'status_std_features' => 3,
+				), $prio = 10, $ext = 'wpssojson' );	// Hooks the 'wpssojson' filters.
 			}
 		}
 
 		public function filter_option_type( $type, $base_key ) {
 
 			if ( ! empty( $type ) ) {
+
 				return $type;
+
 			} elseif ( strpos( $base_key, 'schema_' ) !== 0 ) {
+
 				return $type;
 			}
 
 			switch ( $base_key ) {
+
+				case 'schema_howto_step_section':						// How-To Section (radio buttons).
+				case ( 0 === strpos( $base_key, 'schema_job_empl_type_' ) ? true : false ):	// Employment Type.
+
+					return 'checkbox';
 
 				case 'schema_title':				// Name / Title.
 				case 'schema_title_alt':			// Alternate Name.
@@ -137,41 +150,49 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 					return 'csv_blank';
 
 				case 'schema_def_event_location_id':		// Default Physical Venue.
-				case 'schema_def_event_organizer_org_id':	// Default Organizer Organization.
-				case 'schema_def_event_organizer_person_id':	// Default Organizer Person.
-				case 'schema_def_event_performer_org_id':	// Default Performer Organization.
-				case 'schema_def_event_performer_person_id':	// Default Performer Person.
+				case 'schema_def_event_organizer_org_id':	// Default Organizer (Org).
+				case 'schema_def_event_organizer_person_id':	// Default Organizer (Person).
+				case 'schema_def_event_performer_org_id':	// Default Performer (Org).
+				case 'schema_def_event_performer_person_id':	// Default Performer (Person).
 				case 'schema_def_family_friendly':		// Default Family Friendly.
 				case 'schema_def_job_hiring_org_id':		// Default Hiring Organization.
 				case 'schema_def_job_location_id':		// Default Job Location.
-				case 'schema_def_prov_org_id':			// Default Publisher.
-				case 'schema_def_pub_org_id':			// Default Publisher.
+				case 'schema_def_prov_org_id':			// Default Service Prov. (Org).
+				case 'schema_def_prov_person_id':		// Default Service Prov. (Person).
+				case 'schema_def_pub_org_id':			// Default Publisher (Org).
+				case 'schema_def_pub_person_id':		// Default Publisher (Person).
 				case 'schema_def_review_item_type':		// Default Subject Webpage Type.
 				case 'schema_event_lang':			// Event Language.
 				case 'schema_event_location_id':		// Event Physical Venue.
 				case 'schema_event_offer_currency':
 				case 'schema_event_offer_avail':
-				case 'schema_event_organizer_org_id':		// Organizer Organization.
-				case 'schema_event_organizer_person_id':	// Event Organizer Person.
-				case 'schema_event_performer_org_id':		// Performer Organization.
-				case 'schema_event_performer_person_id':	// Event Performer Person.
+				case 'schema_event_organizer_org_id':		// Event Organizer (Org).
+				case 'schema_event_organizer_person_id':	// Event Organizer (Person).
+				case 'schema_event_performer_org_id':		// Event Performer (Org).
+				case 'schema_event_performer_person_id':	// Event Performer (Person).
 				case 'schema_event_attendance':			// Event Attendance.
 				case 'schema_event_status':			// Event Status.
 				case 'schema_family_friendly':			// Family Friendly.
 				case 'schema_job_hiring_org_id':		// Hiring Organization.
 				case 'schema_job_location_id':			// Job Location.
-				case 'schema_job_salary_currency':
+				case 'schema_job_salary_currency':		// Base Salary.
 				case 'schema_job_salary_period':
 				case 'schema_lang':				// Language.
 				case 'schema_movie_prodco_org_id':		// Production Company.
-				case 'schema_prov_org_id':			// Service Provider.
-				case 'schema_pub_org_id':			// Publisher.
+				case 'schema_prov_org_id':			// Service Prov. (Org).
+				case 'schema_prov_person_id':			// Service Prov. (Person).
+				case 'schema_pub_org_id':			// Publisher (Org).
+				case 'schema_pub_person_id':			// Publisher (Person).
 				case 'schema_review_item_type':			// Reviewed Subject Webpage Type.
 				case 'schema_review_item_cw_author_type':	// Reviewed Subject Author Type.
 				case 'schema_type':				// Schema Type.
 
 					return 'not_blank';
 
+				case 'schema_book_audio_duration_days':		// Audiobook Duration.
+				case 'schema_book_audio_duration_hours':
+				case 'schema_book_audio_duration_mins':
+				case 'schema_book_audio_duration_secs':
 				case 'schema_event_offer_price':
 				case 'schema_howto_prep_days':			// How-To Preparation Time.
 				case 'schema_howto_prep_hours':
@@ -225,53 +246,76 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 				case 'schema_review_claim_first_url':		// First Appearance URL.
 
 					return 'url';
-
-				case 'schema_howto_step_section':		// How-To Section (radio buttons).
-
-					return 'checkbox';
 			}
 
 			return $type;
 		}
 
-		/**
-		 * $doing_upgrade added in WPSSO Core v4.4.0.
-		 */
-		public function filter_save_options( $opts, $options_name, $network, $doing_upgrade ) {
+		public function filter_get_defaults( $defs ) {
 
 			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark();
+			}
+
+			switch ( $this->p->options[ 'site_pub_schema_type' ] ) {
+
+				case 'organization':
+
+					$defs[ 'schema_def_pub_org_id' ]    = 'site';
+					$defs[ 'schema_def_pub_person_id' ] = 'none';
+
+					break;
+
+				case 'person':
+
+					$defs[ 'schema_def_pub_org_id' ]    = 'none';
+					$defs[ 'schema_def_pub_person_id' ] = $this->p->options[ 'site_pub_person_id' ];
+
+					break;
+			}
+
+			return $defs;
+		}
+
+		/**
+		 * $network is true if saving multisite network settings.
+		 */
+		public function filter_save_setting_options( array $opts, $network, $upgrading ) {
+
+			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			if ( $network ) {
+
 				return $opts;	// Nothing to do.
 			}
-
-			$def_opts = null;	// Optimize and only get array when needed.
 
 			/**
 			 * Adjust / cleanup options.
 			 */
 			if ( empty( $opts[ 'plugin_wpssojson_tid' ] ) && ! $this->p->check->pp( 'wpssojson', $li = false ) ) {
 
-				// translators: Please ignore - translation uses a different text domain.
-				$notice_msg = __( 'Non-standard value found for the "%s" option - resetting the option to its default value.', 'wpsso' );
-
-				if ( null === $def_opts ) {	// Only get default options once.
-					$def_opts = $this->p->opt->get_defaults();
-				}
+				$def_opts = $this->p->opt->get_defaults();
 
 				$schema_defs = SucomUtil::preg_grep_keys( '/^schema_def_/', $def_opts );
+
+				// translators: Please ignore - translation uses a different text domain.
+				$notice_msg = __( 'Non-standard value found for the "%s" option - resetting the option to its default value.', 'wpsso' );
 
 				foreach ( $schema_defs as $opt_key => $def_val ) {
 
 					if ( isset( $opts[ $opt_key ] ) ) {
 
 						if ( $opts[ $opt_key ] === $def_val ) {
+
 							continue;
 						}
 
 						if ( is_admin() ) {
+
 							$this->p->notice->warn( sprintf( $notice_msg, $opt_key ) );
 						}
 					}
@@ -283,164 +327,6 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 			return $opts;
 		}
 
-		public function filter_save_md_options( $md_opts, $mod ) {
-
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->mark();
-			}
-
-			$md_defs = $this->filter_get_md_defaults( array(), $mod );	// Only get the schema options.
-
-			/**
-			 * Check for default recipe values.
-			 */
-			foreach ( SucomUtil::preg_grep_keys( '/^schema_recipe_(prep|cook|total)_(days|hours|mins|secs)$/', $md_opts ) as $md_key => $value ) {
-
-				$md_opts[ $md_key ] = (int) $value;
-
-				if ( $md_opts[ $md_key ] === $md_defs[ $md_key ] ) {
-					unset( $md_opts[ $md_key ] );
-				}
-			}
-
-			/**
-			 * The review rating must be greater than 0.
-			 */
-			if ( isset( $md_opts[ 'schema_review_rating' ] ) && $md_opts[ 'schema_review_rating' ] > 0 ) {
-
-				/**
-				 * Fallback to the default values if the from/to is empty.
-				 */
-				foreach ( array(
-					'schema_review_rating_from',
-					'schema_review_rating_to',
-				) as $md_key ) {
-					if ( empty( $md_opts[ $md_key ] ) && isset( $md_defs[ $md_key ] ) ) {
-						$md_opts[ $md_key ] = $md_defs[ $md_key ];
-					}
-				}
-
-			} else {
-
-				foreach ( array(
-					'schema_review_rating',
-					'schema_review_rating_from',
-					'schema_review_rating_to',
-				) as $md_key ) {
-					unset( $md_opts[ $md_key ] );
-				}
-			}
-
-			foreach ( array(
-				'schema_event_start',
-				'schema_event_end',
-				'schema_event_previous',
-			) as $md_pre ) {
-
-				/**
-				 * Unset date / time if same as the default value.
-				 */
-				foreach ( array( 'date', 'time', 'timezone' ) as $md_ext ) {
-
-					if ( isset( $md_opts[ $md_pre . '_' . $md_ext ] ) &&
-						( $md_opts[ $md_pre . '_' . $md_ext ] === $md_defs[ $md_pre . '_' . $md_ext ] ||
-							$md_opts[ $md_pre . '_' . $md_ext ] === 'none' ) ) {
-
-						unset( $md_opts[ $md_pre . '_' . $md_ext ] );
-					}
-				}
-
-				if ( empty( $md_opts[ $md_pre . '_date' ] ) && empty( $md_opts[ $md_pre . '_time' ] ) ) {		// No date or time.
-
-					unset( $md_opts[ $md_pre . '_date' ] );
-					unset( $md_opts[ $md_pre . '_time' ] );
-					unset( $md_opts[ $md_pre . '_timezone' ] );
-
-				} elseif ( ! empty( $md_opts[ $md_pre . '_date' ] ) && empty( $md_opts[ $md_pre . '_time' ] ) ) {	// Date with no time.
-
-					$md_opts[ $md_pre . '_time' ] = '00:00';
-
-				} elseif ( empty( $md_opts[ $md_pre . '_date' ] ) && ! empty( $md_opts[ $md_pre . '_time' ] ) ) {	// Time with no date.
-
-					if ( 'schema_event_previous' === $md_pre ) {
-
-						unset( $md_opts[ $md_pre . '_date' ] );
-						unset( $md_opts[ $md_pre . '_time' ] );
-						unset( $md_opts[ $md_pre . '_timezone' ] );
-
-					} else {
-						$md_opts[ $md_pre . '_date' ] = gmdate( 'Y-m-d', time() );
-					}
-				}
-			}
-
-			/**
-			 * Events with a previous start date must have rescheduled as their status.
-			 *
-			 * Rescheduled events, without a previous start date, is an invalid combination.
-			 */
-			if ( ! empty( $md_opts[ 'schema_event_previous_date' ] ) ) {
-
-				$md_opts[ 'schema_event_status' ]    = 'EventRescheduled';
-				$md_opts[ 'schema_event_status:is' ] = 'disabled';
-
-			} elseif ( isset( $md_opts[ 'schema_event_status' ] ) && 'EventRescheduled' === $md_opts[ 'schema_event_status' ] ) {
-
-				$md_opts[ 'schema_event_status' ] = 'EventScheduled';
-			}
-
-			/**
-			 * Sanitize the offer options.
-			 */
-			$metadata_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX', 5 );
-
-			foreach( array(
-				'schema_event',
-				'schema_review_item_product',
-				'schema_review_item_software_app',
-			) as $md_pre ) {
-
-				foreach ( range( 0, $metadata_offers_max - 1, 1 ) as $key_num ) {
-
-					$is_valid_offer = false;
-
-					/**
-					 * Must have at least an offer name and price.
-					 */
-					foreach ( array(
-						$md_pre . '_offer_name',
-						$md_pre . '_offer_price'
-					) as $md_offer_pre ) {
-
-						if ( isset( $md_opts[ $md_offer_pre . '_' . $key_num] ) && $md_opts[ $md_offer_pre . '_' . $key_num] !== '' ) {
-							$is_valid_offer = true;
-						}
-					}
-
-					if ( ! $is_valid_offer ) {
-						unset( $md_opts[ $md_pre . '_offer_currency_' . $key_num] );
-						unset( $md_opts[ $md_pre . '_offer_avail_' . $key_num] );
-					}
-				}
-			}
-
-			if ( isset( $md_opts[ 'schema_type' ] ) && 'review.claim' === $md_opts[ 'schema_type' ] ) {
-			
-				if ( isset( $md_opts[ 'schema_review_item_type' ] ) && 'review.claim' === $md_opts[ 'schema_review_item_type' ] ) {
-
-					$md_opts[ 'schema_review_item_type' ] = $this->p->options[ 'schema_def_review_item_type' ];
-
-					$notice_msg = __( 'A claim review cannot be the subject of another claim review.', 'wpsso-schema-json-ld' ) . ' ';
-
-					$notice_msg .= __( 'Please select a subject webpage type that better describes the subject of the webpage (ie. the content) being reviewed.', 'wpsso-schema-json-ld' );
-
-					$this->p->notice->err( $notice_msg );
-				}
-			}
-
-			return $md_opts;
-		}
-
 		public function filter_get_md_defaults( $md_defs, $mod ) {
 
 			/**
@@ -450,6 +336,7 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 			$timezone = get_option( 'timezone_string' );
 
 			if ( empty( $timezone ) ) {
+
 				$timezone = 'UTC';
 			}
 
@@ -466,7 +353,8 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 				/**
 				 * Check for a WordPress bug that returns -0001 for the year of a draft post.
 				 */
-				if ( $def_copyright_year === '-0001' ) {
+				if ( '-0001' === $def_copyright_year ) {
+
 					$def_copyright_year = '';
 				}
 			}
@@ -492,21 +380,31 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 				'schema_family_friendly' => $opts[ 'schema_def_family_friendly' ],	// Family Friendly.
 				'schema_copyright_year'  => $def_copyright_year,			// Copyright Year.
 				'schema_license_url'     => '',						// License URL.
-				'schema_pub_org_id'      => $opts[ 'schema_def_pub_org_id' ],		// Publisher.
-				'schema_prov_org_id'     => $opts[ 'schema_def_prov_org_id' ],		// Service Provider.
+				'schema_prov_org_id'     => $opts[ 'schema_def_prov_org_id' ],		// Service Prov. (Org).
+				'schema_prov_person_id'  => $opts[ 'schema_def_prov_person_id' ],	// Service Prov. (Person).
+				'schema_pub_org_id'      => $opts[ 'schema_def_pub_org_id' ],		// Publisher (Org).
+				'schema_pub_person_id'   => $opts[ 'schema_def_pub_person_id' ],	// Publisher (Person).
+
+				/**
+				 * Schema Audiobook.
+				 */
+				'schema_book_audio_duration_days'  => 0,	// Audiobook Duration (Days).
+				'schema_book_audio_duration_hours' => 0,	// Audiobook Duration (Hours).
+				'schema_book_audio_duration_mins'  => 0,	// Audiobook Duration (Mins).
+				'schema_book_audio_duration_secs'  => 0,	// Audiobook Duration (Secs).
 
 				/**
 				 * Schema Event.
 				 */
 				'schema_event_lang'                  => $def_lang,						// Event Language.
-				'schema_event_attendance'            => 'OfflineEventAttendanceMode',				// Event Attendance.
+				'schema_event_attendance'            => 'https://schema.org/OfflineEventAttendanceMode',	// Event Attendance.
 				'schema_event_online_url'            => '',							// Event Online URL.
 				'schema_event_location_id'           => $opts[ 'schema_def_event_location_id' ],		// Event Physical Venue.
-				'schema_event_organizer_org_id'      => $opts[ 'schema_def_event_organizer_org_id' ],		// Organizer Organization.
-				'schema_event_organizer_person_id'   => $opts[ 'schema_def_event_organizer_person_id' ],	// Organizer Person.
-				'schema_event_performer_org_id'      => $opts[ 'schema_def_event_performer_org_id' ],		// Performer Organization.
-				'schema_event_performer_person_id'   => $opts[ 'schema_def_event_performer_person_id' ],	// Performer Person.
-				'schema_event_status'                => 'EventScheduled',					// Event Status.
+				'schema_event_organizer_org_id'      => $opts[ 'schema_def_event_organizer_org_id' ],		// Organizer (Org).
+				'schema_event_organizer_person_id'   => $opts[ 'schema_def_event_organizer_person_id' ],	// Organizer (Person).
+				'schema_event_performer_org_id'      => $opts[ 'schema_def_event_performer_org_id' ],		// Performer (Org).
+				'schema_event_performer_person_id'   => $opts[ 'schema_def_event_performer_person_id' ],	// Performer (Person).
+				'schema_event_status'                => 'https://schema.org/EventScheduled',			// Event Status.
 				'schema_event_start_date'            => '',							// Event Start (Date).
 				'schema_event_start_time'            => 'none',							// Event Start (Time).
 				'schema_event_start_timezone'        => $timezone,						// Event Start (Timezone).
@@ -545,14 +443,14 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 				'schema_job_salary'               => '',					// Base Salary.
 				'schema_job_salary_currency'      => $opts[ 'plugin_def_currency' ],		// Base Salary Currency.
 				'schema_job_salary_period'        => 'year',					// Base Salary per Year, Month, Week, Hour.
-				'schema_job_empl_type_full_time'  => 0,
-				'schema_job_empl_type_part_time'  => 0,
-				'schema_job_empl_type_contractor' => 0,
-				'schema_job_empl_type_temporary'  => 0,
-				'schema_job_empl_type_intern'     => 0,
-				'schema_job_empl_type_volunteer'  => 0,
-				'schema_job_empl_type_per_diem'   => 0,
-				'schema_job_empl_type_other'      => 0,
+				'schema_job_empl_type_FULL_TIME'  => 0,
+				'schema_job_empl_type_PART_TIME'  => 0,
+				'schema_job_empl_type_CONTRACTOR' => 0,
+				'schema_job_empl_type_TEMPORARY'  => 0,
+				'schema_job_empl_type_INTERN'     => 0,
+				'schema_job_empl_type_VOLUNTEER'  => 0,
+				'schema_job_empl_type_PER_DIEM'   => 0,
+				'schema_job_empl_type_OTHER'      => 0,
 				'schema_job_expire_date'          => '',
 				'schema_job_expire_time'          => 'none',
 				'schema_job_expire_timezone'      => $timezone,
@@ -682,6 +580,188 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 			return $md_defs;
 		}
 
+		public function filter_save_md_options( $md_opts, $mod ) {
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark();
+			}
+
+			$md_defs = $this->filter_get_md_defaults( array(), $mod );	// Only get the schema options.
+
+			/**
+			 * Check for default recipe values.
+			 */
+			foreach ( SucomUtil::preg_grep_keys( '/^schema_recipe_(prep|cook|total)_(days|hours|mins|secs)$/', $md_opts ) as $md_key => $value ) {
+
+				$md_opts[ $md_key ] = (int) $value;
+
+				if ( $md_opts[ $md_key ] === $md_defs[ $md_key ] ) {
+
+					unset( $md_opts[ $md_key ] );
+				}
+			}
+
+			/**
+			 * The review rating must be greater than 0.
+			 */
+			if ( isset( $md_opts[ 'schema_review_rating' ] ) && $md_opts[ 'schema_review_rating' ] > 0 ) {
+
+				/**
+				 * Fallback to the default values if the from/to is empty.
+				 */
+				foreach ( array(
+					'schema_review_rating_from',
+					'schema_review_rating_to',
+				) as $md_key ) {
+
+					if ( empty( $md_opts[ $md_key ] ) && isset( $md_defs[ $md_key ] ) ) {
+
+						$md_opts[ $md_key ] = $md_defs[ $md_key ];
+					}
+				}
+
+			} else {
+
+				foreach ( array(
+					'schema_review_rating',
+					'schema_review_rating_from',
+					'schema_review_rating_to',
+				) as $md_key ) {
+
+					unset( $md_opts[ $md_key ] );
+				}
+			}
+
+			foreach ( array(
+				'schema_event_start',
+				'schema_event_end',
+				'schema_event_previous',
+			) as $md_pre ) {
+
+				/**
+				 * Unset date / time if same as the default value.
+				 */
+				foreach ( array( 'date', 'time', 'timezone' ) as $md_ext ) {
+
+					if ( isset( $md_opts[ $md_pre . '_' . $md_ext ] ) &&
+						( $md_opts[ $md_pre . '_' . $md_ext ] === $md_defs[ $md_pre . '_' . $md_ext ] ||
+							$md_opts[ $md_pre . '_' . $md_ext ] === 'none' ) ) {
+
+						unset( $md_opts[ $md_pre . '_' . $md_ext ] );
+					}
+				}
+
+				if ( empty( $md_opts[ $md_pre . '_date' ] ) && empty( $md_opts[ $md_pre . '_time' ] ) ) {		// No date or time.
+
+					unset( $md_opts[ $md_pre . '_date' ] );
+					unset( $md_opts[ $md_pre . '_time' ] );
+					unset( $md_opts[ $md_pre . '_timezone' ] );
+
+				} elseif ( ! empty( $md_opts[ $md_pre . '_date' ] ) && empty( $md_opts[ $md_pre . '_time' ] ) ) {	// Date with no time.
+
+					$md_opts[ $md_pre . '_time' ] = '00:00';
+
+				} elseif ( empty( $md_opts[ $md_pre . '_date' ] ) && ! empty( $md_opts[ $md_pre . '_time' ] ) ) {	// Time with no date.
+
+					if ( 'schema_event_previous' === $md_pre ) {
+
+						unset( $md_opts[ $md_pre . '_date' ] );
+						unset( $md_opts[ $md_pre . '_time' ] );
+						unset( $md_opts[ $md_pre . '_timezone' ] );
+
+					} else {
+						$md_opts[ $md_pre . '_date' ] = gmdate( 'Y-m-d', time() );
+					}
+				}
+			}
+
+			/**
+			 * Events with a previous start date must have rescheduled as their status.
+			 *
+			 * Rescheduled events, without a previous start date, is an invalid combination.
+			 */
+			if ( ! empty( $md_opts[ 'schema_event_previous_date' ] ) ) {
+
+				$md_opts[ 'schema_event_status' ]    = 'https://schema.org/EventRescheduled';
+				$md_opts[ 'schema_event_status:is' ] = 'disabled';
+
+			} elseif ( isset( $md_opts[ 'schema_event_status' ] ) && 'https://schema.org/EventRescheduled' === $md_opts[ 'schema_event_status' ] ) {
+
+				$md_opts[ 'schema_event_status' ] = 'https://schema.org/EventScheduled';
+			}
+
+			/**
+			 * Sanitize the offer options.
+			 */
+			$metadata_offers_max = SucomUtil::get_const( 'WPSSO_SCHEMA_METADATA_OFFERS_MAX', 5 );
+
+			foreach( array(
+				'schema_event',
+				'schema_review_item_product',
+				'schema_review_item_software_app',
+			) as $md_pre ) {
+
+				foreach ( range( 0, $metadata_offers_max - 1, 1 ) as $key_num ) {
+
+					$is_valid_offer = false;
+
+					/**
+					 * Must have at least an offer name and price.
+					 */
+					foreach ( array(
+						$md_pre . '_offer_name',
+						$md_pre . '_offer_price'
+					) as $md_offer_pre ) {
+
+						if ( isset( $md_opts[ $md_offer_pre . '_' . $key_num] ) && $md_opts[ $md_offer_pre . '_' . $key_num] !== '' ) {
+
+							$is_valid_offer = true;
+						}
+					}
+
+					if ( ! $is_valid_offer ) {
+
+						unset( $md_opts[ $md_pre . '_offer_currency_' . $key_num] );
+						unset( $md_opts[ $md_pre . '_offer_avail_' . $key_num] );
+					}
+				}
+			}
+
+			if ( isset( $md_opts[ 'schema_type' ] ) && 'review.claim' === $md_opts[ 'schema_type' ] ) {
+			
+				if ( isset( $md_opts[ 'schema_review_item_type' ] ) && 'review.claim' === $md_opts[ 'schema_review_item_type' ] ) {
+
+					$md_opts[ 'schema_review_item_type' ] = $this->p->options[ 'schema_def_review_item_type' ];
+
+					$notice_msg = __( 'A claim review cannot be the subject of another claim review.', 'wpsso-schema-json-ld' ) . ' ';
+
+					$notice_msg .= __( 'Please select a subject webpage type that better describes the subject of the webpage (ie. the content) being reviewed.', 'wpsso-schema-json-ld' );
+
+					$this->p->notice->err( $notice_msg );
+				}
+			}
+
+			return $md_opts;
+		}
+
+		public function filter_sanitize_md_options( $md_opts, $mod ) {
+
+			if ( ! empty( $mod[ 'is_post' ] ) ) {
+
+				WpssoSchema::check_prop_value_enumeration( $md_opts, $prop_name = 'schema_event_attendance', $enum_key = 'event_attendance' );
+
+				WpssoSchema::check_prop_value_enumeration( $md_opts, $prop_name = 'schema_event_status', $enum_key = 'event_status' );
+
+				foreach ( SucomUtil::preg_grep_keys( '/^schema_(.*)_offer_avail/', $md_opts ) as $prop_name => $prop_val ) {
+		
+					WpssoSchema::check_prop_value_enumeration( $md_opts, $prop_name, $enum_key = 'item_availability' );
+				}
+			}
+
+			return $md_opts;
+		}
+
 		public function filter_post_cache_transient_keys( $transient_keys, $mod, $sharing_url, $mod_salt ) {
 
 			/**
@@ -700,6 +780,7 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 			$day_url   = get_day_link( $year, $month, $day );
 
 			foreach ( array( $home_url, $year_url, $month_url, $day_url ) as $url ) {
+
 				$transient_keys[] = array(
 					'id'   => $cache_md5_pre . md5( $cache_method . '(url:' . $url . ')' ),
 					'pre'  => $cache_md5_pre,
@@ -711,7 +792,9 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 			 * Clear term archive page meta tags (and json markup).
 			 */
 			foreach ( get_post_taxonomies( $mod[ 'id' ] ) as $tax_name ) {
+
 				foreach ( wp_get_post_terms( $mod[ 'id' ], $tax_name ) as $term ) {
+
 					$transient_keys[] = array(
 						'id'   => $cache_md5_pre . md5( $cache_method . '(term:' . $term->term_id . '_tax:' . $tax_name . ')' ),
 						'pre'  => $cache_md5_pre,
@@ -735,9 +818,14 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 		}
 
 		/**
-		 * Hooked to 'wpssojson_status_std_features'.
+		 * Filter for 'wpssojson_status_std_features'.
 		 */
-		public function filter_status_std_features( $features, $ext, $info, $pkg ) {
+		public function filter_status_std_features( $features, $ext, $info ) {
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark();
+			}
 
 			foreach ( array( 'filters' ) as $type_dir ) {
 
@@ -746,29 +834,35 @@ if ( ! class_exists( 'WpssoJsonFilters' ) ) {
 					if ( is_array( $libs ) ) {
 
 						if ( $sub_dir === 'admin' ) { // Skip status for admin menus and tabs.
+
 							continue;
 						}
 
 						foreach ( $libs as $id => $label ) {
 
+							$label_transl = _x( $label, 'lib file description', 'wpsso-schema-json-ld' );
+
 							$classname = SucomUtil::sanitize_classname( 'wpssojson' . $type_dir . $sub_dir . $id, $allow_underscore = false );
 
-							$features[ $label ] = array( 'status' => class_exists( $classname ) ? 'on' : 'off' );
+							$features[ $label ] = array(
+								'label_transl' => $label_transl,
+								'classname'    => $classname,
+							);
 						}
 					}
 				}
 			}
 
-			return $this->add_schema_type_count( $features, $ext, $info, $pkg );
+			return $this->add_schema_type_count( $features, $ext, $info );
 		}
 
-		private function add_schema_type_count( $features, $ext, $info, $pkg ) {
+		private function add_schema_type_count( $features, $ext, $info ) {
 
-			foreach ( $features as $feature_key => $feature_info ) {
+			foreach ( $features as $label => $arr ) {
 
-				if ( preg_match( '/^\(([a-z\-]+)\) (Schema Type .+) \(schema_type:(.+)\)$/', $feature_key, $match ) ) {
+				if ( preg_match( '/^(.*) \[schema_type:(.+)\]$/', $arr[ 'label_transl' ], $match ) ) {
 
-					$features[ $feature_key ][ 'label' ] = $match[2] . ' (' . $this->p->schema->count_schema_type_children( $match[3] ) . ')';
+					$features[ $label ][ 'label_transl' ] = $match[ 1 ] . ' (' . $this->p->schema->count_schema_type_children( $match[ 2 ] ) . ')';
 				}
 			}
 

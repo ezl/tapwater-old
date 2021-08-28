@@ -6,6 +6,8 @@ add_action('wp_enqueue_scripts', 'parent_styles');
 function parent_styles(){
     wp_enqueue_style('parent_style', get_template_directory_uri().'/style.css');
     wp_enqueue_script('custom-js', get_stylesheet_directory_uri() . '/js/custom.js', array( 'jquery' ),'',true );
+    wp_enqueue_script('svg-pan-zoom-js', get_stylesheet_directory_uri() . '/js/svg-pan-zoom.js');
+    wp_enqueue_script('hammer-js', get_stylesheet_directory_uri() . '/js/hammer.js');
 }
 
 //custom post types

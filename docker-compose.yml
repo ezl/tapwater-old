@@ -5,12 +5,15 @@ services:
     image: mysql:5.7
     volumes:
       - ./db:/var/lib/mysql
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: somewordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: "secret"
+      MYSQL_DATABASE: "canyoudrinktapwaterin_co"
+      MYSQL_USER: "canyoudrinktapwa"
+      MYSQL_PASSWORD: "devpass"
+    ports:
+      - 3306:3306
 
   wordpress:
     depends_on:
@@ -21,3 +24,11 @@ services:
     ports:
       - "8080:80"
     restart: always
+    environment:
+      WP_HOME: "http://localhost:8080"
+      WP_SITEURL: "http://localhost:8080"
+      WP_DEBUG: "true"
+      DB_HOST: "db"
+      DB_NAME: "canyoudrinktapwaterin_co"
+      DB_USER: "canyoudrinktapwa"
+      DB_PASSWORD: "devpass"

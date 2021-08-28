@@ -203,11 +203,7 @@ endif;
 
 ?>
 
-<!-- wp:heading -->
-<h2>Tap water by country</h2>
-<!-- /wp:heading -->
 
-<?php get_template_part('world', 'map');  ?>
 
 <!-- wp:heading -->
 <!--/*
@@ -355,6 +351,12 @@ if($waterquality < 20){
 </table>
 </figure>
 <!-- /wp:html -->
+
+<!-- wp:heading -->
+<h2>Tap water by country</h2>
+<!-- /wp:heading -->
+
+<?php get_template_part('world', 'map');  ?>
 
 
 <p>

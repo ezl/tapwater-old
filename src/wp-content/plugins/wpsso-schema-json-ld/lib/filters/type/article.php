@@ -11,6 +11,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -25,6 +26,7 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeArticle' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -36,87 +38,32 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeArticle' ) ) {
 		public function filter_json_data_https_schema_org_article( $json_data, $mod, $mt_og, $page_type_id, $is_main ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
-			$ret = array();
-
-			$ret[ 'isPartOf' ][] = $this->p->schema->get_json_data_home_website();	// Since WPSSO Core v7.5.0.
+			$json_ret = array();
 
 			/**
 			 * Property:
 			 *	articleSection
 			 */
-			WpssoSchema::add_data_itemprop_from_assoc( $ret, $mt_og, array(
+			WpssoSchema::add_data_itemprop_from_assoc( $json_ret, $mt_og, array(
 				'articleSection' => 'article:section',
 			) );
 
-			$amp_size_names = array(
-				$this->p->lca . '-schema-article-1-1',
-				$this->p->lca . '-schema-article-4-3',
-				$this->p->lca . '-schema-article-16-9',
-			);
-
-			if ( SucomUtil::is_amp() ) {
-
-				$size_names     = $amp_size_names;
-				$alt_size_names = null;
-				$org_logo_key   = 'org_banner_url';
-
-			} else {
-
-				$size_names     = array( $this->p->lca . '-schema-article' );
-				$alt_size_names = empty( $this->p->avail[ 'amp' ][ 'any' ] ) ? null : $amp_size_names;
-				$org_logo_key   = 'org_banner_url';
-			}
-
 			/**
 			 * Property:
-			 *      articleBody
+			 *	articleBody
 			 */
-			if ( ! empty( $this->p->options[ 'schema_add_text_prop' ] ) ) {
+			if ( isset( $json_data[ 'text' ] ) ) {
 
-				$text_max_len = $this->p->options[ 'schema_text_max_len' ];
+				$json_ret[ 'articleBody' ] = $json_data[ 'text' ];
 
-				$ret[ 'articleBody' ] = $this->p->page->get_text( $text_max_len, $dots = '...', $mod );
+				unset( $json_data[ 'text' ] );
 			}
 
-			/**
-			 * Property:
-			 *      image as https://schema.org/ImageObject
-			 *      video as https://schema.org/VideoObject
-			 */
-			WpssoSchema::add_media_data( $ret, $mod, $mt_og, $size_names, $add_video = true, $alt_size_names );
-
-			WpssoSchema::check_required( $ret, $mod, array( 'image' ) );
-
-			/**
-			 * Property:
-			 *      provider
-			 *      publisher
-			 */
-			if ( ! empty( $mod[ 'obj' ] ) ) {	// Just in case.
-
-				/**
-				 * The meta data key is unique, but the Schema property name may be repeated to add more than one
-				 * value to a property array.
-				 */
-				foreach ( array(
-					'schema_pub_org_id'  => 'publisher',
-					'schema_prov_org_id' => 'provider',
-				) as $md_key => $prop_name ) {
-	
-					$md_val = $mod[ 'obj' ]->get_options( $mod[ 'id' ], $md_key, $filter_opts = true, $pad_opts = true );
-	
-					if ( $md_val === null || $md_val === '' || $md_val === 'none' ) {
-						continue;
-					}
-	
-					WpssoSchemaSingle::add_organization_data( $ret[ $prop_name ], $mod, $md_val, $org_logo_key, $list_element = false );
-				}
-			}
-
-			return WpssoSchema::return_data_from_filter( $json_data, $ret, $is_main );
+			return WpssoSchema::return_data_from_filter( $json_data, $json_ret, $is_main );
 		}
 	}
 }

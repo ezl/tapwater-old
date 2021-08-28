@@ -11,6 +11,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -25,6 +26,7 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeBrand' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -36,24 +38,24 @@ if ( ! class_exists( 'WpssoJsonFiltersTypeBrand' ) ) {
 		public function filter_json_data_https_schema_org_brand( $json_data, $mod, $mt_og, $page_type_id, $is_main ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
-			$ret = array();
-
-			$size_name = $this->p->lca . '-schema';
+			$json_ret = array();
 
 			/**
 			 * Property:
 			 *	image as https://schema.org/ImageObject
 			 */
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'adding image property for brand (videos disabled)' );
 			}
 
-			WpssoSchema::add_media_data( $ret, $mod, $mt_og, $size_name, $add_video = false );
+			WpssoSchema::add_media_data( $json_ret, $mod, $mt_og, $size_names = 'schema', $add_video = false );
 
-			return WpssoSchema::return_data_from_filter( $json_data, $ret, $is_main );
+			return WpssoSchema::return_data_from_filter( $json_data, $json_ret, $is_main );
 		}
 	}
 }

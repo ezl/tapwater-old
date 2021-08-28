@@ -6,10 +6,12 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
 if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+
 	die( 'Do. Or do not. There is no try.' );
 }
 
@@ -133,6 +135,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 			 * Add the "person" role for all WpssoUser::get_public_ids(). 
 			 */
 			if ( $new_install ) {
+
 				$this->p->user->schedule_add_person_role();
 			}
 
@@ -157,13 +160,14 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 					sprintf( __( 'A background task will begin shortly to clear all caches (%s is enabled).',
 						'wpsso' ), $settings_page_link ) );
 
-				$this->p->util->cache->schedule_clear( $user_id = get_current_user_id(), $clear_other = true );
+				$this->p->util->cache->schedule_clear( $user_id = get_current_user_id(), $clear_other = true, $clear_short = null, $refresh = true );
 			}
 
 			/**
 			 * End of plugin activation.
 			 */
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'done plugin activation' );
 			}
 		}
@@ -192,6 +196,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 						$cache_file = $cache_dir . $file_name;
 
 						if ( ! preg_match( '/^(\..*|index\.php)$/', $file_name ) && is_file( $cache_file ) ) {
+
 							@unlink( $cache_file );
 						}
 					}
@@ -201,6 +206,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 			}
 
 			if ( class_exists( 'WpssoAdmin' ) ) {	// Just in case.
+
 				WpssoAdmin::reset_admin_check_options();
 			}
 		}
@@ -237,11 +243,11 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 				/**
 				 * Delete term settings and meta.
 				 */
-				foreach ( WpssoTerm::get_public_ids() as $id ) {
+				foreach ( WpssoTerm::get_public_ids() as $term_id ) {
 
-					WpssoTerm::delete_term_meta( $id, WPSSO_META_NAME );
+					WpssoTerm::delete_term_meta( $term_id, WPSSO_META_NAME );
 
-					WpssoTerm::delete_term_meta( $id, WPSSO_META_ATTACHED_NAME );
+					WpssoTerm::delete_term_meta( $term_id, WPSSO_META_ATTACHED_NAME );
 				}
 
 				/**
@@ -255,13 +261,15 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 
 				while ( $blog_user_ids = SucomUtil::get_user_ids( $blog_id, '', 1000 ) ) {	// Get a maximum of 1000 user IDs at a time.
 
-					foreach ( $blog_user_ids as $id ) {
+					foreach ( $blog_user_ids as $user_id ) {
 
-						delete_user_option( $id, WPSSO_DISMISS_NAME );
+						delete_user_meta( $user_id, WPSSO_DISMISS_NAME );
 	
-						WpssoUser::delete_metabox_prefs( $id );
+						delete_user_option( $user_id, WPSSO_DISMISS_NAME );
 
-						WpssoUser::remove_role_by_id( $id, $role = 'person' );
+						WpssoUser::delete_metabox_prefs( $user_id );
+
+						WpssoUser::remove_role_by_id( $user_id, $role = 'person' );
 					}
 				}
 
@@ -282,6 +290,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 				$transient_name = str_replace( $prefix, '', $option_name );
 
 				if ( ! empty( $transient_name ) ) {
+
 					delete_transient( $transient_name );
 				}
 			}
@@ -296,6 +305,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 			foreach ( array( 'wp', 'php' ) as $key ) {
 
 				if ( empty( $cf[ $key ][ 'min_version' ] ) ) {
+
 					return;
 				}
 
@@ -321,6 +331,7 @@ if ( ! class_exists( 'WpssoRegister' ) ) {
 				$version_url = $cf[ $key ][ 'version_url' ];
 
 				if ( version_compare( $app_version, $min_version, '>=' ) ) {
+
 					continue;
 				}
 

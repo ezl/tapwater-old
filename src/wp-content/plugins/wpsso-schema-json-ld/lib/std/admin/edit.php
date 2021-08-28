@@ -6,6 +6,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -20,6 +21,7 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -32,6 +34,7 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 		public function filter_metabox_sso_edit_rows( $table_rows, $form, $head_info, $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -39,6 +42,7 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 			 * Move Schema options to the end of the table, just in case.
 			 */
 			foreach ( SucomUtil::preg_grep_keys( '/^(subsection_schema|schema_)/', $table_rows ) as $key => $row ) {
+
 				SucomUtil::move_to_end( $table_rows, $key );
 			}
 
@@ -74,14 +78,6 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 			$def_schema_desc      = $this->p->page->get_description( $schema_desc_max_len, $dots, $mod, $read_cache, $no_hashtags, $do_encode, $schema_desc_md_key );
 			$def_schema_text      = $this->p->page->get_text( $schema_text_max_len, '', $mod, $read_cache, $no_hashtags, $do_encode, $md_key = 'none' );
 			$def_schema_keywords  = $this->p->page->get_keywords( $mod, $read_cache, $md_key = 'none' );
-
-			/**
-			 * Translated text strings.
-			 */
-			$days_sep  = ' ' . _x( 'days', 'option comment', 'wpsso-schema-json-ld' ) . ', ';
-			$hours_sep = ' ' . _x( 'hours', 'option comment', 'wpsso-schema-json-ld' ) . ', ';
-			$mins_sep  = ' ' . _x( 'mins', 'option comment', 'wpsso-schema-json-ld' ) . ', ';
-			$secs_sep  = ' ' . _x( 'secs', 'option comment', 'wpsso-schema-json-ld' );
 
 			/**
 			 * Organization variables.
@@ -236,19 +232,603 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 					'tr_class' => $schema_type_row_class[ 'creative_work' ],
 					'th_class' => 'medium',
 					'td_class' => 'blank',
-					'label'    => _x( 'Publisher', 'option label', 'wpsso-schema-json-ld' ),
+					'label'    => _x( 'Publisher (Org)', 'option label', 'wpsso-schema-json-ld' ),
 					'tooltip'  => 'meta-schema_pub_org_id',
 					'content'  => $form->get_no_select( 'schema_pub_org_id', $org_site_names,
-						$css_class = 'long_name' ) . $org_req_msg,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ) . $org_req_msg,
+				),
+				'schema_pub_person_id' => array(
+					'tr_class' => $schema_type_row_class[ 'creative_work' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Publisher (Person)', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_pub_person_id',
+					'content'  => $form->get_no_select( 'schema_pub_person_id', $person_names,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ),
 				),
 				'schema_prov_org_id' => array(
 					'tr_class' => $schema_type_row_class[ 'creative_work' ],
 					'th_class' => 'medium',
 					'td_class' => 'blank',
-					'label'    => _x( 'Service Provider', 'option label', 'wpsso-schema-json-ld' ),
+					'label'    => _x( 'Service Prov. (Org)', 'option label', 'wpsso-schema-json-ld' ),
 					'tooltip'  => 'meta-schema_prov_org_id',
 					'content'  => $form->get_no_select( 'schema_prov_org_id', $org_site_names,
-						$css_class = 'long_name' ) . $org_req_msg,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ) . $org_req_msg,
+				),
+				'schema_prov_person_id' => array(
+					'tr_class' => $schema_type_row_class[ 'creative_work' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Service Prov. (Person)', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_prov_person_id',
+					'content'  => $form->get_no_select( 'schema_prov_person_id', $person_names,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ),
+				),
+
+				/**
+				 * Schema Creative Work / Book / Audiobook.
+				 */
+				'subsection_book_audio' => array(
+					'tr_class' => $schema_type_row_class[ 'book_audio' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Audiobook Information', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_book_audio_duration_time' => array(
+					'tr_class' => $schema_type_row_class[ 'book_audio' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Duration', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_book_audio_duration_time',
+					'content'  => $this->get_time_dhms( $form ),
+				),
+
+				/**
+				 * Schema Creative Work / How-To.
+				 */
+				'subsection_howto' => array(
+					'tr_class' => $schema_type_row_class[ 'how_to' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'How-To Information', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_howto_yield' => array(
+					'tr_class' => $schema_type_row_class[ 'how_to' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'How-To Makes', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_howto_yield',
+					'content'  => $form->get_no_input_value( '', 'long_name' ),
+				),
+				'schema_howto_prep_time' => array(
+					'tr_class' => $schema_type_row_class[ 'how_to' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Preparation Time', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_howto_prep_time',
+					'content'  => $this->get_time_dhms( $form ),
+				),
+				'schema_howto_total_time' => array(
+					'tr_class' => $schema_type_row_class[ 'how_to' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Total Time', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_howto_total_time',
+					'content'  => $this->get_time_dhms( $form ),
+				),
+				'schema_howto_supplies' => array(
+					'tr_class' => $schema_type_row_class[ 'how_to' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'How-To Supplies', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_howto_supplies',
+					'content'  => $form->get_no_input_value( '', 'long_name', $css_id = '', '', $repeat = 5 ),
+				),
+				'schema_howto_tools' => array(
+					'tr_class' => $schema_type_row_class[ 'how_to' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'How-To Tools', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_howto_tools',
+					'content'  => $form->get_no_input_value( '', 'long_name', $css_id = '', '', $repeat = 5 ),
+				),
+				'schema_howto_steps' => array(
+					'tr_class' => $schema_type_row_class[ 'how_to' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'How-To Steps', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_howto_steps',
+					'content'  => $form->get_no_mixed_multi( array(
+						'schema_howto_step_section' => array(
+							'input_type'    => 'radio',
+							'input_class'   => 'howto_step_section',
+							'input_content' => _x( '%1$s Step Details %2$s or New Section Details', 'option label', 'wpsso-schema-json-ld' ),
+							'input_values'  => array( 0, 1 ),
+							'input_default' => 0,
+						),
+						'schema_howto_step' => array(
+							'input_label' => _x( 'Name', 'option label', 'wpsso-schema-json-ld' ),
+							'input_type'  => 'text',
+							'input_class' => 'wide howto_step_name is_required',
+						),
+						'schema_howto_step_text' => array(
+							'input_label' => _x( 'Description', 'option label', 'wpsso-schema-json-ld' ),
+							'input_type'  => 'textarea',
+							'input_class' => 'wide howto_step_text',
+						),
+						'schema_howto_step_img' => array(
+							'input_label' => _x( 'Image ID', 'option label', 'wpsso-schema-json-ld' ),
+							'input_type'  => 'image',
+							'input_class' => 'howto_step_img',
+						),
+					), $css_class = '', $css_id = 'schema_howto_step',
+						$start_num = 0, $max_input = 3, $show_first = 3 ),
+				),
+
+				/**
+				 * Schema Creative Work / How-To / Recipe.
+				 */
+				'subsection_recipe' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Recipe Information', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_cuisine' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Recipe Cuisine', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_cuisine',
+					'content'  => $form->get_no_input_value( '', 'long_name' ),
+				),
+				'schema_recipe_course' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Recipe Course', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_course',
+					'content'  => $form->get_no_input_value( '', 'long_name' ),
+				),
+				'schema_recipe_yield' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Recipe Makes', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_yield',
+					'content'  => $form->get_no_input_value( '', 'long_name' ),
+				),
+				'schema_recipe_cook_method' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Cooking Method', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_cook_method',
+					'content'  => $form->get_no_input_value( '', 'long_name' ),
+				),
+				'schema_recipe_prep_time' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Preparation Time', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_prep_time',
+					'content'  => $this->get_time_dhms( $form ),
+				),
+				'schema_recipe_cook_time' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Cooking Time', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_cook_time',
+					'content'  => $this->get_time_dhms( $form ),
+				),
+				'schema_recipe_total_time' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Total Time', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_total_time',
+					'content'  => $this->get_time_dhms( $form ),
+				),
+				'schema_recipe_ingredients' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Recipe Ingredients', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_ingredients',
+					'content'  => $form->get_no_input_value( '', 'long_name', $css_id = '', '', $repeat = 5 ),
+				),
+				'schema_recipe_instructions' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Recipe Instructions', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_instructions',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide', $css_id = '', '', $repeat = 5 ),
+				),
+
+				/**
+				 * Schema Creative Work / How-To / Recipe - Nutrition Information.
+				 */
+				'subsection_recipe_nutrition' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Nutrition Information per Serving', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_serv' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Serving Size', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_serv',
+					'content'  => $form->get_no_input_value( '', 'long_name is_required' ),
+				),
+				'schema_recipe_nutri_cal' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Calories', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_cal',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'calories', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_prot' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Protein', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_prot',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'grams of protein', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_fib' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Fiber', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_fib',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'grams of fiber', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_carb' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Carbohydrates', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_carb',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'grams of carbohydrates', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_sugar' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Sugar', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_sugar',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'grams of sugar', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_sod' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Sodium', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_sod',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'milligrams of sodium', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_fat' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Fat', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_fat',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'grams of fat', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_sat_fat' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Saturated Fat', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_sat_fat',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'grams of saturated fat', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_unsat_fat' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Unsaturated Fat', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_unsat_fat',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'grams of unsaturated fat', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_trans_fat' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Trans Fat', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_trans_fat',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'grams of trans fat', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+				'schema_recipe_nutri_chol' => array(
+					'tr_class' => $schema_type_row_class[ 'recipe' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Cholesterol', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_recipe_nutri_chol',
+					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
+						_x( 'milligrams of cholesterol', 'option comment', 'wpsso-schema-json-ld' ),
+				),
+
+				/**
+				 * Schema Creative Work / Movie.
+				 */
+				'subsection_movie' => array(
+					'tr_class' => $schema_type_row_class[ 'movie' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Movie Information', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_movie_actor_person_names' => array(
+					'tr_class' => $schema_type_row_class[ 'movie' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Cast Names', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_movie_actor_person_names',
+					'content'  => $form->get_no_input_value( '', $css_class = 'long_name', $css_id = '', '', $repeat = 5 ),
+				),
+				'schema_movie_director_person_names' => array(
+					'tr_class' => $schema_type_row_class[ 'movie' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Director Names', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_movie_director_person_names',
+					'content'  => $form->get_no_input_value( '', $css_class = 'long_name', $css_id = '', '', $repeat = 2 ),
+				),
+				'schema_movie_prodco_org_id' => array(
+					'tr_class' => $schema_type_row_class[ 'movie' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Production Company', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_movie_prodco_org_id',
+					'content'  => $form->get_no_select( 'schema_movie_prodco_org_id', $org_site_names,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ) . $org_req_msg,
+				),
+				'schema_movie_duration_time' => array(
+					'tr_class' => $schema_type_row_class[ 'movie' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Movie Runtime', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_movie_duration_time',
+					'content'  => $this->get_time_dhms( $form ),
+				),
+
+				/**
+				 * Schema Creative Work / Review.
+				 */
+				'subsection_review' => array(
+					'tr_class' => $schema_type_row_class[ 'review' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Review Information', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_review_rating' => array(	// Included as schema.org/Rating, not schema.org/aggregateRating.
+					'tr_class' => $schema_type_row_class[ 'review' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Review Rating', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_rating',
+					'content'  => $form->get_no_input_value( $form->defaults[ 'schema_review_rating' ], 'short is_required' ) . 
+						' ' . _x( 'from', 'option comment', 'wpsso-schema-json-ld' ) . ' ' . 
+						$form->get_no_input_value( $form->defaults[ 'schema_review_rating_from' ], 'short' ) . 
+						' ' . _x( 'to', 'option comment', 'wpsso-schema-json-ld' ) . ' ' . 
+						$form->get_no_input_value( $form->defaults[ 'schema_review_rating_to' ], 'short' ),
+				),
+				'schema_review_rating_alt_name' => array(
+					'tr_class' => $schema_type_row_class[ 'review' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Rating Value Name', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_rating_alt_name',
+					'content'  => $form->get_no_input_value(),
+				),
+
+				/**
+				 * Schema Creative Work / Review - Subject.
+				 */
+				'subsection_review_item' => array(
+					'tr_class' => $schema_type_row_class[ 'review' ],
+					'td_class' => 'subsection',
+					'header'   => 'h4',
+					'label'    => _x( 'Subject of the Review', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_review_item_type' => array(
+					'tr_class' => $schema_type_row_class[ 'review' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Subject Webpage Type', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_type',
+					'content'  => $form->get_no_select( 'schema_review_item_type', $schema_types, $css_class = 'schema_type', $css_id = '',
+						$is_assoc = true, $selected = false, $event_names = array( 'on_focus_load_json', 'on_show_unhide_rows' ),
+							$event_args = array(
+								'json_var'  => 'schema_types',
+								'exp_secs'  => $schema_exp_secs,	// Create and read from a javascript URL.
+								'is_transl' => true,			// No label translation required.
+								'is_sorted' => true,			// No label sorting required.
+							)
+						),
+				),
+				'schema_review_item_url' => array(
+					'tr_class' => $schema_type_row_class[ 'review' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Subject Webpage URL', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_url',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide is_required' ),
+				),
+				'schema_review_item_sameas_url' => array(
+					'tr_class' => $form->get_css_class_hide_prefix( 'basic', 'schema_review_item_sameas_url' ),
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Subject Same-As URLs', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_sameas_url',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide', $css_id = '', '', $repeat = 2 ),
+				),
+				'schema_review_item_name' => array(
+					'tr_class' => $schema_type_row_class[ 'review' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Subject Name', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_name',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide is_required' ),
+				),
+				'schema_review_item_desc' => array(
+					'tr_class' => $schema_type_row_class[ 'review' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Subject Description', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_desc',
+					'content'  => $form->get_no_textarea_value( '' ),
+				),
+				'schema_review_item_img_id' => array(
+					'tr_class' => $schema_type_row_class[ 'review' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Subject Image ID', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_img_id',
+					'content'  => $form->get_no_input_image_upload( 'schema_review_item_img' ),
+				),
+				'schema_review_item_img_url' => array(
+					'tr_class' => $schema_type_row_class[ 'review' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'or an Image URL', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_img_url',
+					'content'  => $form->get_no_input_value( '' ),
+				),
+
+				/**
+				 * Schema Creative Work / Review - Subject: Creative Work.
+				 */
+				'subsection_review_item_cw' => array(
+					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Creative Work Subject Information', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_review_item_cw_author_type' => array(
+					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'C.W. Author Type', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_cw_author_type',
+					'content'  => $form->get_no_select( 'schema_review_item_cw_author_type', $this->p->cf[ 'form' ][ 'author_types' ] ),
+				),
+				'schema_review_item_cw_author_name' => array(
+					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'C.W. Author Name', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_cw_author_name',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
+				),
+				'schema_review_item_cw_author_url' => array(
+					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'C.W. Author URL', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_cw_author_url',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
+				),
+				'schema_review_item_cw_pub' => array(
+					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'C.W. Published Date', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_cw_pub',
+					'content'  => $form->get_no_date_time_tz( 'schema_review_item_cw_pub' ),
+				),
+				'schema_review_item_cw_created' => array(
+					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'C.W. Created Date', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_item_cw_created',
+					'content'  => $form->get_no_date_time_tz( 'schema_review_item_cw_created' ),
+				),
+
+				/**
+				 * Schema Creative Work / Review / Claim Review.
+				 */
+				'subsection_review_claim' => array(
+					'tr_class' => $schema_type_row_class[ 'review_claim' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Claim Subject Information', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_review_claim_reviewed' => array(
+					'tr_class' => $schema_type_row_class[ 'review_claim' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Short Summary of Claim', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_claim_reviewed',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
+				),
+				'schema_review_claim_first_url' => array(
+					'tr_class' => $schema_type_row_class[ 'review_claim' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'First Appearance URL', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_review_claim_first_url',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
+				),
+
+				/**
+				 * Schema Creative Work / Software Application.
+				 */
+				'subsection_software_app' => array(
+					'tr_class' => $schema_type_row_class[ 'software_app' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'Software Application Information', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_software_app_os' => array(
+					'tr_class' => $schema_type_row_class[ 'software_app' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Operating System', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_software_app_os',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
+				),
+				'schema_software_app_cat' => array(
+					'tr_class' => $schema_type_row_class[ 'software_app' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'Application Category', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_software_app_cat',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
+				),
+
+				/**
+				 * Schema Creative Work / Web Page / QA Page.
+				 */
+				'subsection_qa' => array(
+					'tr_class' => $schema_type_row_class[ 'qa' ],
+					'td_class' => 'subsection',
+					'header'   => 'h5',
+					'label'    => _x( 'QA Page Information', 'metabox title', 'wpsso-schema-json-ld' ),
+				),
+				'schema_qa_desc' => array(
+					'tr_class' => $schema_type_row_class[ 'qa' ],
+					'th_class' => 'medium',
+					'td_class' => 'blank',
+					'label'    => _x( 'QA Heading', 'option label', 'wpsso-schema-json-ld' ),
+					'tooltip'  => 'meta-schema_qa_desc',
+					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
 				),
 
 				/**
@@ -292,22 +872,22 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 					'label'    => _x( 'Event Physical Venue', 'option label', 'wpsso-schema-json-ld' ),
 					'tooltip'  => 'meta-schema_event_location_id',
 					'content'  => $form->get_no_select( 'schema_event_location_id', $plm_place_names,
-						$css_class = 'long_name' ) . $plm_req_msg,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ) . $plm_req_msg,
 				),
 				'schema_event_organizer_org_id' => array(
 					'tr_class' => $schema_type_row_class[ 'event' ],
 					'th_class' => 'medium',
 					'td_class' => 'blank',
-					'label'    => _x( 'Organizer Organization', 'option label', 'wpsso-schema-json-ld' ),
+					'label'    => _x( 'Organizer (Org)', 'option label', 'wpsso-schema-json-ld' ),
 					'tooltip'  => 'meta-schema_event_organizer_org_id',
 					'content'  => $form->get_no_select( 'schema_event_organizer_org_id', $org_site_names,
-						$css_class = 'long_name' ) . $org_req_msg,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ) . $org_req_msg,
 				),
 				'schema_event_organizer_person_id' => array(
 					'tr_class' => $schema_type_row_class[ 'event' ],
 					'th_class' => 'medium',
 					'td_class' => 'blank',
-					'label'    => _x( 'Organizer Person', 'option label', 'wpsso-schema-json-ld' ),
+					'label'    => _x( 'Organizer (Person)', 'option label', 'wpsso-schema-json-ld' ),
 					'tooltip'  => 'meta-schema_event_organizer_person_id',
 					'content'  => $form->get_no_select( 'schema_event_organizer_person_id', $person_names,
 						$css_class = 'long_name' ),
@@ -316,16 +896,16 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 					'tr_class' => $schema_type_row_class[ 'event' ],
 					'th_class' => 'medium',
 					'td_class' => 'blank',
-					'label'    => _x( 'Performer Organization', 'option label', 'wpsso-schema-json-ld' ),
+					'label'    => _x( 'Performer (Org)', 'option label', 'wpsso-schema-json-ld' ),
 					'tooltip'  => 'meta-schema_event_performer_org_id',
 					'content'  => $form->get_no_select( 'schema_event_performer_org_id', $org_site_names,
-						$css_class = 'long_name' ) . $org_req_msg,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ) . $org_req_msg,
 				),
 				'schema_event_performer_person_id' => array(
 					'tr_class' => $schema_type_row_class[ 'event' ],
 					'th_class' => 'medium',
 					'td_class' => 'blank',
-					'label'    => _x( 'Performer Person', 'option label', 'wpsso-schema-json-ld' ),
+					'label'    => _x( 'Performer (Person)', 'option label', 'wpsso-schema-json-ld' ),
 					'tooltip'  => 'meta-schema_event_performer_person_id',
 					'content'  => $form->get_no_select( 'schema_event_performer_person_id', $person_names,
 						$css_class = 'long_name' ),
@@ -408,113 +988,14 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 							'input_type'     => 'select',
 							'input_class'    => 'stock',
 							'select_options' => $this->p->cf[ 'form' ][ 'item_availability' ],
-							'select_default' => 'InStock',
+							'select_default' => 'https://schema.org/InStock',
 						),
 					), $css_class = 'single_line', $css_id = 'schema_event_offer',
 						$start_num = 0, $max_input = 2, $show_first = 2 ),
 				),
 
 				/**
-				 * Schema Financial Product.
-				 *
-				 * 'subsection_financial_prod' => array(
-				 *	'tr_class' => $schema_type_row_class[ 'financial_prod' ],
-				 *	'td_class' => 'subsection',
-				 *	'header'   => 'h5',
-				 *	'label'    => _x( 'Financial Product Information', 'metabox title', 'wpsso-schema-json-ld' ),
-				 * ),
-				 */
-
-				/**
-				 * Schema How-To.
-				 */
-				'subsection_howto' => array(
-					'tr_class' => $schema_type_row_class[ 'how_to' ],
-					'td_class' => 'subsection',
-					'header'   => 'h5',
-					'label'    => _x( 'How-To Information', 'metabox title', 'wpsso-schema-json-ld' ),
-				),
-				'schema_howto_yield' => array(
-					'tr_class' => $schema_type_row_class[ 'how_to' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'How-To Makes', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_howto_yield',
-					'content'  => $form->get_no_input_value( '', 'long_name' ),
-				),
-				'schema_howto_prep_time' => array(
-					'tr_class' => $schema_type_row_class[ 'how_to' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Preparation Time', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_howto_prep_time',
-					'content'  => $form->get_no_input_value( '0', 'short' ) . $days_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $hours_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $mins_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $secs_sep,
-				),
-				'schema_howto_total_time' => array(
-					'tr_class' => $schema_type_row_class[ 'how_to' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Total Time', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_howto_total_time',
-					'content'  => $form->get_no_input_value( '0', 'short' ) . $days_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $hours_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $mins_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $secs_sep,
-				),
-				'schema_howto_supplies' => array(
-					'tr_class' => $schema_type_row_class[ 'how_to' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'How-To Supplies', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_howto_supplies',
-					'content'  => $form->get_no_input_value( '', 'long_name', $css_id = '', '', $repeat = 5 ),
-				),
-				'schema_howto_tools' => array(
-					'tr_class' => $schema_type_row_class[ 'how_to' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'How-To Tools', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_howto_tools',
-					'content'  => $form->get_no_input_value( '', 'long_name', $css_id = '', '', $repeat = 5 ),
-				),
-				'schema_howto_steps' => array(
-					'tr_class' => $schema_type_row_class[ 'how_to' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'How-To Steps', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_howto_steps',
-					'content'  => $form->get_no_mixed_multi( array(
-						'schema_howto_step_section' => array(
-							'input_type'    => 'radio',
-							'input_class'   => 'howto_step_section',
-							'input_content' => _x( '%1$s Step Details %2$s or New Section Details', 'option label', 'wpsso-schema-json-ld' ),
-							'input_values'  => array( 0, 1 ),
-							'input_default' => 0,
-						),
-						'schema_howto_step' => array(
-							'input_label' => _x( 'Name', 'option label', 'wpsso-schema-json-ld' ),
-							'input_type'  => 'text',
-							'input_class' => 'wide howto_step_name is_required',
-						),
-						'schema_howto_step_text' => array(
-							'input_label' => _x( 'Description', 'option label', 'wpsso-schema-json-ld' ),
-							'input_type'  => 'textarea',
-							'input_class' => 'wide howto_step_text',
-						),
-						'schema_howto_step_img' => array(
-							'input_label' => _x( 'Image ID', 'option label', 'wpsso-schema-json-ld' ),
-							'input_type'  => 'image',
-							'input_class' => 'howto_step_img',
-						),
-					), $css_class = '', $css_id = 'schema_howto_step',
-						$start_num = 0, $max_input = 3, $show_first = 3 ),
-				),
-
-				/**
-				 * Schema Job Posting.
+				 * Schema Intangible / Job Posting.
 				 */
 				'subsection_job' => array(
 					'tr_class' => $schema_type_row_class[ 'job_posting' ],
@@ -537,7 +1018,7 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 					'label'    => _x( 'Hiring Organization', 'option label', 'wpsso-schema-json-ld' ),
 					'tooltip'  => 'meta-schema_job_hiring_org_id',
 					'content'  => $form->get_no_select( 'schema_job_hiring_org_id', $org_site_names,
-						$css_class = 'long_name' ) . $org_req_msg,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ) . $org_req_msg,
 				),
 				'schema_job_location_id' => array(
 					'tr_class' => $schema_type_row_class[ 'job_posting' ],
@@ -546,7 +1027,7 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 					'label'    => _x( 'Job Location', 'option label', 'wpsso-schema-json-ld' ),
 					'tooltip'  => 'meta-schema_job_location_id',
 					'content'  => $form->get_no_select( 'schema_job_location_id', $plm_place_names,
-						$css_class = 'long_name' ) . $plm_req_msg,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ) . $plm_req_msg,
 				),
 				'schema_job_salary' => array(
 					'tr_class' => $schema_type_row_class[ 'job_posting' ],
@@ -577,51 +1058,6 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 				),
 
 				/**
-				 * Schema Movie.
-				 */
-				'subsection_movie' => array(
-					'tr_class' => $schema_type_row_class[ 'movie' ],
-					'td_class' => 'subsection',
-					'header'   => 'h5',
-					'label'    => _x( 'Movie Information', 'metabox title', 'wpsso-schema-json-ld' ),
-				),
-				'schema_movie_actor_person_names' => array(
-					'tr_class' => $schema_type_row_class[ 'movie' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Cast Names', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_movie_actor_person_names',
-					'content'  => $form->get_no_input_value( '', $css_class = 'long_name', $css_id = '', '', $repeat = 5 ),
-				),
-				'schema_movie_director_person_names' => array(
-					'tr_class' => $schema_type_row_class[ 'movie' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Director Names', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_movie_director_person_names',
-					'content'  => $form->get_no_input_value( '', $css_class = 'long_name', $css_id = '', '', $repeat = 2 ),
-				),
-				'schema_movie_prodco_org_id' => array(
-					'tr_class' => $schema_type_row_class[ 'movie' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Production Company', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_movie_prodco_org_id',
-					'content'  => $form->get_no_select( 'schema_movie_prodco_org_id', $org_site_names,
-						$css_class = 'long_name' ) . $org_req_msg,
-				),
-				'schema_movie_duration_time' => array(
-					'tr_class' => $schema_type_row_class[ 'movie' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Movie Runtime', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_movie_duration_time',
-					'content'  => $form->get_no_input_value( '0', 'short' ) . $hours_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $mins_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $secs_sep,
-				),
-
-				/**
 				 * Schema Organization.
 				 */
 				'subsection_organization' => array(
@@ -636,8 +1072,9 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 					'td_class' => 'blank',
 					'label'    => _x( 'Select an Organization', 'option label', 'wpsso-schema-json-ld' ),
 					'tooltip'  => 'meta-schema_organization_org_id',
-					'content'  => $form->get_no_select( 'schema_organization_org_id', $org_site_names, $css_class = 'long_name' ) .
-						( empty( $form->options[ 'schema_organization_org_id:is' ] ) ? $org_req_msg : '' ),
+					'content'  => $form->get_no_select( 'schema_organization_org_id', $org_site_names,
+						$css_class = 'long_name', $css_id = '', $is_assoc = true ) .
+					( empty( $form->options[ 'schema_organization_org_id:is' ] ) ? $org_req_msg : '' ),
 				),
 
 				/**
@@ -760,438 +1197,6 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 					'tooltip'  => 'meta-product_gtin',
 					'content'  => $form->get_no_input( 'product_gtin', '', $css_id = '', $placeholder = true ),
 				),
-
-				/**
-				 * Schema QA Page.
-				 */
-				'subsection_qa' => array(
-					'tr_class' => $schema_type_row_class[ 'qa' ],
-					'td_class' => 'subsection',
-					'header'   => 'h5',
-					'label'    => _x( 'QA Page Information', 'metabox title', 'wpsso-schema-json-ld' ),
-				),
-				'schema_qa_desc' => array(
-					'tr_class' => $schema_type_row_class[ 'qa' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'QA Heading', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_qa_desc',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
-				),
-
-				/**
-				 * Schema Recipe.
-				 */
-				'subsection_recipe' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'td_class' => 'subsection',
-					'header'   => 'h5',
-					'label'    => _x( 'Recipe Information', 'metabox title', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_cuisine' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Recipe Cuisine', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_cuisine',
-					'content'  => $form->get_no_input_value( '', 'long_name' ),
-				),
-				'schema_recipe_course' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Recipe Course', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_course',
-					'content'  => $form->get_no_input_value( '', 'long_name' ),
-				),
-				'schema_recipe_yield' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Recipe Makes', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_yield',
-					'content'  => $form->get_no_input_value( '', 'long_name' ),
-				),
-				'schema_recipe_cook_method' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Cooking Method', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_cook_method',
-					'content'  => $form->get_no_input_value( '', 'long_name' ),
-				),
-				'schema_recipe_prep_time' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Preparation Time', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_prep_time',
-					'content'  => $form->get_no_input_value( '0', 'short' ) . $days_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $hours_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $mins_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $secs_sep,
-				),
-				'schema_recipe_cook_time' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Cooking Time', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_cook_time',
-					'content'  => $form->get_no_input_value( '0', 'short' ) . $days_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $hours_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $mins_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $secs_sep,
-				),
-				'schema_recipe_total_time' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Total Time', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_total_time',
-					'content'  => $form->get_no_input_value( '0', 'short' ) . $days_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $hours_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $mins_sep . 
-						$form->get_no_input_value( '0', 'short' ) . $secs_sep,
-				),
-				'schema_recipe_ingredients' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Recipe Ingredients', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_ingredients',
-					'content'  => $form->get_no_input_value( '', 'long_name', $css_id = '', '', $repeat = 5 ),
-				),
-				'schema_recipe_instructions' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Recipe Instructions', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_instructions',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide', $css_id = '', '', $repeat = 5 ),
-				),
-
-				/**
-				 * Schema Recipe - Nutrition Information.
-				 */
-				'subsection_recipe_nutrition' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'td_class' => 'subsection',
-					'header'   => 'h5',
-					'label'    => _x( 'Nutrition Information per Serving', 'metabox title', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_serv' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Serving Size', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_serv',
-					'content'  => $form->get_no_input_value( '', 'long_name is_required' ),
-				),
-				'schema_recipe_nutri_cal' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Calories', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_cal',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'calories', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_prot' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Protein', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_prot',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'grams of protein', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_fib' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Fiber', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_fib',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'grams of fiber', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_carb' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Carbohydrates', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_carb',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'grams of carbohydrates', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_sugar' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Sugar', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_sugar',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'grams of sugar', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_sod' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Sodium', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_sod',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'milligrams of sodium', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_fat' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Fat', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_fat',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'grams of fat', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_sat_fat' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Saturated Fat', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_sat_fat',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'grams of saturated fat', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_unsat_fat' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Unsaturated Fat', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_unsat_fat',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'grams of unsaturated fat', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_trans_fat' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Trans Fat', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_trans_fat',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'grams of trans fat', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-				'schema_recipe_nutri_chol' => array(
-					'tr_class' => $schema_type_row_class[ 'recipe' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Cholesterol', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_recipe_nutri_chol',
-					'content'  => $form->get_no_input_value( '', 'medium' ) . ' ' . 
-						_x( 'milligrams of cholesterol', 'option comment', 'wpsso-schema-json-ld' ),
-				),
-
-				/**
-				 * Schema Review.
-				 */
-				'subsection_review' => array(
-					'tr_class' => $schema_type_row_class[ 'review' ],
-					'td_class' => 'subsection',
-					'header'   => 'h5',
-					'label'    => _x( 'Review Information', 'metabox title', 'wpsso-schema-json-ld' ),
-				),
-				'schema_review_rating' => array(	// Included as schema.org/Rating, not schema.org/aggregateRating.
-					'tr_class' => $schema_type_row_class[ 'review' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Review Rating', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_rating',
-					'content'  => $form->get_no_input_value( $form->defaults[ 'schema_review_rating' ], 'short is_required' ) . 
-						' ' . _x( 'from', 'option comment', 'wpsso-schema-json-ld' ) . ' ' . 
-						$form->get_no_input_value( $form->defaults[ 'schema_review_rating_from' ], 'short' ) . 
-						' ' . _x( 'to', 'option comment', 'wpsso-schema-json-ld' ) . ' ' . 
-						$form->get_no_input_value( $form->defaults[ 'schema_review_rating_to' ], 'short' ),
-				),
-				'schema_review_rating_alt_name' => array(
-					'tr_class' => $schema_type_row_class[ 'review' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Rating Value Name', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_rating_alt_name',
-					'content'  => $form->get_no_input_value(),
-				),
-
-				/**
-				 * Schema Reviewed Subject.
-				 */
-				'subsection_review_item' => array(
-					'tr_class' => $schema_type_row_class[ 'review' ],
-					'td_class' => 'subsection',
-					'header'   => 'h4',
-					'label'    => _x( 'Subject of the Review', 'metabox title', 'wpsso-schema-json-ld' ),
-				),
-				'schema_review_item_type' => array(
-					'tr_class' => $schema_type_row_class[ 'review' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Subject Webpage Type', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_type',
-					'content'  => $form->get_no_select( 'schema_review_item_type', $schema_types, $css_class = 'schema_type', $css_id = '',
-						$is_assoc = true, $selected = false, $event_names = array( 'on_focus_load_json', 'on_show_unhide_rows' ),
-							$event_args = array(
-								'json_var'  => 'schema_types',
-								'exp_secs'  => $schema_exp_secs,
-								'is_transl' => true,	// No label translation required.
-								'is_sorted' => true,	// No label sorting required.
-							)
-						),
-				),
-				'schema_review_item_url' => array(
-					'tr_class' => $schema_type_row_class[ 'review' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Subject Webpage URL', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_url',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide is_required' ),
-				),
-				'schema_review_item_sameas_url' => array(
-					'tr_class' => $form->get_css_class_hide_prefix( 'basic', 'schema_review_item_sameas_url' ),
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Subject Same-As URLs', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_sameas_url',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide', $css_id = '', '', $repeat = 2 ),
-				),
-				'schema_review_item_name' => array(
-					'tr_class' => $schema_type_row_class[ 'review' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Subject Name', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_name',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide is_required' ),
-				),
-				'schema_review_item_desc' => array(
-					'tr_class' => $schema_type_row_class[ 'review' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Subject Description', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_desc',
-					'content'  => $form->get_no_textarea_value( '' ),
-				),
-				'schema_review_item_img_id' => array(
-					'tr_class' => $schema_type_row_class[ 'review' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Subject Image ID', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_img_id',
-					'content'  => $form->get_no_input_image_upload( 'schema_review_item_img' ),
-				),
-				'schema_review_item_img_url' => array(
-					'tr_class' => $schema_type_row_class[ 'review' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'or an Image URL', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_img_url',
-					'content'  => $form->get_no_input_value( '' ),
-				),
-
-				/**
-				 * Schema Reviewed Subject: Creative Work.
-				 */
-				'subsection_review_item_cw' => array(
-					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
-					'td_class' => 'subsection',
-					'header'   => 'h5',
-					'label'    => _x( 'Creative Work Subject Information', 'metabox title', 'wpsso-schema-json-ld' ),
-				),
-				'schema_review_item_cw_author_type' => array(
-					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'C.W. Author Type', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_cw_author_type',
-					'content'  => $form->get_no_select( 'schema_review_item_cw_author_type', $this->p->cf[ 'form' ][ 'author_types' ] ),
-				),
-				'schema_review_item_cw_author_name' => array(
-					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'C.W. Author Name', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_cw_author_name',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
-				),
-				'schema_review_item_cw_author_url' => array(
-					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'C.W. Author URL', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_cw_author_url',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
-				),
-				'schema_review_item_cw_pub' => array(
-					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'C.W. Published Date', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_cw_pub',
-					'content'  => $form->get_no_date_time_tz( 'schema_review_item_cw_pub' ),
-				),
-				'schema_review_item_cw_created' => array(
-					'tr_class' => 'hide_schema_type ' . $schema_review_item_type_row_class[ 'creative_work' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'C.W. Created Date', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_item_cw_created',
-					'content'  => $form->get_no_date_time_tz( 'schema_review_item_cw_created' ),
-				),
-
-				/**
-				 * Schema Claim Review.
-				 */
-				'subsection_review_claim' => array(
-					'tr_class' => $schema_type_row_class[ 'review_claim' ],
-					'td_class' => 'subsection',
-					'header'   => 'h5',
-					'label'    => _x( 'Claim Subject Information', 'metabox title', 'wpsso-schema-json-ld' ),
-				),
-				'schema_review_claim_reviewed' => array(
-					'tr_class' => $schema_type_row_class[ 'review_claim' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Short Summary of Claim', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_claim_reviewed',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
-				),
-				'schema_review_claim_first_url' => array(
-					'tr_class' => $schema_type_row_class[ 'review_claim' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'First Appearance URL', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_review_claim_first_url',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
-				),
-
-				/**
-				 * Schema Software Application.
-				 */
-				'subsection_software_app' => array(
-					'tr_class' => $schema_type_row_class[ 'software_app' ],
-					'td_class' => 'subsection',
-					'header'   => 'h5',
-					'label'    => _x( 'Software Application Information', 'metabox title', 'wpsso-schema-json-ld' ),
-				),
-				'schema_software_app_os' => array(
-					'tr_class' => $schema_type_row_class[ 'software_app' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Operating System', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_software_app_os',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
-				),
-				'schema_software_app_cat' => array(
-					'tr_class' => $schema_type_row_class[ 'software_app' ],
-					'th_class' => 'medium',
-					'td_class' => 'blank',
-					'label'    => _x( 'Application Category', 'option label', 'wpsso-schema-json-ld' ),
-					'tooltip'  => 'meta-schema_software_app_cat',
-					'content'  => $form->get_no_input_value( '', $css_class = 'wide' ),
-				),
 			);
 
 			return $form->get_md_form_rows( $table_rows, $form_rows, $head_info, $mod );
@@ -1200,6 +1205,7 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 		public function filter_metabox_sso_media_rows( $table_rows, $form, $head_info, $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -1207,24 +1213,25 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 			 * Move Schema options to the end of the table, just in case.
 			 */
 			foreach ( SucomUtil::preg_grep_keys( '/^(subsection_schema|schema_)/', $table_rows ) as $key => $row ) {
+
 				SucomUtil::move_to_end( $table_rows, $key );
 			}
 
 			$max_media_items = $this->p->cf[ 'form' ][ 'max_media_items' ];
+			$size_names      = $this->p->util->get_image_size_names( 'schema' );	// Always returns an array.
+			$size_name       = reset( $size_names );
+			$media_request   = array( 'pid', 'img_url' );
+			$media_info      = $this->p->og->get_media_info( $size_name, $media_request, $mod, $md_pre = 'og' );
+			$row_class       = $form->in_options( '/^schema_img_/', $is_preg = true ) ? '' : 'hide_in_basic';
+			$form_rows       = array();
 
-			$media_info = $this->p->og->get_media_info( $this->p->lca . '-schema',
-				array( 'pid', 'img_url' ), $mod, $md_pre = 'og', $mt_pre = 'og' );
-	
-			$row_class = $form->in_options( '/^schema_img_/', $is_preg = true ) ? '' : 'hide_in_basic';
-
-			$form_rows = array(
-				'wpssojson_pro_feature_msg' => array(
-					'tr_class'  => $row_class,
-					'table_row' => '<td colspan="2">' . $this->p->msgs->pro_feature( 'wpssojson' ) . '</td>',
-				),
+			$form_rows[ 'wpssojson_pro_feature_msg' ] = array(
+				'tr_class'  => $row_class,
+				'table_row' => '<td colspan="2">' . $this->p->msgs->pro_feature( 'wpssojson' ) . '</td>',
 			);
 
 			if ( $mod[ 'is_post' ] ) {
+
 				$form_rows[ 'schema_img_max' ] = array(
 					'tr_class' => $row_class,
 					'th_class' => 'medium',
@@ -1254,6 +1261,30 @@ if ( ! class_exists( 'WpssoJsonStdAdminEdit' ) ) {
 			);
 
 			return $form->get_md_form_rows( $table_rows, $form_rows, $head_info, $mod );
+		}
+
+		private function get_time_dhms( $form ) {
+
+			static $days_sep = null;
+			static $hours_sep = null;
+			static $mins_sep = null;
+			static $secs_sep = null;
+
+			/**
+			 * Translated text strings.
+			 */
+			if ( null === $days_sep ) {
+
+				$days_sep  = ' ' . _x( 'days', 'option comment', 'wpsso-schema-json-ld' ) . ', ';
+				$hours_sep = ' ' . _x( 'hours', 'option comment', 'wpsso-schema-json-ld' ) . ', ';
+				$mins_sep  = ' ' . _x( 'mins', 'option comment', 'wpsso-schema-json-ld' ) . ', ';
+				$secs_sep  = ' ' . _x( 'secs', 'option comment', 'wpsso-schema-json-ld' );
+			}
+
+			return $form->get_no_input_value( '0', 'xshort' ) . $days_sep . 
+				$form->get_no_input_value( '0', 'xshort' ) . $hours_sep . 
+				$form->get_no_input_value( '0', 'xshort' ) . $mins_sep . 
+				$form->get_no_input_value( '0', 'xshort' ) . $secs_sep;
 		}
 	}
 }

@@ -6,10 +6,12 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
 if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+
 	die( 'Do. Or do not. There is no try.' );
 }
 
@@ -25,6 +27,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -32,6 +35,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			 * Instantiate the WpssoOpenGraphNS class object.
 			 */
 			if ( ! class_exists( 'WpssoOpenGraphNS' ) ) {
+
 				require_once WPSSO_PLUGINDIR . 'lib/opengraph-ns.php';
 			}
 
@@ -51,9 +55,9 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 		public function filter_plugin_image_sizes( $sizes ) {
 
-			$sizes[ 'og' ] = array(	// Option prefix.
-				'name'  => 'opengraph',
-				'label' => _x( 'Open Graph Image', 'image size label', 'wpsso' ),
+			$sizes[ 'og' ] = array(		// Option prefix.
+				'name'         => 'opengraph',
+				'label_transl' => _x( 'Open Graph (Facebook and oEmbed)', 'option label', 'wpsso' ),
 			);
 
 			return $sizes;
@@ -81,6 +85,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 		public function get_mod_og_type( array $mod, $get_ns = false, $use_mod_opts = true ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -98,6 +103,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				if ( isset( $local_cache[ $cache_salt ] ) ) {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'returning local cache value "' . $local_cache[ $cache_salt ] . '"' );
 					}
 
@@ -106,6 +112,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				} elseif ( is_object( $mod[ 'obj' ] ) && $use_mod_opts ) {	// Check for a column og_type value in wp_cache.
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'checking for value from column wp_cache' );
 					}
 
@@ -124,6 +131,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 							} else {
 
 								if ( $this->p->debug->enabled ) {
+
 									$this->p->debug->log( 'columns wp_cache value "' . $value . '" not in og type ns' );
 								}
 
@@ -132,6 +140,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 						}
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'returning column wp_cache value "' . $value . '"' );
 						}
 
@@ -140,10 +149,12 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				}
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'no value found in local cache or column wp_cache' );
 				}
 
 			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'skipping cache check: mod name and/or id value is empty' );
 			}
 
@@ -163,44 +174,54 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 					if ( empty( $type_id ) ) {	// Must be a non-empty string.
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'custom type id from meta is empty' );
 						}
 
 					} elseif ( $type_id === 'none' ) {
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'custom type id is disabled with value none' );
 						}
 
 					} elseif ( empty( $og_type_ns[ $type_id ] ) ) {
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'custom type id "' . $type_id . '" not in og types' );
 						}
 
 						$type_id = null;
 
 					} elseif ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'custom type id "' . $type_id . '" from ' . $mod[ 'name' ] . ' meta' );
 					}
 
 				} elseif ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'skipping custom type id - mod object is empty' );
 				}
 
 			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'skipping custom type id - use_mod_opts is false' );
 			}
 
 			if ( empty( $type_id ) ) {
+
 				$is_custom = false;
+
 			} else {
+
 				$is_custom = true;
 			}
 
 			if ( empty( $type_id ) ) {	// If no custom of type, then use the default settings.
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'using plugin settings to determine og type' );
 				}
 
@@ -215,6 +236,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 						$type_id = apply_filters( $this->p->lca . '_og_type_for_home_page', $type_id, $mod );
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'using og type id "' . $type_id . '" for home page' );
 						}
 
@@ -225,6 +247,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 						$type_id = apply_filters( $this->p->lca . '_og_type_for_home_posts', $type_id, $mod );
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'using og type id "' . $type_id . '" for home posts' );
 						}
 					}
@@ -240,6 +263,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 							$type_id = apply_filters( $this->p->lca . '_og_type_for_post_type_archive_page', $type_id, $mod );
 
 							if ( $this->p->debug->enabled ) {
+
 								$this->p->debug->log( 'using og type id "' . $type_id . '" for post_type_archive page' );
 							}
 
@@ -248,6 +272,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 							$type_id = $this->get_og_type_id_for_name( $mod[ 'post_type' ] );
 
 							if ( $this->p->debug->enabled ) {
+
 								$this->p->debug->log( 'using og type id "' . $type_id . '" from post type option value' );
 							}
 
@@ -256,6 +281,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 							$type_id = $mod[ 'post_type' ];
 
 							if ( $this->p->debug->enabled ) {
+
 								$this->p->debug->log( 'using og type id "' . $type_id . '" from post type name' );
 							}
 
@@ -266,6 +292,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 							$type_id = apply_filters( $this->p->lca . '_og_type_for_post_type_unknown_type', $type_id, $mod );
 
 							if ( $this->p->debug->enabled ) {
+
 								$this->p->debug->log( 'using "page" og type for unknown post type ' . $mod[ 'post_type' ] );
 							}
 						}
@@ -277,6 +304,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 						$type_id = apply_filters( $this->p->lca . '_og_type_for_post_type_empty_type', $type_id, $mod );
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'using "page" og type for empty post type' );
 						}
 					}
@@ -288,11 +316,13 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 						$type_id = $this->get_og_type_id_for_name( 'tax_' . $mod[ 'tax_slug' ] );
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'using og type id "' . $type_id . '" from term option value' );
 						}
 					}
 
 					if ( empty( $type_id ) ) {	// Just in case.
+
 						$type_id = $this->get_og_type_id_for_name( 'archive_page' );
 					}
 
@@ -300,31 +330,34 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 					$type_id = $this->get_og_type_id_for_name( 'user_page' );
 
-				} elseif ( SucomUtil::is_archive_page() ) {	// Just in case.
-
-					$type_id = $this->get_og_type_id_for_name( 'archive_page' );
-
 				} elseif ( is_search() ) {
 
 					$type_id = $this->get_og_type_id_for_name( 'search_page' );
+
+				} elseif ( SucomUtil::is_archive_page() ) {	// Just in case.
+
+					$type_id = $this->get_og_type_id_for_name( 'archive_page' );
 
 				} else {	// Everything else.
 
 					$type_id = $default_key;
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'using default og type id "' . $default_key . '"' );
 					}
 				}
 			}
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'og type id before filter is "' . $type_id . '"' );
 			}
 
 			$type_id = apply_filters( $this->p->lca . '_og_type', $type_id, $mod, $is_custom );
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'og type id after filter is "' . $type_id . '"' );
 			}
 
@@ -333,24 +366,28 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( empty( $type_id ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'returning false: og type id is empty' );
 				}
 
 			} elseif ( $type_id === 'none' ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'returning false: og type id is disabled' );
 				}
 
 			} elseif ( ! isset( $og_type_ns[ $type_id ] ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'returning false: og type id "' . $type_id . '" is unknown' );
 				}
 
 			} elseif ( $get_ns ) {	// False by default.
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'returning og type namespace "' . $og_type_ns[ $type_id ] . '"' );
 				}
 
@@ -359,6 +396,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			} else {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'returning og type id "' . $type_id . '"' );
 				}
 
@@ -369,35 +407,45 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			 * Optimize and cache post/term/user og type values.
 			 */
 			if ( $cache_salt ) {
+
 				$local_cache[ $cache_salt ] = $get_value;
 			}
 
 			return $get_value;
 		}
 
-		public function get_array( array $mod, $size_name = null ) {
+		/**
+		 * $size_names can be a keyword (ie. 'opengraph' or 'schema'), a registered size name, or an array of size names.
+		 *
+		 * $size_name is passed as-is to $this->get_all_images().
+		 */
+		public function get_array( array $mod, $size_names = 'opengraph' ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
-			/**
-			 * The 'wpsso_og_seed' filter is hooked by the Premium e-commerce modules, for example, to provide product
-			 * meta tags.
-			 */
-			$mt_og    = apply_filters( $this->p->lca . '_og_seed', array(), $mod );
-			$max_nums = $this->p->util->get_max_nums( $mod );
-			$has_pp   = $this->p->check->pp();
+			$has_pp = $this->p->check->pp();
 
-			if ( empty( $size_name ) ) {
-				$size_name = $this->p->lca . '-opengraph';
+			$max_nums = $this->p->util->get_max_nums( $mod );
+
+			/**
+			 * 'wpsso_og_seed' is hooked by e-commerce modules to provide product meta tags.
+			 */
+			$mt_og = apply_filters( $this->p->lca . '_og_seed', SucomUtil::get_mt_og_seed(), $mod );
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log_arr( $this->p->lca . '_og_seed filter returned:', $mt_og );
 			}
 
-			if ( ! empty( $mt_og ) ) {
-				if ( $this->p->debug->enabled ) {
-					$this->p->debug->log( $this->p->lca . '_og_seed filter returned:' );
-					$this->p->debug->log( $mt_og );
-				}
+			/**
+			 * Facebook app id meta tag.
+			 */
+			if ( ! isset( $mt_og[ 'fb:app_id' ] ) ) {
+
+				$mt_og[ 'fb:app_id' ] = $this->p->options[ 'fb_app_id' ];
 			}
 
 			/**
@@ -408,24 +456,21 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				if ( ! empty( $this->p->options[ 'fb_admins' ] ) ) {
 
 					foreach ( explode( ',', $this->p->options[ 'fb_admins' ] ) as $fb_admin ) {
+
 						$mt_og[ 'fb:admins' ][] = trim( $fb_admin );
 					}
 				}
 			}
 
 			/**
-			 * Facebook app id meta tag.
-			 */
-			if ( ! isset( $mt_og[ 'fb:app_id' ] ) ) {
-				$mt_og[ 'fb:app_id' ] = $this->p->options[ 'fb_app_id' ];
-			}
-
-			/**
 			 * Type id meta tag.
 			 */
 			if ( ! isset( $mt_og[ 'og:type' ] ) ) {
+
 				$mt_og[ 'og:type' ] = $this->get_mod_og_type( $mod );
+
 			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'og:type already defined = ' . $mt_og[ 'og:type' ] );
 			}
 
@@ -435,8 +480,11 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			 * URL meta tag.
 			 */
 			if ( ! isset( $mt_og[ 'og:url' ] ) ) {
+
 				$mt_og[ 'og:url' ] = $this->p->util->get_sharing_url( $mod );
+
 			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'og:url already defined = ' . $mt_og[ 'og:url' ] );
 			}
 
@@ -444,8 +492,11 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			 * Locale meta tag.
 			 */
 			if ( ! isset( $mt_og[ 'og:locale' ] ) ) {
+
 				$mt_og[ 'og:locale' ] = $this->get_fb_locale( $this->p->options, $mod );
+
 			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'og:locale already defined = ' . $mt_og[ 'og:locale' ] );
 			}
 
@@ -455,12 +506,14 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( ! isset( $mt_og[ 'og:site_name' ] ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'getting site name for og:site_name meta tag' );
 				}
 
 				$mt_og[ 'og:site_name' ] = SucomUtil::get_site_name( $this->p->options, $mod );	// localized
 
 			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'og:site_name already defined = ' . $mt_og[ 'og:site_name' ] );
 			}
 
@@ -470,16 +523,19 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( ! isset( $mt_og[ 'og:title' ] ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'getting title for og:title meta tag' );
 				}
 
 				$mt_og[ 'og:title' ] = $this->p->page->get_title( $this->p->options[ 'og_title_max_len' ], '...', $mod );
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'og:title value = ' . $mt_og[ 'og:title' ] );
 				}
 
 			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'og:title already defined = ' . $mt_og[ 'og:title' ] );
 			}
 
@@ -489,6 +545,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( ! isset( $mt_og[ 'og:description' ] ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'getting description for og:description meta tag' );
 				}
 
@@ -496,10 +553,12 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 					'...', $mod, $read_cache = true, $this->p->options[ 'og_desc_hashtags' ] );
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'og:description value = ' . $mt_og[ 'og:description' ] );
 				}
 
 			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'og:description already defined = ' . $mt_og[ 'og:description' ] );
 			}
 
@@ -507,7 +566,9 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			 * Updated date / time meta tag.
 			 */
 			if ( ! isset( $mt_og[ 'og:updated_time' ] ) ) {
+
 				if ( $mod[ 'is_post' ] && $mod[ 'id' ] ) {
+
 					$mt_og[ 'og:updated_time' ] = trim( get_post_modified_time( 'c', true, $mod[ 'id' ] ) );	// $gmt is true.
 				}
 			}
@@ -520,12 +581,14 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( ! isset( $mt_og[ 'og:video' ] ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'getting videos for og:video meta tag' );
 				}
 
 				if ( ! $has_pp ) {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'no video modules available' );
 					}
 
@@ -535,22 +598,40 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 					if ( empty( $mt_og[ 'og:video' ] ) ) {
 
+						if ( $this->p->debug->enabled ) {
+
+							$this->p->debug->log( 'no videos returned' );
+						}
+
 						unset( $mt_og[ 'og:video' ] );
 
 					} else {
 
-						/**
-						 * The following get_all_images() method call will include any video preview
-						 * images, so remove them here to avoid duplicate image meta tags.
-						 */
-						foreach ( $mt_og[ 'og:video' ] as &$og_single_video ) {
-							$og_single_video = SucomUtil::preg_grep_keys( '/^og:image/', $og_single_video, $invert = true );
+						if ( $this->p->debug->enabled ) {
+
+							$this->p->debug->log( 'removing video images to avoid duplicates' );
+						}
+
+						foreach ( $mt_og[ 'og:video' ] as $key => $mt_single_video ) {
+
+							if ( ! is_array( $mt_single_video ) ) {	// Just in case.
+
+								if ( $this->p->debug->enabled ) {
+
+									$this->p->debug->log( 'video ignored: $mt_single_video is not an array' );
+								}
+
+								continue;
+							}
+
+							$mt_og[ 'og:video' ][ $key ] = SucomUtil::preg_grep_keys( '/^og:image/', $mt_single_video, $invert = true );
 						}
 					}
 
 				} else {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'videos disabled: maximum videos is 0 or less' );
 					}
 				}
@@ -562,20 +643,23 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( ! isset( $mt_og[ 'og:image' ] ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'getting images for og:image meta tag' );
 				}
 
 				if ( $max_nums[ 'og_img_max' ] > 0 ) {
 
-					$mt_og[ 'og:image' ] = $this->get_all_images( $max_nums[ 'og_img_max' ], $size_name, $mod );
+					$mt_og[ 'og:image' ] = $this->get_all_images( $max_nums[ 'og_img_max' ], $size_names, $mod );
 
 					if ( empty( $mt_og[ 'og:image' ] ) ) {
+
 						unset( $mt_og[ 'og:video' ] );
 					}
 
 				} else {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'skipped getting images: maximum images is 0 or less' );
 					}
 				}
@@ -586,6 +670,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			 * option name, then read it's value from the meta options.
 			 */
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'checking og_type_mt array for known meta tags and md options' );
 			}
 
@@ -630,6 +715,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 							$this->p->options[ 'og_author_field' ] );
 
 					} else {
+
 						$mt_og[ 'article:author' ] = array();
 					}
 
@@ -670,7 +756,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 			if ( ! empty( $this->p->cf[ 'head' ][ 'og_type_ns' ][ $type_id ] ) ) {
 
-				$og_ns = $this->p->cf[ 'head' ][ 'og_type_ns' ][ $type_id ];
+				$og_ns = $this->p->cf[ 'head' ][ 'og_type_ns' ][ $type_id ];	// Example: https://ogp.me/ns/product#
 
 				$filter_name = $this->p->lca . '_og_data_' . SucomUtil::sanitize_hookname( $og_ns );
 
@@ -679,12 +765,18 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 			$mt_og = (array) apply_filters( $this->p->lca . '_og', $mt_og, $mod );
 
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log_arr( $this->p->lca . '_og filter returned:', $mt_og );
+			}
+
 			return $mt_og;
 		}
 
 		public function get_og_type_id_for_name( $type_name, $default_id = null ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log_args( array( 
 					'type_name'  => $type_name,
 					'default_id' => $default_id,
@@ -692,9 +784,12 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			}
 
 			if ( empty( $type_name ) ) {
+
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'exiting early: og type name is empty' );
 				}
+
 				return $default_id;	// Just in case.
 			}
 
@@ -706,6 +801,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( empty( $type_id ) || $type_id === 'none' ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'og type id for ' . $type_name . ' is empty or disabled' );
 				}
 
@@ -714,12 +810,14 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			} elseif ( empty( $og_type_ns[ $type_id ] ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'og type id "' . $type_id . '" for ' . $type_name . ' not in og type ns' );
 				}
 
 				$type_id = $default_id;
 
 			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'og type id for ' . $type_name . ' is ' . $type_id );
 			}
 
@@ -729,6 +827,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 		public function get_og_types_select() {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -747,8 +846,11 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			}
 
 			if ( defined( 'SORT_STRING' ) ) {	// Just in case.
+
 				asort( $select, SORT_STRING );
+
 			} else {
+
 				asort( $select );
 			}
 
@@ -763,14 +865,14 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			 * images if necessary.
 			 */
 			$max_nums  = $this->p->util->get_max_nums( $mod );
-			$og_videos = $this->get_all_videos( $max_nums[ 'og_vid_max' ], $mod, $check_dupes, $md_pre, $force_prev );
-			$og_images = array();
+			$mt_videos = $this->get_all_videos( $max_nums[ 'og_vid_max' ], $mod, $check_dupes, $md_pre, $force_prev );
+			$mt_images = array();
 
 			$this->p->util->clear_uniq_urls( array( 'preview' ) );
 
-			foreach ( $og_videos as $og_single_video ) {
+			foreach ( $mt_videos as $mt_single_video ) {
 
-				$image_url = SucomUtil::get_mt_media_url( $og_single_video, $mt_media_pre = 'og:image' );
+				$image_url = SucomUtil::get_first_mt_media_url( $mt_single_video );
 
 				/**
 				 * Check preview images for duplicates since the same videos may be available in different formats
@@ -780,18 +882,22 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 					if ( ! $check_dupes || $this->p->util->is_uniq_url( $image_url, 'preview' ) ) {
 
-						$og_single_image = SucomUtil::preg_grep_keys( '/^og:image/', $og_single_video );
+						$mt_single_image = SucomUtil::preg_grep_keys( '/^og:image/', $mt_single_video );
 
-						if ( $this->p->util->push_max( $og_images, $og_single_image, $num ) ) {
-							return $og_images;
+						if ( $this->p->util->push_max( $mt_images, $mt_single_image, $num ) ) {
+
+							return $mt_images;
 						}
 					}
 				}
 			}
 
-			return $og_images;
+			return $mt_images;
 		}
 
+		/**
+		 * Returns an array of single video associative arrays.
+		 */
 		public function get_all_videos( $num = 0, array $mod, $check_dupes = true, $md_pre = 'og', $force_prev = false ) {
 
 			$cache_args = array(
@@ -816,30 +922,33 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( isset( $local_cache[ $cache_salt ] ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'returning video data from local cache' );
 				}
 
 				return $local_cache[ $cache_salt ];
 
-			} else {
-
-				$local_cache[ $cache_salt ] = array();
-
-				$og_ret =& $local_cache[ $cache_salt ];
 			}
 
-			$use_prev = $this->p->options[ 'og_vid_prev_img' ];
-			$num_diff = SucomUtil::count_diff( $og_ret, $num );
-			$has_pp   = $this->p->check->pp();
+			$local_cache[ $cache_salt ] = array();
+
+			$mt_videos =& $local_cache[ $cache_salt ];
+
+			$has_pp = $this->p->check->pp();
 
 			if ( ! $has_pp ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'no video modules available' );
 				}
 
-				return $og_ret;
+				return $mt_videos;	// Return an empty array.
 			}
+
+			$use_prev = $this->p->options[ 'og_vid_prev_img' ];
+
+			$num_diff = SucomUtil::count_diff( $mt_videos, $num );
 
 			$this->p->util->clear_uniq_urls( array( 'video', 'content_video', 'video_details' ) );
 
@@ -856,44 +965,49 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 					$use_prev = $mod_prev;	// Use true/false/1/0 value from the custom option.
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'setting use_prev to ' . ( empty( $use_prev ) ? 'false' : 'true' ) . ' from meta data' );
 					}
 				}
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->mark( 'checking for custom videos in ' . $mod[ 'name' ] . ' options' );	// Begin timer.
 				}
 
 				/**
 				 * get_og_videos() converts the $md_pre value to an array and always checks for 'og' metadata as a fallback.
 				 */
-				$og_ret = array_merge( $og_ret, $mod[ 'obj' ]->get_og_videos( $num_diff, $mod[ 'id' ], $check_dupes, $md_pre ) );
+				$mt_videos = array_merge( $mt_videos, $mod[ 'obj' ]->get_og_videos( $num_diff, $mod[ 'id' ], $check_dupes, $md_pre ) );
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->mark( 'checking for custom videos in ' . $mod[ 'name' ] . ' options' );	// End timer.
 				}
 
 			}
 
-			$num_diff = SucomUtil::count_diff( $og_ret, $num );
+			$num_diff = SucomUtil::count_diff( $mt_videos, $num );
 
 			/**
 			 * Optionally get more videos from the post content.
 			 */
-			if ( $mod[ 'is_post' ] && ! $this->p->util->is_maxed( $og_ret, $num ) ) {
+			if ( $mod[ 'is_post' ] && ! $this->p->util->is_maxed( $mt_videos, $num ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->mark( 'checking for additional videos in the post content' );	// Begin timer.
 				}
 
-				$og_ret = array_merge( $og_ret, $this->p->media->get_content_videos( $num_diff, $mod, $check_dupes ) );
+				$mt_videos = array_merge( $mt_videos, $this->p->media->get_content_videos( $num_diff, $mod, $check_dupes ) );
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->mark( 'checking for additional videos in the post content' );	// End timer.
 				}
 			}
 
-			$this->p->util->slice_max( $og_ret, $num );
+			$this->p->util->slice_max( $mt_videos, $num );
 
 			/**
 			 * Optionally remove the image meta tags (aka video preview).
@@ -901,14 +1015,15 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( empty( $use_prev ) && empty( $force_prev ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'use_prev and force_prev are false - removing video preview images' );
 				}
 
-				foreach ( $og_ret as &$og_single_video ) {
+				foreach ( $mt_videos as &$mt_single_video ) {	// Uses reference.
 
-					$og_single_video = SucomUtil::preg_grep_keys( '/^og:image/', $og_single_video, $invert = true );
+					$mt_single_video = SucomUtil::preg_grep_keys( '/^og:image/', $mt_single_video, $invert = true );
 
-					$og_ret[ $num ][ 'og:video:has_image' ] = false;
+					$mt_single_video[ 'og:video:has_image' ] = false;
 				}
 			}
 
@@ -921,7 +1036,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			 */
 			if ( ! empty( $mod[ 'obj' ] ) && $md_pre !== 'none' ) {
 
-				foreach ( $og_ret as $num => $og_single_video ) {
+				foreach ( $mt_videos as &$mt_single_video ) {	// Uses reference.
 
 					foreach ( array(
 						'og_vid_width'  => 'og:video:width',
@@ -936,7 +1051,8 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 						$value = $mod[ 'obj' ]->get_options( $mod[ 'id' ], $md_key );
 
 						if ( ! empty( $value ) ) {	// Must be a non-empty string.
-							$og_ret[ $num ][ $mt_name ] = $value;
+
+							$mt_single_video[ $mt_name ] = $value;
 						}
 					}
 
@@ -944,16 +1060,26 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				}
 			}
 
-			$og_extend = array();
+			$mt_extend = array();
 
-			foreach ( $og_ret as $num => $og_single_video ) {
+			foreach ( $mt_videos as &$mt_single_video ) {	// Uses reference.
 
-				if ( ! empty( $og_single_video[ 'og:video:embed_url' ] ) ) {
+				if ( ! is_array( $mt_single_video ) ) {	// Just in case.
+
+					if ( $this->p->debug->enabled ) {
+
+						$this->p->debug->log( 'video ignored: $mt_single_video is not an array' );
+					}
+
+					continue;
+				}
+
+				if ( 'text/html' !== $mt_single_video[ 'og:video:type' ] && ! empty( $mt_single_video[ 'og:video:embed_url' ] ) ) {
 
 					/**
 					 * Start with a fresh copy of all og meta tags.
 					 */
-					$og_single_embed = SucomUtil::get_mt_video_seed( 'og', $og_single_video, false );
+					$og_single_embed = SucomUtil::get_mt_video_seed( 'og', $mt_single_video, false );
 
 					/**
 					 * Use only og meta tags, excluding the facebook applink meta tags.
@@ -962,14 +1088,16 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 
 					unset( $og_single_embed[ 'og:video:secure_url' ] );	// Just in case.
 
-					$og_single_embed[ 'og:video:url' ]  = $og_single_video[ 'og:video:embed_url' ];
+					$og_single_embed[ 'og:video:url' ]  = $mt_single_video[ 'og:video:embed_url' ];
 					$og_single_embed[ 'og:video:type' ] = 'text/html';
 
 					/**
 					 * Embedded videos may not have width / height information defined.
 					 */
 					foreach ( array( 'og:video:width', 'og:video:height' ) as $mt_name ) {
+
 						if ( isset( $og_single_embed[ $mt_name ] ) && $og_single_embed[ $mt_name ] === '' ) {
+
 							unset( $og_single_embed[ $mt_name ] );
 						}
 					}
@@ -977,86 +1105,195 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 					/**
 					 * Add application/x-shockwave-flash video first and the text/html video second.
 					 */
-					if ( SucomUtil::get_mt_media_url( $og_single_video, $mt_media_pre = 'og:video',
-						$mt_suffixes = array( ':secure_url', ':url', '' ) ) ) {
+					if ( SucomUtil::get_first_mt_media_url( $mt_single_video, $media_pre = 'og:video', $mt_suffixes = array( ':secure_url', ':url', '' ) ) ) {
 
-						$og_extend[] = $og_single_video;
+						$mt_extend[] = $mt_single_video;
 					}
 
-					$og_extend[] = $og_single_embed;
+					$mt_extend[] = $og_single_embed;
 
 				} else {
-					$og_extend[] = $og_single_video;
+
+					$mt_extend[] = $mt_single_video;
 				}
 			}
 
 			if ( $this->p->debug->enabled ) {
 
-				$this->p->debug->log( 'returning ' . count( $og_extend ) . ' videos' );
+				$this->p->debug->log( 'returning ' . count( $mt_extend ) . ' videos' );
+
+				$this->p->debug->log_arr( '$mt_extend', $mt_extend );
 
 				$this->p->debug->mark( 'get all open graph videos' );	// End timer.
 			}
 
-			return $og_extend;
-		}
-
-		public function get_thumbnail_url( $size_name = 'thumbnail', array $mod, $md_pre = 'og' ) {
-
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->mark();
-			}
-
-			$og_images = $this->get_all_images( $num = 1, $size_name, $mod, $check_dupes = true, $md_pre );
-
-			return SucomUtil::get_mt_media_url( $og_images, $mt_media_pre = 'og:image' );
+			/**
+			 * Update the local static cache and return the videos array.
+			 */
+			return $mt_videos = $mt_extend;
 		}
 
 		/**
-		 * Note that the size_name is used to check for duplicates.
+		 * $size_names can be a keyword (ie. 'opengraph' or 'schema'), a registered size name, or an array of size names.
+		 *
+		 * $size_name is passed as-is to $this->get_all_images().
 		 */
-		public function get_all_images( $num = 0, $size_name = 'thumbnail', array $mod, $check_dupes = true, $md_pre = 'og' ) {
+		public function get_thumbnail_url( $size_names = 'thumbnail', array $mod, $md_pre = 'og' ) {
 
 			if ( $this->p->debug->enabled ) {
 
-				$this->p->debug->mark( 'get all open graph images' );	// Begin timer.
+				$this->p->debug->mark();
+			}
+
+			$mt_ret = $this->get_all_images( $num = 1, $size_names, $mod, $check_dupes = true, $md_pre );
+
+			return SucomUtil::get_first_mt_media_url( $mt_ret );
+		}
+
+		/**
+		 * $size_names can be a keyword (ie. 'opengraph' or 'schema'), a registered size name, or an array of size names.
+		 */
+		public function get_all_images( $num, $size_names = 'opengraph', array $mod, $check_dupes = true, $md_pre = 'og' ) {
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->mark( 'get all images' );	// Begin timer.
 
 				$this->p->debug->log_args( array(
 					'num'         => $num,
-					'size_name'   => $size_name,
+					'size_names'  => $size_names,
 					'mod'         => $mod,
 					'check_dupes' => $check_dupes,
 					'md_pre'      => $md_pre,
 				) );
 			}
 
-			$og_ret   = array();
-			$num_diff = SucomUtil::count_diff( $og_ret, $num );
+			$mt_ret = array();
+
+			$size_names = $this->p->util->get_image_size_names( $size_names );	// Always returns an array.
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log( 'getting all video preview images' );
+			}
+
+			$preview_images = $this->get_all_previews( $num, $mod );
+
+			if ( empty( $preview_images ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'no video preview images' );
+				}
+
+			} else {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'merging video preview images' );
+				}
+
+				$mt_ret = array_merge( $mt_ret, $preview_images );
+			}
+
+			$num_diff = SucomUtil::count_diff( $mt_ret, $num );
+
+			if ( $num_diff >= 1 ) {	// Just in case.
+
+				foreach ( $size_names as $size_name ) {
+
+					/**
+					 * $size_name must be a string.
+					 */
+					$mt_images = $this->get_size_name_images( $num_diff, $size_name, $mod, $check_dupes, $md_pre );
+
+					if ( empty( $mt_images ) ) {
+
+						if ( $this->p->debug->enabled ) {
+
+							$this->p->debug->log( 'no images for size name ' . $size_name );
+						}
+
+					} else {
+				
+						if ( $this->p->debug->enabled ) {
+
+							$this->p->debug->log( 'merging ' . count( $mt_images ) . ' images for size name ' . $size_name );
+						}
+
+						$mt_ret = array_merge( $mt_ret, $mt_images );
+					}
+				}
+			}
+
+			return $mt_ret;
+		}
+
+		/**
+		 * $size_name must be a string.
+		 */
+		public function get_size_name_images( $num, $size_name, array $mod, $check_dupes = true, $md_pre = 'og' ) {
+
+			if ( ! is_string( $size_name ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: $size_name argument must be a string' );
+				}
+
+				return array();
+
+			} elseif ( $num < 1 ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: $num argument must be 1 or more' );
+				}
+
+				return array();
+			}
+
+			$size_info = $this->p->util->get_size_info( $size_name );
+
+			if ( empty( $size_info[ 'width' ] ) && empty( $size_info[ 'height' ] ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: missing size information for ' . $size_name );
+				}
+
+				return array();
+			}
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log( 'getting ' . $num . ' images for size name ' . $size_name );
+			}
+
+			$mt_ret = array();
 
 			$this->p->util->clear_uniq_urls( $size_name );	// Clear cache for $size_name context.
-
-			$preview_images = $this->get_all_previews( $num_diff, $mod );
-
-			if ( ! empty( $preview_images ) ) {
-				$og_ret = array_merge( $og_ret, $preview_images );
-			}
 
 			if ( $mod[ 'is_post' ] ) {
 
 				if ( $mod[ 'post_type' ] === 'attachment' && wp_attachment_is_image( $mod[ 'id' ] ) ) {
 
-					$og_single_image = $this->p->media->get_attachment_image( $num_diff, $size_name, $mod[ 'id' ], $check_dupes );
+					/**
+					 * $size_name must be a string.
+					 */
+					$mt_single_image = $this->p->media->get_attachment_image( $num, $size_name, $mod[ 'id' ], $check_dupes );
 
-					if ( empty( $og_single_image ) ) {
+					if ( empty( $mt_single_image ) ) {
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'exiting early: no attachment image' );
 						}
 
-						return $og_ret;
-
-					} else {
-						return array_merge( $og_ret, $og_single_image );
+						return $mt_ret;
 					}
+
+					return array_merge( $mt_ret, $mt_single_image );
 				}
 
 				/**
@@ -1064,46 +1301,47 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				 *
 				 * Allow for empty post id in order to execute featured / attached image filters for modules.
 				 */
-				if ( ! $this->p->util->is_maxed( $og_ret, $num ) ) {
+				$post_images = $this->p->media->get_post_images( $num, $size_name, $mod[ 'id' ], $check_dupes, $md_pre );
 
-					$post_images = $this->p->media->get_post_images( $num_diff, $size_name, $mod[ 'id' ], $check_dupes, $md_pre );
+				if ( ! empty( $post_images ) ) {
 
-					if ( ! empty( $post_images ) ) {
-						$og_ret = array_merge( $og_ret, $post_images );
-					}
+					$mt_ret = array_merge( $mt_ret, $post_images );
 				}
 
 				/**
 				 * Check for NGG query variables and shortcodes.
 				 */
-				if ( ! empty( $this->p->m[ 'media' ][ 'ngg' ] ) && ! $this->p->util->is_maxed( $og_ret, $num ) ) {
+				if ( ! empty( $this->p->m[ 'media' ][ 'ngg' ] ) && ! $this->p->util->is_maxed( $mt_ret, $num ) ) {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'checking for NGG query variables and shortcodes' );
 					}
 
-					$num_diff = SucomUtil::count_diff( $og_ret, $num );
-
 					$ngg_obj =& $this->p->m[ 'media' ][ 'ngg' ];
+
+					$num_diff = SucomUtil::count_diff( $mt_ret, $num );
 
 					$query_images = $ngg_obj->get_query_og_images( $num_diff, $size_name, $mod[ 'id' ], $check_dupes );
 
 					if ( count( $query_images ) > 0 ) {
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'skipping NGG shortcode check - ' . count( $query_images ) . ' query image(s) returned' );
 						}
 
-						$og_ret = array_merge( $og_ret, $query_images );
+						$mt_ret = array_merge( $mt_ret, $query_images );
 
-					} elseif ( ! $this->p->util->is_maxed( $og_ret, $num ) ) {
+					} elseif ( ! $this->p->util->is_maxed( $mt_ret, $num ) ) {
 
-						$num_diff = SucomUtil::count_diff( $og_ret, $num );
+						$num_diff = SucomUtil::count_diff( $mt_ret, $num );
 
 						$shortcode_images = $ngg_obj->get_shortcode_og_images( $num_diff, $size_name, $mod[ 'id' ], $check_dupes );
 
 						if ( ! empty( $shortcode_images ) ) {
-							$og_ret = array_merge( $og_ret, $shortcode_images );
+
+							$mt_ret = array_merge( $mt_ret, $shortcode_images );
 						}
 					}
 
@@ -1112,75 +1350,94 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				/**
 				 * If we haven't reached the limit of images yet, keep going and check the content text.
 				 */
-				if ( ! $this->p->util->is_maxed( $og_ret, $num ) ) {
+				if ( ! $this->p->util->is_maxed( $mt_ret, $num ) ) {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'checking the content text for images' );
 					}
 
-					$num_diff = SucomUtil::count_diff( $og_ret, $num );
+					$num_diff = SucomUtil::count_diff( $mt_ret, $num );
 
 					$content_images = $this->p->media->get_content_images( $num_diff, $size_name, $mod, $check_dupes );
 
 					if ( ! empty( $content_images ) ) {
-						$og_ret = array_merge( $og_ret, $content_images );
+
+						$mt_ret = array_merge( $mt_ret, $content_images );
 					}
 				}
 
 			} else {
 
 				/**
-				 * get_og_images() also provides filter hooks for additional image ids and urls.
+				 * get_og_images() provides filter hooks for additional image ids and urls.
+				 *
+				 * Unless $md_pre is 'none', get_og_images() will fallback to using the 'og' custom meta.
 				 */
 				if ( ! empty( $mod[ 'obj' ] ) ) {	// Term or user.
 
-					$og_images = $mod[ 'obj' ]->get_og_images( $num_diff, $size_name, $mod[ 'id' ], $check_dupes, $md_pre );
+					$mt_images = $mod[ 'obj' ]->get_og_images( $num, $size_name, $mod[ 'id' ], $check_dupes, $md_pre );
 
-					if ( ! empty( $og_images ) ) {
-						$og_ret = array_merge( $og_ret, $og_images );
+					if ( ! empty( $mt_images ) ) {
+
+						$mt_ret = array_merge( $mt_ret, $mt_images );
 					}
 				}
 			}
 
-			if ( empty( $og_ret ) ) {
+			if ( empty( $mt_ret ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'no image(s) found - getting the default image' );
 				}
 
 				$default_images = $this->p->media->get_default_images( 1, $size_name, $check_dupes );
 
 				if ( ! empty( $default_images ) ) {
-					$og_ret = array_merge( $og_ret, $default_images );
+
+					$mt_ret = array_merge( $mt_ret, $default_images );
 				}
 			}
 
-			$this->p->util->slice_max( $og_ret, $num );
+			$this->p->util->slice_max( $mt_ret, $num );
 
 			if ( $this->p->debug->enabled ) {
 
-				$this->p->debug->log( 'returning ' . count( $og_ret ) . ' images' );
+				$this->p->debug->log( 'returning ' . count( $mt_ret ) . ' images' );
 
-				$this->p->debug->mark( 'get all open graph images' );	// End timer.
+				$this->p->debug->log_arr( '$mt_ret', $mt_ret );
 			}
 
-			return $og_ret;
+			return $mt_ret;
 		}
 
 		/**
 		 * The returned array can include a varying number of elements, depending on the $request value.
 		 * 
 		 * $md_pre may be 'none' when getting Open Graph option defaults (and not their custom values).
+		 *
+		 * $size_name should be a string, not an array.
 		 */
 		public function get_media_info( $size_name, array $request, array $mod, $md_pre = 'og', $mt_pre = 'og' ) {
 
-			if ( $this->p->debug->enabled ) {
+			if ( ! is_string( $size_name ) ) {
+
+				if ( $this->p->debug->enabled ) {
+
+					$this->p->debug->log( 'exiting early: $size_name argument must be a string' );
+				}
+
+				return array();
+
+			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			$media_info = array();
-			$og_images  = null;
-			$og_videos  = null;
+			$mt_images  = null;
+			$mt_videos  = null;
 
 			foreach ( $request as $key ) {
 
@@ -1192,25 +1449,9 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 						/**
 						 * Get images only once.
 						 */
-						if ( null === $og_images ) {
+						if ( null === $mt_images ) {
 
-							/**
-							 * Optimize and make sure the image size exists first, just in case.
-							 */
-							$size_info = $this->p->util->get_size_info( $size_name );
-
-							if ( empty( $size_info[ 'width' ] ) && empty( $size_info[ 'height' ] ) ) {
-
-								if ( $this->p->debug->enabled ) {
-									$this->p->debug->log( 'missing size information for ' . $size_name );
-								}
-
-								$og_images = array();
-
-							} else {
-
-								$og_images = $this->get_all_images( $num = 1, $size_name, $mod, $check_dupes = true, $md_pre );
-							}
+							$mt_images = $this->get_size_name_images( $num = 1, $size_name, $mod, $check_dupes = true, $md_pre );
 						}
 
 						break;
@@ -1220,13 +1461,9 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 						/**
 						 * Get videos only once.
 						 */
-						if ( null === $og_videos ) {
+						if ( null === $mt_videos ) {
 
-							/**
-							 * $md_pre may be 'none' when getting Open Graph option defaults (and not
-							 * their custom values).
-							 */
-							$og_videos = $this->get_all_videos( 1, $mod, $check_dupes = true, $md_pre );
+							$mt_videos = $this->get_all_videos( $num = 1, $mod, $check_dupes = true, $md_pre );
 						}
 
 						break;
@@ -1240,70 +1477,74 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 					case 'pid':
 
 						if ( ! isset( $get_mt_name ) ) {
+
 							$get_mt_name = $mt_pre . ':image:id';
 						}
 
-						// no break - fall through
+						// No break - fall through.
 
 					case 'image':
 					case 'img_url':
 
 						if ( ! isset( $get_mt_name ) ) {
+
 							$get_mt_name = $mt_pre . ':image';
 						}
 
-						// no break - fall through
+						// No break - fall through.
 
-						if ( $og_videos !== null ) {
-							$media_info[ $key ] = $this->get_media_value( $og_videos, $get_mt_name );
+						if ( null !== $mt_videos ) {
+
+							$media_info[ $key ] = $this->get_media_value( $mt_videos, $get_mt_name );
 						}
 
 						if ( empty( $media_info[ $key ] ) ) {
-							$media_info[ $key ] = $this->get_media_value( $og_images, $get_mt_name );
+
+							$media_info[ $key ] = $this->get_media_value( $mt_images, $get_mt_name );
 						}
 
 						break;
 
 					case 'img_alt':
 
-						$media_info[ $key ] = $this->get_media_value( $og_images, $mt_pre . ':image:alt' );
+						$media_info[ $key ] = $this->get_media_value( $mt_images, $mt_pre . ':image:alt' );
 
 						break;
 
 					case 'video':
 					case 'vid_url':
 
-						$media_info[ $key ] = $this->get_media_value( $og_videos, $mt_pre . ':video' );
+						$media_info[ $key ] = $this->get_media_value( $mt_videos, $mt_pre . ':video' );
 
 						break;
 
 					case 'vid_type':
 
-						$media_info[ $key ] = $this->get_media_value( $og_videos, $mt_pre . ':video:type' );
+						$media_info[ $key ] = $this->get_media_value( $mt_videos, $mt_pre . ':video:type' );
 
 						break;
 
 					case 'vid_title':
 
-						$media_info[ $key ] = $this->get_media_value( $og_videos, $mt_pre . ':video:title' );
+						$media_info[ $key ] = $this->get_media_value( $mt_videos, $mt_pre . ':video:title' );
 
 						break;
 
 					case 'vid_desc':
 
-						$media_info[ $key ] = $this->get_media_value( $og_videos, $mt_pre . ':video:description' );
+						$media_info[ $key ] = $this->get_media_value( $mt_videos, $mt_pre . ':video:description' );
 
 						break;
 
 					case 'vid_width':
 
-						$media_info[ $key ] = $this->get_media_value( $og_videos, $mt_pre . ':video:width' );
+						$media_info[ $key ] = $this->get_media_value( $mt_videos, $mt_pre . ':video:width' );
 
 						break;
 
 					case 'vid_height':
 
-						$media_info[ $key ] = $this->get_media_value( $og_videos, $mt_pre . ':video:height' );
+						$media_info[ $key ] = $this->get_media_value( $mt_videos, $mt_pre . ':video:height' );
 
 						break;
 
@@ -1311,7 +1552,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 					case 'prev_url':
 					case 'preview':
 
-						$media_info[ $key ] = $this->get_media_value( $og_videos, $mt_pre . ':video:thumbnail_url' );
+						$media_info[ $key ] = $this->get_media_value( $mt_videos, $mt_pre . ':video:thumbnail_url' );
 
 						break;
 
@@ -1326,31 +1567,36 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			}
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( $media_info );
 			}
 
 			return $media_info;
 		}
 
-		public function get_media_value( $mt_og, $mt_media_pre ) {
+		/**
+		 * Also used by the WpssoProMediaGravatar class to get the default image URL.
+		 */
+		public function get_media_value( $mt_og, $media_pre ) {
 
-			if ( empty( $mt_og ) || ! is_array( $mt_og ) ) {
+			if ( empty( $mt_og ) || ! is_array( $mt_og ) ) {	// Nothing to do.
+
 				return '';
 			}
 
-			$og_media = reset( $mt_og );	// only search the first media array
+			$og_media = reset( $mt_og );	// Only search the first media array.
 
-			switch ( $mt_media_pre ) {
+			switch ( $media_pre ) {
 
 				/**
 				 * If we're asking for an image or video url, then search all three values sequentially.
 				 */
-				case ( preg_match( '/:(image|video)(:secure_url|:url)?$/', $mt_media_pre ) ? true : false ):
+				case ( preg_match( '/:(image|video)(:secure_url|:url)?$/', $media_pre ) ? true : false ):
 
 					$mt_search = array(
-						$mt_media_pre . ':secure_url',	// og:image:secure_url
-						$mt_media_pre . ':url',		// og:image:url
-						$mt_media_pre,			// og:image
+						$media_pre . ':secure_url',	// og:image:secure_url
+						$media_pre . ':url',		// og:image:url
+						$media_pre,			// og:image
 					);
 
 					break;
@@ -1360,7 +1606,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				 */
 				default:
 
-					$mt_search = array( $mt_media_pre );
+					$mt_search = array( $media_pre );
 
 					break;
 			}
@@ -1374,16 +1620,19 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				} elseif ( $og_media[ $key ] === '' || $og_media[ $key ] === null ) {	// Allow for 0.
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( $og_media[ $key ] . ' value is empty (skipped)' );
 					}
 
 				} elseif ( $og_media[ $key ] === WPSSO_UNDEF || $og_media[ $key ] === (string) WPSSO_UNDEF ) {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( $og_media[ $key ] . ' value is ' . WPSSO_UNDEF . ' (skipped)' );
 					}
 
 				} else {
+
 					return $og_media[ $key ];
 				}
 			}
@@ -1408,6 +1657,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				if ( ! empty( $opts[ $fb_locale_key ] ) ) {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'returning "' . $opts[ $fb_locale_key ] . '" locale for "' . $fb_locale_key . '" option key' );
 					}
 
@@ -1425,6 +1675,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( empty( $locale ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'exiting early: locale value is empty' );
 				}
 
@@ -1451,6 +1702,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( ! empty( $fb_pub_lang[ $locale ] ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'returning valid facebook locale "' . $locale . '"' );
 				}
 
@@ -1466,6 +1718,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			if ( ! empty( $fb_pub_lang[ $def_locale ] ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'returning default locale "' . $def_locale . '"' );
 				}
 
@@ -1477,6 +1730,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			 * Fallback to en_US.
 			 */
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'returning fallback locale "en_US"' );
 			}
 
@@ -1484,6 +1738,8 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 		}
 
 		/**
+		 * Called by WpssoHead::get_head_array() before merging all meta tag arrays.
+		 *
 		 * Unset mis-matched og_type meta tags using the 'og_type_mt' array as a reference. For example, remove all
 		 * 'article' meta tags if the og_type is 'website'. Removing only known meta tags (using the 'og_type_mt' array as
 		 * a reference) protects internal meta tags that may be used later by WpssoHead->extract_head_info(). For example,
@@ -1491,59 +1747,104 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 		 *
 		 * The 'og_content_map' array is also checked for Schema values that need to be swapped for simpler Open Graph meta
 		 * tag values.
-		 *
-		 * Called by WpssoHead::get_head_array() before merging all meta tag arrays.
 		 */
-		public function sanitize_array( array $mod, array $mt_og, $og_type = '' ) {
+		public function sanitize_mt_array( array $mt_og ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
-			if ( empty( $og_type ) ) {
+			/**
+			 * Array of meta tags to allow, reject, and map.
+			 */
+			static $allow  = null;
+			static $reject = null;
+			static $map    = null;
 
+			if ( null === $allow ) {	// Define the static variables once.
+
+				/**
+				 * The og:type is only needed when first run, to define the allow, reject, and map arrays.
+				 */
 				if ( empty( $mt_og[ 'og:type' ] ) ) {
 
 					if ( $this->p->debug->enabled ) {
-						$this->p->debug->log( 'og:type is empty and required for sanitation' );
+
+						$this->p->debug->log( 'exiting early: og:type is empty and required for sanitation' );
 					}
 
 					return $mt_og;
 				}
 
 				$og_type = $mt_og[ 'og:type' ];
-			}
 
-			if ( ! empty( $mt_og[ $og_type ] ) && is_array( $mt_og[ $og_type ] ) ) {
+				$allow  = array();
+				$reject = array();
+				$map    = array();
 
-				foreach ( $mt_og[ $og_type ] as $num => $mt_arr ) {
-					$mt_og[ $og_type ][ $num ] = $this->sanitize_array( $mod, $mt_arr, $og_type );
+				foreach ( $this->p->cf[ 'head' ][ 'og_type_mt' ] as $type_id => $og_type_mt_md ) {
+				
+					foreach ( $og_type_mt_md as $mt_name => $md_key ) {
+						
+						if (  $type_id === $og_type ) {
+							
+							$allow[ $mt_name ] = true;
+
+							/**
+							 * 'product:availability' => array(
+				 			 * 	'https://schema.org/Discontinued'        => 'oos',
+				 			 * 	'https://schema.org/InStock'             => 'instock',
+				 			 * 	'https://schema.org/InStoreOnly'         => 'instock',
+				 			 * 	'https://schema.org/LimitedAvailability' => 'instock',
+				 			 * 	'https://schema.org/OnlineOnly'          => 'instock',
+				 			 * 	'https://schema.org/OutOfStock'          => 'oos',
+				 			 * 	'https://schema.org/PreOrder'            => 'pending',
+				 			 * 	'https://schema.org/SoldOut'             => 'oos',
+							 * ),
+							 */
+							if ( ! empty( $this->p->cf[ 'head' ][ 'og_content_map' ][ $mt_name ] ) ) {
+
+								$map[ $mt_name ] = $this->p->cf[ 'head' ][ 'og_content_map' ][ $mt_name ];
+							}
+
+						} else {
+
+							$reject[ $mt_name ] = true;
+						}
+					}
 				}
 			}
 
-			foreach ( $this->p->cf[ 'head' ][ 'og_type_mt' ] as $type_id => $og_type_mt_md ) {
+			/**
+			 * Check the meta tag names and their values.
+			 */
+			foreach ( $mt_og as $key => $val ) {
 
-				foreach ( $og_type_mt_md as $mt_name => $md_key ) {
+				if ( ! empty( $allow[ $key ] ) ) {
 
-					if ( isset( $mt_og[ $mt_name ] ) ) {
+					if ( isset( $map[ $key ][ $val ] ) ) {
 
-						if (  $type_id !== $og_type ) {	// Mis-matched meta tag for this og:type
+						if ( $this->p->debug->enabled ) {
 
-							if ( $this->p->debug->enabled ) {
-								$this->p->debug->log( 'removing extra meta tag ' . $mt_name );
-							}
-
-							unset( $mt_og[ $mt_name ] );
-
-						} elseif ( isset( $this->p->cf[ 'head' ][ 'og_content_map' ][ $mt_name ][ $mt_og[ $mt_name ] ] ) ) {
-
-							if ( $this->p->debug->enabled ) {
-								$this->p->debug->log( 'mapping content value for ' . $mt_name );
-							}
-
-							$mt_og[ $mt_name ] = $this->p->cf[ 'head' ][ 'og_content_map' ][ $mt_name ][ $mt_og[ $mt_name ] ];
+							$this->p->debug->log( 'mapping content value for ' . $key );
 						}
+
+						$mt_og[ $key ] = $map[ $key ][ $val ];	// Example: 'OutOfStock' to 'oos'.
 					}
+
+				} elseif ( ! empty( $reject[ $key ] ) ) {
+
+					if ( $this->p->debug->enabled ) {
+
+						$this->p->debug->log( 'removing extra meta tag ' . $key );
+					}
+
+					unset( $mt_og[ $key ] );
+
+				} elseif ( is_array( $val ) ) {
+
+					$mt_og[ $key ] = $this->sanitize_mt_array( $val );
 				}
 			}
 
@@ -1556,14 +1857,17 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 		public function add_og_type_mt_md( $type_id, array &$mt_og, array $md_opts ) {	// Pass by reference is OK.
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			if ( empty( $this->p->cf[ 'head' ][ 'og_type_mt' ][ $type_id ] ) ) {	// Just in case.
+
 				return;
 			}
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'loading og_type_mt array for type id ' . $type_id );
 			}
 
@@ -1640,8 +1944,8 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 					if ( $md_opts[ $md_key ] === 'none' ) {
 
 						if ( $this->p->debug->enabled ) {
-							$this->p->debug->log( 'unsetting ' . $mt_name . ': ' .
-								$md_key . ' metadata is "none"' );
+
+							$this->p->debug->log( 'unsetting ' . $mt_name . ': ' . $md_key . ' metadata is "none"' );
 						}
 
 						unset( $mt_og[ $mt_name ] );
@@ -1662,6 +1966,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 						preg_match( '/^[^_]+_(.*)_value$/', $md_key, $unit_match ) ) {
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( $mt_name . ' from metadata = ' . $md_opts[ $md_key ] );
 						}
 
@@ -1670,6 +1975,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 						$mt_units = $mt_match[ 1 ] . ':units';
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( 'checking for ' . $mt_units . ' unit text' );
 						}
 
@@ -1678,6 +1984,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 							if ( $unit_text = WpssoSchema::get_data_unit_text( $unit_match[ 1 ] ) ) {
 
 								if ( $this->p->debug->enabled ) {
+
 									$this->p->debug->log( $mt_units . ' from unit text = ' . $unit_text );
 								}
 
@@ -1695,6 +2002,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 					} else {
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( $mt_name . ' from metadata = ' . $md_opts[ $md_key ] );
 						}
 
@@ -1704,6 +2012,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				} elseif ( isset( $mt_og[ $mt_name ] ) ) {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( $mt_name . ' value kept = ' . $mt_og[ $mt_name ] );
 					}
 
@@ -1712,6 +2021,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 					if ( $this->p->options[ 'og_def_' . $md_key ] !== 'none' ) {
 
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( $mt_name . ' from options default = ' .
 								$this->p->options[ 'og_def_' . $md_key ] );
 						}
@@ -1722,6 +2032,7 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 				} else {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( $mt_name . ' = null' );
 					}
 
@@ -1731,34 +2042,46 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 		}
 
 		/**
-		 * If we have a GTIN number, try to improve the assigned property name. Pass $mt_og by reference to modify the
-		 * array directly. A similar method exists as WpssoSchema::check_gtin_prop_value().
+		 * If we have a GTIN number, try to improve the assigned property name.
+		 *
+		 * Pass $mt_og by reference to modify the array directly.
+		 *
+		 * A similar method exists as WpssoSchema::check_prop_value_gtin().
 		 */
-		public static function check_gtin_mt_value( &$mt_og, $prefix = 'product' ) {	// Pass by reference is OK.
+		public static function check_mt_value_gtin( &$mt_og, $mt_pre = 'product' ) {	// Pass by reference is OK.
 
-			if ( ! empty( $mt_og[ $prefix . ':gtin' ] ) ) {
+			$wpsso =& Wpsso::get_instance();
+
+			if ( $wpsso->debug->enabled ) {
+
+				$wpsso->debug->log( 'checking ' . $mt_pre . ' gtin value' );
+			}
+
+			if ( ! empty( $mt_og[ $mt_pre . ':gtin' ] ) ) {
 
 				/**
 				 * The value may come from a custom field, so trim it, just in case.
 				 */
-				$mt_og[ $prefix . ':gtin' ] = trim( $mt_og[ $prefix . ':gtin' ] );
+				$mt_og[ $mt_pre . ':gtin' ] = trim( $mt_og[ $mt_pre . ':gtin' ] );
 
-				$gtin_len = strlen( $mt_og[ $prefix . ':gtin' ] );
+				$gtin_len = strlen( $mt_og[ $mt_pre . ':gtin' ] );
 
 				switch ( $gtin_len ) {
 
 					case 13:
 
-						if ( empty( $mt_og[ $prefix . ':ean' ] ) ) {
-							$mt_og[ $prefix . ':ean' ] = $mt_og[ $prefix . ':gtin' ];
+						if ( empty( $mt_og[ $mt_pre . ':ean' ] ) ) {
+
+							$mt_og[ $mt_pre . ':ean' ] = $mt_og[ $mt_pre . ':gtin' ];
 						}
 
 						break;
 
 					case 12:
 
-						if ( empty( $mt_og[ $prefix . ':upc' ] ) ) {
-							$mt_og[ $prefix . ':upc' ] = $mt_og[ $prefix . ':gtin' ];
+						if ( empty( $mt_og[ $mt_pre . ':upc' ] ) ) {
+
+							$mt_og[ $mt_pre . ':upc' ] = $mt_og[ $mt_pre . ':gtin' ];
 						}
 
 						break;
@@ -1766,9 +2089,50 @@ if ( ! class_exists( 'WpssoOpenGraph' ) ) {
 			}
 		}
 
+		public static function check_mt_value_price( &$mt_og, $mt_pre = 'product' ) {	// Pass by reference is OK.
+
+			$wpsso =& Wpsso::get_instance();
+
+			if ( $wpsso->debug->enabled ) {
+
+				$wpsso->debug->log( 'checking ' . $mt_pre . ' price value' );
+			}
+
+			foreach ( array( 'original_price', 'pretax_price', 'price', 'sale_price', 'shipping_cost' ) as $price_name ) {
+
+				if ( isset( $mt_og[ $mt_pre . ':' . $price_name . ':amount' ] ) ) {
+
+					$amount_key   = $mt_pre . ':' . $price_name . ':amount';
+					$currency_key = $mt_pre . ':' . $price_name . ':currency';
+
+					if ( is_numeric( $mt_og[ $amount_key ] ) ) {	// Allow for price of 0.
+
+						if ( empty( $mt_og[ $currency_key ] ) ) {
+
+							$mt_og[ $currency_key ] = $wpsso->options[ 'plugin_def_currency' ];
+						}
+
+					} else {
+
+						if ( ! empty( $mt_og[ $amount_key ] ) ) {	// Non-empty string, array, etc.
+						
+							if ( $wpsso->debug->enabled ) {
+
+								$wpsso->debug->log( 'invalid ' . $amount_key . ' value = ' . print_r( $mt_og[ $amount_key ], true ) );
+							}
+						}
+
+						unset( $mt_og[ $amount_key ] );
+						unset( $mt_og[ $currency_key ] );
+					}
+				}
+			}
+		}
+
 		private function update_post_md_opts( &$md_opts, $post_id, $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 

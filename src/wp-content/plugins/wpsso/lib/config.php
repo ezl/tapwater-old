@@ -6,6 +6,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -21,11 +22,11 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			),
 			'plugin' => array(
 				'wpsso' => array(			// Plugin acronym.
-					'version'     => '7.9.0',	// Plugin version.
-					'opt_version' => '741',		// Increment when changing default option values.
+					'version'     => '8.3.0',	// Plugin version.
+					'opt_version' => '756',		// Increment when changing default option values.
 					'short'       => 'WPSSO Core',	// Short plugin name.
 					'name'        => 'WPSSO Core',
-					'desc'        => 'Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded.',
+					'desc'        => 'Make sure your content looks great on social sites and search results, no matter how your URLs are crawled, shared, re-shared, posted, or embedded.',
 					'slug'        => 'wpsso',
 					'base'        => 'wpsso/wpsso.php',
 					'update_auth' => 'tid',
@@ -35,14 +36,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'images/icon-128x128.png',
-							'high' => 'images/icon-256x256.png',
+							'1x' => 'images/icon-128x128.png',
+							'2x' => 'images/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -94,7 +103,6 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 								'woocommerce-brands'            => '(plugin) WooCommerce Brands',
 								'woocommerce-currency-switcher' => '(plugin) WooCommerce Currency Switcher',
 								'woo-add-gtin'                  => '(plugin) WooCommerce UPC, EAN, and ISBN',
-								'wpecommerce'                   => '(plugin) WP eCommerce',
 								'wpm-product-gtin-wc'           => '(plugin) Product GTIN for WooCommerce',
 								'yith-woocommerce-brands'       => '(plugin) YITH WooCommerce Brands Add-on',
 							),
@@ -137,6 +145,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 								'wpultimaterecipe' => '(plugin) WP Ultimate Recipe',
 							),
 							'review' => array(
+								'shopperapproved' => '(api) Shopper Approved API',
 								'wpproductreview' => '(plugin) WP Product Review',
 								'yotpowc'         => '(plugin) Yotpo Social Reviews for WooCommerce',
 							),
@@ -151,7 +160,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 							),
 							'util' => array(
 								'coauthors'     => '(plugin) Co-Authors Plus',
-								'shorten'       => '(api) URL Shortening APIs',
+								'shorten'       => '(feature) URL Shortening Service',
 								'wpseo-meta'    => '(feature) Import Yoast SEO Social Meta',
 							),
 						),
@@ -186,7 +195,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 							'tools'           => 'Tools and Actions',
 						),
 						'users' => array(
-							'add-person' => 'Add a Person',
+							'add-person' => 'Add Person',
 						),
 					),
 				),
@@ -201,14 +210,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-am/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-am/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-am/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-am/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-am/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-am/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -257,14 +274,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-breadcrumbs/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-breadcrumbs/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-breadcrumbs/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-breadcrumbs/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-breadcrumbs/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-breadcrumbs/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -313,14 +338,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-faq/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-faq/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-faq/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-faq/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-faq/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-faq/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -369,14 +402,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-inherit-parent-meta/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-inherit-parent-meta/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-inherit-parent-meta/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-inherit-parent-meta/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-inherit-parent-meta/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-inherit-parent-meta/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -425,14 +466,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-schema-json-ld/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-schema-json-ld/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-schema-json-ld/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-schema-json-ld/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-schema-json-ld/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-schema-json-ld/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -474,7 +523,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				'wpssoorg' => array(			// Plugin acronym.
 					'short'       => 'WPSSO ORG',	// Short plugin name.
 					'name'        => 'WPSSO Organization Markup',
-					'desc'        => 'Customize the Home Page Schema Organization Markup and Manage Additional Organizations (Publisher, Organizer, etc.).',
+					'desc'        => 'Customize the Schema Organization Markup for your WebSite and Manage Additional Organizations (Publisher, Organizer, etc.).',
 					'slug'        => 'wpsso-organization',
 					'base'        => 'wpsso-organization/wpsso-organization.php',
 					'update_auth' => 'tid',
@@ -482,14 +531,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-organization/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-organization/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-organization/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-organization/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-organization/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-organization/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -538,14 +595,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-plm/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-plm/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-plm/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-plm/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-plm/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-plm/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -594,14 +659,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-ratings-and-reviews/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-ratings-and-reviews/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-ratings-and-reviews/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-ratings-and-reviews/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-ratings-and-reviews/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-ratings-and-reviews/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -650,14 +723,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-rest-api/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-rest-api/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-rest-api/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-rest-api/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-rest-api/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-rest-api/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -706,14 +787,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
-							'low' => 'https://surniaulula.github.io/wpsso-rrssb/assets/banner-772x250.jpg',
+							'low'  => 'https://surniaulula.github.io/wpsso-rrssb/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-rrssb/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low' => 'https://surniaulula.github.io/wpsso-rrssb/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-rrssb/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-rrssb/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-rrssb/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -762,14 +851,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-strip-schema-microdata/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-strip-schema-microdata/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-strip-schema-microdata/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-strip-schema-microdata/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-strip-schema-microdata/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-strip-schema-microdata/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -818,14 +915,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-tune-image-editors/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-tune-image-editors/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-tune-image-editors/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-tune-image-editors/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-tune-image-editors/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-tune-image-editors/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -874,14 +979,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-user-locale/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-user-locale/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-user-locale/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-user-locale/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-user-locale/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-user-locale/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -930,14 +1043,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-um/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-um/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-um/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-um/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-um/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-um/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -982,14 +1103,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * URLs or relative paths to plugin banners and icons.
 					 */
-					'assets'      => array(
+					'assets' => array(
+
+						/**
+						 * Banner image array keys are 'low' and 'high'.
+						 */
 						'banners' => array(
 							'low'  => 'https://surniaulula.github.io/wpsso-wc-metadata/assets/banner-772x250.jpg',
 							'high' => 'https://surniaulula.github.io/wpsso-wc-metadata/assets/banner-1544x500.jpg',
 						),
+
+						/**
+						 * Icon image array keys are '1x' and '2x'.
+						 */
 						'icons' => array(
-							'low'  => 'https://surniaulula.github.io/wpsso-wc-metadata/assets/icon-128x128.png',
-							'high' => 'https://surniaulula.github.io/wpsso-wc-metadata/assets/icon-256x256.png',
+							'1x' => 'https://surniaulula.github.io/wpsso-wc-metadata/assets/icon-128x128.png',
+							'2x' => 'https://surniaulula.github.io/wpsso-wc-metadata/assets/icon-256x256.png',
 						),
 					),
 					'hosts' => array(
@@ -1036,13 +1165,12 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'site_name_alt'                => '',		// (localized)
 					'site_desc'                    => '',		// (localized)
 					'site_url'                     => '',
-					'site_org_schema_type'         => 'organization',
-					'site_place_id'                => 'none',
-					'schema_add_home_organization' => 1,
-					'schema_add_home_person'       => 0,
-					'schema_home_person_id'        => 'none',
-					'schema_logo_url'              => '',
-					'schema_banner_url'            => '',
+					'site_org_banner_url'          => '',
+					'site_org_logo_url'            => '',
+					'site_org_place_id'            => 'none',
+					'site_org_schema_type'         => 'organization',	// Organization Schema Type.
+					'site_pub_schema_type'         => 'organization',	// WebSite Publisher Type.
+					'site_pub_person_id'           => 'none',		// WebSite Publisher (Person).
 					'schema_img_max'               => 1,
 					'schema_desc_max_len'          => 250,		// Max. Schema Description Length (hard limit).
 
@@ -1067,40 +1195,30 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * Schema image sizes.
 					 */
-					'schema_article_img_width'       => 1200,		// Must be at least 696px for Articles.
-					'schema_article_img_height'      => 1800,
-					'schema_article_img_crop'        => 0,
-					'schema_article_img_crop_x'      => 'center',
-					'schema_article_img_crop_y'      => 'center',
-					'schema_article_1_1_img_width'   => 1200,		// Must be at least 1200px for Articles.
-					'schema_article_1_1_img_height'  => 1200,
-					'schema_article_1_1_img_crop'    => 1,
-					'schema_article_1_1_img_crop_x'  => 'center',
-					'schema_article_1_1_img_crop_y'  => 'center',
-					'schema_article_4_3_img_width'   => 1200,		// Must be at least 1200px for Articles.
-					'schema_article_4_3_img_height'  => 900,
-					'schema_article_4_3_img_crop'    => 1,
-					'schema_article_4_3_img_crop_x'  => 'center',
-					'schema_article_4_3_img_crop_y'  => 'center',
-					'schema_article_16_9_img_width'  => 1200,		// Must be at least 1200px for Articles.
-					'schema_article_16_9_img_height' => 675,
-					'schema_article_16_9_img_crop'   => 1,
-					'schema_article_16_9_img_crop_x' => 'center',
-					'schema_article_16_9_img_crop_y' => 'center',
-					'schema_img_width'               => 1200,		// Must be at least 400px.
-					'schema_img_height'              => 1800,
-					'schema_img_crop'                => 0,
-					'schema_img_crop_x'              => 'center',
-					'schema_img_crop_y'              => 'center',
+					'schema_1_1_img_width'   => 1200,
+					'schema_1_1_img_height'  => 1200,
+					'schema_1_1_img_crop'    => 1,
+					'schema_1_1_img_crop_x'  => 'center',
+					'schema_1_1_img_crop_y'  => 'center',
+					'schema_4_3_img_width'   => 1200,
+					'schema_4_3_img_height'  => 900,
+					'schema_4_3_img_crop'    => 1,
+					'schema_4_3_img_crop_x'  => 'center',
+					'schema_4_3_img_crop_y'  => 'center',
+					'schema_16_9_img_width'  => 1200,
+					'schema_16_9_img_height' => 675,
+					'schema_16_9_img_crop'   => 1,
+					'schema_16_9_img_crop_x' => 'center',
+					'schema_16_9_img_crop_y' => 'center',
 
 					/**
 					 * Schema thumbnail image size.
 					 */
-					'thumb_img_width'              => 1200,
-					'thumb_img_height'             => 630,
-					'thumb_img_crop'               => 1,
-					'thumb_img_crop_x'             => 'center',
-					'thumb_img_crop_y'             => 'center',
+					'thumb_img_width'  => 1200,
+					'thumb_img_height' => 630,
+					'thumb_img_crop'   => 1,
+					'thumb_img_crop_x' => 'center',
+					'thumb_img_crop_y' => 'center',
 
 					/**
 					 * Standard WordPress types.
@@ -1134,12 +1252,12 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'schema_type_for_other'                  => 'other',
 					'schema_type_for_person'                 => 'person',
 					'schema_type_for_place'                  => 'place',
-					'schema_type_for_product'                => 'product',		// For WooCommerce and most e-commerce plugins.
+					'schema_type_for_product'                => 'product',		// For WooCommerce etc.
 					'schema_type_for_qa'                     => 'webpage.qa',
-					'schema_type_for_question'               => 'question',
+					'schema_type_for_question'               => 'question',		// For WPSSO FAQ.
 					'schema_type_for_recipe'                 => 'recipe',		// For WP Ultimate Recipe.
 					'schema_type_for_review'                 => 'review',		// For WP Product Review.
-					'schema_type_for_tax_faq_category'       => 'webpage.faq',	// For WPSSO FAQ Add-on.
+					'schema_type_for_tax_faq_category'       => 'webpage.faq',	// For WPSSO FAQ.
 					'schema_type_for_tax_product_brand'      => 'item.list',	// For WooCommerce Brands.
 					'schema_type_for_tax_product_cat'        => 'item.list',	// For WooCommerce.
 					'schema_type_for_tax_product_tag'        => 'item.list',	// For WooCommerce.
@@ -1149,7 +1267,6 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'schema_type_for_tribe_events'           => 'event',		// For The Events Calendar.
 					'schema_type_for_webpage'                => 'webpage',
 					'schema_type_for_website'                => 'website',
-					'schema_type_for_wpsc-product'           => 'product',		// For WP eCommerce.
 
 					/**
 					 * Facebook options.
@@ -1185,7 +1302,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'og_type_for_tax_category'      => 'website',
 					'og_type_for_tax_link_category' => 'website',
 					'og_type_for_tax_post_tag'      => 'website',
-					'og_type_for_user_page'         => 'website',
+					'og_type_for_user_page'         => 'profile',
 
 					/**
 					 * Other taxonomy and post types.
@@ -1195,7 +1312,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'og_type_for_download'               => 'product',	// For Easy Digital Downloads.
 					'og_type_for_organization'           => 'website',
 					'og_type_for_place'                  => 'place',
-					'og_type_for_product'                => 'product', 	// For WooCommerce and most e-commerce plugins.
+					'og_type_for_product'                => 'product', 	// For WooCommerce etc.
 					'og_type_for_question'               => 'article',
 					'og_type_for_tax_faq_category'       => 'website',
 					'og_type_for_tax_product_brand'      => 'website',	// For WooCommerce Brands.
@@ -1206,7 +1323,6 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'og_type_for_tc_events'              => 'article',	// For Tickera.
 					'og_type_for_tribe_events'           => 'article',	// For The Events Calendar.
 					'og_type_for_website'                => 'website',
-					'og_type_for_wpsc-product'           => 'product',	// For WP eCommerce.
 
 					'og_author_field'            => 'facebook',		// Author Profile URL Field.
 					'og_def_article_section'     => 'none',			// Default Article Section.
@@ -1440,7 +1556,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'plugin_p_cap_prefix'   => 'Caption:',			// WP Caption Text Prefix.
 					'plugin_no_title_text'  => 'No Title',			// No Title Text.
 					'plugin_no_desc_text'   => 'No Description.',		// No Description Text.
-					'plugin_gravatar_api'   => 1,				// Gravatar is Author Default Image
+					'plugin_gravatar_api'   => 1,				// Gravatar is Default Author Image
+					'plugin_gravatar_size'  => 1200,			// Gravatar Image Size
 					'plugin_facebook_api'   => 1,				// Check for Embedded Media: Facebook Videos.
 					'plugin_slideshare_api' => 1,				// Check for Embedded Media: Slideshare Presentations.
 					'plugin_soundcloud_api' => 1,				// Check for Embedded Media: Soundcloud Tracks.
@@ -1467,15 +1584,15 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * Advanced Settings - Cache tab.
 					 */
-					'plugin_content_cache_exp'   => HOUR_IN_SECONDS,	// Filtered Content Cache Expiry (1 hour).
-					'plugin_select_cache_exp'    => MONTH_IN_SECONDS,	// Form Selects Cache Expiry (1 month).
 					'plugin_head_cache_exp'      => WEEK_IN_SECONDS,	// Head Markup Cache Expiry (1 week).
+					'plugin_content_cache_exp'   => HOUR_IN_SECONDS,	// Filtered Content Cache Expiry (1 hour).
 					'plugin_imgsize_cache_exp'   => DAY_IN_SECONDS,		// Image URL Info Cache Expiry (1 day).
+					'plugin_vidinfo_cache_exp'   => DAY_IN_SECONDS,		// Video API Info Cache Expiry (1 day).
 					'plugin_short_url_cache_exp' => 7776000,		// Shortened URL Cache Expiry (90 days / 3 months).
 					'plugin_types_cache_exp'     => MONTH_IN_SECONDS,	// Schema Types Cache Expiry (1 month).
+					'plugin_select_cache_exp'    => MONTH_IN_SECONDS,	// Form Selects Cache Expiry (1 month).
 					'plugin_clear_on_activate'   => 1,			// Clear All Caches on Activate.
 					'plugin_clear_on_deactivate' => 0,			// Clear All Caches on Deactivate.
-					'plugin_clear_on_save'       => 0,			// Clear All Caches on Save Settings.
 					'plugin_clear_short_urls'    => 0,			// Refresh Short URLs on Clear Cache.
 					'plugin_clear_post_terms'    => 1,			// Clear Term Cache for Published Post.
 					'plugin_clear_for_comment'   => 1,			// Clear Post Cache for New Comment.
@@ -1483,18 +1600,24 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * Advanced Settings - Service APIs tab.
 					 */
-					'plugin_shortener'          => 'none',			// Preferred URL Shortening Service.
-					'plugin_wp_shortlink'       => 1,			// Use Shortnened URL for WP Shortlink.
-					'plugin_min_shorten'        => 23,
-					'plugin_bitly_access_token' => '',			// Bitly Generic Access Token.
-					'plugin_bitly_domain'       => '',			// Bitly Short Domain (Optional).
-					'plugin_bitly_group_name'   => '',			// Bitly Group Name (Optional).
-					'plugin_dlmyapp_api_key'    => '',			// DLMY.App API Key.
-					'plugin_owly_api_key'       => '',			// Ow.ly API Key.
-					'plugin_yourls_api_url'     => '',			// YOURLS API URL.
-					'plugin_yourls_username'    => '',			// YOURLS Username.
-					'plugin_yourls_password'    => '',			// YOURLS Password.
-					'plugin_yourls_token'       => '',			// YOURLS Token.
+					'plugin_shortener'                    => 'none',	// URL Shortening Service.
+					'plugin_wp_shortlink'                 => 1,		// Use Shortened URL for WP Shortlink.
+					'plugin_min_shorten'                  => 23,
+					'plugin_bitly_access_token'           => '',		// Bitly Generic Access Token.
+					'plugin_bitly_domain'                 => '',		// Bitly Short Domain (Optional).
+					'plugin_bitly_group_name'             => '',		// Bitly Group Name (Optional).
+					'plugin_dlmyapp_api_key'              => '',		// DLMY.App API Key.
+					'plugin_owly_api_key'                 => '',		// Ow.ly API Key.
+					'plugin_shopperapproved_site_id'      => '',		// Shopper Approved Site ID.
+					'plugin_shopperapproved_token'        => '',		// Shopper Approved API Token.
+					'plugin_shopperapproved_num_max'      => 100,		// Maximum Number of Reviews.
+					'plugin_shopperapproved_age_max'      => 60,		// Maximum Age of Reviews.
+					'plugin_shopperapproved_for_download' => 1,		// For Easy Digital Downloads.
+					'plugin_shopperapproved_for_product'  => 1,		// For WooCommerce, etc.
+					'plugin_yourls_api_url'               => '',		// YOURLS API URL.
+					'plugin_yourls_username'              => '',		// YOURLS Username.
+					'plugin_yourls_password'              => '',		// YOURLS Password.
+					'plugin_yourls_token'                 => '',		// YOURLS Token.
 
 					/**
 					 * Advanced Settings - Table Columns tab.
@@ -1541,19 +1664,18 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'plugin_add_to_download'               => 1,		// For Easy Digital Downloads.
 					'plugin_add_to_organization'           => 1,
 					'plugin_add_to_place'                  => 1,
-					'plugin_add_to_product'                => 1,
+					'plugin_add_to_product'                => 1,		// For WooCommerce, etc.
 					'plugin_add_to_question'               => 1,
-					'plugin_add_to_reply'                  => 0,		// Bbpress
+					'plugin_add_to_reply'                  => 0,		// For Bbpress
 					'plugin_add_to_tax_faq_category'       => 1,
 					'plugin_add_to_tax_product_brand'      => 1,		// For WooCommerce Brands.
 					'plugin_add_to_tax_product_cat'        => 1,		// For WooCommerce.
 					'plugin_add_to_tax_product_tag'        => 1,		// For WooCommerce.
 					'plugin_add_to_tax_pwb-brand'          => 1,		// For Perfect WooCommerce Brands Add-on.
 					'plugin_add_to_tax_yith_product_brand' => 1,		// For YITH WooCommerce Brands Add-on.
-					'plugin_add_to_topic'                  => 0,		// Bbpress
-					'plugin_add_to_tribe_events'           => 1,		// The Events Calendar.
-					'plugin_add_to_tribe-ea-record'        => 1,		// The Events Calendar.
-					'plugin_add_to_wpsc-product'           => 1,		// For WP eCommerce.
+					'plugin_add_to_topic'                  => 0,		// For Bbpress
+					'plugin_add_to_tribe_events'           => 1,		// For The Events Calendar.
+					'plugin_add_to_tribe-ea-record'        => 1,		// For The Events Calendar.
 
 					/**
 					 * Advanced Settings - Product Attributes tab.
@@ -1708,24 +1830,24 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					/**
 					 * Advanced Settings - Cache tab.
 					 */
-					'plugin_content_cache_exp'       => HOUR_IN_SECONDS,	// Filtered Content Cache Expiry (1 hour).
-					'plugin_content_cache_exp:use'   => 'default',
-					'plugin_select_cache_exp'         => MONTH_IN_SECONDS,	// Form Selects Cache Expiry (1 month).
-					'plugin_select_cache_exp:use'     => 'default',
 					'plugin_head_cache_exp'          => WEEK_IN_SECONDS,	// Head Markup Cache Expiry (1 week).
 					'plugin_head_cache_exp:use'      => 'default',
+					'plugin_content_cache_exp'       => HOUR_IN_SECONDS,	// Filtered Content Cache Expiry (1 hour).
+					'plugin_content_cache_exp:use'   => 'default',
 					'plugin_imgsize_cache_exp'       => DAY_IN_SECONDS,	// Image URL Info Cache Expiry (1 day).
 					'plugin_imgsize_cache_exp:use'   => 'default',
+					'plugin_vidinfo_cache_exp'       => DAY_IN_SECONDS,	// Video API Info Cache Expiry (1 day).
+					'plugin_vidinfo_cache_exp:use'   => 'default',
 					'plugin_short_url_cache_exp'     => 7776000,		// Shortened URL Cache Expiry (90 days / 3 months).
 					'plugin_short_url_cache_exp:use' => 'default',
 					'plugin_types_cache_exp'         => MONTH_IN_SECONDS,	// Schema Types Cache Expiry (1 month).
 					'plugin_types_cache_exp:use'     => 'default',
+					'plugin_select_cache_exp'        => MONTH_IN_SECONDS,	// Form Selects Cache Expiry (1 month).
+					'plugin_select_cache_exp:use'    => 'default',
 					'plugin_clear_on_activate'       => 1,			// Clear All Caches on Activate.
 					'plugin_clear_on_activate:use'   => 'default',
 					'plugin_clear_on_deactivate'     => 0,			// Clear All Caches on Deactivate.
 					'plugin_clear_on_deactivate:use' => 'default',
-					'plugin_clear_on_save'           => 0,			// Clear All Caches on Save Settings.
-					'plugin_clear_on_save:use'       => 'default',
 					'plugin_clear_short_urls'        => 0,			// Refresh Short URLs on Clear Cache.
 					'plugin_clear_short_urls:use'    => 'default',
 					'plugin_clear_post_terms'        => 1,			// Clear Term Cache for Published Post.
@@ -1822,7 +1944,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			 * Update manager config.
 			 */
 			'um' => array(
-				'rec_version' => '2.13.1',	// Minimum update manager version (soft limit).
+				'rec_version' => '3.1.0',	// Minimum update manager version (soft limit).
 				'check_hours' => array(
 					24  => 'Every day',
 					48  => 'Every two days',
@@ -2028,7 +2150,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'wpsso_i_' => array(	// Default is day in seconds.
 						'label'   => 'Image URL Info',
 						'opt_key' => 'plugin_imgsize_cache_exp',
-						'filter'  => 'wpsso_cache_expire_image_url_size',
+						'filter'  => 'wpsso_cache_expire_image_info',
 					),
 					'wpsso_s_' => array(	// Default is 7776000 seconds.
 						'label'   => 'Shortened URLs',
@@ -2039,6 +2161,11 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 						'label'   => 'Schema Types',
 						'opt_key' => 'plugin_types_cache_exp',
 						'filter'  => 'wpsso_cache_expire_schema_types',
+					),
+					'wpsso_v_' => array(	// Default is day in seconds.
+						'label'   => 'Video API Info',
+						'opt_key' => 'plugin_vidinfo_cache_exp',
+						'filter'  => 'wpsso_cache_expire_video_info',
 					),
 					'wpsso_' => array(
 						'label' => 'All Transients',
@@ -2208,6 +2335,10 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'organization' => 'Organization',
 					'person'       => 'Person',
 				),
+				'publisher_types' => array(
+					'organization' => 'Organization',
+					'person'       => 'Person',
+				),
 				'user_name_fields' => array(
 					'none'         => '[None]',
 					'fullname'     => 'First and Last Names',
@@ -2252,14 +2383,14 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'center' => 'Center',
 					'bottom' => 'Bottom',
 				),
-				'breadcrumbs_for_posts' => array(
-					'none'       => '[None]',
-					'categories' => 'Categories',
-					'ancestors'  => 'Parents',
+				'breadcrumbs_for_posts' => array(	// Breadcrumbs by Post Type.
+					'none'         => '[No Breadcrumbs]',
+					'categories'   => 'Home Page(s) and Categories',
+					'ancestors'    => 'Home Page(s) and Parents',
 				),
-				'breadcrumbs_for_terms' => array(
-					'none'      => '[None]',
-					'ancestors' => 'Parents',
+				'breadcrumbs_for_terms' => array(	// Breadcrumbs by Taxonomy.
+					'none'      => '[No Breadcrumbs]',
+					'ancestors' => 'Home Page(s) and Parents',
 				),
 
 				/**
@@ -2267,8 +2398,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				 */
 				'shorteners' => array(
 					'none'    => '[None]',
-					'bitly'   => 'Bitly (suggested)',	// Requires lib/pro/ext/bitly.php.
-					'dlmyapp' => 'DLMY.App',		// Requires lib/pro/ext/dlmy.php.
+					'bitly'   => 'Bitly',		// Requires lib/pro/com/bitly.php.
+					'dlmyapp' => 'DLMY.App',	// Requires lib/pro/ext/dlmy.php.
 					'owly'    => 'Ow.ly',		// Requires lib/pro/ext/owly.php.
 					'tinyurl' => 'TinyURL',		// Requires lib/pro/ext/tinyurl.php.
 					'yourls'  => 'YOURLS',		// Requires lib/pro/ext/yourls.php.
@@ -2363,16 +2494,33 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				),
 
 				/**
-				 * See https://developers.facebook.com/docs/reference/opengraph/object-type/product/.
+				 * Validated on 2020/08/17.
+				 *
+				 * See https://developers.facebook.com/docs/marketing-api/catalog/reference/#og-tags.
+				 *
+				 * Optional for dynamic ads. N/A for commerce. Age group associated to the item. Accepted values:
+				 * adult, all ages, teen, kids, toddler, infant, newborn.
 				 */
 				'age_group' => array(
-					'none'   => '[None]',
-					'kids'   => 'Kids',
-					'adult'  => 'Adult',
+					'none'     => '[None]',
+					'adult'    => 'Adult',
+					'all ages' => 'All Ages',
+					'teen'     => 'Teen',
+					'kids'     => 'Kids',
+					'toddler'  => 'Toddler',
+					'infant'   => 'Infant',
+					'newborn'  => 'Newborn',
 				),
 
 				/**
+				 * Validated on 2020/08/17.
+				 *
 				 * See https://schema.org/suggestedGender.
+				 *
+				 * See https://developers.facebook.com/docs/marketing-api/catalog/reference/#og-tags.
+				 *
+				 * Optional for dynamic ads. Required for commerce. Determines gender for sizing. Supported values:
+				 * female, male, unisex.
 				 */
 				'audience_gender' => array(
 					'none'   => '[None]',
@@ -2382,96 +2530,122 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				),
 
 				/**
-				 * See https://developers.google.com/search/docs/data-types/job-postings.
+				 * A Schema enumerated value.
+				 *
+				 * See https://schema.org/BookFormatType.
 				 */
-				'employment_type' => array(
-					'full_time'  => 'Full Time',
-					'part_time'  => 'Part Time',
-					'contractor' => 'Contractor',
-					'temporary'  => 'Temporary',
-					'intern'     => 'Intern',
-					'volunteer'  => 'Volunteer',
-					'per_diem'   => 'Per Diem',
-					'other'      => 'Other',
+				'book_format' => array(
+					'none'                               => '[None]',
+					'https://schema.org/AudiobookFormat' => 'Audiobook',
+					'https://schema.org/EBook'           => 'eBook',
+					'https://schema.org/GraphicNovel'    => 'Graphic Novel',
+					'https://schema.org/Hardcover'       => 'Hardcover',
+					'https://schema.org/Paperback '      => 'Paperback',
 				),
 
 				/**
+				 * Validated on 2020/08/17.
+				 *
+				 * See https://developers.google.com/search/docs/data-types/job-postings.
+				 *
+				 * Choose one or more of the following case-sensitive values: "FULL_TIME" "PART_TIME" "CONTRACTOR"
+				 * "TEMPORARY" "INTERN" "VOLUNTEER" "PER_DIEM" "OTHER". You can include more than one
+				 * employmentType property.
+				 */
+				'employment_type' => array(
+					'none'       => '[None]',
+					'FULL_TIME'  => 'Full Time',
+					'PART_TIME'  => 'Part Time',
+					'CONTRACTOR' => 'Contractor',
+					'TEMPORARY'  => 'Temporary',
+					'INTERN'     => 'Intern',
+					'VOLUNTEER'  => 'Volunteer',
+					'PER_DIEM'   => 'Per Diem',
+					'OTHER'      => 'Other',
+				),
+
+				/**
+				 * A Schema enumerated value.
+				 *
 				 * See https://schema.org/EventAttendanceModeEnumeration.
 				 */
 				'event_attendance' => array(
-					'OfflineEventAttendanceMode' => 'Physical Location',	// Default.
-					'OnlineEventAttendanceMode'  => 'Online',
-					'MixedEventAttendanceMode'   => 'Mixed',
+					'none'                                          => '[None]',
+					'https://schema.org/MixedEventAttendanceMode'   => 'Mixed',
+					'https://schema.org/OnlineEventAttendanceMode'  => 'Online',
+					'https://schema.org/OfflineEventAttendanceMode' => 'Physical Location',	// Default.
 				),
 
 				/**
+				 * A Schema enumerated value.
+				 *
 				 * See https://schema.org/EventStatusType.
 				 */
 				'event_status' => array(	
-					'EventCancelled'   => 'Cancelled',
-					'EventMovedOnline' => 'Moved Online',
-					'EventPostponed'   => 'Postponed',
-					'EventRescheduled' => 'Rescheduled',
-					'EventScheduled'   => 'Scheduled',	// Default.
+					'none'                                => '[None]',
+					'https://schema.org/EventCancelled'   => 'Cancelled',
+					'https://schema.org/EventMovedOnline' => 'Moved Online',
+					'https://schema.org/EventPostponed'   => 'Postponed',
+					'https://schema.org/EventRescheduled' => 'Rescheduled',
+					'https://schema.org/EventScheduled'   => 'Scheduled',	// Default.
 				),
 
 				/**
+				 * A Schema enumerated value.
+				 *
 				 * See https://schema.org/ItemAvailability.
 				 */
 				'item_availability' => array(
-					'none'                => '[None]',
-			 		'Discontinued'        => 'Discontinued',
-			 		'InStock'             => 'In Stock',
-			 		'InStoreOnly'         => 'In Store Only',
-			 		'LimitedAvailability' => 'Limited Availability',
-			 		'OnlineOnly'          => 'Online Only',
-			 		'OutOfStock'          => 'Out of Stock',
-			 		'PreOrder'            => 'Pre-Order',
-			 		'SoldOut '            => 'Sold Out',
+					'none'                                   => '[None]',
+			 		'https://schema.org/Discontinued'        => 'Discontinued',
+			 		'https://schema.org/InStock'             => 'In Stock',
+			 		'https://schema.org/InStoreOnly'         => 'In Store Only',
+			 		'https://schema.org/LimitedAvailability' => 'Limited Availability',
+			 		'https://schema.org/OnlineOnly'          => 'Online Only',
+			 		'https://schema.org/OutOfStock'          => 'Out of Stock',
+			 		'https://schema.org/PreOrder'            => 'Pre-Order',
+			 		'https://schema.org/PreSale'             => 'Pre-Sale',
+			 		'https://schema.org/SoldOut'             => 'Sold Out',
 				),
 
 				/**
+				 * A Schema enumerated value.
+				 *
 				 * See https://schema.org/OfferItemCondition.
 				 */
 				'item_condition' => array(
-					'none'                 => '[None]',
-					'DamagedCondition'     => 'Damaged',
-					'NewCondition'         => 'New',
-					'RefurbishedCondition' => 'Refurbished',
-					'UsedCondition'        => 'Used',
+					'none'                                    => '[None]',
+					'https://schema.org/DamagedCondition'     => 'Damaged',
+					'https://schema.org/NewCondition'         => 'New',
+					'https://schema.org/RefurbishedCondition' => 'Refurbished',
+					'https://schema.org/UsedCondition'        => 'Used',
 				),
 			),
 			'head' => array(
 				'limit' => array(
-					'schema_article_1_1_img_ratio'  => 1.000,
-					'schema_article_4_3_img_ratio'  => 1.333,
-					'schema_article_16_9_img_ratio' => 1.778,
+					'schema_1_1_img_ratio'  => 1.000,
+					'schema_4_3_img_ratio'  => 1.333,
+					'schema_16_9_img_ratio' => 1.778,
 				),
 				'limit_min' => array(
-					'og_desc_len'                    => 160,
-					'og_img_width'                   => 200,	// See https://developers.facebook.com/docs/sharing/best-practices.
-					'og_img_height'                  => 200,
-					'schema_article_img_width'       => 696,	// See https://developers.google.com/search/docs/data-types/articles.
-					'schema_article_img_height'      => 279,	// Calculated from the Article minimum image width and maximum image ratio.
-					'schema_article_1_1_img_width'   => 1200,
-					'schema_article_1_1_img_height'  => 1200,
-					'schema_article_4_3_img_width'   => 1200,
-					'schema_article_4_3_img_height'  => 900,
-					'schema_article_16_9_img_width'  => 1200,
-					'schema_article_16_9_img_height' => 675,
-					'schema_desc_len'                => 156,
-					'schema_img_width'               => 400,	// See https://developers.google.com/+/web/snippet/article-rendering.
-					'schema_img_height'              => 160,
-					'seo_desc_len'                   => 156,
-					'tc_desc_len'                    => 160,
-					'thumb_img_width'                => 300,	// Recommended minimum for WhatsApp is 300x200px.
-					'thumb_img_height'               => 200,
+					'og_desc_len'            => 160,
+					'og_img_width'           => 200,
+					'og_img_height'          => 200,
+					'schema_1_1_img_width'   => 1200,
+					'schema_1_1_img_height'  => 1200,
+					'schema_4_3_img_width'   => 1200,
+					'schema_4_3_img_height'  => 900,
+					'schema_16_9_img_width'  => 1200,
+					'schema_16_9_img_height' => 675,
+					'schema_desc_len'        => 156,
+					'seo_desc_len'           => 156,
+					'tc_desc_len'            => 160,
+					'thumb_img_width'        => 300,
+					'thumb_img_height'       => 200,
 				),
 				'limit_max' => array(
-					'og_img_ratio'             => 3.000,
-					'schema_article_img_ratio' => 2.500,
-					'schema_headline_len'      => 110,
-					'schema_img_ratio'         => 2.500,	// See https://developers.google.com/+/web/snippet/article-rendering.
+					'og_img_ratio'        => 3.000,
+					'schema_headline_len' => 110,
 				),
 
 				/**
@@ -2482,6 +2656,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'organization' => 'website',
 					'place'        => 'place',
 					'product'      => 'product',
+					'profile'      => 'profile',
 				),
 
 				/**
@@ -2495,6 +2670,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'product'              => 'product',
 					'review'               => 'article',
 					'software.application' => 'product',
+					'webpage.profile'      => 'profile',
 				),
 
 				'og_type_ns' => array(		// See https://ogp.me/#types.
@@ -2522,6 +2698,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					'book'                => 'https://ogp.me/ns/book#',
 					'place'               => 'https://ogp.me/ns/place#',	// Supported by Facebook and Pinterest.
 					'product'             => 'https://ogp.me/ns/product#',	// Supported by Facebook and Pinterest.
+					'profile'             => 'https://ogp.me/ns/profile#',
 					'website'             => 'https://ogp.me/ns/website#',
 				),
 				'og_type_mt' => array(						// See https://developers.facebook.com/docs/reference/opengraph/.
@@ -2713,34 +2890,41 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 						'video:tag'          => '',
 					),
 				),
-				'og_type_array' => array(			// Element of 'head' array.
-					'product' => array(
-						'product:original_price:amount'   => true,	// Used by WooCommerce module.
-						'product:original_price:currency' => true,	// Used by WooCommerce module.
-						'product:pretax_price:amount'     => true,
-						'product:pretax_price:currency'   => true,
-						'product:price:amount'            => true,
-						'product:price:currency'          => true,
-						'product:sale_price:amount'       => true,	// Used by WooCommerce module.
-						'product:sale_price:currency'     => true,	// Used by WooCommerce module.
+				'og_content_map' => array(	// Element of 'head' array.
+
+					/**
+					 * Validated on 2020/08/17.
+					 *
+					 * See https://developers.facebook.com/docs/marketing-api/catalog/reference/#og-tags.
+					 *
+					 * Required. Current availability of the item: in stock, out of stock, available for order,
+					 * discontinued. Supports pixel-based catalogs.
+					 */
+					'product:availability' => array(
+				 		'https://schema.org/Discontinued'        => 'discontinued',
+				 		'https://schema.org/InStock'             => 'in stock',
+				 		'https://schema.org/InStoreOnly'         => 'in stock',
+				 		'https://schema.org/LimitedAvailability' => 'in stock',
+				 		'https://schema.org/OnlineOnly'          => 'in stock',
+				 		'https://schema.org/OutOfStock'          => 'out of stock',
+				 		'https://schema.org/PreOrder'            => 'preorder',
+			 			'https://schema.org/PreSale'             => 'available for order',
+				 		'https://schema.org/SoldOut'             => 'available for order',
 					),
-				),
-				'og_content_map' => array(			// Element of 'head' array.
-					'product:availability' => array(	// 'instock', 'oos', or 'pending'
-				 		'Discontinued'        => 'oos',
-				 		'InStock'             => 'instock',
-				 		'InStoreOnly'         => 'instock',
-				 		'LimitedAvailability' => 'instock',
-				 		'OnlineOnly'          => 'instock',
-				 		'OutOfStock'          => 'oos',
-				 		'PreOrder'            => 'pending',
-				 		'SoldOut '            => 'oos',
-					),
+
+					/**
+					 * Validated on 2020/08/17.
+					 *
+					 * See https://developers.facebook.com/docs/marketing-api/catalog/reference/#og-tags.
+					 *
+					 * Required. Current condition of the item: new, refurbished, used. Supports pixel-based
+					 * catalogs.
+					 */
 					'product:condition' => array(
-						'DamagedCondition'     => 'used',
-						'NewCondition'         => 'new',
-						'RefurbishedCondition' => 'refurbished',
-						'UsedCondition'        => 'used',
+						'https://schema.org/DamagedCondition'     => 'used',
+						'https://schema.org/NewCondition'         => 'new',
+						'https://schema.org/RefurbishedCondition' => 'refurbished',
+						'https://schema.org/UsedCondition'        => 'used',
 					),
 				),
 				'schema_type' => array(				// Element of 'head' array.
@@ -2862,13 +3046,14 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 									'webpage.gallery.image' => 'https://schema.org/ImageGallery',
 									'webpage.gallery.video' => 'https://schema.org/VideoGallery',
 								),
-								'webpage.contact'        => 'https://schema.org/ContactPage',
-								'webpage.faq'            => 'https://schema.org/FAQPage',
-								'webpage.item'           => 'https://schema.org/ItemPage',
-								'webpage.medical'        => 'https://schema.org/MedicalWebPage',
-								'webpage.profile'        => 'https://schema.org/ProfilePage',
-								'webpage.qa'             => 'https://schema.org/QAPage',
-								'webpage.search.results' => 'https://schema.org/SearchResultsPage',
+								'webpage.contact'             => 'https://schema.org/ContactPage',
+								'webpage.faq'                 => 'https://schema.org/FAQPage',
+								'webpage.item'                => 'https://schema.org/ItemPage',
+								'webpage.medical'             => 'https://schema.org/MedicalWebPage',
+								'webpage.profile'             => 'https://schema.org/ProfilePage',
+								'webpage.qa'                  => 'https://schema.org/QAPage',
+								'webpage.real.estate.listing' => 'https://schema.org/RealEstateListing',
+								'webpage.search.results'      => 'https://schema.org/SearchResultsPage',
 							),
 							'webpage.element' => 'https://schema.org/WebPageElement',
 							'website'         => 'https://schema.org/WebSite',
@@ -3637,6 +3822,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 		public static function get_config( $apply_filters = false, $read_cache = true ) {
 
 			if ( ! empty( self::$cf[ 'config_filtered' ] ) && $read_cache ) {
+
 				return self::$cf;
 			}
 
@@ -3672,30 +3858,34 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 
 					$pkg_dir = 'std';
 
-					if ( ! $pro_disabled && defined( $ext_dir_const = strtoupper( $ext ) . '_PLUGINDIR' ) &&
-						is_dir( constant( $ext_dir_const ) . 'lib/pro/' ) ) {
+					if ( defined( $ext_dir_const = strtoupper( $ext ) . '_PLUGINDIR' ) &&
+						is_dir( constant( $ext_dir_const ) . 'lib/pro/' ) && ! $pro_disabled ) {
 
 						$pkg_dir = 'pro';
 					}
 
 					if ( isset( $info[ 'slug' ] ) ) {
+
 						self::$cf[ '*' ][ 'slug' ][ $info[ 'slug' ] ] = $ext;
 					}
 
 					if ( isset( $info[ 'base' ] ) ) {
+
 						self::$cf[ '*' ][ 'base' ][ $info[ 'base' ] ] = $ext;
 					}
 
 					if ( isset( $info[ 'lib' ] ) && is_array( $info[ 'lib' ] ) ) {
-						self::$cf[ '*' ][ 'lib' ] = SucomUtil::array_merge_recursive_distinct(
-							self::$cf[ '*' ][ 'lib' ], $info[ 'lib' ] );
+
+						self::$cf[ '*' ][ 'lib' ] = SucomUtil::array_merge_recursive_distinct( self::$cf[ '*' ][ 'lib' ], $info[ 'lib' ] );
 					}
 
 					if ( isset( $info[ 'version' ] ) ) {
+
 						self::$cf[ '*' ][ 'version' ] .= '-' . $ext . $info[ 'version' ] . $pkg_dir;
 					}
 
 					if ( isset( $info[ 'opt_version' ] ) ) {
+
 						self::$cf[ 'opt' ][ 'version' ] .= '-' . $ext . $info[ 'opt_version' ] . $pkg_dir;
 					}
 
@@ -3704,8 +3894,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					 */
 					$plugin_base = trailingslashit( plugins_url( '', $info[ 'base' ] ) );
 
-					array_walk_recursive( self::$cf[ 'plugin' ][ $ext ][ 'assets' ], 
-						array( __CLASS__, 'maybe_prefix_base_url' ), $plugin_base );
+					array_walk_recursive( self::$cf[ 'plugin' ][ $ext ][ 'assets' ], array( __CLASS__, 'maybe_prefix_base_url' ), $plugin_base );
 				}
 			}
 
@@ -3715,6 +3904,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 		private static function maybe_prefix_base_url( &$url, $key, $plugin_base ) {
 
 			if ( ! empty( $url ) && false === strpos( $url, '//' ) ) {
+
 				$url = $plugin_base . $url;
 			}
 		}
@@ -3722,6 +3912,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 		public static function set_constants( $plugin_file_path ) {
 
 			if ( defined( 'WPSSO_VERSION' ) ) {	// Define constants only once.
+
 				return;
 			}
 
@@ -3754,6 +3945,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 		public static function set_variable_constants( $var_const = null ) {
 
 			if ( ! is_array( $var_const ) ) {
+
 				$var_const = (array) self::get_variable_constants();
 			}
 
@@ -3761,7 +3953,9 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			 * Define the variable constants, if not already defined.
 			 */
 			foreach ( $var_const as $name => $value ) {
+
 				if ( ! defined( $name ) ) {
+
 					define( $name, $value );
 				}
 			}
@@ -3778,6 +3972,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				( defined( 'NONCE_KEY' ) ? NONCE_KEY : '' ) );
 
 			if ( defined( 'WPSSO_PLUGINDIR' ) ) {
+
 				$var_const[ 'WPSSO_ARTICLE_SECTIONS_LIST' ]   = WPSSO_PLUGINDIR . 'share/article-sections.txt';
 				$var_const[ 'WPSSO_PRODUCT_CATEGORIES_LIST' ] = WPSSO_PLUGINDIR . 'share/product-categories.txt';
 			}
@@ -3801,6 +3996,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			$var_const[ 'WPSSO_PHP_GETIMGSIZE_MAX_TIME' ]     = 1.50;	// Send an error to trigger_error() if getimagesize() takes longer.
 			$var_const[ 'WPSSO_REFRESH_CACHE_SLEEP_TIME' ]    = 0.50;	// Seconds to sleep between requests when refreshing the cache.
 			$var_const[ 'WPSSO_SELECT_PERSON_NAMES_MAX' ]     = 100;	// Maximum number of persons to include in a form select.
+			$var_const[ 'WPSSO_GRAVATAR_IMAGE_SIZE_MAX' ]     = 2048;	// Maximum available width of images from Gravatar.com.
 
 			/**
 			 * Schema limits.
@@ -3815,7 +4011,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			$var_const[ 'WPSSO_SCHEMA_METADATA_OFFERS_MAX' ]       = 5;
 			$var_const[ 'WPSSO_SCHEMA_MOVIE_ACTORS_MAX' ]          = 15;
 			$var_const[ 'WPSSO_SCHEMA_MOVIE_DIRECTORS_MAX' ]       = 5;
-			$var_const[ 'WPSSO_SCHEMA_PRODUCT_VALID_MAX_TIME' ]    = YEAR_IN_SECONDS;	// Used for Schema 'priceValidUntil' property default.
+			$var_const[ 'WPSSO_SCHEMA_PRODUCT_VALID_MAX_TIME' ]    = MONTH_IN_SECONDS;	// Used for Schema 'priceValidUntil' property default.
 			$var_const[ 'WPSSO_SCHEMA_QUESTIONS_PER_FAQPAGE_MAX' ] = 50;
 			$var_const[ 'WPSSO_SCHEMA_RECIPE_INGREDIENTS_MAX' ]    = 40;
 			$var_const[ 'WPSSO_SCHEMA_RECIPE_INSTRUCTIONS_MAX' ]   = 40;
@@ -3863,7 +4059,9 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			 * Maybe override the default constant value with a pre-defined constant value.
 			 */
 			foreach ( $var_const as $name => $value ) {
+
 				if ( defined( $name ) ) {
+
 					$var_const[ $name ] = constant( $name );
 				}
 			}
@@ -3888,8 +4086,8 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			require_once WPSSO_PLUGINDIR . 'lib/com/util-wp.php';
 
 			require_once WPSSO_PLUGINDIR . 'lib/check.php';
+			require_once WPSSO_PLUGINDIR . 'lib/compat.php';	// 3rd party plugin and theme compatibility actions and filters.
 			require_once WPSSO_PLUGINDIR . 'lib/exception.php';	// Extends ErrorException.
-			require_once WPSSO_PLUGINDIR . 'lib/filters.php';
 			require_once WPSSO_PLUGINDIR . 'lib/functions.php';
 			require_once WPSSO_PLUGINDIR . 'lib/head.php';
 			require_once WPSSO_PLUGINDIR . 'lib/media.php';
@@ -3928,9 +4126,9 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			add_filter( 'wpsso_load_lib', array( 'WpssoConfig', 'load_lib' ), 10, 3 );
 		}
 
-		public static function load_lib( $ret = false, $filespec = '', $classname = '' ) {
+		public static function load_lib( $success = false, $filespec = '', $classname = '' ) {
 
-			if ( false === $ret && ! empty( $filespec ) ) {
+			if ( false === $success && ! empty( $filespec ) ) {
 
 				$file_path = WPSSO_PLUGINDIR . 'lib/' . $filespec . '.php';
 
@@ -3939,19 +4137,22 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 					require_once $file_path;
 
 					if ( empty( $classname ) ) {
+
 						return SucomUtil::sanitize_classname( 'wpsso' . $filespec, $allow_underscore = false );
-					} else {
-						return $classname;
+
 					}
+
+					return $classname;
 				}
 			}
 
-			return $ret;
+			return $success;
 		}
 
 		public static function get_cache_dir() {
 
 			if ( defined( 'WPSSO_CACHEDIR' ) ) {
+
 				return WPSSO_CACHEDIR;
 			}
 
@@ -3960,12 +4161,15 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				$content_dir = trailingslashit( WP_CONTENT_DIR );
 
 				if ( self::is_cache_dir( $content_dir . 'cache/wpsso/' ) ) {
+
 					return $content_dir . 'cache/wpsso/';
 				}
 			}
 
 			if ( defined( 'WPSSO_PLUGINDIR' ) ) {
+
 				if ( self::is_cache_dir( WPSSO_PLUGINDIR . 'cache/' ) ) {
+
 					return WPSSO_PLUGINDIR . 'cache/';
 				}
 			}
@@ -3976,6 +4180,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 		public static function get_cache_url() {
 
 			if ( defined( 'WPSSO_CACHEURL' ) ) {
+
 				return WPSSO_CACHEURL;
 			}
 
@@ -3984,13 +4189,17 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				$content_dir = trailingslashit( WP_CONTENT_DIR );
 
 				if ( self::is_cache_dir( $content_dir . 'cache/wpsso/' ) ) {
+
 					return content_url( 'cache/wpsso/' );
 				}
 			}
 
 			if ( defined( 'WPSSO_PLUGINDIR' ) ) {
+
 				if ( self::is_cache_dir( WPSSO_PLUGINDIR . 'cache/' ) ) {
+
 					if ( defined( 'WPSSO_URLPATH' ) ) {	// Just in case.
+
 						return WPSSO_URLPATH . 'cache/';
 					}
 				}
@@ -4007,6 +4216,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			$access_file = $dir . '.htaccess';
 
 			if ( file_exists( $index_file ) ) {	// Assume directory permissions are good.
+
 				return true;
 			}
 
@@ -4074,6 +4284,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 		private static function sort_ext_by_name( $a, $b ) {
 
 			if ( isset( $a[ 'name' ] ) && isset( $b[ 'name' ] ) ) {		// Just in case.
+
 				return strnatcmp( $a[ 'name' ], $b[ 'name' ] );
 			}
 
@@ -4099,8 +4310,7 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 			 */
 			$ext_dir_const = strtoupper( $ext ) . '_PLUGINDIR';
 
-			if ( defined( $ext_dir_const ) &&
-				is_dir( $ext_dir = constant( $ext_dir_const ) ) ) {
+			if ( defined( $ext_dir_const ) && is_dir( $ext_dir = constant( $ext_dir_const ) ) ) {
 
 				return $local_cache[ $ext ] = trailingslashit( $ext_dir );
 			}
@@ -4114,14 +4324,12 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 
 				$slug = $cf[ 'plugin' ][ $ext ][ 'slug' ];
 
-				if ( defined ( 'WPMU_PLUGIN_DIR' ) &&
-					is_dir( $ext_dir = trailingslashit( WPMU_PLUGIN_DIR ) . $slug . '/' ) ) {
+				if ( defined ( 'WPMU_PLUGIN_DIR' ) && is_dir( $ext_dir = trailingslashit( WPMU_PLUGIN_DIR ) . $slug . '/' ) ) {
 				
 					return $local_cache[ $ext ] = $ext_dir;
 				}
 
-				if ( defined ( 'WP_PLUGIN_DIR' ) &&
-					is_dir( $ext_dir = trailingslashit( WP_PLUGIN_DIR ) . $slug . '/' ) ) {
+				if ( defined ( 'WP_PLUGIN_DIR' ) && is_dir( $ext_dir = trailingslashit( WP_PLUGIN_DIR ) . $slug . '/' ) ) {
 
 					return $local_cache[ $ext ] = $ext_dir;
 				}
@@ -4142,12 +4350,14 @@ if ( ! class_exists( 'WpssoConfig' ) ) {
 				if ( $is_dir ) {	// Must be a directory.
 
 					if ( is_dir( $sub_dir = trailingslashit( $ext_dir . $file_name ) ) ) {
+
 						return $sub_dir;
 					}
 
 				} else {
 
 					if ( file_exists( $file_path = $ext_dir . $file_name ) ) {
+
 						return $file_path;
 					}
 				}

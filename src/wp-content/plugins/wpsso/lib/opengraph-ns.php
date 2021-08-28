@@ -6,10 +6,12 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
 if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+
 	die( 'Do. Or do not. There is no try.' );
 }
 
@@ -24,6 +26,7 @@ if ( ! class_exists( 'WpssoOpenGraphNS' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -41,12 +44,14 @@ if ( ! class_exists( 'WpssoOpenGraphNS' ) ) {
 						 	(int) $this->p->options[ $opt_pre . '_prio' ] : 100 ), 1 );
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'added add_og_ns_attributes filter for ' . $wp_filter_name );
 					}
 
 					break;	// Stop here.
 
 				} elseif ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'skipping add_og_ns_attributes for ' . $opt_pre . ' - filter name is empty or disabled' );
 				}
 			}
@@ -61,6 +66,7 @@ if ( ! class_exists( 'WpssoOpenGraphNS' ) ) {
 		public function add_og_ns_attributes( $html_attr ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log_args( array (
 					'html_attr' => $html_attr,
 				) );
@@ -69,6 +75,7 @@ if ( ! class_exists( 'WpssoOpenGraphNS' ) ) {
 			$use_post = apply_filters( $this->p->lca . '_use_post', false );
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'required call to get_page_mod()' );
 			}
 
@@ -93,7 +100,7 @@ if ( ! class_exists( 'WpssoOpenGraphNS' ) ) {
 
 			$og_ns = apply_filters( $this->p->lca . '_og_ns', $og_ns, $mod );
 
-			if ( SucomUtil::is_amp() ) {
+			if ( SucomUtil::is_amp() ) {	// Returns null, true, or false.
 
 				/**
 				 * Nothing to do.
@@ -114,37 +121,51 @@ if ( ! class_exists( 'WpssoOpenGraphNS' ) ) {
 					 * See https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
 					 */
 					if ( preg_match( '/^(.*)\sprefix=["\']([^"\']*)["\'](.*)$/s', $html_attr, $match ) ) {
+
 						$html_attr    = $match[1] . $match[3];	// Remove the prefix.
 					}
 				}
 
-				$prefix_value = '';
+				$attr_val = '';
 
 				foreach ( $og_ns as $name => $url ) {
 
-					if ( false === strpos( $prefix_value, ' ' . $name . ': ' . $url ) ) {
-						$prefix_value .= ' ' . $name . ': ' . $url;
+					if ( false === strpos( $attr_val, ' ' . $name . ': ' . $url ) ) {
+
+						$attr_val .= ' ' . $name . ': ' . $url;
 					}
 				}
 
-				$html_attr .= ' prefix="' . trim( $prefix_value ) . '"';
+				$html_attr .= ' prefix="' . trim( $attr_val ) . '"';
 			}
 
 			return trim( $html_attr );
 		}
 
+		/**
+		 * The output from this method is provided to the WPSSO JSON add-on, so be careful when removing array elements. If
+		 * you need to remove array elements after the Schema JSON-LD markup has been created, but before the meta tags
+		 * have been generated, use the WpssoOpenGraph->sanitize_mt_array() method.
+		 */
 		public function filter_og_data_https_ogp_me_ns_article( array $mt_og, array $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			return $mt_og;
 		}
 
+		/**
+		 * The output from this method is provided to the WPSSO JSON add-on, so be careful when removing array elements. If
+		 * you need to remove array elements after the Schema JSON-LD markup has been created, but before the meta tags
+		 * have been generated, use the WpssoOpenGraph->sanitize_mt_array() method.
+		 */
 		public function filter_og_data_https_ogp_me_ns_book( array $mt_og, array $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -154,58 +175,45 @@ if ( ! class_exists( 'WpssoOpenGraphNS' ) ) {
 			return $mt_og;
 		}
 
+		/**
+		 * The output from this method is provided to the WPSSO JSON add-on, so be careful when removing array elements. If
+		 * you need to remove array elements after the Schema JSON-LD markup has been created, but before the meta tags
+		 * have been generated, use the WpssoOpenGraph->sanitize_mt_array() method.
+		 */
 		public function filter_og_data_https_ogp_me_ns_product( array $mt_og, array $mod ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
-			/**
-			 * If we have a GTIN number, try to improve the assigned property name.
-			 */
-			WpssoOpenGraph::check_gtin_mt_value( $mt_og, $prefix = 'product' );
+			WpssoOpenGraph::check_mt_value_gtin( $mt_og, $mt_pre = 'product' );
+
+			WpssoOpenGraph::check_mt_value_price( $mt_og, $mt_pre = 'product' );
 
 			/**
 			 * Include variations (aka product offers) if available.
 			 */
 			if ( ! empty( $mt_og[ 'product:offers' ] ) && is_array( $mt_og[ 'product:offers' ] ) ) {
 
-				foreach ( $mt_og[ 'product:offers' ] as $num => $offer ) {
+				foreach ( $mt_og[ 'product:offers' ] as $num => &$offer ) {	// Allow changes to the offer array.
 
-					foreach( $offer as $mt_name => $mt_value ) {
+					WpssoOpenGraph::check_mt_value_gtin( $offer, $mt_pre = 'product' );
 
-						if ( isset( $this->p->cf[ 'head' ][ 'og_type_array' ][ 'product' ][ $mt_name ] ) ) {
-
-							$mt_og[ 'product' ][ $num ][ $mt_name ] = $mt_value;
-
-							if ( isset( $mt_og[ $mt_name ] ) ) {
-								unset ( $mt_og[ $mt_name ] );
-							}
-						}
-					}
+					WpssoOpenGraph::check_mt_value_price( $offer, $mt_pre = 'product' );
 
 					/**
-					 * If we have a GTIN number, try to improve the assigned property name.
+					 * Allow only a single main product brand.
 					 */
-					WpssoOpenGraph::check_gtin_mt_value( $offer );
-				}
+					if ( ! empty( $offer[ 'product:brand' ] ) ) {
 
-			} elseif ( isset( $mt_og[ 'product:price:amount' ] ) ) {
+						if ( empty( $mt_og[ 'product:brand' ] ) ) {
 
-				if ( is_numeric( $mt_og[ 'product:price:amount' ] ) ) {	// Allow for price of 0.
+							$mt_og[ 'product:brand' ] = $mt_value;
+						}
 
-					if ( empty( $mt_og[ 'product:price:currency' ] ) ) {
-						$mt_og[ 'product:price:currency' ] = $this->p->options[ 'plugin_def_currency' ];
+						unset ( $offer[ 'product:brand' ] );
 					}
-
-				} else {
-
-					if ( $this->p->debug->enabled ) {
-						$this->p->debug->log( 'product price amount must be numeric' );
-					}
-
-					unset( $mt_og[ 'product:price:amount' ] );
-					unset( $mt_og[ 'product:price:currency' ] );
 				}
 			}
 

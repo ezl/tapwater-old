@@ -1,10 +1,10 @@
 === Under Construction ===
-Contributors: WebFactory, UnderConstructionPage, googlemapswidget, wpreset
+Contributors: WebFactory, UnderConstructionPage, googlemapswidget, wpreset, securityninja
 Tags: coming soon page, under construction mode, under construction, under construction page, coming soon, maintenance mode, maintenance page, launch page, coming soon mode, maintenance mode page, offline page, maintenance, landing page
 Requires at least: 4.0
 Requires PHP: 5.2
-Tested up to: 5.4
-Stable tag: 3.75
+Tested up to: 5.5
+Stable tag: 3.81
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,9 +21,9 @@ Create an Under Construction Page, Maintenance Mode Page, Coming Soon Page or a 
 
 A simple, no-nonsense under construction plugin for all those situations when you have to hide the site behind an Under Construction page for a while. Live examples are available on the <a href="https://underconstructionpage.com/?utm_source=wordpressorg&utm_medium=content&utm_campaign=readme&utm_content=website">Under Construction website</a>. Give us a shout on Twitter <a href="http://twitter.com/WebFactoryLtd">@WebFactoryLtd</a> or check out the <a href="https://youtu.be/fqqWrQENSDc">video</a>.
 
-UCP has full support for collecting leads and subscribers via optin boxes in content, and optin popups. We've integrated <a href="https://wordpress.org/plugins/mailoptin/">MailOptin</a> a great, free plugin into UCP that connects to MailChimp and numerous other autoresponder services allowing you to easily collect emails.
-
 Thanks to our partnership with <a href="https://wordpress.org/plugins/weglot/">Weglot</a>, UCP is fully multilanguage ready and you can instantly translate your under construction page to 100+ languages with one click.
+
+Let <a href="https://wordpress.org/plugins/security-ninja/">Security Ninja</a> take care of your site's security from day one! Run over 50 security tests with one click. Get a detailed report and automatically fix security issues. Download it from the <a href="https://wordpress.org/plugins/security-ninja/">official wp.org repo</a> for free.
 
 
 **Options**
@@ -60,7 +60,7 @@ Thanks to our partnership with <a href="https://wordpress.org/plugins/weglot/">W
 * Whitelisted User Roles - user roles who see the site, instead of under construction page
 * Whitelisted Users - users who see the site, instead of under construction page
 
-Under Construction Page is compatible with the following caching plugins: W3 Total Cache, WP Super Cache, Endurance Page Cache, SiteGround SuperCacher, WP Fastest Cache, Swift Performance Cache, and Hummingbird cache.
+Under Construction Page is compatible with the following caching plugins: W3 Total Cache, WP Super Cache, Endurance Page Cache, SiteGround SuperCacher, WP Fastest Cache, Swift Performance Cache, WP Rocket, and Hummingbird cache.
 
 
 **What are others saying about the Under Construction Page plugin**
@@ -138,6 +138,15 @@ Or if needed, upload manually;
 
 == Changelog ==
 
+= 3.81 =
+* 2020/08/20
+* bug fixes
+
+= 3.80 =
+* 2020/06/17
+* more cache handling improvements
+* stripped HTML from page title and description
+
 = 3.75 =
 * 2020/04/15
 * better cache handling
@@ -146,6 +155,7 @@ Or if needed, upload manually;
 * 2020/03/27
 * minor bug fixes
 * removed Security Ninja ads
+* 400,000 installations hit on 2019-12-06
 
 = 3.65 =
 * 2019/11/21

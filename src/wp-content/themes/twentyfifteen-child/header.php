@@ -1,4 +1,3 @@
-
 <?php
 /**
  * The template for displaying the header
@@ -24,8 +23,13 @@
 	<!--[if lt IE 9]>
 	<script src="<?php echo esc_url( get_template_directory_uri() ); ?>/js/html5.js"></script>
 	<![endif]-->
-	<?php 
+	
+		<script data-ad-client="ca-pub-2648095472405229" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
+	
+	<?php 
+	
+	
 	//custom meta description
 	//cities
 

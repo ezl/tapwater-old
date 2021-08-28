@@ -6,10 +6,12 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
 if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+
 	die( 'Do. Or do not. There is no try.' );
 }
 
@@ -81,16 +83,16 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 					'tc_lrgimg_crop'                 => 'tc_lrg_img_crop',
 					'tc_lrgimg_crop_x'               => 'tc_lrg_img_crop_x',
 					'tc_lrgimg_crop_y'               => 'tc_lrg_img_crop_y',
-					'schema_img_article_width'       => 'schema_article_img_width',
-					'schema_img_article_height'      => 'schema_article_img_height',
-					'schema_img_article_crop'        => 'schema_article_img_crop',
-					'schema_img_article_crop_x'      => 'schema_article_img_crop_x',
-					'schema_img_article_crop_y'      => 'schema_article_img_crop_y',
+					'schema_img_article_width'       => '',
+					'schema_img_article_height'      => '',
+					'schema_img_article_crop'        => '',
+					'schema_img_article_crop_x'      => '',
+					'schema_img_article_crop_y'      => '',
 					'og_site_name'                   => 'site_name',
 					'og_site_description'            => 'site_desc',
 					'org_url'                        => 'site_url',
 					'org_type'                       => 'site_org_schema_type',
-					'org_place_id'                   => 'site_place_id',
+					'org_place_id'                   => 'site_org_place_id',
 					'link_def_author_id'             => '',
 					'link_def_author_on_index'       => '',
 					'link_def_author_on_search'      => '',
@@ -143,12 +145,17 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 				561 => array(
 					'plugin_shortlink' => 'plugin_wp_shortlink',
 				),
+
+				/**
+				 * 'schema_add_home_organization' and 'schema_add_home_person' will be unset in self::options()
+				 * after determining a new 'site_pub_schema_type' value (either 'organization' or 'person').
+				 */
 				569 => array(
 					'plugin_cf_add_type_urls'  => 'plugin_cf_addl_type_urls',
 					'schema_organization_json' => 'schema_add_home_organization',
 					'schema_person_json'       => 'schema_add_home_person',
 					'schema_website_json'      => '',
-					'schema_person_id'         => 'schema_home_person_id',
+					'schema_person_id'         => 'site_pub_person_id',
 				),
 				574 => array(
 					'plugin_json_post_data_cache_exp' => '',
@@ -246,21 +253,21 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 				),
 				667 => array(
 					'schema_add_noscript' => '',
-					'schema_article_amp1x1_img_width'   => 'schema_article_1_1_img_width',
-					'schema_article_amp1x1_img_height'  => 'schema_article_1_1_img_height',
-					'schema_article_amp1x1_img_crop'    => 'schema_article_1_1_img_crop',
-					'schema_article_amp1x1_img_crop_x'  => 'schema_article_1_1_img_crop_x',
-					'schema_article_amp1x1_img_crop_y'  => 'schema_article_1_1_img_crop_y',
-					'schema_article_amp4x3_img_width'   => 'schema_article_4_3_img_width',
-					'schema_article_amp4x3_img_height'  => 'schema_article_4_3_img_height',
-					'schema_article_amp4x3_img_crop'    => 'schema_article_4_3_img_crop',
-					'schema_article_amp4x3_img_crop_x'  => 'schema_article_4_3_img_crop_x',
-					'schema_article_amp4x3_img_crop_y'  => 'schema_article_4_3_img_crop_y',
-					'schema_article_amp16x9_img_width'  => 'schema_article_16_9_img_width',
-					'schema_article_amp16x9_img_height' => 'schema_article_16_9_img_height',
-					'schema_article_amp16x9_img_crop'   => 'schema_article_16_9_img_crop',
-					'schema_article_amp16x9_img_crop_x' => 'schema_article_16_9_img_crop_x',
-					'schema_article_amp16x9_img_crop_y' => 'schema_article_16_9_img_crop_y',
+					'schema_article_amp1x1_img_width'   => 'schema_1_1_img_width',
+					'schema_article_amp1x1_img_height'  => 'schema_1_1_img_height',
+					'schema_article_amp1x1_img_crop'    => 'schema_1_1_img_crop',
+					'schema_article_amp1x1_img_crop_x'  => 'schema_1_1_img_crop_x',
+					'schema_article_amp1x1_img_crop_y'  => 'schema_1_1_img_crop_y',
+					'schema_article_amp4x3_img_width'   => 'schema_4_3_img_width',
+					'schema_article_amp4x3_img_height'  => 'schema_4_3_img_height',
+					'schema_article_amp4x3_img_crop'    => 'schema_4_3_img_crop',
+					'schema_article_amp4x3_img_crop_x'  => 'schema_4_3_img_crop_x',
+					'schema_article_amp4x3_img_crop_y'  => 'schema_4_3_img_crop_y',
+					'schema_article_amp16x9_img_width'  => 'schema_16_9_img_width',
+					'schema_article_amp16x9_img_height' => 'schema_16_9_img_height',
+					'schema_article_amp16x9_img_crop'   => 'schema_16_9_img_crop',
+					'schema_article_amp16x9_img_crop_x' => 'schema_16_9_img_crop_x',
+					'schema_article_amp16x9_img_crop_y' => 'schema_16_9_img_crop_y',
 				),
 				671 => array(
 					'p_dom_verify' => 'p_site_verify',
@@ -340,6 +347,52 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 				722 => array(
 					'plugin_add_to_term' => '',	// Replaced by "plugin_add_to_tax_{tax_slug}" options.
 					'plugin_add_to_user' => 'plugin_add_to_user_page',
+				),
+
+				/**
+				 * 'schema_add_home_organization' and 'schema_add_home_person' will be unset in self::options()
+				 * after determining a new 'site_pub_schema_type' value (either 'organization' or 'person').
+				 */
+				744 => array(
+					'schema_banner_url'     => 'site_org_banner_url',
+					'schema_home_person_id' => 'site_pub_person_id',
+					'schema_logo_url'       => 'site_org_logo_url',
+					'site_place_id'         => 'site_org_place_id',
+				),
+				748 => array(
+					'schema_article_img_width'       => '',
+					'schema_article_img_height'      => '',
+					'schema_article_img_crop'        => '',
+					'schema_article_img_crop_x'      => '',
+					'schema_article_img_crop_y'      => '',
+					'schema_article_1_1_img_width'   => 'schema_1_1_img_width',
+					'schema_article_1_1_img_height'  => 'schema_1_1_img_height',
+					'schema_article_1_1_img_crop'    => 'schema_1_1_img_crop',
+					'schema_article_1_1_img_crop_x'  => 'schema_1_1_img_crop_x',
+					'schema_article_1_1_img_crop_y'  => 'schema_1_1_img_crop_y',
+					'schema_article_4_3_img_width'   => 'schema_4_3_img_width',
+					'schema_article_4_3_img_height'  => 'schema_4_3_img_height',
+					'schema_article_4_3_img_crop'    => 'schema_4_3_img_crop',
+					'schema_article_4_3_img_crop_x'  => 'schema_4_3_img_crop_x',
+					'schema_article_4_3_img_crop_y'  => 'schema_4_3_img_crop_y',
+					'schema_article_16_9_img_width'  => 'schema_16_9_img_width',
+					'schema_article_16_9_img_height' => 'schema_16_9_img_height',
+					'schema_article_16_9_img_crop'   => 'schema_16_9_img_crop',
+					'schema_article_16_9_img_crop_x' => 'schema_16_9_img_crop_x',
+					'schema_article_16_9_img_crop_y' => 'schema_16_9_img_crop_y',
+					'schema_img_width'               => '',
+					'schema_img_height'              => '',
+					'schema_img_crop'                => '',
+					'schema_img_crop_x'              => '',
+					'schema_img_crop_y'              => '',
+				),
+				751 => array(
+					'og_type_for_wpsc-product'     => '',
+					'plugin_add_to_wpsc-product'   => '',
+					'schema_type_for_wpsc-product' => '',
+				),
+				752 => array(
+					'plugin_clear_on_save' => '',
 				),
 			),
 		);
@@ -434,6 +487,7 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 			if ( $prev_version > 0 && $prev_version <= 342 ) {
 
 				if ( ! empty( $opts[ 'plugin_file_cache_hrs' ] ) ) {
+
 					$opts[ 'plugin_social_file_cache_exp' ] = $opts[ 'plugin_file_cache_hrs' ] * HOUR_IN_SECONDS;
 				}
 
@@ -458,6 +512,7 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 				foreach ( SucomUtil::preg_grep_keys( '/^(' . $keys_preg . ')(_[0-9]+)?$/', $opts ) as $key => $val ) {
 
 					if ( ! empty( $this->p->cf[ 'head' ][ 'schema_renamed' ][ $val ] ) ) {
+
 						$opts[ $key ] = $this->p->cf[ 'head' ][ 'schema_renamed' ][ $val ];
 					}
 				}
@@ -498,6 +553,7 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 				if ( $prev_version > 0 && $prev_version <= 296 ) {
 
 					if ( empty( $opts[ 'plugin_min_shorten' ] ) || $opts[ 'plugin_min_shorten' ] < 22 ) {
+
 						$opts[ 'plugin_min_shorten' ] = 22;
 					}
 				}
@@ -505,6 +561,7 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 				if ( $prev_version > 0 && $prev_version <= 373 ) {
 
 					if ( ! empty( $opts[ 'plugin_head_attr_filter_name' ] ) && $opts[ 'plugin_head_attr_filter_name' ] === 'language_attributes' ) {
+
 						$opts[ 'plugin_head_attr_filter_name' ] = 'head_attributes';
 					}
 				}
@@ -512,6 +569,7 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 				if ( $prev_version > 0 && $prev_version <= 557 ) {
 
 					if ( isset( $opts[ 'plugin_cm_fb_label' ] ) && $opts[ 'plugin_cm_fb_label' ] === 'Facebook URL' ) {
+
 						$opts[ 'plugin_cm_fb_label' ] = 'Facebook User URL';
 					}
 
@@ -521,6 +579,7 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 				if ( $prev_version > 0 && $prev_version <= 564 ) {
 
 					if ( isset( $opts[ 'schema_type_for_job_listing' ] ) && $opts[ 'schema_type_for_job_listing' ] === 'webpage' ) {
+
 						$opts[ 'schema_type_for_job_listing' ] = 'job.posting';
 					}
 				}
@@ -600,6 +659,7 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 				if ( $prev_version > 0 && $prev_version <= 637 ) {
 
 					foreach ( SucomUtil::get_opts_begin( 'add_meta_property_product:', $opts ) as $key => $val ) {
+
 						$opts[ $key ] = 1;
 					}
 				}
@@ -610,8 +670,25 @@ if ( ! class_exists( 'WpssoOptionsUpgrade' ) ) {
 				if ( $prev_version > 0 && $prev_version <= 637 ) {
 
 					if ( isset( $opts[ 'seo_desc_max_len' ] ) && $opts[ 'seo_desc_max_len' ] === 156 ) {
+
 						$opts[ 'seo_desc_max_len' ] = 220;
 					}
+				}
+
+				if ( $prev_version > 0 && $prev_version <= 744 ) {
+
+					if ( ! empty( $opts[ 'schema_add_home_organization' ] ) ) {
+
+						$opts[ 'site_pub_schema_type' ] = 'organization';
+
+					} elseif ( ! empty( $opts[ 'schema_add_home_person' ] ) ) {
+
+						$opts[ 'site_pub_schema_type' ] = 'person';
+					}
+
+					unset( $opts[ 'schema_add_home_organization' ] );
+
+					unset( $opts[ 'schema_add_home_person' ] );
 				}
 
 				/**

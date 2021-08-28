@@ -42,7 +42,7 @@
 
 <h2>WooCommerce Product Attributes</h2>
 
-<p>The WPSSO Core Premium plugin will read all standard product information from WooCommerce automatically (prices, sku, sales, dimensions, variations, etc.), and can also read the following additional WooCommerce Product Attributes <em>if you create them in your WooCommerce store</em> (note that upper/lower case is important).</p>
+<p>The WPSSO Core Premium plugin will read all standard product information from WooCommerce automatically (prices, sku, sales, dimensions, variations, etc.), and can also read the following additional WooCommerce Product Attributes <em>if you create them in your WooCommerce store</em> (upper/lower case is important).</p>
 
 <ul>
 	<li><strong>Brand</strong></li>
@@ -66,7 +66,7 @@
 
 <p><strong>Please note</strong> that WooCommerce creates a selector on the purchase page for Product Attributes used for variations, which may be fine for some purchase options like Color, Condition, Size, etc., but is not suitable for other values like GTIN, ISBN, and MPN. We suggest activating the <a href="https://wordpress.org/plugins/wpsso-wc-metadata/">WPSSO Product Metadata for WooCommerce add-on</a>, or using one of the supported 3rd party plugins to manage singular product information like Brand, GTIN, ISBN, and MPN.</p>
 
-<p><strong>Please note</strong> the limited selection of product condition values (Damaged, New, Refurbished, or Used), which are determined by Schema.org and Google's Rich Results markup standard &mdash; do not use other values.</p>
+<p><strong>Please note</strong> the limited selection of product condition values (Damaged, New, Refurbished, or Used), which are determined by Schema.org and Google's Rich Results markup standard &mdash; do not use other values unless they are a more complete version of the same (for example, 'New', 'NewCondition', or 'https://schema.org/NewCondition' are all acceptable).</p>
 
 <p>If you use the <a href="https://woocommerce.com/products/brands/">WooCommerce Brands</a>, <a href="https://wordpress.org/plugins/perfect-woocommerce-brands/">Perfect WooCommerce Brands</a>, or the<a href="https://wordpress.org/plugins/search/yith-woocommerce-brands-add-on/">YITH WooCommerce Brands Add-on</a> plugin, the "Brand Attribute Name" and the "Product Brand Custom Field" options in WPSSO Core Premium will be disabled (as the supported plugin becomes the source of all product Brand information).</p>
 
@@ -74,9 +74,9 @@
 
 <h3>Google reports "missing a global identifier"?</h3>
 
-<p>If the Google Testing Tool reports that "This Product is missing a global identifier (e.g. isbn, mpn or gtin8)" for your WooCommerce products, note that the <em>global identifier</em> referred to by Google is not the Schema 'productID' property, but a general term used by Google for a missing <em>globally common product identifier</em> like the 'mpn' (aka Manufacturer Part Number) or another globally common product identifier (ISBN, GTIN, etc.).</p>
+<p>If the Google Test Tool reports that "This Product is missing a global identifier (e.g. isbn, mpn or gtin8)" for your WooCommerce products, note that the <em>global identifier</em> referred to by Google is not the Schema 'productID' property, but a general term used by Google for a missing <em>globally common product identifier</em> like the 'mpn' (aka Manufacturer Part Number) or another globally common product identifier (ISBN, GTIN, etc.).</p>
 
-<p>Unfortunately, the often used product 'sku' (aka Stock Keeping Unit) is a number that changes from one retailer to another, so is not valid as a <em>globally common product identifier</em>. If the Google Testing Tool reports a missing global identifier for your Schema Product markup, make sure you have created one (or more) of the WooCommerce Product Attributes for the MPN, ISBN, GTIN, etc., or activated one of these supported plugins / add-ons:</p>
+<p>Unfortunately, the often used product 'sku' (aka Stock Keeping Unit) is a number that changes from one retailer to another, so is not valid as a <em>globally common product identifier</em>. If the Google Test Tool reports a missing global identifier for your Schema Product markup, make sure you have created one (or more) of the WooCommerce Product Attributes for the MPN, ISBN, GTIN, etc., or activated one of these supported plugins / add-ons:</p>
 
 <ul>
 	<li><a href="https://wordpress.org/plugins/wpsso-wc-metadata/">WPSSO Product Metadata for WooCommerce</a> (add-on for WPSSO Core).</li>
@@ -88,7 +88,9 @@
 
 <h3>Customize Product Attribute Names</h3>
 
-<p>You can customize the default Product Attribute names that WPSSO Core Premium reads from WooCommerce under the <em>SSO &gt; Advanced Settings&gt; Editing Pages &gt; Product Attributes</em> tab. Modifying the default can be useful if you already have one or more existing WooCommerce Product Attributes with different names &mdash; for example, using the "Colour" Product Attribute name instead of "Color". ;-)</p>
+<p>You can customize the default Product Attribute names that WPSSO Core Premium reads from WooCommerce under the <em>SSO &gt; Advanced Settings&gt; Editing Pages &gt; Product Attributes</em> tab. Modifying the default name can be useful if you already have one or more existing WooCommerce Product Attributes with different names &mdash; for example, using the "Colour" Product Attribute name instead of "Color". ;-)</p>
+
+<blockquote><p><strong>WPSSO Core Premium uses the Product Attribute names to request Product Attribute values from WooCommerce. Make sure the Product Attribute names in the WPSSO Core settings are identical (upper/lower case is important) to the Product Attribute names you create and use in WooCommerce.</strong></p></blockquote>
 
 <h2>WordPress Custom Fields</h2>
 

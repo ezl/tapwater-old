@@ -1,35 +1,39 @@
-<h1>WPSSO Core (The Complete Meta Tag and Schema Markup Solution)</h1>
+<h1>WPSSO Core</h1><h3>The Complete Meta Tag and Schema Markup Solution</h3>
 
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Core</td></tr>
-<tr><th align="right" valign="top" nowrap>Summary</th><td>Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>7.9.0</td></tr>
+<tr><th align="right" valign="top" nowrap>Summary</th><td>Make sure your content looks great on social sites and search results, no matter how your URLs are crawled, shared, re-shared, posted, or embedded.</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>8.3.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>5.6 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>4.2 or newer</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.4.2</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>4.2.0</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.5</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>4.4.1</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://www.gnu.org/licenses/gpl.txt">GPLv3</a></td></tr>
-<tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>optimize, social, search, meta tags, schema, open graph, rich pins, twitter cards, seo, social sharing, structured data, rich snippets, facebook, linkedin</td></tr>
+<tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>twitter, google, pinterest, linkedin, facebook, open graph, rich pins, meta tags, schema, rich results, social sharing, seo, structured data</td></tr>
 </table>
 
 <h2>Description</h2>
 
 <p style="margin:0;"><img class="readme-icon" src="https://surniaulula.github.io/wpsso/assets/icon-256x256.png"></p>
 
-<h3>The Complete Meta Tag and Schema Markup Solution</h3>
+<p><strong>Make sure your content looks great on social sites and search results, no matter how your URLs are crawled, shared, re-shared, posted, or embedded:</strong></p>
 
-<p><strong>Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded:</strong></p>
+<p>WPSSO creates meta tags and Schema markup for Facebook / Open Graph, Pinterest Rich Pins, Twitter Cards, Google Knowledge Graph, Google Rich Results (aka Rich Snippets, Structured Data), WhatsApp and Messaging Apps, Mobile Web Browsers, WordPress REST API, LinkedIn / oEmbed data and more &mdash; including complete markup for image SEO, video SEO, extensive e-Commerce product markup (for WooCommerce and others), mobile store apps, author profile / authorship, co-authors, publisher information, local business markup, aggregate ratings, reviews, recipe information, event details, and much, much more &mdash; all from your existing WordPress content, supported plugin data, and service API data.</p>
 
-<p>WPSSO creates meta tags and Schema markup for Facebook / Open Graph, Google's Knowledge Graph, Google Rich Results (aka Rich Snippets, Structured Data), Mobile Web Browsers, oEmbed data for LinkedIn, Pinterest Rich Pins, Twitter Cards &mdash; including complete markup for image SEO, video SEO, extensive e-Commerce product markup (for WooCommerce and others), mobile store apps, author profile / authorship, co-authors, publisher information, local business markup, aggregate ratings, reviews, recipe information, event details, and much, much more &mdash; all from your existing WordPress content, supported plugin data, and service API data.</p>
+<p><strong>Uses your existing WordPress content, plugin data, and service API data:</strong></p>
 
-<p>There's no need to manually re-enter descriptions, titles, product information, re-select images / videos, etc. like other meta tag and Schema markup plugins &mdash; WPSSO reads all your existing post, page, image, video, e-commerce product, recipe, rating, review, event, and SEO content automatically.</p>
+<p>There's no need to manually re-enter descriptions, titles, product information, re-select images / videos, etc. like other meta tag, SEO and Schema markup plugins.</p>
 
-<p>WPSSO is also language / locale aware, which means you can customize several option values for different webpage languages.</p>
+<p>WPSSO can be used as your one and only <em>social and search optimization</em> plugin, or in combination with your favorite SEO plugin to improve its meta tags and Schema markup (including, All In One SEO Pack, Jetpack SEO Tools, Rank Math SEO, SEO Ultimate, The SEO Framework, WP Meta SEO, Yoast SEO, and more).</p>
 
-<p><strong>Coded for maximum performance:</strong></p>
+<p><strong>Customize the plugin settings for different languages:</strong></p>
 
-<p>WPSSO makes full use of all available caching methods &mdash; along with offering advanced caching features like pre-seeding in background. WPSSO Core and its complementary add-ons load only the libraries and classes they need, keeping their code small, fast and light. All code is fully tested and compatible with the latest version of WordPress and PHP v7.x (WordPress v4.2 and PHP v5.6 or newer required).</p>
+<p>Text, image, and video related options are WordPress language / locale aware, which means you can easily switch languages and customize these options for different front-end webpage languages.</p>
+
+<p><strong>Coded for maximum WordPress performance and compatibility:</strong></p>
+
+<p>WPSSO makes full use of all available caching methods &mdash; along with offering advanced caching features like pre-seeding in background. WPSSO Core and its complementary add-ons load only the libraries and classes they need, keeping their code small, fast and light. All code is fully tested and compatible with the latest version of WordPress and PHP v7.x (WordPress v4.2 and PHP v5.6 or newer is required).</p>
 
 <h3>Users Love the WPSSO Core Plugin</h3>
 
@@ -51,11 +55,9 @@
 <ul>
 <li>Open Graph (Facebook and oEmbed)</li>
 <li>Pinterest Pin It</li>
-<li>Schema</li>
-<li>Schema Article</li>
-<li>Schema Article AMP 1:1</li>
-<li>Schema Article AMP 4:3</li>
-<li>Schema Article AMP 16:9</li>
+<li>Schema 1:1 (Google Rich Results)</li>
+<li>Schema 4:3 (Google Rich Results)</li>
+<li>Schema 16:9 (Google Rich Results)</li>
 <li>Schema Thumbnail Image</li>
 <li>Twitter Summary Card</li>
 <li>Twitter Large Image Summary Card</li>
@@ -73,14 +75,14 @@
 <li>Archive Pages</li>
 </ul></li>
 <li><p>Customize values in the Document SSO metabox when editing posts, pages, custom post types, terms (categories and tags), custom post types, and user profiles.</p></li>
-<li><p>Built-in support for AMP plugins:</p>
+<li><p>Built-in compatibility with AMP plugins:</p>
 
 <ul>
 <li><a href="https://wordpress.org/plugins/amp/">AMP</a></li>
 <li><a href="https://wordpress.org/plugins/better-amp/">Better AMP</a></li>
 <li><a href="https://wordpress.org/plugins/accelerated-mobile-pages/">AMP for WP</a></li>
 </ul></li>
-<li><p>Built-in support for caching plugins:</p>
+<li><p>Built-in compatibility with caching plugins:</p>
 
 <ul>
 <li>Autoptimize</li>
@@ -95,7 +97,7 @@
 <li>WP Rocket Cache</li>
 <li>WP Super Cache.</li>
 </ul></li>
-<li><p>Built-in support for advanced WordPress configurations:</p>
+<li><p>Built-in compatibility for advanced WordPress configurations:</p>
 
 <ul>
 <li>WordPress MU Domain Mapping</li>
@@ -114,9 +116,9 @@
 <li><p>Contextual help for every plugin option and <a href="https://wpsso.com/docs/plugins/wpsso/">comprehensive online documentation</a>.</p></li>
 </ul>
 
-<h3>Free Complementary Add-ons for WPSSO Core</h3>
+<h3>Free Complementary Add-ons</h3>
 
-<p>Optionally activate free complementary add-on(s) for non-standard features:</p>
+<p>Optionally activate free complementary add-ons for more non-standard features:</p>
 
 <ul>
 <li><a href="https://wordpress.org/plugins/wpsso-faq/">WPSSO FAQ Manager</a> to manage FAQ categories with Question and Answer pages.</li>
@@ -140,9 +142,9 @@
 <p>The Standard version is designed to satisfy the requirements of most standard WordPress sites / blogs. If your site requires additional 3rd party plugin or service API integration, like WooCommerce shops, embedded video support, or advanced customization features, then you may want the Premium version for those additional features.</p>
 
 <ul>
-<li><p>Support for embedded videos from Facebook, Slideshare, Vimeo, Wistia, and Youtube in content text.</p></li>
-<li><p>Twitter <a href="https://dev.twitter.com/cards/types/player">Player Card</a> for embedded videos from Facebook, Slideshare, Vimeo, Wistia, and Youtube.</p></li>
-<li><p>Optionally upscale small images from the Media Library for social sharing and Schema markup.</p></li>
+<li><p>Detection of embedded videos from Facebook, Slideshare, Vimeo, Wistia, and Youtube in the content text.</p></li>
+<li><p>Support for the Twitter <a href="https://dev.twitter.com/cards/types/player">Player Card</a> for embedded videos.</p></li>
+<li><p>Optional upscaling of small images from the Media Library for social sharing and Schema markup.</p></li>
 <li><p>URL shortening with Bitly, DLMY.App, Google, Ow.ly, TinyURL, or YOURLS.</p></li>
 <li><p>Integrates with 3rd party plugins and service APIs for additional image, video, eCommerce product details, SEO settings, etc. The following modules are included with the Premium version, and are automatically loaded if/when the supported plugins and/or services are required.</p>
 
@@ -171,7 +173,6 @@
 <li><a href="https://wordpress.org/plugins/woocommerce-currency-switcher/">WooCommerce Currency Switcher</a></li>
 <li><a href="https://wordpress.org/plugins/woo-add-gtin/">WooCommerce UPC, EAN, and ISBN</a></li>
 <li>WooCommerce Show Single Variations</li>
-<li><a href="https://wordpress.org/plugins/wp-e-commerce/">WP eCommerce</a></li>
 <li><a href="https://wordpress.org/plugins/wp-job-manager/">WP Job Manager</a></li>
 <li><a href="https://wordpress.org/plugins/wp-meta-seo/">WP Meta SEO</a></li>
 <li><a href="https://wordpress.org/plugins/wp-postratings/">WP-PostRatings</a></li>
@@ -191,6 +192,7 @@
 <li>Facebook Embedded Videos</li>
 <li>Gravatar (Author Image)</li>
 <li>Ow.ly</li>
+<li>Shopper Approved (Ratings and Reviews)</li>
 <li>Slideshare Presentations</li>
 <li>Soundcloud Tracks (for the Twitter Player Card)</li>
 <li>TinyURL</li>
@@ -238,7 +240,6 @@
 <ul>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/can-i-use-the-pro-version-on-multiple-websites/">Can I use the Premium plugin on multiple websites?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/does-linkedin-read-the-open-graph-meta-tags/">Does LinkedIn read the Open Graph meta tags?</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-can-i-exclude-ignore-certain-parts-of-the-content-text/">How can I exclude / ignore certain parts of the content text?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-can-i-fix-a-err_too_many_redirects-error/">How can I fix a ERR_TOO_MANY_REDIRECTS error?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-can-i-fix-a-generic-http-500-error/">How can I fix a generic HTTP 500 error?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/how-can-i-fix-a-php-fatal-out-of-memory-error/">How can I fix a PHP fatal "out of memory" error?</a></li>
@@ -256,7 +257,7 @@
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/w3c-says-there-is-no-attribute-property/">W3C says "there is no attribute 'property'"</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/why-are-some-html-elements-missing-misaligned-different/">Why are some HTML elements missing / misaligned / different?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/why-does-facebook-show-the-wrong-image-text/">Why does Facebook show the wrong image / text?</a></li>
-<li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/why-does-google-structured-data-testing-tool-show-errors/">Why does Google Structured Data Testing Tool show errors?</a></li>
+<li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/why-does-google-structured-data-testing-tool-show-errors/">Why does Google Structured Data Test Tool show errors?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/why-is-the-open-graph-title-the-same-for-every-webpage/">Why is the Open Graph title the same for every webpage?</a></li>
 <li><a href="https://wpsso.com/docs/plugins/wpsso/faqs/why-shouldnt-i-upload-small-images-to-the-media-library/">Why shouldn't I upload small images to the Media library?</a></li>
 </ul>

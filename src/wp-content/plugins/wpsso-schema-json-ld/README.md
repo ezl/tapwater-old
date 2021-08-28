@@ -3,14 +3,14 @@
 <table>
 <tr><th align="right" valign="top" nowrap>Plugin Name</th><td>WPSSO Schema JSON-LD Markup</td></tr>
 <tr><th align="right" valign="top" nowrap>Summary</th><td>Google Rich Results and Structured Data for Articles, Carousels, Events, FAQ Pages, How-Tos, Local SEO, Products, Recipes, Ratings, Reviews, and More.</td></tr>
-<tr><th align="right" valign="top" nowrap>Stable Version</th><td>3.11.0</td></tr>
+<tr><th align="right" valign="top" nowrap>Stable Version</th><td>4.2.0</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires PHP</th><td>5.6 or newer</td></tr>
 <tr><th align="right" valign="top" nowrap>Requires WordPress</th><td>4.2 or newer</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.4.2</td></tr>
-<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>4.2.0</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WordPress</th><td>5.5</td></tr>
+<tr><th align="right" valign="top" nowrap>Tested Up To WooCommerce</th><td>4.4.1</td></tr>
 <tr><th align="right" valign="top" nowrap>Contributors</th><td>jsmoriss</td></tr>
 <tr><th align="right" valign="top" nowrap>License</th><td><a href="https://www.gnu.org/licenses/gpl.txt">GPLv3</a></td></tr>
-<tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>schema.org, schema, rich snippets, structured data, rich results, woocommerce, seo, image seo, video seo, local seo, news seo, knowledge graph</td></tr>
+<tr><th align="right" valign="top" nowrap>Tags / Keywords</th><td>schema.org, rich results, image seo, video seo, woocommerce, schema, rich results, structured data, seo, news seo, knowledge graph</td></tr>
 </table>
 
 <h2>Description</h2>
@@ -19,11 +19,9 @@
 
 <p><strong>Supports over 495 different Schema types and sub-types:</strong></p>
 
-<p>Google Rich Results and Structured Data for Articles, Carousels (aka Item Lists), Claim Reviews, Events, FAQ Pages, How-Tos, Images, Local Business / Local SEO, Organizations, Products, Ratings, Recipes, Restaurants, Reviews, Videos, and more.</p>
+<p>Google Rich Results and Structured Data for Articles, Carousels (aka Item Lists), Claim Reviews, Events, FAQ Pages, How-Tos, Images, Local Business / Local SEO, Organizations, Products, Ratings, Recipes, Restaurants, Reviews, Video Objects, and more.</p>
 
-<p>Uses filters to dynamically (and automatically) create Schema markup, allowing the WPSSO Schema JSON-LD Markup add-on to provide an almost unlimited number of Schema types, children sub-types, and properties inherited from each parent type (for example, Restaurant is a sub-type of Food Establishment, which is a sub-type of Local Business, which is sub-type of <em>both</em> Organization <em>and</em> Place, which are both sub-types of Thing).</p>
-
-<p><strong>Uses your existing WordPress content, plugin and service API data:</strong></p>
+<p><strong>Reads your existing WordPress content, plugin and service API data:</strong></p>
 
 <p>There's no need to manually re-create descriptions, titles, product information, re-select images / videos, etc.</p>
 
@@ -31,7 +29,7 @@
 
 <p><strong>Most complete Schema JSON-LD markup for WooCommerce products:</strong></p>
 
-<p>The WooCommerce plugin is known to offer incomplete Schema markup for Google. The <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium plugin</a> (required for WooCommerce integration) and its WPSSO Schema JSON-LD add-on provide a far better solution by offering complete Facebook / Pinterest Product meta tags and Schema Product markup for Google Rich Results (aka Rich Snippets) &mdash; including additional product images, product variations, product information (brand, color, condition, dimensions, material, size, weight, SKU, GTIN-8/12/13/14, EAN, ISBN, MPN, etc), product reviews, product ratings, prices and currencies, sale start / end dates, sale prices, pre-tax prices, VAT prices, and much, much more.</p>
+<p>The WooCommerce plugin is known to offer incomplete Schema markup for Google. The <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium plugin</a> (required for WooCommerce integration) and this add-on provide a far better solution by offering complete Facebook / Pinterest Product meta tags and Schema Product markup for Google Rich Results (aka Rich Snippets) &mdash; including additional product images, product variations, product information (brand, color, condition, dimensions, material, size, weight, SKU, GTIN-8/12/13/14, EAN, ISBN, MPN, etc), product reviews, product ratings, prices and currencies, sale start / end dates, sale prices, pre-tax prices, VAT prices, and much, much more.</p>
 
 <p><strong>Fixes all Google Search Console / Structured Data Testing Tool errors:</strong></p>
 
@@ -54,7 +52,7 @@
 
 <p>Some Schema property values may require data from <a href="https://wpsso.com/extend/plugins/wpsso/">WPSSO Core Premium</a> supported 3rd party plugins and service APIs.</p>
 
-<p>Google regularly updates and changes their Schema markup requirements - WPSSO JSON Premium customers can also <a href="https://surniaulula.com/support/">open a Premium support ticket for assistance</a> with any new Google testing tool errors.</p>
+<p>Google regularly updates and changes their Schema markup requirements - WPSSO JSON Premium customers can also <a href="https://surniaulula.com/support/">open a Premium support ticket for timely assistance</a> with any new Google testing tool errors.</p>
 
 <h3>Users Love the WPSSO JSON Add-on</h3>
 
@@ -72,8 +70,8 @@
 <li><p>Extends the features of the WPSSO Core plugin.</p></li>
 <li><p>Provides accurate and comprehensive Schema JSON-LD markup for Google Rich Results (aka Rich Snippets) with Structured Data.</p></li>
 <li><p>Provides complete Schema ImageObject SEO markup with image information from the WordPress Media Library (name, alternateName, alternativeHeadline, caption, description, fileFormat, uploadDate, and more).</p></li>
-<li><p>Provides complete Schema VideoObject SEO markup with video information from WPSSO Core Premium service APIs (Facebook, Slideshare, Soundcloud, Vimeo, Wistia, YouTube).</p></li>
-<li><p>Provides Schema Article AMP 1:1, 4:3, and 16:9 images for mobile Google Rich Results (see the <a href="https://developers.google.com/search/docs/data-types/article#amp-sd">Google Article AMP structured data guidelines</a> for details).</p></li>
+<li><p>Provides complete Schema VideoObject SEO markup with video information from WPSSO Core Premium service APIs (Facebook, Slideshare, Soundcloud, Vimeo, Wistia, YouTube) including the 'embedUrl' and 'contentUrl' properties for Google.</p></li>
+<li><p>Provides Schema 1:1, 4:3, and 16:9 images for Google Rich Results (see the <a href="https://developers.google.com/search/docs/guides/search-gallery">Google rich results search library</a> for details).</p></li>
 <li><p>Provides Schema FAQPage and Question / Answer markup for the <a href="https://wordpress.org/plugins/wpsso-faq/">WPSSO FAQ Manager</a> add-on.</p></li>
 <li><p>Includes Schema JSON-LD scripts from shortcodes and WordPress editor blocks in the Schema CreativeWork type and sub-types.</p></li>
 <li><p>Built-in support for <a href="https://wordpress.org/plugins/amp/">AMP</a>, <a href="https://wordpress.org/plugins/better-amp/">Better AMP</a>, and <a href="https://wordpress.org/plugins/accelerated-mobile-pages/">AMP for WP</a> plugins.</p></li>
@@ -139,8 +137,10 @@
 <li>Family Friendly</li>
 <li>Copyright Year</li>
 <li>License URL</li>
-<li>Publisher</li>
-<li>Service Provider</li>
+<li>Publisher (Org)</li>
+<li>Publisher (Person)</li>
+<li>Service Provider (Org)</li>
+<li>Service Provider (Person)</li>
 </ul></li>
 <li>Event Information
 
@@ -149,10 +149,10 @@
 <li>Event Attendance</li>
 <li>Event Online URL</li>
 <li>Event Physical Venue</li>
-<li>Event Organizer Organization</li>
-<li>Event Organizer Person</li>
-<li>Event Performer Organization</li>
-<li>Event Performer Person</li>
+<li>Event Organizer (Org)</li>
+<li>Event Organizer (Person)</li>
+<li>Event Performer (Org)</li>
+<li>Event Performer (Person)</li>
 <li>Event Start (date, time, timezone)</li>
 <li>Event End (date, time, timezone)</li>
 <li>Event Offers Start (date, time, timezone)</li>

@@ -1,0 +1,133 @@
+body {
+  height: 100%;
+  margin: 0;
+  font-family: "sans-serif";
+}
+
+#map-container {
+  height: 100vh;
+  width: 100vw;
+  margin: 0 auto;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  padding: 12px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: #08303b;
+  border-radius: 5px;
+  min-width: 200px;
+  box-shadow: 0 0 65px 20px rgba(8, 48, 59, 0.5);
+  color: #fff;
+}
+.info .map__info-country-name {
+  font-size: 22px;
+  font-weight: 300;
+}
+
+.info .map__info-country-rate {
+  margin-bottom: 12px;
+  margin-top: 0;
+}
+
+.info .map__info--details-link {
+  color: #ff9f00;
+  text-decoration: none;
+}
+
+.city-info {
+  padding: 0;
+  margin: 0.25rem 0!important;
+}
+
+.city-info-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  content: "";
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.icon-hovered {
+  border: 5px solid red;
+}
+
+.city-marker-container:hover .city-marker {
+  box-shadow: 0 0 10px 3px #000;
+}
+
+
+.leaflet-left {
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  bottom: 25px;
+}
+
+.map-legend {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 0 auto!important;
+  padding: 5px 0;
+  float: none;
+  background-color: #ddd;
+  border-radius: 5px;
+}
+
+.legend-item__container {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  font-size: 14px;
+}
+
+.grade-color {
+  width: 15px;
+  height: 15px;
+  margin-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+  .map-legend {
+    padding: 15px;
+    justify-content: center;
+  }
+
+  .leaflet-top.leaflet-right {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .legend-item__container {
+    width: auto;
+    font-size: 18px;
+    margin-right: 20px;
+    flex-direction: row;
+  }
+
+  .grade-color {
+    width: 25px;
+    height: 25px;
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
+
+}
+
+@media (min-width: 1280px) {
+  .map-legend {
+    width: 75%;
+  }
+  .legend-item__container {
+    flex: 1;
+  }
+
+}

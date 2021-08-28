@@ -21,8 +21,11 @@ while(have_posts()){
         
         the_content(); 
         
-        get_template_part('world', 'map'); 
-        
+        if(is_user_logged_in()):
+            get_template_part('test', 'map'); 
+        else:
+            get_template_part('world', 'map'); 
+        endif;
         ?>
 	
 	</div><!-- .entry-content -->

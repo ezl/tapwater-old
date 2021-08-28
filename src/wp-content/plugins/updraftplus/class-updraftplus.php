@@ -135,8 +135,11 @@ class UpdraftPlus {
 
 		add_action('updraft_report_remotestorage_extrainfo', array($this, 'report_remotestorage_extrainfo'), 10, 3);
 
-		// Prevent people upgrading from being baffled by WP's obscure error message. See: https://core.trac.wordpress.org/ticket/27196
-		add_filter('upgrader_source_selection', array($this, 'upgrader_source_selection'), 10, 4);
+		// Prevent people using WP < 5.5 upgrading from being baffled by WP's obscure error message. See: https://core.trac.wordpress.org/ticket/27196
+		
+		if (version_compare($this->get_wordpress_version(), '5.4.99999999', '<')) {
+			add_filter('upgrader_source_selection', array($this, 'upgrader_source_selection'), 10, 4);
+		}
 		
 		// register_deactivation_hook(__FILE__, array($this, 'deactivation'));
 		if (!empty($_POST) && !empty($_GET['udm_action']) && 'vault_disconnect' == $_GET['udm_action'] && !empty($_POST['udrpc_message']) && !empty($_POST['reset_hash'])) {
@@ -338,6 +341,11 @@ class UpdraftPlus {
 		}
 	}
 
+	/**
+	 * Attempt to close the connection to the browser, optionally with some output sent first, whilst continuing execution
+	 *
+	 * @param String $txt - output to send
+	 */
 	public function close_browser_connection($txt = '') {
 		// Close browser connection so that it can resume AJAX polling
 		header('Content-Length: '.(empty($txt) ? '0' : 4+strlen($txt)));
@@ -390,6 +398,11 @@ class UpdraftPlus {
 		return $matches;
 	}
 
+	/**
+	 * Fetch information about the most recently modified log file
+	 *
+	 * @return Array - lists the modification time, the full path to the log file, and the log's nonce (ID)
+	 */
 	public function last_modified_log() {
 		$updraft_dir = $this->backups_dir_location();
 
@@ -630,6 +643,13 @@ class UpdraftPlus {
 		wp_die('<h1>'.__('Under Maintenance', 'updraftplus') .'</h1><p>'.__('Briefly unavailable for scheduled maintenance. Check back in a minute.', 'updraftplus').'</p>');
 	}
 
+	/**
+	 * Get the installation's base table prefix, optionally allowing the result to be filtered
+	 *
+	 * @param Boolean $allow_override - allow the result to be filtered
+	 *
+	 * @return String
+	 */
 	public function get_table_prefix($allow_override = false) {
 		global $wpdb;
 		if (is_multisite() && !defined('MULTISITE')) {
@@ -638,7 +658,7 @@ class UpdraftPlus {
 		} else {
 			$prefix = $wpdb->get_blog_prefix(0);
 		}
-		return ($allow_override) ? apply_filters('updraftplus_get_table_prefix', $prefix) : $prefix;
+		return $allow_override ? apply_filters('updraftplus_get_table_prefix', $prefix) : $prefix;
 	}
 
 	public function siteid() {
@@ -742,7 +762,6 @@ class UpdraftPlus {
 	public function updraftcentral_listener_post_udrpc_action() {
 		$this->register_wp_http_option_hooks(false);
 	}
-
 	
 	/**
 	 * Register our class. WP filter updraftplus_remotecontrol_command_classes.
@@ -801,6 +820,22 @@ class UpdraftPlus {
 			$got_wp_version = $wp_version;
 		}
 		return $got_wp_version;
+	}
+
+	/**
+	 * Get the UpdraftPlus version and convert it to the correct format to be used in filenames
+	 *
+	 * @return String - the file version number
+	 */
+	public function get_updraftplus_file_version() {
+		
+		if ($this->use_unminified_scripts()) return '';
+		
+		$version_parts = explode('.', $this->version);
+		$version_parts = array_slice($version_parts, 0, 3);
+		$version = implode('.', $version_parts);
+		
+		return '-'.str_replace('.', '-', $version).'.min';
 	}
 
 	/**
@@ -1577,7 +1612,10 @@ class UpdraftPlus {
 				if (false !== strpos($potsql, ' ')) $potsql = "'$potsql'";
 			}
 				
-			$exec .= "$potsql --defaults-file=$pfile --max_allowed_packet=1M --quote-names --add-drop-table --skip-comments --skip-set-charset --allow-keywords --dump-date --extended-insert --where=option_name=$siteurl --user=".escapeshellarg(DB_USER)." --host=".escapeshellarg(DB_HOST)." ".DB_NAME." ".escapeshellarg($table_name)."";
+			// Allow --max_allowed_packet to be configured via constant. Experience has shown some customers with complex CMS or pagebuilder setups can have extrememly large postmeta entries.
+			$msqld_max_allowed_packet = (defined('UPDRAFTPLUS_MYSQLDUMP_MAX_ALLOWED_PACKET') && (is_int(UPDRAFTPLUS_MYSQLDUMP_MAX_ALLOWED_PACKET) || is_string(UPDRAFTPLUS_MYSQLDUMP_MAX_ALLOWED_PACKET))) ? UPDRAFTPLUS_MYSQLDUMP_MAX_ALLOWED_PACKET : '1M';
+				
+			$exec .= "$potsql --defaults-file=$pfile --max_allowed_packet=$msqld_max_allowed_packet --quote-names --add-drop-table --skip-comments --skip-set-charset --allow-keywords --dump-date --extended-insert --where=option_name=$siteurl --user=".escapeshellarg(DB_USER)." --host=".escapeshellarg(DB_HOST)." ".DB_NAME." ".escapeshellarg($table_name)."";
 			
 			$handle = popen($exec, "r");
 			if ($handle) {
@@ -3502,6 +3540,7 @@ class UpdraftPlus {
 		$this->attachments = apply_filters('updraft_report_attachments', $attachments);
 
 		if (count($this->attachments) > 0) add_action('phpmailer_init', array($this, 'phpmailer_init'));
+		add_action('phpmailer_init', array($this, 'set_sender_email_address'), 9);
 
 		$attach_size = 0;
 		$unlink_files = array();
@@ -3547,6 +3586,7 @@ class UpdraftPlus {
 		foreach ($unlink_files as $file) @unlink($file);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 
 		do_action('updraft_report_finished');
+		remove_action('phpmailer_init', array($this, 'set_sender_email_address'), 9);
 		if (count($this->attachments) > 0) remove_action('phpmailer_init', array($this, 'phpmailer_init'));
 
 	}
@@ -3567,7 +3607,22 @@ class UpdraftPlus {
 			}
 		}
 	}
-	
+
+	/**
+	 * Set the email sender to the administration email address
+	 *
+	 * @param Object $phpmailer PHPMailer object
+	 */
+	public function set_sender_email_address($phpmailer) {
+		$sitename = preg_replace('/^www\./i', '', strtolower($_SERVER['SERVER_NAME']));
+		$admin_email = get_bloginfo('admin_email');
+		$admin_email_domain = preg_replace('/^[^@]+@(.+)$/', "$1", $admin_email);
+		if (trim(strtolower($sitename)) === trim(strtolower($admin_email_domain))) {
+			// assuming (non validating) that the email account of the admin email does exist, and the admin email is under the same domain as with the web domain and the domain exists and live as well
+			$phpmailer->setFrom(get_bloginfo('admin_email'), sprintf(__('UpdraftPlus on %s', 'updraftplus'), $sitename), false);
+		}
+	}
+
 	/**
 	 * This function returns 'true' if mod_rewrite could be detected as unavailable; a 'false' result may mean it just couldn't find out the answer
 	 *
@@ -3878,7 +3933,7 @@ class UpdraftPlus {
 	/**
 	 * For detecting another run, and aborting if one was found
 	 *
-	 * @param  String $file - full file path of the file to check
+	 * @param String $file - full file path of the file to check
 	 */
 	public function check_recent_modification($file) {
 		if (file_exists($file)) {
@@ -4550,6 +4605,9 @@ class UpdraftPlus {
 		$tables_found = array();
 		$db_charsets_found = array();
 
+		$db_scan_timed_out = false;
+		$php_max_input_vars_exceeded = false;
+
 		// TODO: If the backup is the right size/checksum, then we could restore the $line <= 100 in the 'while' condition and not bother scanning the whole thing? Or better: sort the core tables to be first so that this usually terminates early
 
 		$wanted_tables = array('terms', 'term_taxonomy', 'term_relationships', 'commentmeta', 'comments', 'links', 'options', 'postmeta', 'posts', 'users', 'usermeta');
@@ -4595,6 +4653,7 @@ class UpdraftPlus {
 							if (UpdraftPlus_Manipulation_Functions::normalise_url($old_siteurl) == UpdraftPlus_Manipulation_Functions::normalise_url(site_url())) {
 								// Same site migration with only http/https difference
 								$info['same_url'] = false;
+								$info['url_scheme_change'] = true;
 								$old_siteurl_parsed = parse_url($old_siteurl);
 								$actual_siteurl_parsed = parse_url(site_url());
 								if ((stripos($old_siteurl_parsed['host'], 'www.') === 0 && stripos($actual_siteurl_parsed['host'], 'www.') !== 0) || (stripos($old_siteurl_parsed['host'], 'www.') !== 0 && stripos($actual_siteurl_parsed['host'], 'www.') === 0)) {
@@ -4616,6 +4675,7 @@ class UpdraftPlus {
 							} else {
 								// For completely different site migration
 								$info['same_url'] = false;
+								$info['url_scheme_change'] = false;
 								$warn[] = apply_filters('updraftplus_dbscan_urlchange', '<a href="https://updraftplus.com/shop/migrator/" target="_blank">'.sprintf(__('This backup set is from a different site (%s) - this is not a restoration, but a migration. You need the Migrator add-on in order to make this work.', 'updraftplus'), htmlspecialchars($old_siteurl.' / '.untrailingslashit(site_url()))).'</a>', $old_siteurl, $res);
 							}
 							if (!class_exists('UpdraftPlus_Addons_Migrator')) {
@@ -4630,6 +4690,7 @@ class UpdraftPlus {
 					} else {
 						// For exactly same URL site restoration
 						$info['same_url'] = true;
+						$info['url_scheme_change'] = false;
 					}
 				} elseif ('' == $old_home && preg_match('/^\# Home URL: (http(.*))$/', $buffer, $matches)) {
 					$old_home = untrailingslashit($matches[1]);
@@ -4759,8 +4820,10 @@ class UpdraftPlus {
 			}
 		}
 		if ($is_plain) {
+			if (!feof($dbhandle)) $db_scan_timed_out = true;
 			@fclose($dbhandle);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 		} else {
+			if (!gzeof($dbhandle)) $db_scan_timed_out = true;
 			@gzclose($dbhandle);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 		}
 		if (!empty($db_supported_character_sets)) {
@@ -4920,10 +4983,26 @@ class UpdraftPlus {
 			}
 		}
 
+		$php_max_input_vars = ini_get("max_input_vars"); // phpcs:ignore PHPCompatibility.IniDirectives.NewIniDirectives.max_input_varsFound -- does not exist in PHP 5.2
+		
+		if (false == $php_max_input_vars) {
+			$php_max_input_vars_exceeded = true;
+		} elseif (count($tables_found) >= 0.90 * $php_max_input_vars) {
+			$php_max_input_vars_exceeded = true;
+		}
+
 		$select_restore_tables = '<div class="notice below-h2 updraft-restore-option">';
 		$select_restore_tables .= '<p>'.__('If you do not want to restore all your tables, then choose some to exclude here.', 'updraftplus').'(<a href="#" id="updraftplus_restore_tables_showmoreoptions">...</a>)</p>';
 
 		$select_restore_tables .= '<div class="updraftplus_restore_tables_options_container" style="display:none;">';
+
+		if ($db_scan_timed_out || $php_max_input_vars_exceeded) {
+			if ($db_scan_timed_out) $all_other_table_title = __('The database scan was taking too long and consequently the list of all tables in the database could not be completed. This option will ensure all tables not found will be backed up.', 'updraftplus');
+			if ($php_max_input_vars_exceeded) $all_other_table_title = __('The amount of database tables scanned is near or over the php_max_input_vars value so some tables maybe truncated. This option will ensure all tables not found will be backed up.', 'updraftplus');
+			$select_restore_tables .= '<input class="updraft_restore_table_options" id="updraft_restore_table_udp_all_other_tables" checked="checked" type="checkbox" name="updraft_restore_table_options[]" value="udp_all_other_tables"> ';
+			$select_restore_tables .= '<label for="updraft_restore_table_udp_all_other_tables"  title="'.$all_other_table_title.'">'.__('Include all tables not listed below', 'updraftplus').'</label><br>';
+		}
+
 		foreach ($tables_found as $table) {
 			$select_restore_tables .= '<input class="updraft_restore_table_options" id="updraft_restore_table_'.$table.'" checked="checked" type="checkbox" name="updraft_restore_table_options[]" value="'.$table.'"> ';
 			$select_restore_tables .= '<label for="updraft_restore_table_'.$table.'">'.$table.'</label><br>';
@@ -4942,15 +5021,27 @@ class UpdraftPlus {
 	/**
 	 * Get the current outgoing IP address. Use this wisely; of course, it's not guaranteed to always be the same.
 	 *
+	 * @param Boolean $use_ipv6_service True to check the IP address using the IPv6 service with IPv4 fallback, false to use the IPv4 service only
 	 * @return String|Boolean - returns false upon failure
 	 */
-	public function get_outgoing_ip_address() {
-		$ip_lookup = wp_remote_get('https://ipvigilante.com/json', array('timeout' => 6));
-		if (200 == wp_remote_retrieve_response_code($ip_lookup)) {
-			$info = json_decode(wp_remote_retrieve_body($ip_lookup), true);
-			if (!empty($info['status']) && !empty($info['data']) && 'success' === $info['status']);
-			if (!empty($info['data']['ipv4'])) return $info['data']['ipv4'];
-			if (!empty($info['data']['ipv6'])) return $info['data']['ipv6'];
+	public function get_outgoing_ip_address($use_ipv6_service = false) {
+		$urls = array('https://ipvigilante.com/json');
+		if ($use_ipv6_service) array_unshift($urls, 'http://ip6.me/api');
+		$urls = apply_filters('updraftplus_get_outgoing_ip_address', $urls);
+		foreach ($urls as $url) {
+			$ip_lookup = wp_remote_get($url, array('timeout' => 6));
+			if (200 === wp_remote_retrieve_response_code($ip_lookup)) {
+				$body = wp_remote_retrieve_body($ip_lookup);
+				$info = json_decode($body, true);
+				if (is_array($info)) {
+					if (!empty($info['status']) && !empty($info['data']) && 'success' === $info['status']);
+					if (!empty($info['data']['ipv4'])) return $info['data']['ipv4'];
+					if (!empty($info['data']['ipv6'])) return $info['data']['ipv6'];
+				} elseif (preg_match_all('/([^"\',]+|"(?:[^"]|")*?"|\'(?:[^\']|\')*?\')?(?:,|$)/is', $body, $matches)) { // https://regex101.com/r/Q8XjT4/1/
+					$matches[1][0] = strtolower(trim($matches[1][0], ',\'" '));
+					if (('ipv4' === $matches[1][0] || 'ipv6' === $matches[1][0]) && !empty($matches[1][1])) return trim($matches[1][1], ',\'" ');
+				}
+			}
 		}
 		return false;
 	}
@@ -5022,7 +5113,7 @@ class UpdraftPlus {
 	public static function get_current_clean_url() {
 	
 		// Within an UpdraftCentral context, there should be no prefix on the anchor link
-		if (defined('UPDRAFTCENTRAL_COMMAND') && UPDRAFTCENTRAL_COMMAND) return '';
+		if (defined('UPDRAFTCENTRAL_COMMAND') && UPDRAFTCENTRAL_COMMAND || defined('WP_CLI') && WP_CLI) return '';
 		
 		if (defined('DOING_AJAX') && DOING_AJAX) {
 			$current_url = $_SERVER["HTTP_REFERER"];

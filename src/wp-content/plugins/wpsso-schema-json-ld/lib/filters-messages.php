@@ -20,9 +20,6 @@ if ( ! class_exists( 'WpssoJsonFiltersMessages' ) ) {
 		 */
 		public function __construct( &$plugin ) {
 
-			/**
-			 * Just in case - prevent filters from being hooked and executed more than once.
-			 */
 			static $do_once = null;
 
 			if ( true === $do_once ) {
@@ -120,30 +117,42 @@ if ( ! class_exists( 'WpssoJsonFiltersMessages' ) ) {
 
 				 	break;
 
-				case 'tooltip-meta-schema_pub_org_id':			// Publisher.
+				case 'tooltip-meta-schema_pub_org_id':		// Publisher (Org).
 
-					$text = __( 'Select a publisher for the Schema CreativeWork type and/or its sub-types (Article, BlogPosting, WebPage, etc).', 'wpsso-schema-json-ld' );
+					$text = __( 'Select a publisher organization for the Schema CreativeWork type and/or its sub-types (Article, BlogPosting, WebPage, etc).', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-meta-schema_prov_org_id':			// Service Provider.
+				case 'tooltip-meta-schema_pub_person_id':	// Publisher (Person).
+
+					$text = __( 'Select a publisher person for the Schema CreativeWork type and/or its sub-types (Article, BlogPosting, WebPage, etc).', 'wpsso-schema-json-ld' );
+
+				 	break;
+
+				case 'tooltip-meta-schema_prov_org_id':		// Service Prov. (Org).
+				case 'tooltip-meta-schema_prov_person_id':	// Service Prov. (Person).
 
 					$text = __( 'Select a service provider, service operator or service performer (example: "Netflix").', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-meta-schema_copyright_year':		// Copyright Year.
+				case 'tooltip-meta-schema_copyright_year':	// Copyright Year.
 
 					$text = __( 'The year during which the claimed copyright was first asserted for this creative work.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-meta-schema_license_url':			// License URL.
+				case 'tooltip-meta-schema_license_url':		// License URL.
 
 					$text = __( 'A license document URL that applies to this content.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
+				case 'tooltip-meta-schema_book_audio_duration_time':	// Audiobook Duration.
+
+					$text = __( 'The total duration of the audio recording.', 'wpsso-schema-json-ld' );
+
+				 	break;
 				case 'tooltip-meta-schema_event_lang':			// Event Language.
 
 					$text = __( 'The language (aka locale) for the event performance.', 'wpsso-schema-json-ld' );
@@ -168,25 +177,25 @@ if ( ! class_exists( 'WpssoJsonFiltersMessages' ) ) {
 
 				 	break;
 
-				case 'tooltip-meta-schema_event_organizer_org_id':	// Organizer Organization.
+				case 'tooltip-meta-schema_event_organizer_org_id':	// Organizer (Org).
 
 					$text = __( 'Select an organizer (organization) for the event.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-meta-schema_event_organizer_person_id':	// Organizer Person.
+				case 'tooltip-meta-schema_event_organizer_person_id':	// Organizer (Person).
 
 					$text = __( 'Select an organizer (person) for the event.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-meta-schema_event_performer_org_id':	// Performer Organization.
+				case 'tooltip-meta-schema_event_performer_org_id':	// Performer (Org).
 
 					$text = __( 'Select a performer (organization) for the event.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-meta-schema_event_performer_person_id':	// Performer Person.
+				case 'tooltip-meta-schema_event_performer_person_id':	// Performer (Person).
 
 					$text = __( 'Select a performer (person) for the event.', 'wpsso-schema-json-ld' );
 
@@ -337,25 +346,25 @@ if ( ! class_exists( 'WpssoJsonFiltersMessages' ) ) {
 
 				 	break;
 
-				case 'tooltip-meta-schema_movie_actor_person_names':	// Cast Names
+				case 'tooltip-meta-schema_movie_actor_person_names':	// Cast Names.
 
 					$text = __( 'The name of one or more actors appearing in the movie.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-meta-schema_movie_director_person_names':	// Director Names
+				case 'tooltip-meta-schema_movie_director_person_names':	// Director Names.
 
 					$text = __( 'The name of one or more directors of the movie.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-meta-schema_movie_prodco_org_id':		// Movie Production Company
+				case 'tooltip-meta-schema_movie_prodco_org_id':		// Movie Production Company.
 
 					$text = __( 'The principle production company or studio responsible for the movie.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-meta-schema_movie_duration_time':		// Movie Runtime
+				case 'tooltip-meta-schema_movie_duration_time':		// Movie Runtime.
 
 					$text = __( 'The total movie runtime from the start to the end of the credits.', 'wpsso-schema-json-ld' );
 
@@ -711,13 +720,20 @@ if ( ! class_exists( 'WpssoJsonFiltersMessages' ) ) {
 
 				 	break;
 
-				case 'tooltip-schema_def_pub_org_id':			// Default Publisher.
+				case 'tooltip-schema_def_pub_org_id':			// Default Publisher (Org).
 
-					$text = __( 'Select a default publisher for the Schema CreativeWork type and/or its sub-types (Article, BlogPosting, WebPage, etc).', 'wpsso-schema-json-ld' );
+					$text = __( 'Select a default publisher organization for the Schema CreativeWork type and/or its sub-types (Article, BlogPosting, WebPage, etc).', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-schema_def_prov_org_id':			// Default Service Provider.
+				case 'tooltip-schema_def_pub_person_id':		// Default Publisher (Person).
+
+					$text = __( 'Select a default publisher person for the Schema CreativeWork type and/or its sub-types (Article, BlogPosting, WebPage, etc).', 'wpsso-schema-json-ld' );
+
+				 	break;
+
+				case 'tooltip-schema_def_prov_org_id':			// Default Service Prov. (Org).
+				case 'tooltip-schema_def_prov_person_id':		// Default Service Prov. (Person).
 
 					$text = __( 'Select a default service provider, service operator or service performer (example: "Netflix").', 'wpsso-schema-json-ld' );
 
@@ -729,31 +745,31 @@ if ( ! class_exists( 'WpssoJsonFiltersMessages' ) ) {
 
 				 	break;
 
-				case 'tooltip-schema_def_event_organizer_org_id':	// Default Organizer Organization.
+				case 'tooltip-schema_def_event_organizer_org_id':	// Default Organizer (Org).
 
 					$text = __( 'Select a default organizer (organization) for the Schema Event type.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-schema_def_event_organizer_person_id':	// Default Organizer Person.
+				case 'tooltip-schema_def_event_organizer_person_id':	// Default Organizer (Person).
 
 					$text = __( 'Select a default organizer (person) for the Schema Event type.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-schema_def_event_performer_org_id':	// Default Performer Organization.
+				case 'tooltip-schema_def_event_performer_org_id':	// Default Performer (Org).
 
 					$text = __( 'Select a default performer (organization) for the Schema Event type.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-schema_def_event_performer_person_id':	// Default Performer Person.
+				case 'tooltip-schema_def_event_performer_person_id':	// Default Performer (Person).
 
 					$text = __( 'Select a default performer (person) for the Schema Event type.', 'wpsso-schema-json-ld' );
 
 				 	break;
 
-				case 'tooltip-schema_def_job_hiring_org_id':		// Default Job Hiring Organization.
+				case 'tooltip-schema_def_job_hiring_org_id':		// Default Job Hiring (Org).
 
 					$text = __( 'Select a default organization for the Schema JobPosting hiring organization.', 'wpsso-schema-json-ld' );
 

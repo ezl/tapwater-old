@@ -10,6 +10,16 @@ class ContentHandling
 {
 
     /**
+     * @var int
+     */
+    protected static $headingIdCounter = 0;
+
+    /**
+     * @var string[]
+     */
+    protected static $headingIds = [];
+
+    /**
      * @param ContentHandlingDto $dto
      * @return ContentHandlingResult
      */
@@ -20,8 +30,7 @@ class ContentHandling
 
         $skipRegex = Core::$plugin->skipHeadingTextToRegex($dto->skipText);
 
-        static::$headingIdCounter = 0;
-        static::$headingIds = [];
+        static::reset();
 
         $dom = Dom::make($dto->content);
         if ($dom === false) {
@@ -93,16 +102,6 @@ class ContentHandling
     }
 
     /**
-     * @var int
-     */
-    protected static $headingIdCounter;
-
-    /**
-     * @var string[]
-     */
-    protected static $headingIds;
-
-    /**
      * @param string $label
      * @param ContentHandlingDto $dto
      * @return string
@@ -171,5 +170,14 @@ class ContentHandling
         static::$headingIds[] = $id;
 
         return $id;
+    }
+
+    /**
+     * @return void
+     */
+    protected static function reset()
+    {
+        static::$headingIdCounter = 0;
+        static::$headingIds = [];
     }
 }

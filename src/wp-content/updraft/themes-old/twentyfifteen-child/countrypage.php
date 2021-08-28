@@ -23,7 +23,6 @@ $curID = $post->ID;
 
     breadcrumbs();
 
-
     
 		
 		
@@ -33,8 +32,13 @@ $curID = $post->ID;
         <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
         <div class="toc"></div>
 	</header><!-- .entry-header -->
+<?php
+    if($curID == 5233){
 
+get_template_part('usa', 'map'); 
 
+}
+?>
 
 	<div class="entry-content">
 
@@ -72,15 +76,17 @@ $curID = $post->ID;
 
 <!-- wp:paragraph -->
 <?php
-    if(get_field('cdc_data') == 'yes' || get_field('who_national_2017_safely_managed') > 90){
+if(get_field('cdc_data') !== ''):
+    if(get_field('cdc_data') == 'yes'){
 ?>
-<p>The US Center for Disease Control’s travel advisory confirms the safety of the tap water in <?php the_field('county_name'); ?> (<a href="<?php the_field('cdc_source'); ?>">source</a>). However, it would be best if you take special precautions toward the unregulated water sources in some areas.</p>
+<p>The US Center for Disease Control’s travel advisory confirms the safety of the tap water in <?php the_field('country_name'); ?> (<a href="<?php the_field('cdc_source'); ?>">source</a>). However, it would be best if you take special precautions toward the unregulated water sources in some areas.</p>
 <?php
 }else{
 ?>
 <p>The US Center for Disease Control's travel advisory recommends avoiding tap water and drinking bottled or disinfected water in <?php the_field('country_name'); ?> (<a href="<?php the_field('cdc_source'); ?>">source</a>).</p>
 <?php
 }
+endif;
 ?>
 <!-- /wp:paragraph -->
 
@@ -91,34 +97,107 @@ $curID = $post->ID;
 <!-- /wp:image -->
 
 <!-- wp:paragraph -->
-<p>Like all countries though, water accessibility, sanitation, and treatment vary widely from location to location, so we encourage looking for specific city information. The most commonly searched cities in <?php the_field('country_name'); ?> are:</p>
+<p>Like all countries though, water accessibility, sanitation, and treatment vary widely from location to location, so we encourage looking for specific city information.</p>
 <!-- /wp:paragraph -->
+ 
+<?php
+// Travellers Notes
 
-<!-- wp:shortcode -->
-<?php echo do_shortcode('[tw_topcities]'); ?>
-<!-- /wp:shortcode -->
+if(get_field('travellers_notes')):
 
+    ?>
+    
+    <h2>What do people in <?php the_field('country_name'); ?> think about the tap water?</h2>
+    
+
+    <p><?php the_field('travellers_notes'); ?></p>
+    
+    <?php
+
+endif;
+
+// Wikitravel
+
+if(get_field('wikitravel_content')):
+
+    ?>
+    
+    <h2>Wikitravel</h2>
+    
+
+    <?php the_field('wikitravel_content'); ?>
+    
+    <?php
+
+endif;
+
+?>
+
+<?php
+// Commonly searched cities
+
+$countrycat = wp_get_post_terms(get_the_ID(), 'category',  array('fields' => 'all', 'orderby' => 'term_id'));
+$query = new WP_Query(array(
+    'post_type' => 'post',
+    'category_name' => $countrycat[1]->slug,
+    'post__not_in' => array(get_the_ID())
+));
+
+if($query->have_posts()):
+
+?>
+<p>The most commonly searched cities in <?php the_field('country_name'); ?> are:</p>
+<?php
+echo do_shortcode('[tw_topcities]');
+?>
 <!-- wp:paragraph -->
 <p>For a full list of cities in <?php the_field('country_name'); ?>, scroll to the bottom of this post or click <a href="#bottom">here</a>.</p>
 <!-- /wp:paragraph -->
+<?php
+endif;
+wp_reset_postdata();
+?>
+<!-- /wp:paragraph -->
+
+<?php
+    if(get_field('video')):
+        the_field('video');
+    endif;
+?>
 
 <!-- wp:heading -->
 <h2>World Health Organization <?php the_field('country_name'); ?> Water Summary</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
+
+
 <?php if(get_field('who_national_2017_basic')): ?>
-<p>The World Health Organization estimates that <?php the_field('who_national_2017_basic'); ?> percent of <?php the_field('country_name'); ?> have access to <a href="<?php site_url(); ?>/tap-water/">tap water</a>.</p>
+<p>The World Health Organization estimates that <?php the_field('who_national_2017_basic'); ?> percent of <?php the_field('country_name'); ?> have access to drinkable <a href="<?php site_url(); ?>/tap-water/">tap water</a>.</p>
 <?php else: ?>
 <p>The World Health Organization has unspecified data of information in <?php the_field('country_name'); ?>. You can review below how locals and tourists rated the drinking water in the country. Also, you may ask people from the area with regards to their advice of drinking water, or if skeptical stick with bottled water to ensure safety. 
 </p>
 <?php endif; ?>
-<p>In 2000, <?php if(get_field('who_national_2000_safely_managed')){echo get_field('who_national_2000_safely_managed').'%';}else{echo 'undefined %';} ?> of the population had access to drinkable, tap water on site, and <?php if(get_field('who_national_2000_basic')){echo get_field('who_national_2000_basic').'%';}else{echo 'undefined %';} ?> within an accessible distance, including both rural and urban areas.
-</p>
-<p>
-In <?php the_field('country_name'); ?>, like in most countries, clean tap water availability is much higher in urban areas than in rural areas, with urban area availability averages at <?php if(get_field('who_urban_2017_safely_managed')){echo get_field('who_urban_2017_safely_managed').'%';}else{echo 'undefined %';} ?> and rural availability figures at <?php if(get_field('who_rural_2017_safely_managed')){echo get_field('who_rural_2017_safely_managed').'%';}else{echo 'undefined %';} ?>.
 
-</p>
+<?php if(get_field('who_national_2000_safely_managed') && get_field('who_national_2000_basic')): ?>
+    <p>In 2000, <?php echo get_field('who_national_2000_safely_managed').'%'; ?> of the population had access to drinkable, tap water on site, and <?php echo get_field('who_national_2000_basic').'%'; ?> within an accessible distance, including both rural and urban areas.
+    </p>
+<?php endif; ?>
+
+<?php if(get_field('who_urban_2017_safely_managed')): ?>
+    <p>
+    In <?php the_field('country_name'); ?>, like in most countries, clean tap water availability is much higher in urban areas than in rural areas, with urban area availability averages at <?php echo get_field('who_urban_2017_safely_managed').'%'; ?>.
+    </p>
+<?php endif; ?>
+
+<?php if(get_field('who_rural_2017_safely_managed')): ?>
+    <p>
+    The rural availability figures at <?php echo get_field('who_rural_2017_safely_managed').'%'; ?>
+    </p>
+<?php endif; ?>
+
+
+
 
 <!-- /wp:paragraph -->
 
@@ -175,51 +254,51 @@ In <?php the_field('country_name'); ?>, like in most countries, clean tap water 
 </tr>
 <tr>
 <td>2000</td>
-<td><?php the_field('who_national_2000_population'); ?></td>
-<td><?php the_field('who_national_2000_safely_managed'); ?>%</td>
-<td><?php the_field('who_national_2000_basic'); ?>%</td>
-<td><?php the_field('who_national_2000_limited'); ?>%</td>
+<td><?php if(get_field('who_national_2000_population')){the_field('who_national_2000_population');}else{echo '-';} ?></td>
+<td><?php if(get_field('who_national_2000_safely_managed')){echo get_field('who_national_2000_safely_managed').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_national_2000_basic')){echo get_field('who_national_2000_basic').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_national_2000_limited')){echo get_field('who_national_2000_limited').'%';}else{echo '-';} ?></td>
 </tr>
 <tr>
 <td>2017</td>
-<td><?php the_field('who_national_2017_population'); ?></td>
-<td><?php the_field('who_national_2017_safely_managed'); ?>%</td>
-<td><?php the_field('who_national_2017_basic'); ?>%</td>
-<td><?php the_field('who_national_2017_limited'); ?>%</td>
+<td><?php if(get_field('who_national_2017_population')){echo get_field('who_national_2017_population');}else{echo '-';} ?></td>
+<td><?php if(get_field('who_national_2017_safely_managed')){echo get_field('who_national_2017_safely_managed').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_national_2017_basic')){echo get_field('who_national_2017_basic').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_national_2017_limited')){echo get_field('who_national_2017_limited').'%';}else{echo '-';} ?></td>
 </tr>
 <tr>
 <td colspan="5"><strong>Rural</strong></td>
 </tr>
 <tr>
 <td>2000</td>
-<td><?php the_field('who_rural_2000_population'); ?></td>
-<td><?php the_field('who_rural_2000_safely_managed'); ?>%</td>
-<td><?php the_field('who_rural_2000_basic'); ?>%</td>
-<td><?php the_field('who_rural_2000_limited'); ?>%</td>
+<td><?php if(get_field('who_rural_2000_population')){echo get_field('who_rural_2000_population');}else{echo '-';} ?></td>
+<td><?php if(get_field('who_rural_2000_safely_managed')){echo get_field('who_rural_2000_safely_managed').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_rural_2000_basic')){echo get_field('who_rural_2000_basic').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_rural_2000_limited')){echo get_field('who_rural_2000_limited').'%';}else{echo '-';} ?></td>
 </tr>
 <tr>
 <td>2017</td>
-<td><?php the_field('who_rural_2017_population'); ?></td>
-<td><?php the_field('who_rural_2017_safely_managed'); ?>%</td>
-<td><?php the_field('who_rural_2017_basic'); ?>%</td>
-<td><?php the_field('who_rural_2017_limited'); ?>%</td>
+<td><?php if(get_field('who_rural_2017_population')){echo get_field('who_rural_2017_population');}else{echo '-';} ?></td>
+<td><?php if(get_field('who_rural_2017_safely_managed')){echo get_field('who_rural_2017_safely_managed').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_rural_2017_basic')){echo get_field('who_rural_2017_basic').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_rural_2017_limited')){echo get_field('who_rural_2017_limited').'%';}else{echo '-';} ?></td>
 </tr>
 <tr>
 <td colspan="5"><strong>Urban</strong></td>
 </tr>
 <tr>
 <td>2000</td>
-<td><?php the_field('who_urban_2000_population'); ?></td>
-<td><?php the_field('who_urban_2000_safely_managed'); ?>%</td>
-<td><?php the_field('who_urban_2000_basic'); ?>%</td>
-<td><?php the_field('who_urban_2000_limited'); ?>%</td>
+<td><?php if(get_field('who_urban_2000_population')){echo get_field('who_urban_2000_population');}else{echo '-';} ?></td>
+<td><?php if(get_field('who_urban_2000_safely_managed')){echo get_field('who_urban_2000_safely_managed').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_urban_2000_basic')){echo get_field('who_urban_2000_basic').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_urban_2000_limited')){echo get_field('who_urban_2000_limited').'%';}else{echo '-';} ?></td>
 </tr>
 <tr>
 <td>2017</td>
-<td><?php the_field('who_urban_2017_population'); ?></td>
-<td><?php the_field('who_urban_2017_safely_managed'); ?>%</td>
-<td><?php the_field('who_urban_2017_basic'); ?>%</td>
-<td><?php the_field('who_urban_2017_limited'); ?>%</td>
+<td><?php if(get_field('who_urban_2017_population')){echo get_field('who_urban_2017_population');}else{echo '-';} ?></td>
+<td><?php if(get_field('who_urban_2017_safely_managed')){echo get_field('who_urban_2017_safely_managed').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_urban_2017_basic')){echo get_field('who_urban_2017_basic').'%';}else{echo '-';} ?></td>
+<td><?php if(get_field('who_urban_2017_limited')){echo get_field('who_urban_2017_limited').'%';}else{echo '-';} ?></td>
 </tr>
 </tbody>
 </table>
@@ -227,7 +306,7 @@ In <?php the_field('country_name'); ?>, like in most countries, clean tap water 
 <!-- /wp:html -->
 
 <!-- wp:heading -->
-<h2>How Do People In <?php the_field('country_name'); ?> Rate The Water?</h2>
+<h2>What Do People In <?php the_field('country_name'); ?> Think About The Tap Water?</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
@@ -313,6 +392,31 @@ if(get_field('water_quality') < 30){
 <!-- end content -->
         
 <?php
+
+if(have_rows('sources')):
+
+?>
+    <div class="sources">
+    <h2>Sources</h2>
+<?php
+
+    while(have_rows('sources')):
+        the_row();
+?>
+    <a href="<?php the_sub_field('source_link'); ?>"><?php the_sub_field('source_link'); ?></a><br>
+<?php
+    endwhile;
+?>
+    </div>
+<?php
+endif;
+
+?>
+
+<?php
+
+the_content();
+
     $categories = wp_get_post_terms(get_the_ID(), 'category',  array('fields' => 'names', 'orderby' => 'term_id')); 
 if($categories[1])://only show if is country page
 	  
@@ -322,7 +426,8 @@ if($categories[1])://only show if is country page
 //    echo '<ul class="country-list">';
     $query = new WP_Query(array(
     	'post_type' => 'post',
-        'category_name' => $country_name
+        'category_name' => $country_name,
+        'post__not_in' => array(get_the_ID())
     ));
 if($query->have_posts()):
     echo '<h3>View our tap water report on all cities in '.$country_name.'</h3>';
@@ -349,8 +454,8 @@ endif;
     
     $query = new WP_Query(array(
     	'post_type' => 'page',
-    	'category_name' => $continent_name,
-        'post_status' => 'any'
+        'category_name' => $continent_name,
+        'post__not_in' => array(5233)
     ));
     if($query->have_posts()):
     echo '<h3>View other countries in '.$continent_name.'</h3>';
@@ -359,11 +464,14 @@ endif;
     	$query->the_post();
         $currentcat = wp_get_post_terms(get_the_ID(), 'category',  array('fields' => 'names', 'orderby' => 'term_id'));
         
-        if(get_post_type() == 'page' && $currentcat[1] && $curID != get_the_ID()){
-       echo '<li><a href="'.get_the_permalink().'">'.$currentcat[1].'</a></li>';
-       
-        
+        //if usa
+        if(get_post_type() == 'page' && $currentcat[2] && $curID != get_the_ID()){
+       echo '<li><a href="'.get_the_permalink().'">'.$currentcat[2].'</a></li>';
         }
+        //if non usa
+        if(get_post_type() == 'page' && $currentcat[1] && $curID != get_the_ID() && $currentcat[1] != 'United States of America'){
+       echo '<li><a href="'.get_the_permalink().'">'.$currentcat[1].'</a></li>';
+       }
     endwhile;
     echo '</ul>';
     endif;
@@ -372,6 +480,7 @@ endif;
     
     
 endif;
+
 
 // if continent page show list of countries in continent and cities list
  $categories = wp_get_post_terms(get_the_ID(), 'category',  array('fields' => 'all', 'orderby' => 'term_id')); 

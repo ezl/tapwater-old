@@ -6,10 +6,12 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
 if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+
 	die( 'Do. Or do not. There is no try.' );
 }
 
@@ -17,13 +19,14 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 	class WpssoUser extends WpssoWpMeta {
 
-		protected static $cache_pref = array();	// Used by get_pref() and save_pref().
+		private static $cache_user_prefs = array();	// Used by get_pref() and save_pref().
 
 		public function __construct( &$plugin ) {
 
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -36,6 +39,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function add_wp_hooks() {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -53,8 +57,11 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			if ( ! empty( $this->p->options[ 'plugin_new_user_is_person' ] ) ) {
 
 				if ( is_multisite() ) {
+
 					add_action( 'wpmu_new_user', array( __CLASS__, 'add_role_by_id' ), 20, 1 );
+
 				} else {
+
 					add_action( 'user_register', array( __CLASS__, 'add_role_by_id' ), 20, 1 );
 				}
 			}
@@ -94,6 +101,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				 * Add edit table columns.
 				 */
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'adding column filters for users' );
 				}
 
@@ -120,6 +128,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				if ( empty( $user_id ) ) {
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'exiting early: empty user_id' );
 					}
 
@@ -147,7 +156,15 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function get_mod( $mod_id ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
+			}
+
+			static $local_cache = array();
+
+			if ( isset( $local_cache[ $mod_id ] ) ) {
+
+				return $local_cache[ $mod_id ];
 			}
 
 			$mod = parent::$mod_defaults;
@@ -165,7 +182,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			 */
 			$mod[ 'is_user' ] = true;
 
-			return apply_filters( $this->p->lca . '_get_user_mod', $mod, $mod_id );
+			return $local_cache[ $mod_id ] = apply_filters( $this->p->lca . '_get_user_mod', $mod, $mod_id );
 		}
 
 		/**
@@ -179,6 +196,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function get_options( $user_id, $md_key = false, $filter_opts = true, $pad_opts = false ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log_args( array( 
 					'user_id'     => $user_id, 
 					'md_key'      => $md_key, 
@@ -190,11 +208,13 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$user_id = false === $user_id ? get_current_user_id() : $user_id;
 
 			if ( empty( $user_id ) ) {
+
 				if ( false !== $md_key ) {
+
 					return null;
-				} else {
-					return array();
 				}
+
+				return array();
 			}
 
 			static $local_cache = array();
@@ -208,8 +228,11 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			 * Maybe initialize the cache.
 			 */
 			if ( ! isset( $local_cache[ $cache_id ] ) ) {
+
 				$local_cache[ $cache_id ] = false;
+
 			} elseif ( $this->md_cache_disabled ) {
+
 				$local_cache[ $cache_id ] = false;
 			}
 
@@ -220,12 +243,16 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$user_exists = SucomUtilWP::user_exists( $user_id );
 
 				if ( $user_exists ) {
+
 					$md_opts = get_user_meta( $user_id, WPSSO_META_NAME, $single = true );
+
 				} else {
+
 					$md_opts = apply_filters( $this->p->lca . '_get_other_user_meta', false, $user_id );
 				}
 
 				if ( ! is_array( $md_opts ) ) {
+
 					$md_opts = array();
 				}
 
@@ -238,17 +265,22 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 					 * Save the upgraded options.
 					 */
 					if ( $user_exists ) {
+
 						update_user_meta( $user_id, WPSSO_META_NAME, $md_opts );
+
 					} else {
+
 						apply_filters( $this->p->lca . '_update_other_user_meta', $md_opts, $user_id );
 					}
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'user_id ' . $user_id . ' settings upgraded' );
 					}
 				}
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log_arr( 'user_id ' . $user_id . ' meta options read', $md_opts );
 				}
 			}
@@ -257,10 +289,6 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 				if ( empty( $md_opts[ 'options_filtered' ] ) ) {
 
-					if ( $this->p->debug->enabled ) {
-						$this->p->debug->log( 'applying get_user_options filters for user_id ' . $user_id . ' meta' );
-					}
-
 					$md_opts[ 'options_filtered' ] = 1;	// Set before calling filter to prevent recursion.
 
 					$mod = $this->get_mod( $user_id );
@@ -268,13 +296,32 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 					/**
 					 * Since WPSSO Core v7.1.0.
 					 */
+					if ( $this->p->debug->enabled ) {
+
+						$this->p->debug->log( 'applying get_md_options filters' );
+					}
+
 					$md_opts = apply_filters( $this->p->lca . '_get_md_options', $md_opts, $mod );
+
+					/**
+					 * Since WPSSO Core v4.31.0.
+					 */
+					if ( $this->p->debug->enabled ) {
+
+						$this->p->debug->log( 'applying get_user_options filters for user_id ' . $user_id . ' meta' );
+					}
 
 					$md_opts = apply_filters( $this->p->lca . '_get_user_options', $md_opts, $user_id, $mod );
 
+					/**
+					 * Since WPSSO Core v8.2.0.
+					 */
 					if ( $this->p->debug->enabled ) {
-						$this->p->debug->log_arr( 'user_id ' . $user_id . ' meta options filtered', $md_opts );
+
+						$this->p->debug->log( 'applying sanitize_md_options filters' );
 					}
+
+					$md_opts = apply_filters( $this->p->lca . '_sanitize_md_options', $md_opts, $mod );
 				}
 			}
 
@@ -284,10 +331,12 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function save_options( $user_id, $rel_id = false ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			if ( ! $this->user_can_save( $user_id, $rel_id ) ) {
+
 				return;
 			}
 
@@ -297,7 +346,11 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 			$opts = $this->get_submit_opts( $user_id );
 
+			/**
+			 * Just in case - do not save the SEO description if an SEO plugin is active.
+			 */
 			if ( ! empty( $this->p->avail[ 'seo' ][ 'any' ] ) ) {
+
 				unset( $opts[ 'seo_desc' ] );
 			}
 
@@ -306,8 +359,11 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$opts = apply_filters( $this->p->lca . '_save_user_options', $opts, $user_id, $rel_id, $mod );
 
 			if ( empty( $opts ) ) {
+
 				delete_user_meta( $user_id, WPSSO_META_NAME );
+
 			} else {
+
 				update_user_meta( $user_id, WPSSO_META_NAME, $opts );
 			}
 
@@ -347,22 +403,27 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function get_posts_ids( array $mod, $ppp = null, $paged = null, array $posts_args = array() ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			if ( null === $ppp ) {
+
 				$ppp = apply_filters( $this->p->lca . '_posts_per_page', get_option( 'posts_per_page' ), $mod );
 			}
 
 			if ( null === $paged ) {
+
 				$paged = get_query_var( 'paged' );
 			}
 
 			if ( ! $paged > 1 ) {
+
 				$paged = 1;
 			}
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'calling get_posts() for posts authored by ' . 
 					$mod[ 'name' ] . ' id ' . $mod[ 'id' ] . ' (posts_per_page is ' . $ppp . ')' );
 			}
@@ -388,6 +449,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$info = $this->p->cf[ 'plugin' ][ $this->p->lca ];
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( sprintf( 'slow query detected - WordPress get_posts() took %1$0.3f secs'.
 						' to get posts authored by user ID %2$d', $mtime_total, $mod[ 'id' ] ) );
 				}
@@ -411,6 +473,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			}
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( count( $post_ids ) . ' post ids returned in ' . sprintf( '%0.3f secs', $mtime_total ) );
 			}
 
@@ -420,6 +483,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function add_column_headings( $columns ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -433,25 +497,42 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$col_key = str_replace( $this->p->lca . '_', '', $column_name );
 
 				if ( ( $col_info = self::get_sortable_columns( $col_key ) ) !== null ) {
+
 					if ( isset( $col_info[ 'meta_key' ] ) ) {	// Just in case.
+
 						$value = $this->get_meta_cache_value( $user_id, $col_info[ 'meta_key' ] );
 					}
 				}
 			}
+
 			return $value;
 		}
 
 		public function get_meta_cache_value( $user_id, $meta_key, $none = '' ) {
 
-			$meta_cache = wp_cache_get( $user_id, 'user_meta' );	// optimize and check wp_cache first
+			/**
+			 * WordPress stores data using a post, term, or user ID, along with a group string.
+			 *
+			 * Example: wp_cache_get( 1, 'user_meta' );
+			 *
+			 * Returns (bool|mixed) false on failure to retrieve contents or the cache contents on success.
+			 *
+			 * $found (bool) (Optional) whether the key was found in the cache (passed by reference). Disambiguates a
+			 * return of false, a storable value. Default null.
+			 */
+			$meta_cache = wp_cache_get( $user_id, 'user_meta', $force = false, $found );	// Optimize and check wp_cache first.
 
 			if ( isset( $meta_cache[ $meta_key ][ 0 ] ) ) {
+
 				$value = (string) maybe_unserialize( $meta_cache[ $meta_key ][ 0 ] );
+
 			} else {
+
 				$value = (string) get_user_meta( $user_id, $meta_key, $single = true );
 			}
 
 			if ( $value === 'none' ) {
+
 				$value = $none;
 			}
 
@@ -461,12 +542,16 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function update_sortable_meta( $user_id, $col_key, $content ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			if ( ! empty( $user_id ) ) {	// Just in case.
+
 				if ( ( $sort_cols = self::get_sortable_columns( $col_key ) ) !== null ) {
+
 					if ( isset( $sort_cols[ 'meta_key' ] ) ) {	// Just in case.
+
 						update_user_meta( $user_id, $sort_cols[ 'meta_key' ], $content );
 					}
 				}
@@ -479,10 +564,12 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			 * Example $meta_key value: '_wpsso_head_info_og_img_thumb'.
 			 */
 			if ( 0 !== strpos( $meta_key, '_' . $this->p->lca . '_head_info_' ) ) {
+
 				return $value;	// Return null.
 			}
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'user ID ' . $user_id . ' for meta key ' . $meta_key );
 			}
 
@@ -495,7 +582,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 			$local_recursion[ $user_id ][ $meta_key ] = true;	// Prevent recursion.
 
-			if ( get_user_meta( $user_id, $meta_key, $single = true ) === '' ) {	// Returns empty string if meta not found.
+			if ( '' === get_user_meta( $user_id, $meta_key, $single = true ) ) {	// Returns empty string if meta not found.
 
 				$this->get_head_info( $user_id, $read_cache = true );
 			}
@@ -513,6 +600,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function load_meta_page( $screen = false ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -520,10 +608,12 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			 * All meta modules set this property, so use it to optimize code execution.
 			 */
 			if ( false !== parent::$head_tags || ! isset( $screen->id ) ) {
+
 				return;
 			}
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'screen id = ' . $screen->id );
 			}
 
@@ -556,6 +646,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				default:
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'exiting early: not a recognized user page' );
 					}
 
@@ -563,6 +654,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			}
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'user ID = ' . $user_id );
 				$this->p->debug->log( 'home url = ' . get_option( 'home' ) );
 				$this->p->debug->log( 'locale default = ' . SucomUtil::get_locale( 'default' ) );
@@ -578,6 +670,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				do_action( $this->p->lca . '_admin_user_head', $mod, $screen->id );
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'setting head_meta_info static property' );
 				}
 
@@ -602,6 +695,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 						if ( empty( parent::$head_info[ 'og:' . $mt_suffix ] ) ) {
 
 							if ( $this->p->debug->enabled ) {
+
 								$this->p->debug->log( 'og:' . $mt_suffix . ' meta tag is value empty and required' );
 							}
 
@@ -627,6 +721,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$action_name = SucomUtil::sanitize_hookname( $_GET[ $action_query ] );
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'found action query: ' . $action_name );
 
 				}
@@ -634,6 +729,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				if ( empty( $_GET[ WPSSO_NONCE_NAME ] ) ) {	// WPSSO_NONCE_NAME is an md5() string
 
 					if ( $this->p->debug->enabled ) {
+
 						$this->p->debug->log( 'nonce token query field missing' );
 					}
 
@@ -662,10 +758,12 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$user_id = SucomUtil::get_user_object( false, 'id' );
 
 			if ( ! current_user_can( 'edit_user', $user_id ) ) {
+
 				return;
 			}
 
 			if ( empty( $this->p->options[ 'plugin_add_to_user_page' ] ) ) {
+
 				return;
 			}
 
@@ -686,14 +784,17 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function show_metabox_section( $user_obj ) {
 
 			if ( ! isset( $user_obj->ID ) ) {	// Just in case.
+
 				return;
 			}
 
 			if ( ! current_user_can( 'edit_user', $user_obj->ID ) ) {
+
 				return;
 			}
 
 			if ( empty( $this->p->options[ 'plugin_add_to_user_page' ] ) ) {
+
 				return;
 			}
 
@@ -735,6 +836,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			wp_nonce_field( WpssoAdmin::get_nonce_action(), WPSSO_NONCE_NAME );
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark( $metabox_id . ' table rows' );	// start timer
 			}
 
@@ -760,7 +862,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 			$metabox_html = "\n" . '<div id="' . $mb_container_id . '">';
 
-			$metabox_html .= $this->p->util->get_metabox_tabbed( $metabox_id, $tabs, $table_rows, $tabbed_args );
+			$metabox_html .= $this->p->util->metabox->get_tabbed( $metabox_id, $tabs, $table_rows, $tabbed_args );
 
 			$metabox_html .= apply_filters( $mb_container_id . '_footer', '', $mod );
 
@@ -769,6 +871,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$metabox_html .= $this->get_metabox_javascript( $mb_container_id );
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark( $metabox_id . ' table rows' );	// End timer.
 			}
 
@@ -802,6 +905,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 							$cm_label_value = SucomUtil::get_key_value( $cm_label_key, $this->p->options );
 
 							if ( ! empty( $cm_label_value ) ) {	// Just in case.
+
 								$fields[ $id ] = $cm_label_value;
 							}
 
@@ -833,6 +937,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 							$cm_label_value = SucomUtil::get_key_value( $cm_label_key, $this->p->options );
 
 							if ( ! empty( $cm_label_value ) ) {	// Just in case.
+
 								$fields[ $this->p->options[ $cm_name_key ] ] = $cm_label_value;
 							}
 						}
@@ -854,6 +959,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function sanitize_submit_cm( $user_id ) {
 
 			if ( ! current_user_can( 'edit_user', $user_id ) ) {
+
 				return;
 			}
 
@@ -899,6 +1005,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 									 */
 
 									if ( false === strpos( $value, '://' ) ) {
+
 										$value = '';
 									}
 
@@ -930,6 +1037,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$methods = array();
 
 				if ( get_site_option( 'initial_db_version' ) < 23588 ) {
+
 					$methods = array(
 						'aim'    => __( 'AIM' ),
 						'jabber' => __( 'Jabber / Google Talk' ),
@@ -946,24 +1054,51 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$author_id = false;
 
 			if ( $mod[ 'is_post' ] ) {
+
 				if ( $mod[ 'post_author' ] ) {
+
 					$author_id = $mod[ 'post_author' ];
 				}
+
 			} elseif ( $mod[ 'is_user' ] ) {
+
 				$author_id = $mod[ 'id' ];
 			}
 
 			return $author_id;
 		}
 
-		public function get_author_meta( $user_id, $field_id ) {
+		public function get_author_meta( $user_id, $meta_key ) {
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log_args( array( 
+					'user_id'  => $user_id, 
+					'meta_key' => $meta_key, 
+				) );
+			}
+
+			static $local_cache = array();
+
+			if ( isset( $local_cache[ $user_id ] ) ) {
+
+				if ( isset( $local_cache[ $user_id ][ $meta_key ] ) ) {
+
+					return $local_cache[ $user_id ][ $meta_key ];
+				}
+
+			} else {
+
+				$local_cache[ $user_id ] = array();
+			}
 
 			$user_exists = SucomUtilWP::user_exists( $user_id );
+
 			$author_meta = '';
 
 			if ( $user_exists ) {
 
-				switch ( $field_id ) {
+				switch ( $meta_key ) {
 
 					case 'none':
 
@@ -971,21 +1106,19 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 					case 'fullname':
 
-						$author_meta = get_the_author_meta( 'first_name', $user_id ) . ' ' . 
-							get_the_author_meta( 'last_name', $user_id );
+						$author_meta = get_the_author_meta( 'first_name', $user_id ) . ' ' . get_the_author_meta( 'last_name', $user_id );
 
 						break;
 
 					case 'description':
 
-						$author_meta = preg_replace( '/[\s\n\r]+/s', ' ',
-							get_the_author_meta( $field_id, $user_id ) );
+						$author_meta = preg_replace( '/[\s\n\r]+/s', ' ', get_the_author_meta( $meta_key, $user_id ) );
 
 						break;
 
 					default:
 
-						$author_meta = get_the_author_meta( $field_id, $user_id );
+						$author_meta = get_the_author_meta( $meta_key, $user_id );
 
 						break;
 				}
@@ -993,133 +1126,24 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 				$author_meta = trim( $author_meta );	// Just in case.
 
 			} elseif ( $this->p->debug->enabled ) {
+
 				$this->p->debug->log( 'user id ' . $user_id . ' is not a WordPress user' );
 			}
 
-			$author_meta = apply_filters( $this->p->lca . '_get_author_meta', $author_meta, $user_id, $field_id, $user_exists );
+			$author_meta = apply_filters( $this->p->lca . '_get_author_meta', $author_meta, $user_id, $meta_key, $user_exists );
 
 			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'user id ' . $user_id . ' ' . $field_id . ': ' . $author_meta );
+
+				$this->p->debug->log( 'user id ' . $user_id . ' ' . $meta_key . ': ' . $author_meta );
 			}
 
-			return $author_meta;
+			return $local_cache[ $user_id ][ $meta_key ] = (string) $author_meta;
 		}
 
+		/**
+		 * Deprecated on 2020/07/20.
+		 */
 		public static function reset_metabox_prefs( $pagehook, $box_ids = array(), $meta_name = '', $context = '', $force = false ) {
-
-			$user_id = get_current_user_id();	// Since WP v3.0.
-
-			switch ( $meta_name ) {
-
-				case 'order':
-				case 'meta-box-order':
-
-					$meta_states = array( 'meta-box-order' );
-
-					break;
-
-				case 'hidden':
-				case 'metaboxhidden':
-
-					$meta_states = array( 'metaboxhidden' );
-
-					break;
-
-				case 'closed':
-				case 'closedpostboxes':
-
-					$meta_states = array( 'closedpostboxes' );
-
-					break;
-
-				default:
-
-					$meta_states = array( 'meta-box-order', 'metaboxhidden', 'closedpostboxes' );
-
-					break;
-			}
-
-			foreach ( $meta_states as $state ) {
-
-				$meta_key = $state . '_' . $pagehook;
-
-				if ( $force && empty( $box_ids ) ) {
-					delete_user_option( $user_id, $meta_key );
-				}
-
-				$is_changed = false;
-				$is_default = false;
-				$user_opts  = get_user_option( $meta_key, $user_id );
-
-				if ( empty( $user_opts ) ) {
-					$is_changed = true;
-					$is_default = true;
-					$user_opts  = array();
-				}
-
-				if ( $is_default || $force ) {
-
-					foreach ( $box_ids as $box_id ) {
-
-						/**
-						 * Change the order only if forced (default is controlled by add_meta_box() order).
-						 */
-						if ( $force && $state == 'meta-box-order' && ! empty( $user_opts[ $context ] ) ) {
-
-							/**
-							 * Don't proceed if the metabox is already first.
-							 */
-							if ( 0 !== strpos( $user_opts[ $context ], $pagehook . '_' . $box_id ) ) {
-
-								$boxes = explode( ',', $user_opts[ $context ] );
-
-								/**
-								 * Remove the box, no matter its position in the array.
-								 */
-								if ( false !== ( $key = array_search( $pagehook . '_' . $box_id, $boxes ) ) ) {
-									unset( $boxes[ $key ] );
-								}
-
-								/**
-								 * Assume we want to be top-most.
-								 */
-								array_unshift( $boxes, $pagehook . '_' . $box_id );
-
-								$user_opts[ $context ] = implode( ',', $boxes );
-
-								$is_changed = true;
-							}
-
-						} else {
-
-							/**
-							 * Check to see if the metabox is present for that state.
-							 */
-							$key = array_search( $pagehook . '_' . $box_id, $user_opts );
-
-							/**
-							 * If we're not targetting, then clear it, otherwise if we want a state, add if it's missing.
-							 */
-							if ( empty( $meta_name ) && false !== $key ) {
-
-								unset( $user_opts[ $key ] );
-
-								$is_changed = true;
-
-							} elseif ( ! empty( $meta_name ) && false === $key ) {
-
-								$user_opts[] = $pagehook . '_' . $box_id;
-
-								$is_changed = true;
-							}
-						}
-					}
-				}
-
-				if ( $is_default || $is_changed ) {
-					update_user_option( $user_id, $meta_key, array_unique( $user_opts ) );
-				}
-			}
 		}
 
 		/**
@@ -1162,9 +1186,9 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 			$pagehook = get_plugin_page_hookname( $menu_slug, $parent_slug);
 
-			foreach ( array( 'meta-box-order', 'metaboxhidden', 'closedpostboxes' ) as $state ) {
+			foreach ( array( 'meta-box-order', 'metaboxhidden', 'closedpostboxes' ) as $mb_state ) {
 
-				$meta_key = $state . '_' . $pagehook;
+				$meta_key = $mb_state . '_' . $pagehook;
 
 				if ( false === $user_id ) {
 
@@ -1182,13 +1206,17 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 						if ( ! empty( $user_obj->ID ) ) {	// Just in case.
 
-							delete_user_option( $user_obj->ID, $meta_key );
+							delete_user_option( $user_obj->ID, $meta_key, $global = false );
+
+							delete_user_option( $user_obj->ID, $meta_key, $global = true );
 						}
 					}
 
 				} elseif ( is_numeric( $user_id ) ) {
 
-					delete_user_option( $user_id, $meta_key );
+					delete_user_option( $user_id, $meta_key, $global = false );
+
+					delete_user_option( $user_id, $meta_key, $global = true );
 				}
 			}
 		}
@@ -1197,38 +1225,46 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 			$user_id = empty( $user_id ) ? get_current_user_id() : $user_id;
 
-			if ( ! isset( self::$cache_pref[ $user_id ][ 'prefs_filtered' ] ) || ! self::$cache_pref[ $user_id ][ 'prefs_filtered' ] ) {
+			if ( ! isset( self::$cache_user_prefs[ $user_id ][ 'prefs_filtered' ] ) ||
+				! self::$cache_user_prefs[ $user_id ][ 'prefs_filtered' ] ) {
 
 				$wpsso =& Wpsso::get_instance();
 
-				self::$cache_pref[ $user_id ] = get_user_meta( $user_id, WPSSO_PREF_NAME, $single = true );
+				self::$cache_user_prefs[ $user_id ] = get_user_meta( $user_id, WPSSO_PREF_NAME, $single = true );
 
-				if ( ! is_array( self::$cache_pref[ $user_id ] ) ) {
-					self::$cache_pref[ $user_id ] = array();
+				if ( ! is_array( self::$cache_user_prefs[ $user_id ] ) ) {
+
+					self::$cache_user_prefs[ $user_id ] = array();
 				}
 
-				self::$cache_pref[ $user_id ][ 'prefs_filtered' ] = true;	// Set before calling filter to prevent recursion.
+				self::$cache_user_prefs[ $user_id ][ 'prefs_filtered' ] = true;	// Set before calling filter to prevent recursion.
 
-				self::$cache_pref[ $user_id ] = apply_filters( $wpsso->lca . '_get_user_pref', self::$cache_pref[ $user_id ], $user_id );
+				self::$cache_user_prefs[ $user_id ] = apply_filters( $wpsso->lca . '_get_user_pref',
+					self::$cache_user_prefs[ $user_id ], $user_id );
 
-				if ( ! isset( self::$cache_pref[ $user_id ][ 'show_opts' ] ) ) {
-					self::$cache_pref[ $user_id ][ 'show_opts' ] = $wpsso->options[ 'plugin_show_opts' ];
+				if ( ! isset( self::$cache_user_prefs[ $user_id ][ 'show_opts' ] ) ) {
+
+					self::$cache_user_prefs[ $user_id ][ 'show_opts' ] = $wpsso->options[ 'plugin_show_opts' ];
 				}
 
 				if ( $wpsso->debug->enabled ) {
-					$wpsso->debug->log_arr( '$cache_pref', self::$cache_pref[ $user_id ] );
+
+					$wpsso->debug->log_arr( '$cache_user_prefs', self::$cache_user_prefs[ $user_id ] );
 				}
 			}
 
 			if ( false !== $pref_key ) {
-				if ( isset( self::$cache_pref[ $user_id ][ $pref_key ] ) ) {
-					return self::$cache_pref[ $user_id ][ $pref_key ];
-				} else {
-					return false;
+
+				if ( isset( self::$cache_user_prefs[ $user_id ][ $pref_key ] ) ) {
+
+					return self::$cache_user_prefs[ $user_id ][ $pref_key ];
 				}
-			} else {
-				return self::$cache_pref[ $user_id ];
+
+				return false;
+
 			}
+
+			return self::$cache_user_prefs[ $user_id ];
 		}
 
 		public static function save_pref( $user_prefs, $user_id = false ) {
@@ -1236,10 +1272,12 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$user_id = empty( $user_id ) ? get_current_user_id() : $user_id;
 
 			if ( ! current_user_can( 'edit_user', $user_id ) ) {
+
 				return false;
 			}
 
 			if ( ! is_array( $user_prefs ) || empty( $user_prefs ) ) {
+
 				return false;
 			}
 
@@ -1252,17 +1290,16 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			 */
 			if ( $old_prefs !== $new_prefs ) {
 
-				self::$cache_pref[ $user_id ] = $new_prefs;	// update the pref cache
+				self::$cache_user_prefs[ $user_id ] = $new_prefs;	// update the pref cache
 
 				unset( $new_prefs[ 'prefs_filtered' ] );
 
 				update_user_meta( $user_id, WPSSO_PREF_NAME, $new_prefs );
 
 				return true;
-
-			} else {
-				return false;
 			}
+
+			return false;
 		}
 
 		public static function is_show_all( $user_id = false ) {
@@ -1285,21 +1322,24 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$show_opts = self::get_pref( 'show_opts' );
 
 			if ( $compare ) {
+
 				return $compare === $show_opts ? true : false;
-			} else {
-				return $show_opts;
 			}
+
+			return $show_opts;
 		}
 
 		public function clear_cache( $user_id, $rel_id = false ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 			
 			static $do_once = array();
 
 			if ( isset( $do_once[ $user_id ][ $rel_id ] ) ) {
+
 				return;
 			}
 
@@ -1324,6 +1364,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			if ( ! $this->verify_submit_nonce() ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'exiting early: verify_submit_nonce failed' );
 				}
 
@@ -1333,6 +1374,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			if ( ! $user_can_save = current_user_can( 'edit_user', $user_id ) ) {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'insufficient privileges to save settings for user ID ' . $user_id );
 				}
 
@@ -1349,12 +1391,10 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			return $user_can_save;
 		}
 
-		/**
-		 * Methods that return an associative array of Open Graph meta tags.
-		 */
-		public function get_og_images( $num, $size_name, $user_id, $check_dupes = true, $md_pre = 'og' ) {
+		public function get_og_images( $num, $size_names, $user_id, $check_dupes = true, $md_pre = 'og', $mt_pre = 'og' ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -1366,58 +1406,89 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$user_exists = SucomUtilWP::user_exists( $user_id );
 
 			if ( $user_exists ) {
-				return $this->get_md_images( $num, $size_name, $mod, $check_dupes, $md_pre, 'og' );
-			} else {
-				return apply_filters( $this->p->lca . '_get_other_user_images', array(), $num, $size_name, $user_id, $check_dupes, $md_pre );
+
+				return $this->get_md_images( $num, $size_names, $mod, $check_dupes, $md_pre, $mt_pre );
 			}
+
+			return apply_filters( $this->p->lca . '_get_other_user_images', array(), $num, $size_names, $user_id, $check_dupes, $md_pre );
 		}
 
 		/**
 		 * WpssoUser class specific methods.
+		 *
+		 * Called by WpssoOpenGraph->get_array() for a single post author and (possibly) several coauthors.
 		 */
-		public function get_authors_websites( $user_ids, $field_id = 'url' ) {
+		public function get_authors_websites( $user_ids, $meta_key = 'url' ) {
 
-			$ret = array();
+			$urls = array();
 
 			if ( empty( $user_ids ) ) {	// Just in case.
-				return $ret;
+
+				return $urls;
 			}
 
 			if ( ! is_array( $user_ids ) ) {
+
 				$user_ids = array( $user_ids );
 			}
 
-			if ( empty( $field_id ) ) {
-				$field_id = $this->p->options[ 'og_author_field' ];	// Provide a default value.
+			if ( empty( $meta_key ) ) {
+
+				$meta_key = $this->p->options[ 'og_author_field' ];	// Provide a default value.
 			}
 
-			if ( ! empty( $field_id ) && $field_id !== 'none' ) {	// Just in case.
+			if ( ! empty( $meta_key ) && 'none' !== $meta_key ) {	// Just in case.
 
 				foreach ( $user_ids as $user_id ) {
 
 					if ( empty( $user_id ) ) {
+
 						continue;
 					}
 
-					$value = $this->get_author_website( $user_id, $field_id );	// Returns a single URL string.
+					$value = $this->get_author_website( $user_id, $meta_key );	// Returns a single URL string.
 
 					if ( ! empty( $value ) ) {	// Make sure we don't add empty values.
-						$ret[] = $value;
+
+						$urls[] = $value;
 					}
 				}
 			}
 
-			return $ret;
+			return $urls;
 		}
 
-		public function get_author_website( $user_id, $field_id = 'url' ) {
+		public function get_author_website( $user_id, $meta_key = 'url' ) {
+
+			if ( $this->p->debug->enabled ) {
+
+				$this->p->debug->log_args( array( 
+					'user_id'  => $user_id, 
+					'meta_key' => $meta_key, 
+				) );
+			}
+
+			static $local_cache = array();
+
+			if ( isset( $local_cache[ $user_id ] ) ) {
+
+				if ( isset( $local_cache[ $user_id ][ $meta_key ] ) ) {
+
+					return $local_cache[ $user_id ][ $meta_key ];
+				}
+
+			} else {
+
+				$local_cache[ $user_id ] = array();
+			}
 
 			$user_exists = SucomUtilWP::user_exists( $user_id );
+
 			$website_url = '';
 
 			if ( $user_exists ) {
 
-				switch ( $field_id ) {
+				switch ( $meta_key ) {
 
 					case 'none':
 
@@ -1431,9 +1502,10 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 					case 'twitter':
 
-						$website_url = get_the_author_meta( $field_id, $user_id );
+						$website_url = get_the_author_meta( $meta_key, $user_id );
 
 						if ( filter_var( $website_url, FILTER_VALIDATE_URL ) === false ) {
+
 							$website_url = 'https://twitter.com/' . preg_replace( '/^@/', '', $website_url );
 						}
 
@@ -1448,7 +1520,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 					default:
 
-						$website_url = get_the_author_meta( $field_id, $user_id );
+						$website_url = get_the_author_meta( $meta_key, $user_id );
 
 						break;
 				}
@@ -1458,17 +1530,19 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			} else {
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'user id ' . $user_id . ' is not a WordPress user' );
 				}
 			}
 
-			$website_url = apply_filters( $this->p->lca . '_get_author_website', $website_url, $user_id, $field_id, $user_exists );
+			$website_url = apply_filters( $this->p->lca . '_get_author_website', $website_url, $user_id, $meta_key, $user_exists );
 
 			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log( 'user id ' . $user_id . ' ' . $field_id . ' = ' . $website_url );
+
+				$this->p->debug->log( 'user id ' . $user_id . ' ' . $meta_key . ' = ' . $website_url );
 			}
 
-			return $website_url;
+			return $local_cache[ $user_id ][ $meta_key ] = (string) $website_url;
 		}
 
 		/**
@@ -1506,6 +1580,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function add_person_role( $user_id = null ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -1552,10 +1627,15 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			}
 
 			if ( 0 === get_current_user_id() ) {		// User is the scheduler.
+
 				set_time_limit( HOUR_IN_SECONDS );	// Set maximum PHP execution time to one hour.
 			}
 
 			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+
+				/**
+				 * Register image sizes and include WooCommerce front-end libs.
+				 */
 				do_action( $this->p->lca . '_scheduled_task_started', $user_id );
 			}
 
@@ -1611,6 +1691,7 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 		public function remove_person_role( $user_id = null ) {
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -1659,10 +1740,15 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			$this->stop_add_person_role();	// Just in case.
 
 			if ( 0 === get_current_user_id() ) {		// User is the scheduler.
+
 				set_time_limit( HOUR_IN_SECONDS );	// Set maximum PHP execution time to one hour.
 			}
 
 			if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+
+				/**
+				 * Register image sizes and include WooCommerce front-end libs.
+				 */
 				do_action( $this->p->lca . '_scheduled_task_started', $user_id );
 			}
 
@@ -1761,18 +1847,21 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 
 		/**
 		 * Since WPSSO Core v7.6.0.
+		 *
+		 * Used by WpssoFaqShortcodeQuestion->do_shortcode().
 		 */
-		public function add_attached( $user_id, $attach_type, $attach_id ) {
+		public function add_attached( $user_id, $attach_type, $attachment_id ) {
 
 			$opts = get_user_meta( $user_id, WPSSO_META_ATTACHED_NAME, $single = true );
 
-			if ( ! isset( $opts[ $attach_type ][ $attach_id ] ) ) {
+			if ( ! isset( $opts[ $attach_type ][ $attachment_id ] ) ) {
 
 				if ( ! is_array( $opts ) ) {
+
 					$opts = array();
 				}
 
-				$opts[ $attach_type ][ $attach_id ] = true;
+				$opts[ $attach_type ][ $attachment_id ] = true;
 
 				return update_user_meta( $user_id, WPSSO_META_ATTACHED_NAME, $opts );
 			}
@@ -1780,15 +1869,19 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			return false;	// No addition.
 		}
 
-		public function delete_attached( $user_id, $attach_type, $attach_id ) {
+		/**
+		 * Since WPSSO Core v7.6.0.
+		 */
+		public function delete_attached( $user_id, $attach_type, $attachment_id ) {
 
 			$opts = get_user_meta( $user_id, WPSSO_META_ATTACHED_NAME, $single = true );
 
-			if ( isset( $opts[ $attach_type ][ $attach_id ] ) ) {
+			if ( isset( $opts[ $attach_type ][ $attachment_id ] ) ) {
 
-				unset( $opts[ $attach_type ][ $attach_id ] );
+				unset( $opts[ $attach_type ][ $attachment_id ] );
 
 				if ( empty( $opts ) ) {	// Cleanup.
+
 					return delete_user_meta( $user_id, WPSSO_META_ATTACHED_NAME );
 				}
 
@@ -1798,6 +1891,9 @@ if ( ! class_exists( 'WpssoUser' ) ) {
 			return false;	// No delete.
 		}
 
+		/**
+		 * Since WPSSO Core v7.6.0.
+		 */
 		public function get_attached( $user_id, $attach_type ) {
 
 			$opts = get_user_meta( $user_id, WPSSO_META_ATTACHED_NAME, $single = true );

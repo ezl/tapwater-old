@@ -6,6 +6,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -18,6 +19,7 @@ if ( ! class_exists( 'WpssoSubmenuImageSizes' ) && class_exists( 'WpssoAdmin' ) 
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -27,8 +29,8 @@ if ( ! class_exists( 'WpssoSubmenuImageSizes' ) && class_exists( 'WpssoAdmin' ) 
 			$this->menu_ext  = $ext;
 
 			$this->p->util->add_plugin_filters( $this, array(
-				'form_button_rows' => 2,
-			), $prio = -10000 );
+				'form_button_rows' => 2,	// Filter form buttons for all settings pages.
+			) );
 		}
 
 		public function filter_form_button_rows( $form_button_rows, $menu_id ) {
@@ -43,7 +45,6 @@ if ( ! class_exists( 'WpssoSubmenuImageSizes' ) && class_exists( 'WpssoAdmin' ) 
 
 					break;
 
-				case 'sso-tools':
 				case 'tools':
 
 					$row_num = 2;
@@ -52,6 +53,7 @@ if ( ! class_exists( 'WpssoSubmenuImageSizes' ) && class_exists( 'WpssoAdmin' ) 
 			}
 
 			if ( null !== $row_num ) {
+
 				$form_button_rows[ $row_num ][ 'reload_default_image_sizes' ] = _x( 'Reload Default Image Sizes',
 					'submit button', 'wpsso' );
 			}
@@ -93,7 +95,7 @@ if ( ! class_exists( 'WpssoSubmenuImageSizes' ) && class_exists( 'WpssoAdmin' ) 
 				apply_filters( $filter_name, array(), $this->form )
 			);
 
-			$this->p->util->do_metabox_table( $table_rows, 'metabox-' . $metabox_id );
+			$this->p->util->metabox->do_table( $table_rows, 'metabox-' . $metabox_id );
 		}
 
 		protected function get_table_rows( $metabox_id, $tab_key ) {
@@ -107,10 +109,6 @@ if ( ! class_exists( 'WpssoSubmenuImageSizes' ) && class_exists( 'WpssoAdmin' ) 
 					$p_img_disabled = empty( $this->p->options[ 'p_add_img_html' ] ) ? true : false;
 					$p_img_msg      = $p_img_disabled ? $this->p->msgs->p_img_disabled( $extra_css_class = 'inline' ) : '';
 
-					$amp_img_disabled = empty( $this->p->avail[ 'amp' ][ 'any' ] ) ? true : false;
-					$amp_img_msg      = $amp_img_disabled ? $this->p->msgs->amp_img_disabled( $extra_css_class = 'inline' ) :
-						$this->p->msgs->maybe_ext_required( 'wpssojson' );
-
 					$table_rows[ 'og_img_size' ] = '' .
 					$this->form->get_th_html( _x( 'Open Graph (Facebook and oEmbed)', 'option label', 'wpsso' ), '', 'og_img_size' ) . 
 					'<td>' . $this->form->get_input_image_dimensions( 'og_img' ) . '</td>';
@@ -119,35 +117,27 @@ if ( ! class_exists( 'WpssoSubmenuImageSizes' ) && class_exists( 'WpssoAdmin' ) 
 					$this->form->get_th_html( _x( 'Pinterest Pin It', 'option label', 'wpsso' ), '', 'p_img_size' ) . 
 					'<td>' . $this->form->get_input_image_dimensions( 'p_img', $p_img_disabled ) . $p_img_msg . '</td>';
 
-					$table_rows[ 'schema_00_img_size' ] = '' .		// Use a key name that sorts first.
-					$this->form->get_th_html( _x( 'Schema', 'option label', 'wpsso' ), '', 'schema_img_size' ) . 
-					'<td>' . $this->form->get_input_image_dimensions( 'schema_img' ) . '</td>';
+					$table_rows[ 'schema_01_01_img_size' ] = '' .
+					$this->form->get_th_html( _x( 'Schema 1:1 (Google)', 'option label', 'wpsso' ), '', 'schema_1_1_img_size' ) . 
+					'<td>' . $this->form->get_input_image_dimensions( 'schema_1_1_img' ) . '</td>';
 
-					$table_rows[ 'schema_article_00_img_size' ] = '' .	// Use a key name that sorts first.
-					$this->form->get_th_html( _x( 'Schema Article', 'option label', 'wpsso' ), '', 'schema_article_img_size' ) . 
-					'<td>' . $this->form->get_input_image_dimensions( 'schema_article_img' ) . '</td>';
+					$table_rows[ 'schema_04_03_img_size' ] = '' .
+					$this->form->get_th_html( _x( 'Schema 4:3 (Google)', 'option label', 'wpsso' ), '', 'schema_4_3_img_size' ) . 
+					'<td>' . $this->form->get_input_image_dimensions( 'schema_4_3_img' ) . '</td>';
 
-					$table_rows[ 'schema_article_01_01_img_size' ] = ( $amp_img_disabled ? $this->form->get_tr_hide( 'basic' ) : '' ) .
-					$this->form->get_th_html( _x( 'Schema Article AMP 1:1', 'option label', 'wpsso' ), '', 'schema_article_1_1_img_size' ) . 
-					'<td>' . $this->form->get_input_image_dimensions( 'schema_article_1_1_img', $amp_img_disabled ) . $amp_img_msg . '</td>';
-
-					$table_rows[ 'schema_article_04_03_img_size' ] = ( $amp_img_disabled ? $this->form->get_tr_hide( 'basic' ) : '' ) .
-					$this->form->get_th_html( _x( 'Schema Article AMP 4:3', 'option label', 'wpsso' ), '', 'schema_article_4_3_img_size' ) . 
-					'<td>' . $this->form->get_input_image_dimensions( 'schema_article_4_3_img', $amp_img_disabled ) . $amp_img_msg . '</td>';
-
-					$table_rows[ 'schema_article_16_09_img_size' ] = ( $amp_img_disabled ? $this->form->get_tr_hide( 'basic' ) : '' ) .
-					$this->form->get_th_html( _x( 'Schema Article AMP 16:9', 'option label', 'wpsso' ), '', 'schema_article_16_9_img_size' ) . 
-					'<td>' . $this->form->get_input_image_dimensions( 'schema_article_16_9_img', $amp_img_disabled ) . $amp_img_msg . '</td>';
+					$table_rows[ 'schema_16_09_img_size' ] = '' .
+					$this->form->get_th_html( _x( 'Schema 16:9 (Google)', 'option label', 'wpsso' ), '', 'schema_16_9_img_size' ) . 
+					'<td>' . $this->form->get_input_image_dimensions( 'schema_16_9_img' ) . '</td>';
 
 					$table_rows[ 'schema_thumb_img_size' ] = '' .
 					$this->form->get_th_html( _x( 'Schema Thumbnail Image', 'option label', 'wpsso' ), '', 'thumb_img_size' ) . 
 					'<td>' . $this->form->get_input_image_dimensions( 'thumb_img' ) . '</td>';
 
-					$table_rows[ 'tc_00_sum_img_size' ] = '' .	// Use a key name that sorts first.
+					$table_rows[ 'tc_00_sum_img_size' ] = '' .
 					$this->form->get_th_html( _x( 'Twitter Summary Card', 'option label', 'wpsso' ), '', 'tc_sum_img_size' ) . 
 					'<td>' . $this->form->get_input_image_dimensions( 'tc_sum_img' ) . '</td>';
 
-					$table_rows[ 'tc_lrg_img_size' ] = '' .
+					$table_rows[ 'tc_01_lrg_img_size' ] = '' .
 					$this->form->get_th_html( _x( 'Twitter Large Image Summary Card', 'option label', 'wpsso' ), '', 'tc_lrg_img_size' ) . 
 					'<td>' . $this->form->get_input_image_dimensions( 'tc_lrg_img' ) . '</td>';
 

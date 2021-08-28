@@ -11,6 +11,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -25,11 +26,12 @@ if ( ! class_exists( 'WpssoJsonFiltersTypePerson' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			/**
-			 * Use the WpssoSchema method / filter.
+			 * Use the WpssoSchema filter.
 			 */
 			$this->p->util->add_plugin_filters( $this->p->schema, array(
 				'json_data_https_schema_org_person' => 5,

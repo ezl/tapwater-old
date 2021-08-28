@@ -11,6 +11,7 @@
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
 	<?php
 
     breadcrumbs();
@@ -84,48 +85,46 @@
 
 			);
 			?>
-            
-<?php
 
-           // More cities from same country
-           if(is_single() && get_the_category()[0]->slug != 'home'):
-           
-           $category = get_the_category();
-           $country = $category[1]->name;
-           $country_slug = $category[1]->slug;
-           $postid = get_the_ID();
-           ?>
-           
-           <?php
-           $query = new WP_Query(array(
-           	'category_name' => $country_slug,
-            'post_type' => 'post',
-            'post__not_in' => array($postid) //do not display current post
+    <?php
+        // Display more cities from same country - city page
+
+        
+            //only show if not home category post
+            if(is_single() && get_the_category()[0]->slug != 'home'): 
+                //get current categories for post 0-continent 1-xountry
+                $currentcat = wp_get_post_terms(get_the_ID(), 'category',  array('fields' => 'all', 'orderby' => 'term_id')); 
             
-           )); 
-           ?>
-           	<ul class="country-list">
-           <?php
-           if($query->have_posts()){ //display only if query has other cities
-           ?>
-           <h3>Check tap water safety for other cities in <a href="<?php echo site_url("/$country_slug"); ?>"><?php echo $country; ?></a></h3>
-           <?php
-               while($query->have_posts()){
-                $query->the_post();
-                if(get_post_type() != 'page'):
-                ?>
-                <li><a href="<?php the_permalink(); ?>"><?php the_field('city_name'); ?></li>
-                <?php
+                $query = new WP_Query(array(
+                    'category_name' => $currentcat[1]->slug,
+                    'post__not_in' => array(get_the_ID())
+
+                ));
+                
+                if($query->have_posts() && $query->found_posts > 1)://do not display if only one city in country, because that city  == current city
+                    ?>
+                    <h3>Check tap water safety for other cities in <a href="<?php echo site_url('/tap-water-safety-in-').$currentcat[1]->slug; ?>"><?php echo $currentcat[1]->name; ?></a></h3>
+                    <ul class="country-list">
+                    <?php
+                    while($query->have_posts()):
+                        $query->the_post();
+                        if(get_post_type() == 'post')://only show posts - cities
+                        ?>
+                            <li><a href="<?php the_permalink(); ?>"><?php the_field('city_name'); ?></li>
+                        <?php
+                        endif;
+                    endwhile;
+                    ?>
+                    </ul>
+                    <?php
                 endif;
-               }
-           }
-           ?>
-           </ul>
-           <?php
-           wp_reset_postdata();
-           
-           endif;
-           ?>           
+
+                wp_reset_postdata();
+            endif;
+       
+    ?>
+            
+
            
 	</div><!-- .entry-content -->
 

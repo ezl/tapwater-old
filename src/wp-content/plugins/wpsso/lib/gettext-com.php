@@ -5,14 +5,17 @@
  */
 __( '%s Notice', 'wpsso' );
 __( 'Notice', 'wpsso' );
-__( 'Error connecting to %1$s for caching (HTTP code %2$d).', 'wpsso' );
+__( 'Error retrieving %1$s for caching (HTTP code %2$d after %3$.03f seconds).', 'wpsso' );
+__( 'Error retrieving %1$s for caching (HTTP code %2$d).', 'wpsso' );
+__( 'Error retrieving %1$s for caching (after %2$.03f seconds).', 'wpsso' );
+__( 'Error retrieving %1$s for caching.', 'wpsso' );
 __( 'The PHP "%s" setting is enabled &mdash; the PHP cURL library cannot follow URL redirects.', 'wpsso' );
 __( 'The "%s" setting is deprecated since PHP version 5.3 and removed from PHP since version 5.4.', 'wpsso' );
 __( 'Please contact your hosting provider to have this setting disabled or install a newer version of PHP.', 'wpsso' );
 __( 'The PHP "%s" setting is enabled &mdash; the PHP cURL library cannot follow URL redirects.', 'wpsso' );
 __( 'Please contact your hosting provider to have this setting disabled.', 'wpsso' );
 __( 'The maximum number of URL redirects (%d) may have been exceeded.', 'wpsso' );
-__( 'Requests to cache this URL will be ignored for %d second(s).', 'wpsso' );
+__( 'Additional requests to retrieve and cache this URL will be ignored for another %d second(s).', 'wpsso' );
 __( 'Error removing cache file %s.', 'wpsso' );
 __( 'PHP cURL library missing &mdash; contact your hosting provider to have the cURL library installed.', 'wpsso' );
 __( 'Error removing cache file %s.', 'wpsso' );

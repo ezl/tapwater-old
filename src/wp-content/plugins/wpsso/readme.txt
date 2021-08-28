@@ -1,4 +1,4 @@
-=== WPSSO Core (The Complete Meta Tag and Schema Markup Solution) ===
+=== WPSSO Core | The Complete Meta Tag and Schema Markup Solution ===
 Plugin Name: WPSSO Core
 Plugin Slug: wpsso
 Text Domain: wpsso
@@ -6,33 +6,37 @@ Domain Path: /languages
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.txt
 Assets URI: https://surniaulula.github.io/wpsso/assets/
-Tags: optimize, social, search, meta tags, schema, open graph, rich pins, twitter cards, seo, social sharing, structured data, rich snippets, facebook, linkedin
+Tags: twitter, google, pinterest, linkedin, facebook, open graph, rich pins, meta tags, schema, rich results, social sharing, seo, structured data
 Contributors: jsmoriss
 Requires PHP: 5.6
 Requires At Least: 4.2
-Tested Up To: 5.4.2
-WC Tested Up To: 4.2.0
-Stable Tag: 7.9.0
+Tested Up To: 5.5
+WC Tested Up To: 4.4.1
+Stable Tag: 8.3.0
 
-Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded.
+Make sure your content looks great on social sites and search results, no matter how your URLs are crawled, shared, re-shared, posted, or embedded.
 
 == Description ==
 
 <p style="margin:0;"><img class="readme-icon" src="https://surniaulula.github.io/wpsso/assets/icon-256x256.png"></p>
 
-<h3>The Complete Meta Tag and Schema Markup Solution</h3>
+**Make sure your content looks great on social sites and search results, no matter how your URLs are crawled, shared, re-shared, posted, or embedded:**
 
-**Make sure your content looks great on all social and search sites - no matter how your URLs are crawled, shared, re-shared, posted, or embedded:**
+WPSSO creates meta tags and Schema markup for Facebook / Open Graph, Pinterest Rich Pins, Twitter Cards, Google Knowledge Graph, Google Rich Results (aka Rich Snippets, Structured Data), WhatsApp and Messaging Apps, Mobile Web Browsers, WordPress REST API, LinkedIn / oEmbed data and more &mdash; including complete markup for image SEO, video SEO, extensive e-Commerce product markup (for WooCommerce and others), mobile store apps, author profile / authorship, co-authors, publisher information, local business markup, aggregate ratings, reviews, recipe information, event details, and much, much more &mdash; all from your existing WordPress content, supported plugin data, and service API data.
 
-WPSSO creates meta tags and Schema markup for Facebook / Open Graph, Google's Knowledge Graph, Google Rich Results (aka Rich Snippets, Structured Data), Mobile Web Browsers, oEmbed data for LinkedIn, Pinterest Rich Pins, Twitter Cards &mdash; including complete markup for image SEO, video SEO, extensive e-Commerce product markup (for WooCommerce and others), mobile store apps, author profile / authorship, co-authors, publisher information, local business markup, aggregate ratings, reviews, recipe information, event details, and much, much more &mdash; all from your existing WordPress content, supported plugin data, and service API data.
+**Uses your existing WordPress content, plugin data, and service API data:**
 
-There's no need to manually re-enter descriptions, titles, product information, re-select images / videos, etc. like other meta tag and Schema markup plugins &mdash; WPSSO reads all your existing post, page, image, video, e-commerce product, recipe, rating, review, event, and SEO content automatically.
+There's no need to manually re-enter descriptions, titles, product information, re-select images / videos, etc. like other meta tag, SEO and Schema markup plugins.
 
-WPSSO is also language / locale aware, which means you can customize several option values for different webpage languages.
+WPSSO can be used as your one and only *social and search optimization* plugin, or in combination with your favorite SEO plugin to improve its meta tags and Schema markup (including, All In One SEO Pack, Jetpack SEO Tools, Rank Math SEO, SEO Ultimate, The SEO Framework, WP Meta SEO, Yoast SEO, and more).
 
-**Coded for maximum performance:**
+**Customize the plugin settings for different languages:**
 
-WPSSO makes full use of all available caching methods &mdash; along with offering advanced caching features like pre-seeding in background. WPSSO Core and its complementary add-ons load only the libraries and classes they need, keeping their code small, fast and light. All code is fully tested and compatible with the latest version of WordPress and PHP v7.x (WordPress v4.2 and PHP v5.6 or newer required).
+Text, image, and video related options are WordPress language / locale aware, which means you can easily switch languages and customize these options for different front-end webpage languages.
+
+**Coded for maximum WordPress performance and compatibility:**
+
+WPSSO makes full use of all available caching methods &mdash; along with offering advanced caching features like pre-seeding in background. WPSSO Core and its complementary add-ons load only the libraries and classes they need, keeping their code small, fast and light. All code is fully tested and compatible with the latest version of WordPress and PHP v7.x (WordPress v4.2 and PHP v5.6 or newer is required).
 
 <h3>Users Love the WPSSO Core Plugin</h3>
 
@@ -54,11 +58,9 @@ WPSSO makes full use of all available caching methods &mdash; along with offerin
 
 	* Open Graph (Facebook and oEmbed)
 	* Pinterest Pin It
-	* Schema
-	* Schema Article
-	* Schema Article AMP 1:1
-	* Schema Article AMP 4:3
-	* Schema Article AMP 16:9
+	* Schema 1:1 (Google Rich Results)
+	* Schema 4:3 (Google Rich Results)
+	* Schema 16:9 (Google Rich Results)
 	* Schema Thumbnail Image
 	* Twitter Summary Card
 	* Twitter Large Image Summary Card
@@ -77,13 +79,13 @@ WPSSO makes full use of all available caching methods &mdash; along with offerin
 
 * Customize values in the Document SSO metabox when editing posts, pages, custom post types, terms (categories and tags), custom post types, and user profiles.
 
-* Built-in support for AMP plugins:
+* Built-in compatibility with AMP plugins:
 
 	* [AMP](https://wordpress.org/plugins/amp/)
 	* [Better AMP](https://wordpress.org/plugins/better-amp/)
 	* [AMP for WP](https://wordpress.org/plugins/accelerated-mobile-pages/)
 
-* Built-in support for caching plugins:
+* Built-in compatibility with caching plugins:
 
 	* Autoptimize
 	* Cache Enabler
@@ -97,7 +99,7 @@ WPSSO makes full use of all available caching methods &mdash; along with offerin
 	* WP Rocket Cache
 	* WP Super Cache.
 
-* Built-in support for advanced WordPress configurations:
+* Built-in compatibility for advanced WordPress configurations:
 
 	* WordPress MU Domain Mapping
 	* Network / Multisite Installations
@@ -113,9 +115,9 @@ WPSSO makes full use of all available caching methods &mdash; along with offerin
 
 * Contextual help for every plugin option and [comprehensive online documentation](https://wpsso.com/docs/plugins/wpsso/).
 
-<h3>Free Complementary Add-ons for WPSSO Core</h3>
+<h3>Free Complementary Add-ons</h3>
 
-Optionally activate free complementary add-on(s) for non-standard features:
+Optionally activate free complementary add-ons for more non-standard features:
 
 * [WPSSO FAQ Manager](https://wordpress.org/plugins/wpsso-faq/) to manage FAQ categories with Question and Answer pages.
 * [WPSSO Inherit Parent Metadata](https://wordpress.org/plugins/wpsso-inherit-parent-meta/) to inherit featured and custom images.
@@ -136,11 +138,11 @@ Optionally activate free complementary add-on(s) for non-standard features:
 
 The Standard version is designed to satisfy the requirements of most standard WordPress sites / blogs. If your site requires additional 3rd party plugin or service API integration, like WooCommerce shops, embedded video support, or advanced customization features, then you may want the Premium version for those additional features.
 
-* Support for embedded videos from Facebook, Slideshare, Vimeo, Wistia, and Youtube in content text.
+* Detection of embedded videos from Facebook, Slideshare, Vimeo, Wistia, and Youtube in the content text.
 
-* Twitter [Player Card](https://dev.twitter.com/cards/types/player) for embedded videos from Facebook, Slideshare, Vimeo, Wistia, and Youtube.
+* Support for the Twitter [Player Card](https://dev.twitter.com/cards/types/player) for embedded videos.
 
-* Optionally upscale small images from the Media Library for social sharing and Schema markup.
+* Optional upscaling of small images from the Media Library for social sharing and Schema markup.
 
 * URL shortening with Bitly, DLMY.App, Google, Ow.ly, TinyURL, or YOURLS.
 
@@ -169,7 +171,6 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 		* [WooCommerce Currency Switcher](https://wordpress.org/plugins/woocommerce-currency-switcher/)
 		* [WooCommerce UPC, EAN, and ISBN](https://wordpress.org/plugins/woo-add-gtin/)
 		* WooCommerce Show Single Variations
-		* [WP eCommerce](https://wordpress.org/plugins/wp-e-commerce/)
 		* [WP Job Manager](https://wordpress.org/plugins/wp-job-manager/)
 		* [WP Meta SEO](https://wordpress.org/plugins/wp-meta-seo/)
 		* [WP-PostRatings](https://wordpress.org/plugins/wp-postratings/)
@@ -188,6 +189,7 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 		* Facebook Embedded Videos
 		* Gravatar (Author Image)
 		* Ow.ly
+		* Shopper Approved (Ratings and Reviews)
 		* Slideshare Presentations
 		* Soundcloud Tracks (for the Twitter Player Card)
 		* TinyURL
@@ -223,7 +225,6 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 
 * [Can I use the Premium plugin on multiple websites?](https://wpsso.com/docs/plugins/wpsso/faqs/can-i-use-the-pro-version-on-multiple-websites/)
 * [Does LinkedIn read the Open Graph meta tags?](https://wpsso.com/docs/plugins/wpsso/faqs/does-linkedin-read-the-open-graph-meta-tags/)
-* [How can I exclude / ignore certain parts of the content text?](https://wpsso.com/docs/plugins/wpsso/faqs/how-can-i-exclude-ignore-certain-parts-of-the-content-text/)
 * [How can I fix a ERR_TOO_MANY_REDIRECTS error?](https://wpsso.com/docs/plugins/wpsso/faqs/how-can-i-fix-a-err_too_many_redirects-error/)
 * [How can I fix a generic HTTP 500 error?](https://wpsso.com/docs/plugins/wpsso/faqs/how-can-i-fix-a-generic-http-500-error/)
 * [How can I fix a PHP fatal "out of memory" error?](https://wpsso.com/docs/plugins/wpsso/faqs/how-can-i-fix-a-php-fatal-out-of-memory-error/)
@@ -241,7 +242,7 @@ The Standard version is designed to satisfy the requirements of most standard Wo
 * [W3C says "there is no attribute 'property'"](https://wpsso.com/docs/plugins/wpsso/faqs/w3c-says-there-is-no-attribute-property/)
 * [Why are some HTML elements missing / misaligned / different?](https://wpsso.com/docs/plugins/wpsso/faqs/why-are-some-html-elements-missing-misaligned-different/)
 * [Why does Facebook show the wrong image / text?](https://wpsso.com/docs/plugins/wpsso/faqs/why-does-facebook-show-the-wrong-image-text/)
-* [Why does Google Structured Data Testing Tool show errors?](https://wpsso.com/docs/plugins/wpsso/faqs/why-does-google-structured-data-testing-tool-show-errors/)
+* [Why does Google Structured Data Test Tool show errors?](https://wpsso.com/docs/plugins/wpsso/faqs/why-does-google-structured-data-testing-tool-show-errors/)
 * [Why is the Open Graph title the same for every webpage?](https://wpsso.com/docs/plugins/wpsso/faqs/why-is-the-open-graph-title-the-same-for-every-webpage/)
 * [Why shouldn't I upload small images to the Media library?](https://wpsso.com/docs/plugins/wpsso/faqs/why-shouldnt-i-upload-small-images-to-the-media-library/)
 
@@ -308,257 +309,242 @@ Version components: `{major}.{minor}.{bugfix}[-{stage}.{level}]`
 
 <h3>Changelog / Release Notes</h3>
 
-**Version 7.9.0 (2020/06/12)**
+**Version 8.3.0 (2020/09/05)**
 
 * **New Features**
-	* Added a new Users &gt; Add a Person page to create new persons.
-	* Added a new "Book ISBN" option in the Document SSO metabox.
-	* Added a new "Book ISBN Custom Field" option in the Advanced Settings page.
+	* None.
 * **Improvements**
-	* None.
+	* Updated the cleanup method for Rank Math to remove only the Facebook and Twitter meta tags.
 * **Bugfixes**
-	* None.
+	* Fixed the Schema markup user profile query to include only posts and not pages.
 * **Developer Notes**
-	* Added a new WpssoUsersAddPerson class in lib/users/add-person.php.
-	* Added a new WpssoOpenGraphNS class in lib/opengraph-ns.php.
-	* Added a new 'img_url' option sanitation type in WpssoOptions->check_value().
-	* Added new 'wpsso_og_data_https_ogp_me_ns_{og_type}' filters.
+	* Added a new `SucomUtil::get_wp_url()` method.
+	* Refactored the `SucomUtil::is_toplevel_edit()` method.
+	* Refactored the `WpssoUtil->get_page_url()` method to handle 'is_search' and 'is_date' module array elements.
+	* Refactored the `WpssoPage->get_description()` method to handle 'is_search' and 'is_date' module array elements.
+	* Refactored the `WpssoPage->get_the_title()` method to handle 'is_search' and 'is_date' module array elements.
+	* Added a lib/compat.php library file for 3rd party plugin and theme compatibility actions and filters.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
-**Version 7.8.0 (2020/06/04)**
+**Version 8.2.2 (2020/08/28)**
 
 * **New Features**
 	* None.
 * **Improvements**
-	* Minor code optimization when getting folder and file path information for WPSSO add-ons.
+	* None.
 * **Bugfixes**
-	* Fixed missing Document SSO metabox in term editing pages for taxonomies registered with 'show_in_menu' as false (for example, WooCommerce product attributes).
+	* Fixed the Shopper Approved integration modules to skip the WooCommerce shop archive page.
 * **Developer Notes**
-	* Added a new `WpssoConfig::get_ext_dir()` method.
-	* Added a new `WpssoConfig::get_ext_file_path()` method.
-	* Moved `WpssoUtil->get_post_types()` to `SucomUtilWP::get_post_types()`.
-	* Moved `WpssoUtil->get_taxonomies()` to `SucomUtilWP::get_taxonomies()`.
-	* Renamed the following filters:
-		* 'wpsso_get_post_types' to 'sucom_get_post_types'
-		* 'wpsso_get_taxonomies' to 'sucom_get_taxonomies'
-	* Removed the following filters:
-		* 'wpsso_add_metabox_post'
-		* 'wpsso_add_metabox_term'
-		* 'wpsso_add_metabox_user'
+	* None.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
-**Version 7.7.0 (2020/05/30)**
+**Version 8.2.1 (2020/08/15)**
+
+**Google has updated their Rich Results requirements to use the complete URL of Schema enumeration values instead of only the enumeration name (as they previously required). The product availability, product condition, event attendance, event status, and offer availability values have all been updated to include their complete enumeration URL. For example, a previous product condition might have been 'New' or 'NewCondition' and will now be included in Schema markup as 'https://schema.org/NewCondition'.**
 
 * **New Features**
-	* Added a "Copy notifications to clipboard." link in the SSO notifications list.
+	* None.
 * **Improvements**
-	* Added an informational message about Schema FAQPage, QAPage, and Question markup when selecting those types.
+	* Added 'https://schema.org/' to the Schema item availability, item condition, event attendance, and event status property values.
 * **Bugfixes**
-	* Fix to skip URL shortening for 404 and search pages.
+	* Fixed a possible missing 'publisher' property for the Schema Article type.
 * **Developer Notes**
-	* Added a new WpssoEdit class in lib/edit.php for post, term, and user editing page filters.
-	* Added a new `SucomUtil::is_non_assoc()` method to test for non-associative arrays.
-	* Added a new `SucomUtil::is_mod_current_screen()` method for notice text in `WpssoUtil::maybe_set_ref()`.
-	* Added a new `WpssoWpMeta->$md_cache_disabled` property to skip local caches when saving post/term/user options.
-	* Added new 'wpsso_json_data_validate_https_schema_org_{item_type}' filters for WPSSO JSON v3.10.0.
-	* Moved the lib/wp-meta.php library file to lib/abstracts/wp-meta.php.
+	* Added a new 'wpsso_sanitize_md_options' filter hook in WpssoSchema to sanitize the post metadata product availability and condition values.
+	* Added a new `WpssoSchema::check_prop_value_enumeration()` method.
+	* Deprecated the `WpssoSchema::check_itemprop_content_map()` method.
+	* Replaced the jQuery `.load( handler )` event function trigger with `.on( 'load', handler )`.
+	* Replaced the jQuery `hover` event with `mouseenter` in SucomForm->get_event_load_json_script().
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
-**Version 7.6.0 (2020/05/22)**
+**Version 8.1.0 (2020/08/13)**
 
 * **New Features**
-	* Added a new "Show Yoast SEO Import Details" option under the SSO &gt; Advanced Settings &gt; Editing Pages &gt; Document Meta tab.
-* **Improvements**
-	* Added post cache clearing for attached post IDs (used by the WPSSO FAQ add-on).
-	* Removed the SSO &gt; General Settings &gt; Social and Search Sites &gt; Google &gt; Knowledge Graph for Home Page &gt; Include Schema WebSite option.
-	* Moved the 'sucom-block-editor-admin' script from the header (default location) to the footer in order to work around a bug in NextGEN Gallery.
-* **Bugfixes**
 	* None.
+* **Improvements**
+	* Added new options under SSO &gt; Advanced Settings &gt; Shopper Approved:
+		* Maximum Number of Reviews (100)
+		* Maximum Age of Reviews (60) months
+* **Bugfixes**
+	* Fixed a PHP fatal error for `SucomUtil::preg_grep_keys()` when adding a custom video from the Document SSO metabox.
 * **Developer Notes**
-	* Added a new 'wpsso_schema_types_select' filter.
-	* Updated the `WpssoPost->clear_cache()` method to clear attached post IDs.
-	* Added recursion prevention in the WpssoPost, WpssoTerm, and WpssoUser `clear_cache()` methods.
-	* Added new methods in the WpssoPost, WpssoTerm, WpssoUser, and WpssoWpMeta classes:
-		* add_attached()
-		* delete_attached()
-		* get_attached()
+	* Added extra checks and debugging messages for a possible invalid video array from the `WpssoOpenGraph->get_all_videos()` method.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
-**Version 7.5.0 (2020/05/14)**
+**Version 8.0.0 (2020/08/11)**
+
+**Google has updated their Rich Results requirements and now prefers 1:1, 4:3, and 16:9 images for all Schema types, not just the Schema Article type for AMP webpages. The "Schema" and "Schema Article" image sizes have been removed and replaced by new Schema 1:1, 4:3, and 16:9 image sizes (minimum dimensions are 1200x1200px, 1200x900px, and 1200x675px).**
+
+**The [WP eCommerce](https://wordpress.org/plugins/wp-e-commerce/) plugin is no longer supported (last update in January 2019) and the WPSSO Core Premium integration module for WP eCommerce has been removed.**
 
 * **New Features**
-	* None.
+	* Added an API integration module for Shopper Approved ratings and reviews. See the SSO &gt; Advanced Settings &gt; Service APIs tab to enter your Shopper Approved API token and enabled reviews for specific post types (for example, the "product" custom post type).
 * **Improvements**
-	* The WPSSO Tweet a Quote add-on has been deprecated and removed.
-	* Added a check to prevent post URLs from non-public post types from being shortened.
+	* Added a new "Gravatar Image Size" option (default is 1200px).
+	* Added shortening service API status to the SSO &gt; Dashboard &gt; Premium Features Status metabox:
+		* Bitly Shortener API
+		* DLMY.App Shortener API
+		* Ow.ly Shortener API
+		* TinyURL Shortener API
+		* YOURLS Shortener API
+	* Renamed the following SSO &gt; Image Sizes:
+		* Schema Article AMP 1:1 to Schema 1:1 (Google)
+		* Schema Article AMP 4:3 to Schema 4:3 (Google)
+		* Schema Article AMP 16:9 to Schema 16:9 (Google)
+	* Removed the following SSO &gt; Image Sizes:
+		* Schema
+		* Schema Article
+	* Removed the "Schema Image URL" option in the Document SSO metabox.
+	* Removed the WPSSO Core Premium integration module for the [WP eCommerce](https://wordpress.org/plugins/wp-e-commerce/) plugin.
+	* Removed the SSO &gt; Advanced Settings &gt; Cache &gt; Clear All Caches on Save Settings option.
 * **Bugfixes**
-	* Fixed an ignored Product Availability value in the Document SSO metabox for custom product pages that are not e-commerce product pages.
+	* Fixed incorrect sanitation of plugin settings for multisite blogs.
 * **Developer Notes**
-	* Added a new WpssoSchema->get_json_data_home_website() method.
-	* Added a new WpssoWpMeta::get_mod_home() method.
+	* Added a new `WpssoUtilMetabox` class.
+	* Added a new `WpssoProUtilShorten->load_lib()` method.
+	* Added new `WpssoSchema::is_valid_key()` and `is_valid_val()` methods.
+	* Renamed the `WpssoProUtilShorten->set_instance()` method to `get_svc_instance()`.
+	* Refactored `WpssoProUtilShorten->get_svc_instance()` to use the new `self->load_lib()` method.
+	* Added more debugging messages to the `WpssoProEcomWooCommerce` class for missing product methods.
+	* Added a 'label_transl' key to the `$features` array for the SSO &gt; Dashboard &gt; Premium Features Status metabox.
+	* Refactored the Gravatar integration module to always fallback to the "mystery person" image.
+	* Refactored the `WpssoMedia->get_featured()` method to use a local cache to avoid duplicate database queries.
+	* Refactored the `WpssoMedia->get_attached_images()` method to use a local cache to avoid duplicate database queries.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
-**Version 7.4.0 (2020/05/09)**
+**Version 7.15.0 (2020/08/02)**
 
 * **New Features**
-	* Added new buttons in the SSO &gt; Tools and Actions page:
-		* Add Person Role to Content Creators
-		* Remove Person Role from All Users
+	* None.
 * **Improvements**
-	* Changed the menu font icon for better compatibility between Mac OS and Windows (Mac OS superscripted the original font icon).
+	* Removed the Users &gt; Add Person &gt; Additional Role option.
+	* Added the ability to translate labels in the "Standard Features Status" and "Premium Features Status" metaboxes in the SSO &gt; Dashboard page.
 * **Bugfixes**
 	* None.
 * **Developer Notes**
-	* Added a new lib/util-cache.php library file.
+	* Tested with WordPress v5.5.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
-**Version 7.3.0 (2020/05/01)**
+**Version 7.14.1 (2020/07/25)**
+
+**The Open Graph meta tags for WooCommerce products have been extended to include additional information for each product variation. The sanitation of Open Graph meta tags, and their generation from internal meta tag data, has also been completely refactored.**
 
 * **New Features**
-	* Added a new WPSSO Product Metadata for WooCommerce add-on.
+	* Extended the Open Graph product type by adding all available product meta tags for each product offer (ie. 'product:retailer_item_id', 'product:retailer_part_no', 'product:availability', 'product:color', 'og:image', etc.).
 * **Improvements**
-	* None.
+	* Added 'PreSale' to the list of product availability values.
+	* Updated the Open Graph product availability values (see [Facebook Marketing API &gt; Catalog &gt; Reference &gt; OpenGraph Tags](https://developers.facebook.com/docs/marketing-api/catalog/reference/#og-tags)).
 * **Bugfixes**
-	* None.
+	* Fixed a possible missing Open Graph image for WooCommerce products with variations.
 * **Developer Notes**
-	* Added a new lib/util-woocommerce.php library file.
+	* Refactored the `WpssoHead->get_mt_array()` method.
+	* Refactored the `WpssoOpenGraph->sanitize_mt_array()` method.
+	* Added a new `WpssoHead->add_mt_array()` method to recurse the meta tag arrays.
+	* Added a new `SucomUtil::get_mt_og_seed()` method to provide a default 'wpsso_og_seed' filter value.
+	* Added a new `WpssoOpenGraph::check_mt_value_price` method to sanitize product price values.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
-**Version 7.2.0 (2020/04/28)**
+**Version 7.13.1 (2020/07/21)**
 
 * **New Features**
 	* None.
 * **Improvements**
-	* Added a new 'wpseo_frontend_presenters' filter to disable Open Graph, Twitter, and Schema markup in Yoast SEO v14.0.
-* **Bugfixes**
 	* None.
+* **Bugfixes**
+	* Fixed an "undefined index url" error for videos with incomplete streaming data from the Google YouTube API.
 * **Developer Notes**
-	* Renamed the 'plugin_product_attr_' option keys to 'plugin_attr_product_' for the new WPSSO WCMD add-on.
-	* Moved the lib/pro/util/custom-fields.php library class to lib/util-custom-fields.php.
-	* Removed applying the following filters, which are no longer compatible with Yoast SEO v14.0.
-		* 'wpseo_desc'
-		* 'wpseo_metadesc'
-		* 'wpseo_title'
+	* Refactored the side information column in plugin settings pages for WordPress v5.5.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
-**Version 7.1.0 (2020/04/25)**
+**Version 7.13.0 (2020/07/18)**
 
 * **New Features**
-	* None.
+	* Added a "Video API Info" status to the SSO &gt; Dashboard &gt; Cache Status metabox.
+	* Added a "Video API Info Cache Expiry" option under the SSO &gt; Advanced Settings &gt; Cache tab.
 * **Improvements**
-	* The "Import Yoast SEO Social Meta" feature module (Advanced Settings page) now reads image IDs instead of image URLs, and shows an update notice for any custom metadata values read (Premium version).
-	* The "Structured data product" setting for the Product GTIN (EAN, UPC, ISBN) for WooCommerce plugin is now checked to assign the GTIN/ISBN/MPN value to the correct Schema property (Premium version).
+	* None.
 * **Bugfixes**
-	* Fixed a conflict when both a custom Image ID and Image URL were provided for the same option.
+	* Fixed an "undefined index formats" error for protected YouTube videos (without streaming data).
 * **Developer Notes**
-	* Added a new 'wpsso_get_md_options' filter.
-	* Added a new `SucomForm->get_input_locale()` method.
-	* Added a new `SucomForm->get_textarea_locale()` method.
-	* Added a new `SucomForm->get_th_html_locale()` method.
-	* Refactored the WpssoProUtilWpseoMeta class methods (ie. the "Import Yoast SEO Social Meta" feature module).
-	* Refactored the `SucomForm->get_css_class_hide()` method to check both localized and non-localized values.
+	* Updated the `SucomCache` class to rename '$file_ext' to '$cache_ext' and add its (optional) value to the transient cache id.
+	* Updated the video API modules to include a '$cache_ext' value when calling the `SucomCache->get()` method.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
-**Version 7.0.1 (2020/04/19)**
+**Version 7.12.1 (2020/07/11)**
 
 * **New Features**
 	* None.
 * **Improvements**
-	* Added a fallback to the full size image if the requested image size is uncropped and one side matches the image size.
+	* Added contextual information about the Google Structured Data Test Tool being deprecated.
 * **Bugfixes**
-	* Fixed a possible error notice when the WordPress `image_make_intermediate_size()` function returns false instead of creating a resized image as expected.
+	* Fixed missing submission of form options that are disabled dynamically using jQuery.
 * **Developer Notes**
-	* Added a 'wp_image_resize_identical_dimensions' filter (added in WordPress v5.3) hook in `WpssoMedia->maybe_resize_fuzzy_dimensions()` to prevent WordPress from skipping image creation if the resized image and the original image are "close enough".
+	* Added a `sucomDisableUnchanged()` jQuery call to the 'profile' and 'sitesubmenu' form submissions.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
-**Version 7.0.0 (2020/04/17)**
+**Version 7.12.0 (2020/07/04)**
 
 * **New Features**
-	* Deprecated the WPSSO Social Sharing Buttons (aka WPSSO SSB) add-on.
-	* Added taxonomy names to the SSO &gt; Advanced Settings &gt; Editing Pages &gt; Add Document SSO Metabox option.
+	* None.
 * **Improvements**
-	* Added a title to the tab content for mobile icon-only tabs.
-	* Added a default icon for unknown WPSSO settings tabs.
-	* Added a dismiss link to WPSSO "update-nag" notices.
-	* Updated the Image ID and Image URL option enabled/disabled behavior:
-		* The Image ID option is disabled when an Image URL is entered.
-		* The Image URL option is disabled when an Image ID is selected.
-	* Renamed the Document SSO "Head" tab to "Head Markup".
-	* Renamed the SSO &gt; Advanced Settings "Plugin Behavior" tab to "Standard Settings".
-	* Renamed the 'Enforce Image Size Checks' option to 'Enforce Image Dimension Checks'.
-	* Renamed the 'Video Size' option to 'Video Dimensions'.
+	* Added a new "WebSite Publisher Type" option under the SSO &gt; Essential Settings &gt; Google tab.
+	* Renamed the "User for Person Social Profile" option to "WebSite Publisher (Person)"
+	* Removed the "Knowledge Graph for Home Page" option.
+* **Bugfixes**
+	* Fixed possible duplicate Organization markup in the home page.
+	* Fixed a non-unique md5 hash value for the Schema Person @id string.
+* **Developer Notes**
+	* Refactored the `WpssoSchemaGraph::optimize_json()` method to avoid possible duplicate Organization markup in the home page.
+	* Refactored the `WpssoSchema::update_data_id()` method to avoid possibly appending duplicate type IDs to the '@id' string.
+	* Deprecated the `WpssoAdmin::add_schema_knowledge_graph_table_rows()` method.
+	* Renamed setting option keys:
+		* 'schema_home_person_id' to 'site_pub_person_id'
+		* 'schema_logo_url' to 'site_org_logo_url'
+		* 'schema_banner_url' to 'site_org_banner_url'
+		* 'site_place_id' to 'site_org_place_id'
+	* Removed setting option keys:
+		* 'schema_add_home_organization'
+		* 'schema_add_home_person'
+* **Requires At Least**
+	* PHP v5.6.
+	* WordPress v4.2.
+
+**Version 7.11.0 (2020/06/27)**
+
+* **New Features**
+	* None.
+* **Improvements**
+	* None.
 * **Bugfixes**
 	* None.
 * **Developer Notes**
-	* Added new methods:
-		* `SucomUtil::add_query_fragment()`
-		* `SucomUtil::get_mod_anchor()`
-		* `SucomUtil::sanitize_anchor()`
-		* `SucomUtilWP::get_post_type_labels()`
-		* `SucomUtilWP::get_taxonomy_labels()`
-		* `SucomUtilWP::is_post_type_public()`
-		* `SucomUtilWP::sort_objects_by_label()`
-		* `WpssoUtil->add_post_type_names()`
-		* `WpssoUtil->add_taxonomy_names()`
-		* `WpssoUtil::get_fragment_anchor()` (for the WPSSO FAQ add-on)
-	* Updated post type and taxonomy "public" query filters:
-		* From:
-			* `array( 'public' => 1, 'show_ui' => 1 )`
-		* To:
-			* `array( 'show_in_menu' => 1, 'show_ui' => 1 )`
-		* In:
-			* `WpssoTerm::get_public_ids()`
-			* `WpssoUtil->get_post_types()`
-			* `SucomUtilWP::get_post_type_labels()`
-			* `SucomUtilWP::get_taxonomy_labels()`
-	* Added a new 'is_public' key to the `$mod` associative array (value is `true` by default, and `false` for non-public post types and taxonomies).
-	* Added a static local cache to the `WpssoUtil->get_page_url()` private method.
-	* Refactored the `SucomForm->get_checklist_post_types()` method and removed the `$values` argument.
-	* Removed the `$src_id` argument from `WpssoUtil->get_canonical_url()`.
-	* Removed the `$src_id` argument from `WpssoUtil->get_sharing_url()`.
-	* Removed the `$src_id` argument from `WpssoUtil->get_page_url()`.
-	* Removed the `$src_id` argument from following filters:
-		* 'wpsso_archive_page_url'
-		* 'wpsso_canonical_url'
-		* 'wpsso_home_url'
-		* 'wpsso_post_url'
-		* 'wpsso_search_url'
-		* 'wpsso_server_request_url_cache_disabled'
-		* 'wpsso_server_request_url'
-		* 'wpsso_sharing_url'
-		* 'wpsso_term_url'
-		* 'wpsso_user_url'
-	* Removed the 'plugin_add_to_term' option key (replaced by new 'plugin_add_to_tax_{tax_slug}' options).
-	* Renamed the 'wpsso_server_request_url_disable_cache' filter to 'wpsso_server_request_url_cache_disabled'.
-	* Deprecated the `WpssoUtil->get_atts_css_attr()` public method.
-	* Deprecated the `WpssoUtil->get_atts_src_id()` public method.
+	* Added a new 'wpsso_version_updates' action, which is run when add-on versions are updated / changed.
 * **Requires At Least**
 	* PHP v5.6.
 	* WordPress v4.2.
 
 == Upgrade Notice ==
 
-= 7.9.0 =
+= 8.3.0 =
 
-(2020/06/12) Added a new Users &gt; Add a Person page to create new persons. Added a new "Book ISBN" option in the Document SSO metabox.
+(2020/09/05) Fixed the Schema markup user profile query to include only posts and not pages.
 

@@ -27,11 +27,8 @@
 				the_privacy_policy_link( '', '<span role="separator" aria-hidden="true"></span>' );
 			}
 			?>
-			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentyfifteen' ) ); ?>" class="imprint">
-				<?php
-				/* translators: %s: WordPress */
-				printf( __( 'Proudly powered by %s', 'twentyfifteen' ), 'WordPress' );
-				?>
+			<a href="<?php echo esc_url( __( 'https://www.canyoudrinktapwaterin.com/contact-us/', 'twentyfifteen' ) ); ?>" class="imprint">
+				<?php printf( __( 'Built with &hearts; in Chicago %s', 'twentyfifteen' ), 'by ezl' ); ?>
 			</a>
 		</div><!-- .site-info -->
 	</footer><!-- .site-footer -->

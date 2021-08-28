@@ -1,5 +1,8 @@
 <?php
 get_header();
+
+
+
 while(have_posts()){
 	the_post();
 ?>
@@ -14,12 +17,14 @@ while(have_posts()){
 	</header><!-- .entry-header -->
 
 	<div class="entry-content">
-		<?php 
+        <?php 
+        
         the_content(); 
         
+        get_template_part('world', 'map'); 
         
         ?>
-		
+	
 	</div><!-- .entry-content -->
 
 	
@@ -38,8 +43,9 @@ while(have_posts()){
                 $regions = get_categories(array(
                 	'orderby' => 'name',
                     'parent' => 0,
-                    'exclude' => array(21, 1)             
+                    'exclude' => array(21, 1)         
                 ));
+                
                 $n = 0;
                 foreach($regions as $region){
                 $n++;
@@ -71,7 +77,8 @@ $n++;
     <div class="country <?php echo $country->slug; ?>">	
     <?php
     
-    	echo '<h2><a href="'.site_url('/').$country->slug.'">'.$country->name.'</a></h2><ul>';
+    	echo '<h2><a href="'.site_url('/tap-water-safety-in-').$country->slug.'">'.$country->name.'</a></h2><ul>';
+    	
         
         
        	
@@ -101,7 +108,6 @@ $n++;
 </div>
 <?php
 }
-//
 
 
                 

@@ -35,15 +35,15 @@
 
 'wpsso_article_sections' ( array $sections )
 
-'wpsso_attached_accept_img_dims' ( $bool, $img_url, $img_width, $img_height, $size_name, $pid )
+'wpsso_attached_accept_img_dims' ( $accept, $img_url, $img_width, $img_height, $size_name, $pid )
 
 'wpsso_attached_image_ids' ( $attach_ids, $post_id )
 
-'wpsso_attached_images' ( $og_ret, $num, $size_name, $post_id, $check_dupes )
+'wpsso_attached_images' ( $mt_ret, $num, $size_name, $post_id, $check_dupes )
 
 'wpsso_cache_expire_head_markup' ( $secs )
 
-'wpsso_cache_expire_image_url_size' ( $secs )
+'wpsso_cache_expire_image_info' ( $secs )
 
 'wpsso_cache_expire_schema_types' ( $secs )
 
@@ -52,6 +52,8 @@
 'wpsso_cache_expire_short_url' ( $secs )
 
 'wpsso_cache_expire_the_content' ( $secs )
+
+'wpsso_cache_expire_video_info' ( $secs )
 
 'wpsso_canonical_url' ( $url, $mod, $add_page )
 
@@ -63,7 +65,7 @@
 
 'wpsso_columns_post_{post_type_name}' ( true )
 
-'wpsso_content_accept_img_dims' ( $bool, $img_url, $img_width, $img_height, $size_name, $mod )
+'wpsso_content_accept_img_dims' ( $accept, $img_url, $img_width, $img_height, $size_name, $mod )
 
 'wpsso_content_image_preg_html_tag' ( $default = 'img' )
 
@@ -121,7 +123,7 @@
 
 'wpsso_monthly_archive_description' ( $desc_text, $mod )
 
-'wpsso_ngg_accept_img_dims' ( $bool, $img_url, $img_width, $img_height, $size_name, $pid )
+'wpsso_ngg_accept_img_dims' ( $accept, $img_url, $img_width, $img_height, $size_name, $pid )
 
 'wpsso_ngg_tags_seed' ( $tags, $pid )
 
@@ -143,13 +145,11 @@
 
 'wpsso_og_default_img_url' ( $image_url )
 
-'wpsso_og_ecom_edd' ( $og_ecom, $mod )
+'wpsso_og_ecom_edd' ( $mt_ecom, $mod )
 
-'wpsso_og_ecom_woocommerce' ( $og_ecom, $mod )
+'wpsso_og_ecom_woocommerce' ( $mt_ecom, $mod )
 
-'wpsso_og_ecom_wpecommerce' ( $og_ecom, $mod )
-
-'wpsso_og_featured' ( $og_ret, $num, $size_name, $post_id, $check_dupes )
+'wpsso_og_featured' ( $mt_ret, $num, $size_name, $post_id, $check_dupes )
 
 'wpsso_og_ns' ( $ns )
 
@@ -170,8 +170,6 @@
 'wpsso_og_type_for_post_type_unknown_type' ( $type_id, $mod )
 
 'wpsso_og_type' ( $og_type, $mod, $is_custom )
-
-'wpsso_opengraph_img_size_limits' ( array( $min_width, $min_height, $max_ratio ) )
 
 'wpsso_option_type' ( false, $base_key, $network, $mod )
 
@@ -215,17 +213,13 @@
 
 'wpsso_robots_content' ( $content, $mod, $directives )
 
-'wpsso_save_options' ( $opts, $options_name, $network, $doing_upgrade )
+'wpsso_save_setting_options' ( $opts, $network, $upgrading )
 
 'wpsso_save_post_options' ( $opts, $post_id, $rel_id, $mod )
 
 'wpsso_save_term_options' ( $opts, $term_id, $term_tax_id, $mod )
 
 'wpsso_save_user_options' ( $opts, $term_id, false, $mod )
-
-'wpsso_schema_article_img_size_limits' ( array( $min_width, $min_height, $max_ratio ) )
-
-'wpsso_schema_img_size_limits' ( array( $min_width, $min_height, $max_ratio ) )
 
 'wpsso_schema_meta_itemprop' ( $mt_schema, $mod, $mt_og, $page_type_id )
 
@@ -254,6 +248,8 @@
 'wpsso_server_request_url' ( $url, $mod, $add_page )
 
 'wpsso_sharing_url' ( $url, $mod, $add_page )
+
+'wpsso_shopperapproved_for_{post_type}' ( $bool, $mod )
 
 'wpsso_social_accounts' ( (array) $social_accounts )
 

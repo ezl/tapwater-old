@@ -31,6 +31,15 @@
 			<a href="<?php echo esc_url( __( 'https://www.canyoudrinktapwaterin.com/contact-us/', 'twentyfifteen' ) ); ?>" class="imprint">
 				<?php printf( __( 'Built with &hearts; in Chicago %s', 'twentyfifteen' ), 'by ezl' ); ?>
 			</a>
+   
+    	<div class="footer-social">
+        	<a href="https://www.facebook.com/Tap-Water-Safety-110261403853327/"><img src="https://img.icons8.com/ios-filled/24/000000/facebook-new.png"/></a>
+            <a href="https://twitter.com/TapWaterSafety"><img src="https://img.icons8.com/ios-filled/24/000000/twitter-squared.png"/></a>
+            <a href="https://www.reddit.com/user/TapwaterSafety"><img src="https://img.icons8.com/metro/24/000000/reddit.png"/></a>
+            <a href="https://www.pinterest.com/tapwatersafety/"><img src="https://img.icons8.com/ios/24/000000/pinterest.png"/></a>
+            
+        </div>
+   
 		</div><!-- .site-info -->
 	</footer><!-- .site-footer -->
 

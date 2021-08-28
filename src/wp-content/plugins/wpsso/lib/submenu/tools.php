@@ -6,6 +6,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -20,6 +21,7 @@ if ( ! class_exists( 'WpssoSubmenuTools' ) && class_exists( 'WpssoAdmin' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
@@ -38,9 +40,14 @@ if ( ! class_exists( 'WpssoSubmenuTools' ) && class_exists( 'WpssoAdmin' ) ) {
 		 */
 		protected function add_plugin_hooks() {
 
+			/**
+			 * Make sure this filter runs first as it initializes a new form buttons array.
+			 */
+			$min_int = SucomUtil::get_min_int();
+
 			$this->p->util->add_plugin_filters( $this, array(
-				'form_button_rows'  => 1,
-			) );
+				'form_button_rows'  => 1,	// Filter form buttons for this settings page only.
+			), $min_int );
 		}
 
 		protected function show_post_body_setting_form() {
@@ -67,8 +74,11 @@ if ( ! class_exists( 'WpssoSubmenuTools' ) && class_exists( 'WpssoAdmin' ) ) {
 					echo '* ';
 
 					if ( empty( $this->p->options[ 'plugin_clear_short_urls' ] ) ) {
+
 						echo sprintf( __( '%1$s option is unchecked - shortened URLs cache will be preserved.', 'wpsso' ), $settings_page_link );
+
 					} else {
+
 						echo sprintf( __( '%1$s option is checked - shortened URLs cache will be cleared.', 'wpsso' ), $settings_page_link );
 					}
 
@@ -78,8 +88,9 @@ if ( ! class_exists( 'WpssoSubmenuTools' ) && class_exists( 'WpssoAdmin' ) ) {
 
 			echo '<p class="status-msg smaller left">';
 			echo '** ';
-			echo sprintf( __( 'Members of the %s role may be hand selected for certain Schema properties (content creators are administrators, editors, authors or contributors).', 'wpsso' ), $role_label );
-			echo '</p>';
+			echo sprintf( __( 'Members of the %s role may be selected for certain Schema properties.', 'wpsso' ), $role_label ) . ' ';
+			echo __( '"Content Creators" are all administrators, editors, authors, and contributors.', 'wpsso' );
+			echo '</p>' . "\n";
 
 			echo '</div><!-- #tools-content -->' . "\n";
 		}

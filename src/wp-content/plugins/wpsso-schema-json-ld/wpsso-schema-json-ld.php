@@ -13,9 +13,9 @@
  * Description: Google Rich Results and Structured Data for Articles, Carousels (aka Item Lists), Claim Reviews, Events, FAQ Pages, How-Tos, Images, Local Business / Local SEO, Organizations, Products, Ratings, Recipes, Restaurants, Reviews, Videos, and More.
  * Requires PHP: 5.6
  * Requires At Least: 4.2
- * Tested Up To: 5.4.2
- * WC Tested Up To: 4.2.0
- * Version: 3.11.0
+ * Tested Up To: 5.5
+ * WC Tested Up To: 4.4.1
+ * Version: 4.2.0
  * 
  * Version Numbering: {major}.{minor}.{bugfix}[-{stage}.{level}]
  *
@@ -28,6 +28,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
@@ -38,13 +39,14 @@ if ( ! class_exists( 'WpssoJson' ) ) {
 		/**
 		 * Wpsso plugin class object variable.
 		 */
-		public $p;		// Wpsso
+		public $p;		// Wpsso.
 
 		/**
 		 * Library class object variables.
 		 */
-		public $filters;	// WpssoJsonFilters
-		public $reg;		// WpssoJsonRegister
+		public $compat;		// WpssoJsonCompat (3rd party plugin and theme compatibility actions and filters).
+		public $filters;	// WpssoJsonFilters.
+		public $reg;		// WpssoJsonRegister.
 
 		/**
 		 * Reference Variables (config, options, modules, etc.).
@@ -130,7 +132,8 @@ if ( ! class_exists( 'WpssoJson' ) ) {
 
 			static $loaded = null;
 
-			if ( null !== $loaded ) {
+			if ( null !== $loaded && ! $debug_enabled ) {
+
 				return;
 			}
 
@@ -144,18 +147,21 @@ if ( ! class_exists( 'WpssoJson' ) ) {
 			$this->p =& Wpsso::get_instance();
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 
 			if ( self::get_missing_requirements() ) {	// Returns false or an array of missing requirements.
 
 				if ( $this->p->debug->enabled ) {
+
 					$this->p->debug->log( 'exiting early: have missing requirements' );
 				}
 
 				return;	// Stop here.
 			}
 
+			$this->compat  = new WpssoJsonCompat( $this->p );	// 3rd party plugin and theme compatibility actions and filters.
 			$this->filters = new WpssoJsonFilters( $this->p );
 		}
 
@@ -190,6 +196,7 @@ if ( ! class_exists( 'WpssoJson' ) ) {
 						}
 			
 						if ( $this->p->debug->enabled ) {
+
 							$this->p->debug->log( strtolower( $req_info[ 'notice' ] ) );
 						}
 					}
@@ -202,12 +209,14 @@ if ( ! class_exists( 'WpssoJson' ) ) {
 		public static function maybe_show_notices() {
 
 			if ( self::$missing_shown ) {	// Nothing to do.
+
 				return;	// Stop here.
 			}
 
 			$missing_reqs = self::get_missing_requirements();	// Returns false or an array of missing requirements.
 
 			if ( ! $missing_reqs ) {
+
 				return;	// Stop here.
 			}
 
@@ -230,20 +239,13 @@ if ( ! class_exists( 'WpssoJson' ) ) {
 			static $local_cache = null;
 
 			if ( null !== $local_cache ) {
+
 				return $local_cache;
 			}
 
 			$local_cache = array();
 
-			self::wpsso_init_textdomain();	// If not already loaded, load the textdomain now.
-
 			$info = WpssoJsonConfig::$cf[ 'plugin' ][ self::$ext ];
-
-			$plugin_missing_transl = __( 'The %1$s version %2$s add-on requires the %3$s plugin &mdash; please activate the missing plugin.',
-				'wpsso-schema-json-ld' );
-
-			$old_version_transl = __( 'The %1$s version %2$s add-on requires %3$s version %4$s or newer (version %5$s is currently installed).',
-				'wpsso-schema-json-ld' );
 
 			foreach ( $info[ 'req' ] as $key => $req_info ) {
 
@@ -266,7 +268,11 @@ if ( ! class_exists( 'WpssoJson' ) ) {
 
 				} elseif ( ! empty( $req_info[ 'plugin_class' ] ) && ! class_exists( $req_info[ 'plugin_class' ] ) ) {
 
-					$req_info[ 'notice' ] = sprintf( $plugin_missing_transl, $info[ 'name' ], $info[ 'version' ], $req_name );
+					self::wpsso_init_textdomain();	// If not already loaded, load the textdomain now.
+
+					$notice_msg = __( 'The %1$s version %2$s add-on requires the %3$s plugin &mdash; please activate the missing plugin.', 'wpsso-schema-json-ld' );
+
+					$req_info[ 'notice' ] = sprintf( $notice_msg, $info[ 'name' ], $info[ 'version' ], $req_name );
 				}
 
 				if ( ! empty( $req_info[ 'version' ] ) ) {
@@ -275,8 +281,11 @@ if ( ! class_exists( 'WpssoJson' ) ) {
 
 						if ( version_compare( $req_info[ 'version' ], $req_info[ 'min_version' ], '<' ) ) {
 
-							$req_info[ 'notice' ] = sprintf( $old_version_transl, $info[ 'name' ], $info[ 'version' ],
-								$req_name, $req_info[ 'min_version' ], $req_info[ 'version' ] );
+							self::wpsso_init_textdomain();	// If not already loaded, load the textdomain now.
+
+							$notice_msg = __( 'The %1$s version %2$s add-on requires %3$s version %4$s or newer (version %5$s is currently installed).', 'wpsso-schema-json-ld' );
+
+							$req_info[ 'notice' ] = sprintf( $notice_msg, $info[ 'name' ], $info[ 'version' ], $req_name, $req_info[ 'min_version' ], $req_info[ 'version' ] );
 						}
 					}
 				}

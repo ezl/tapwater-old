@@ -6,10 +6,12 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
+
 	die( 'These aren\'t the droids you\'re looking for.' );
 }
 
 if ( ! defined( 'WPSSO_PLUGINDIR' ) ) {
+
 	die( 'Do. Or do not. There is no try.' );
 }
 
@@ -27,18 +29,12 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 			$this->p =& $plugin;
 
 			if ( $this->p->debug->enabled ) {
+
 				$this->p->debug->mark();
 			}
 		}
 
 		public function get( $msg_key = false, $info = array() ) {
-
-			if ( $this->p->debug->enabled ) {
-				$this->p->debug->log_args( array(
-					'msg_key' => $msg_key,
-					'info'    => $info,
-				) );
-			}
 
 			$msg_key = sanitize_title_with_dashes( $msg_key );
 
@@ -84,8 +80,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 			/**
 			 * Get the array of plugin urls (download, purchase, etc.).
 			 */
-			$url = isset( $this->p->cf[ 'plugin' ][ $lca ][ 'url' ] ) ?
-				$this->p->cf[ 'plugin' ][ $lca ][ 'url' ] : array();
+			$url = isset( $this->p->cf[ 'plugin' ][ $lca ][ 'url' ] ) ? $this->p->cf[ 'plugin' ][ $lca ][ 'url' ] : array();
 
 			/**
 			 * Add query arguments to the Premium purchase URL.
@@ -116,6 +111,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 				), $url[ 'purchase' ] );
 
 			} else {
+
 				$url[ 'purchase' ] = '';
 			}
 
@@ -125,17 +121,32 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 			foreach ( array( 'short', 'name', 'version' ) as $info_key ) {
 
 				if ( ! isset( $info[ $info_key ] ) ) {
+
 					if ( ! isset( $this->p->cf[ 'plugin' ][ $lca ][ $info_key ] ) ) {	// Just in case.
+
 						$info[ $info_key ] = null;
+
+						continue;
+
 					} else {
+
 						$info[ $info_key ] = $this->p->cf[ 'plugin' ][ $lca ][ $info_key ];
 					}
 				}
 
-				$info[ $info_key . '_pro' ] = SucomUtil::get_dist_name( $info[ $info_key ], $pro_transl );
 
-				$info[ $info_key . '_pro_purchase' ] = empty( $url[ 'purchase' ] ) ?
-					$info[ $info_key . '_pro' ] : '<a href="' . $url[ 'purchase' ] . '">' . $info[ $info_key . '_pro' ] . '</a>';
+				switch ( $info_key ) {
+
+					case 'short':
+					case 'name':
+
+						$info[ $info_key . '_pro' ] = SucomUtil::get_dist_name( $info[ $info_key ], $pro_transl );
+
+						$info[ $info_key . '_pro_purchase' ] = empty( $url[ 'purchase' ] ) ? $info[ $info_key . '_pro' ] :
+							'<a href="' . $url[ 'purchase' ] . '">' . $info[ $info_key . '_pro' ] . '</a>';
+
+						break;
+				}
 			}
 
 			/**
@@ -415,17 +426,48 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							break;
 
-						case 'tooltip-site_org_schema_type':
+						case 'tooltip-site_pub_schema_type':	// WebSite Publisher Type.
 
-							$text = __( 'Google does not recognize all Schema Organization sub-types as valid organization and publisher types.', 'wpsso' ) . ' ';
+							$text .= __( 'Select a Schema type for the publisher of the content for this website.', 'wpsso' ) . ' ';
 
-							$text .= sprintf( __( 'The WebSite organization type ID should be "%s" unless you are confident that Google will recognize your preferred Schema Organization sub-type as a valid organization.', 'wpsso' ), 'organization' ) . ' ';
-							
-							$text .= sprintf( __( 'To select a different organization type ID for your WebSite, define the %s constant with your preferred type ID (the type ID, not the Schema type URL).', 'wpsso' ), '<code>WPSSO_SCHEMA_ORGANIZATION_TYPE_ID</code>' );
+							$text .= __( 'Traditionally, the Schema Organization type is selected for business websites, where-as the Schema Person type is selected for personal websites.', 'wpsso' );
 
 							break;
 
-						case 'tooltip-site_place_id':
+						case 'tooltip-site_pub_person_id':	// WebSite Publisher (Person).
+
+							$text = __( 'Select a user profile for the Schema Person publisher markup.', 'wpsso' ) . ' ';
+
+							$text .= sprintf( __( 'The available Person list includes users with the "%1$s" or "%2$s" role.', 'wpsso' ),
+								_x( 'Administrator', 'user role', 'wpsso' ), _x( 'Editor', 'user role', 'wpsso' ) );
+
+							break;
+
+						case 'tooltip-site_org_schema_type':	// Organization Schema Type.
+
+							$text = __( 'Unfortunately, Google does not recognize all Schema Organization sub-types as valid organizations.', 'wpsso' ) . ' ';
+
+							$text .= sprintf( __( 'The default Schema type ID for the WebSite organization is "%s".', 'wpsso' ), 'organization' ) . ' ';
+
+							$text .= sprintf( __( 'You should not change this default value unless you are confident that Google will recognize your preferred Schema Organization sub-type as a valid organization.', 'wpsso' ), 'organization' ) . ' ';
+							
+							$text .= sprintf( __( 'To select a different organization type ID for the WebSite, define the %s constant with your preferred type ID (note that this is a Schema type ID, not a Schema type URL).', 'wpsso' ), '<code>WPSSO_SCHEMA_ORGANIZATION_TYPE_ID</code>' );
+
+							break;
+
+						case 'tooltip-site_org_logo_url':	// Organization Logo URL.
+
+							$text = __( 'A URL for this organization\'s logo image that Google can show in its search results and <em>Knowledge Graph</em>.', 'wpsso' );
+
+							break;
+
+						case 'tooltip-site_org_banner_url':	// Organization Banner URL.
+
+							$text = __( 'A URL for this organization\'s banner image &mdash; <strong>measuring exactly 600x60px</strong> &mdash; that Google News can show for Schema Article type content from this publisher.', 'wpsso' );
+
+							break;
+
+						case 'tooltip-site_org_place_id':
 
 							if ( isset( $this->p->cf[ 'plugin' ][ 'wpssoplm' ] ) ) {
 
@@ -436,6 +478,12 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 								$text = sprintf( __( 'Select an optional location for this organization (requires the %s add-on).',
 									'wpsso' ), $plm_addon_link );
 							}
+
+							break;
+
+						case 'tooltip-site-use':
+
+							$text = __( 'Individual sites/blogs may use this value as a default (when the plugin is first activated), if the current site/blog option value is blank, or force every site/blog to use this specific value.', 'wpsso' );
 
 							break;
 					}
@@ -585,17 +633,17 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						 */
 						case 'tooltip-og_img_max':		// Maximum Images to Include.
 
-							$text = __( 'The maximum number of images to include in Open Graph meta tags, including custom, featured, attached, and content images.', 'wpsso' ) . ' ';
+							$text = __( 'The maximum number of images to include in the Open Graph meta tags for the webpage.', 'wpsso' ) . ' ';
 
-							$text .= __( 'If you select "0", then no images will be included in Open Graph meta tags (<strong>not recommended</strong>).', 'wpsso' ) . ' ';
+							$text .= __( 'If you select "0", then no images will be included (<strong>not recommended</strong>).', 'wpsso' ) . ' ';
 
-							$text .= __( 'If no images are included in your Open Graph meta tags, then social sites may select any image from the webpage (including headers, sidebars, thumbnails, etc.).', 'wpsso' );
+							$text .= __( 'If no images are available in the Open Graph meta tags, social sites may choose any random image from the webpage, including headers, thumbnails, ads, etc.', 'wpsso' );
 
 							break;
 
 						case 'tooltip-og_img_size':		// Open Graph.
 
-							$def_img_dims = $this->get_def_img_dims( 'og_img' );
+							$def_img_dims = $this->get_def_img_dims( 'og' );
 
 							$text = sprintf( __( 'The image dimensions used for Facebook / Open Graph meta tags and oEmbed markup (the default dimensions are %s).', 'wpsso' ), $def_img_dims ) . ' ';
 
@@ -893,7 +941,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						/**
 						 * Cache settings.
 						 */
-						case 'tooltip-plugin_head_cache_exp':
+						case 'tooltip-plugin_head_cache_exp':		// Head Markup Cache Expiry.
 
 							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_head_cache_exp' );
 
@@ -906,7 +954,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							break;
 
-						case 'tooltip-plugin_content_cache_exp':
+						case 'tooltip-plugin_content_cache_exp':	// Filtered Content Cache Expiry.
 
 							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_content_cache_exp' );
 
@@ -919,46 +967,46 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							break;
 
-						case 'tooltip-plugin_short_url_cache_exp':
-
-							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_short_url_cache_exp' );
-
-							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
-								_x( 'disabled', 'option comment', 'wpsso' );
-
-							$text = __( 'Shortened URLs are saved to the WordPress transient cache to optimize performance and API connections.', 'wpsso' ) . ' ';
-
-							$text .= sprintf( __( 'The suggested cache expiration value is %1$s seconds (%2$s).', 'wpsso' ), $cache_exp_secs, $cache_exp_human );
-
-							break;
-
-						case 'tooltip-plugin_imgsize_cache_exp':
+						case 'tooltip-plugin_imgsize_cache_exp':	// Image URL Info Cache Expiry.
 
 							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_imgsize_cache_exp' );
 
 							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
 								_x( 'disabled', 'option comment', 'wpsso' );
 
-							$text = __( 'The size for image URLs (not image IDs) is retrieved and saved to the WordPress transient cache to optimize performance and network bandwidth.', 'wpsso' ) . ' ';
+							$text = __( 'The size information for image URLs (not image IDs) is retrieved and saved to the WordPress transient cache to optimize performance and save network bandwidth.', 'wpsso' ) . ' ';
 
 							$text .= sprintf( __( 'The suggested cache expiration value is %1$s seconds (%2$s).', 'wpsso' ), $cache_exp_secs, $cache_exp_human );
 
 							break;
 
-						case 'tooltip-plugin_select_cache_exp':
+						case 'tooltip-plugin_vidinfo_cache_exp':	// Video API Info Cache Expiry.
 
-							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_select_cache_exp' );
+							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_vidinfo_cache_exp' );
 
 							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
 								_x( 'disabled', 'option comment', 'wpsso' );
 
-							$text = __( 'The filtered text list arrays (for example, article sections and product categories) are saved to the WordPress transient cache to optimize performance and disk access.', 'wpsso' ) . ' ';
+							$text = __( 'Video information is retrieved from the video service API and saved to the WordPress transient cache to optimize performance and reduce API connections.', 'wpsso' ) . ' ';
 
 							$text .= sprintf( __( 'The suggested cache expiration value is %1$s seconds (%2$s).', 'wpsso' ), $cache_exp_secs, $cache_exp_human );
 
 							break;
 
-						case 'tooltip-plugin_types_cache_exp':
+						case 'tooltip-plugin_short_url_cache_exp':	// Shortened URL Cache Expiry.
+
+							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_short_url_cache_exp' );
+
+							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
+								_x( 'disabled', 'option comment', 'wpsso' );
+
+							$text = __( 'Shortened URLs are saved to the WordPress transient cache to optimize performance and reduce API connections.', 'wpsso' ) . ' ';
+
+							$text .= sprintf( __( 'The suggested cache expiration value is %1$s seconds (%2$s).', 'wpsso' ), $cache_exp_secs, $cache_exp_human );
+
+							break;
+
+						case 'tooltip-plugin_types_cache_exp':		// Schema Types Cache Expiry.
 
 							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_types_cache_exp' );
 
@@ -966,6 +1014,19 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 								_x( 'disabled', 'option comment', 'wpsso' );
 
 							$text = __( 'The filtered Schema types array is saved to the WordPress transient cache to optimize performance.', 'wpsso' ) . ' ';
+
+							$text .= sprintf( __( 'The suggested cache expiration value is %1$s seconds (%2$s).', 'wpsso' ), $cache_exp_secs, $cache_exp_human );
+
+							break;
+
+						case 'tooltip-plugin_select_cache_exp':		// Form Selects Cache Expiry.
+
+							$cache_exp_secs = $this->p->opt->get_defaults( 'plugin_select_cache_exp' );
+
+							$cache_exp_human = $cache_exp_secs ? human_time_diff( 0, $cache_exp_secs ) : 
+								_x( 'disabled', 'option comment', 'wpsso' );
+
+							$text = __( 'The filtered text list arrays (for example, article sections and product categories) are saved to the WordPress transient cache to optimize performance and disk access.', 'wpsso' ) . ' ';
 
 							$text .= sprintf( __( 'The suggested cache expiration value is %1$s seconds (%2$s).', 'wpsso' ), $cache_exp_secs, $cache_exp_human );
 
@@ -980,12 +1041,6 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						case 'tooltip-plugin_clear_on_deactivate':	// Clear All Caches on Deactivate.
 
 							$text = sprintf( __( 'Automatically clear all caches when the %s plugin is deactivated.', 'wpsso' ), $info[ 'short' ] );
-
-							break;
-
-						case 'tooltip-plugin_clear_on_save':		// Clear All Caches on Save Settings.
-
-							$text = sprintf( __( 'Automatically clear all caches when the %s plugin settings are saved.', 'wpsso' ), $info[ 'short' ] );
 
 							break;
 
@@ -1018,13 +1073,21 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						/**
 						 * Service APIs settings.
 						 */
-						case 'tooltip-plugin_gravatar_api':	// Gravatar is Author Default Image.
+						case 'tooltip-plugin_gravatar_api':	// Gravatar is Default Author Image.
 
 							$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
 
-							$text = __( 'If no custom image has been defined for an author, fallback to using their Gravatar image (if available) in author related meta tags and Schema markup.', 'wpsso' ) . ' ';
+							$text = __( 'If no custom image has been defined for an author, fallback to using their Gravatar image in author related meta tags and Schema markup.', 'wpsso' ) . ' ';
 
-							$text .= sprintf( __( 'A customized image can be selected for/by each author in the WordPress user profile %s metabox.', 'wpsso' ), $mb_title );
+							$text .= sprintf( __( 'A customized image can be selected in the WordPress user profile %s metabox.', 'wpsso' ), $mb_title );
+
+							break;
+
+						case 'tooltip-plugin_gravatar_size':	// Gravatar Image Size.
+
+							$text = __( 'The requested Gravatar image width and height.', 'wpsso' ) . ' ';
+
+							$text = __( 'You may choose an image size from 1px up to 2048px, however note that many users have lower resolution images, so choosing a larger size may result in pixelation and lower-quality images.', 'wpsso' );
 
 							break;
 
@@ -1040,7 +1103,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							break;
 
-						case 'tooltip-plugin_wp_shortlink':
+						case 'tooltip-plugin_wp_shortlink':	// Use Shortened URL for WP Shortlink.
 
 							$text = sprintf( __( 'Use the shortened sharing URL for the <em>Get Shortlink</em> button in admin editing pages, along with the "%s" HTML tag value.', 'wpsso' ), 'link&nbsp;rel&nbsp;shortlink' );
 
@@ -1084,6 +1147,33 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						case 'tooltip-plugin_owly_api_key':
 
 							$text = sprintf( __( 'To use Ow.ly as your preferred shortening service, you must provide the Ow.ly API Key for this website (complete this form to <a href="%s">Request Ow.ly API Access</a>).', 'wpsso' ), 'https://docs.google.com/forms/d/1Fn8E-XlJvZwlN4uSRNrAIWaY-nN_QA3xAHUJ7aEF7NU/viewform' );
+
+							break;
+
+						case 'tooltip-plugin_shopperapproved_site_id':
+						case 'tooltip-plugin_shopperapproved_token':
+
+							$text = __( 'Your Shopper Approved Site ID and API Token are required to retrieve ratings and reviews from Shopper Approved.', 'wpsso' ) . ' ';
+
+							$text .= sprintf( __( '<a href="%s">Login to your Shopper Approved account and go to the API Dashboard</a>, then scroll down to find your Site ID and API Token.', 'wpsso' ), 'https://www.shopperapproved.com/account/setup/api/merchant-api' );
+
+							break;
+
+						case 'tooltip-plugin_shopperapproved_num_max':
+
+							$text = __( 'The maximum number of reviews retrieved from the Shopper Approved API.', 'wpsso' );
+
+							break;
+
+						case 'tooltip-plugin_shopperapproved_age_max':
+
+							$text = __( 'The maximum age of reviews retrieved from the Shopper Approved API.', 'wpsso' );
+
+							break;
+
+						case 'tooltip-plugin_shopperapproved_for':
+
+							$text = __( 'Retrieve ratings and reviews from Shopper Approved for the selected post types.', 'wpsso' );
 
 							break;
 
@@ -1336,98 +1426,28 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 					switch ( $msg_key ) {
 
-						case 'tooltip-schema_knowledge_graph':	// Knowledge Graph for Home Page.
-
-							$social_accounts_link = $this->p->util->get_admin_url( 'social-accounts',
-								_x( 'Social Pages', 'lib file description', 'wpsso' ) );
-
-							$text = __( 'Enable or disable the Schema WebSite, Organization, and Person markup in the home page for Google\'s Knowledge Graph.', 'wpsso' ) . ' ';
-
-							/**
-							 * Include Schema WebSite.
-							 */
-							$text .= __( 'The Schema WebSite markup includes the site name, alternate site name, site URL, and search query URL.', 'wpsso' ) . ' ';
-
-							$text .= sprintf( __( 'Developers can hook the "%s" filter to modify the site search URL (or disable its addition by returning false).', 'wpsso' ), $this->p->lca . '_json_ld_search_url' ) . ' ';
-
-							/**
-							 * Include Schema Organization.
-							 */
-							$text .= sprintf( __( 'The Schema Organization markup includes all URLs entered in the %s settings page.', 'wpsso' ), $social_accounts_link ) . ' ';
-
-							/**
-							 * Include Schema Person.
-							 */
-							$text .= __( 'The Schema Person markup includes all contact method URLs entered in the user\'s WordPress profile page.', 'wpsso' );
-
-							$text .= __( 'Traditionally, the Schema Organization markup is included for business websites, where-as the Schema Person markup is included for personal websites.', 'wpsso' );
-
-							break;
-
-						case 'tooltip-schema_home_person_id':	// User for Person Social Profile.
-
-							$text = __( 'Select an optional site owner for the <em>Knowledge Graph</em> Person markup included in the front page.', 'wpsso' ) . ' ';
-
-							$text .= __( 'The Person markup includes all contact method URLs entered in the user\'s WordPress profile page.', 'wpsso' ) . ' ';
-
-							$text .= sprintf( __( 'The available Person list includes users with "%1$s" and/or "%2$s" roles.', 'wpsso' ),
-								_x( 'Administrator', 'user role', 'wpsso' ), _x( 'Editor', 'user role', 'wpsso' ) );
-
-							break;
-
-						case 'tooltip-schema_logo_url':		// Organization Logo URL.
-
-							$text = __( 'A URL for this organization\'s logo image that Google can use in its search results and <em>Knowledge Graph</em>.', 'wpsso' );
-
-							break;
-
-						case 'tooltip-schema_banner_url':	// Organization Banner URL.
-
-							$text = __( 'A URL for this organization\'s banner image &mdash; <strong>measuring exactly 600x60px</strong> &mdash; that Google News can use for Schema Article content from this publisher.', 'wpsso' );
-
-							break;
-
 						case 'tooltip-schema_img_max':		// Maximum Images to Include.
 
-							$text = __( 'The maximum number of images to include in Schema markup, including custom, featured, attached, and content images.', 'wpsso' ) . ' ';
+							$text = __( 'The maximum number of images to include in the Schema main entity markup for the webpage.', 'wpsso' ) . ' ';
 
-							$text .= __( 'If you select "0", then no images will be included in the Schema markup (<strong>not recommended</strong>).', 'wpsso' );
-
-							break;
-
-						case 'tooltip-schema_img_size':		// Schema Image Size.
-
-							$def_img_dims = $this->get_def_img_dims( 'schema_img' );
-
-							$text = sprintf( __( 'The image dimensions used for Schema meta tags and JSON-LD markup (the default dimensions are %s).', 'wpsso' ), $def_img_dims );
+							$text .= __( 'If you select "0", then no images will be included (<strong>not recommended</strong>).', 'wpsso' ) . ' ';
 
 							break;
 
-						case 'tooltip-schema_article_img_size':	// Schema Article Image Size.
+						case 'tooltip-schema_1_1_img_size':	// Schema 1:1 Image Size.
+						case 'tooltip-schema_4_3_img_size':	// Schema 4:3 Image Size.
+						case 'tooltip-schema_16_9_img_size':	// Schema 16:9 Image Size.
 
-							$def_img_dims = $this->get_def_img_dims( 'schema_article_img' );
+							if ( preg_match( '/^tooltip-(schema_([0-9]+)_([0-9]+))_img_size$/', $msg_key, $matches ) ) {
 
-							$text = sprintf( __( 'The image dimensions used for Schema Article meta tags and JSON-LD markup (the default dimensions are %s).', 'wpsso' ), $def_img_dims ) . ' ';
+								$opt_pre      = $matches[ 1 ];
+								$ratio_msg    = $matches[ 2 ] . ':' . $matches[ 3 ];
+								$def_img_dims = $this->get_def_img_dims( $opt_pre );
 
-							$text .= sprintf( __( 'The minimum image width required by Google is %dpx.', 'wpsso' ), $this->p->cf[ 'head' ][ 'limit_min' ][ 'schema_article_img_width' ] ). ' ';
+								$text = sprintf( __( 'The %1$s image dimensions used for Schema meta tags and JSON-LD markup (the default dimensions are %2$s).', 'wpsso' ), $ratio_msg, $def_img_dims ) . ' ';
 
-							$text .= sprintf( __( 'If this image size is uncropped (default setting), the height value must be large enough to accommodate portrait / vertical images (default height is %dpx).', 'wpsso' ), $this->p->opt->get_defaults( 'schema_article_img_height' ) );
-
-							break;
-
-						case 'tooltip-schema_article_1_1_img_size':	// Schema Article AMP 1:1 Img Size.
-						case 'tooltip-schema_article_4_3_img_size':	// Schema Article AMP 4:3 Img Size.
-						case 'tooltip-schema_article_16_9_img_size':	// Schema Article AMP 16:9 Img Size.
-		
-							$opt_pre = preg_replace( '/^tooltip-(schema_article_.*_img)_size$/', '$1', $msg_key );
-
-							$opt_ratio = preg_replace( '/^schema_article_([0-9]+)_([0-9]+)_img$/', '$1:$2', $opt_pre );
-
-							$def_img_dims = $this->get_def_img_dims( $opt_pre );
-
-							$text = sprintf( __( 'The AMP %1$s image dimensions for Schema Article JSON-LD markup (the default dimensions are %2$s).', 'wpsso' ), $opt_ratio, $def_img_dims ) . ' ';
-
-							$text .= sprintf( __( 'The minimum image width required by Google is %dpx.', 'wpsso' ), $this->p->cf[ 'head' ][ 'limit_min' ][ $opt_pre . '_width' ] ). ' ';
+								$text .= sprintf( __( 'The minimum image width required by Google is %dpx.', 'wpsso' ), $this->p->cf[ 'head' ][ 'limit_min' ][ $opt_pre . '_img_width' ] ). ' ';
+							}
 
 							break;
 
@@ -1622,7 +1642,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						case 'tooltip-tc_sum_img_size':
 
-							$def_img_dims = $this->get_def_img_dims( 'tc_sum_img' );
+							$def_img_dims = $this->get_def_img_dims( $opt_pre = 'tc_sum' );
 
 							$text = sprintf( __( 'The image dimensions for the <a href="%1$s">Summary Card</a> (should be at least %2$s and less than %3$s).', 'wpsso' ), 'https://dev.twitter.com/docs/cards/types/summary-card', '120x120px', __( '1MB', 'wpsso' ) ) . ' ';
 
@@ -1632,7 +1652,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						case 'tooltip-tc_lrg_img_size':
 
-							$def_img_dims = $this->get_def_img_dims( 'tc_lrg_img' );
+							$def_img_dims = $this->get_def_img_dims( $opt_pre = 'tc_lrg' );
 
 							$text = sprintf( __( 'The image dimensions for the <a href="%1$s">Large Image Summary Card</a> (must be larger than %2$s and less than %3$s).', 'wpsso' ), 'https://dev.twitter.com/docs/cards/large-image-summary-card', '280x150px', __( '1MB', 'wpsso' ) ) . ' ';
 
@@ -1783,15 +1803,9 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							break;
 
-						case 'tooltip-site-use':
-
-							$text = __( 'Individual sites/blogs may use this value as a default (when the plugin is first activated), if the current site/blog option value is blank, or force every site/blog to use this specific value.', 'wpsso' );
-
-							break;
-
 						case 'tooltip-thumb_img_size':
 
-							$text = sprintf( __( 'The image dimensions used for the Schema "%1$s" property and the "%2$s" tag (the default dimensions are %3$s).', 'wpsso' ), 'thumbnailUrl', 'meta name thumbnail', $this->get_def_img_dims( 'thumb_img' ) );
+							$text = sprintf( __( 'The image dimensions used for the Schema "%1$s" property and the "%2$s" tag (the default dimensions are %3$s).', 'wpsso' ), 'thumbnailUrl', 'meta name thumbnail', $this->get_def_img_dims( $opt_pre = 'thumb' ) );
 
 							break;
 
@@ -1851,21 +1865,23 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 						 	break;
 
-						case 'info-meta-validate-google-testing-tool':
+						case 'info-meta-validate-google-rich-results':
 
 							$text = '<p class="top">';
 
-							$text .= __( 'Verify the webpage structured data markup.', 'wpsso' );
+							$text .= __( 'Check the webpage structured data markup for Google Rich Result types (Job posting, Product, Recipe, etc.).', 'wpsso' );
 
 							$text .= '</p>';
 
 						 	break;
 
-						case 'info-meta-validate-google-rich-results':
+						case 'info-meta-validate-google-testing-tool':
 
 							$text = '<p class="top">';
 
-							$text .= __( 'Check the webpage structured data markup for Google Rich Result types (Job posting, Recipe, etc.).', 'wpsso' );
+							$text .= __( 'Validate the webpage JSON-LD, Microdata and RDFa structured data markup.', 'wpsso' ) . ' ';
+
+							$text .= sprintf( __( 'Although deprecated, this tool provides additional validation for Schema types beyond the limited <a href="%s">selection of Google Rich Result types</a>.', 'wpsso' ), __( 'https://developers.google.com/search/docs/guides/search-gallery', 'wpsso' ) );
 
 							$text .= '</p>';
 
@@ -1940,12 +1956,14 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 							} elseif ( empty( $this->p->avail[ 'p_ext' ][ 'json' ] ) ) {
 
-								$link = $this->p->util->get_admin_url( 'addons#wpssojson',
-									$this->p->cf[ 'plugin' ][ 'wpssojson' ][ 'short' ] );
+								$json_info = $this->p->cf[ 'plugin' ][ 'wpssoplm' ];
+
+								$json_addon_link = $this->p->util->get_admin_url( 'addons#wpssojson', $json_info[ 'short' ] );
 
 								$text .= '<p class="status-msg left">* ';
 
-								$text .= sprintf( __( 'Activate the %s add-on for Google structured data markup.', 'wpsso' ), $link );
+								$text .= sprintf( __( 'Activate the %s add-on for Google structured data markup.',
+									'wpsso' ), $json_addon_link );
 
 								$text .= '</p>';
 							}
@@ -2296,9 +2314,12 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 						$text .= empty( $url[ 'purchase' ] ) ? '' : '<a href="' . $url[ 'purchase' ] . '">';
 
 						if ( $lca === $this->p->lca ) {
+
 							$text .= sprintf( __( 'Purchase the %1$s plugin to upgrade and get the following features.',
 								'wpsso' ), $info[ 'short_pro' ] );
+
 						} else {
+
 							$text .= sprintf( __( 'Purchase the %1$s add-on to upgrade and get the following features.',
 								'wpsso' ), $info[ 'short_pro' ] );
 						}
@@ -2340,6 +2361,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 					case 'pro-purchase-link':
 
 						if ( empty( $info[ 'ext' ] ) ) {	// Nothing to do.
+
 							break;
 						}
 
@@ -2348,12 +2370,16 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 							$text = _x( 'Get More Licenses', 'plugin action link', 'wpsso' );
 
 						} elseif ( $info[ 'ext' ] === $lca ) {
+
 							$text = sprintf( _x( 'Purchase %s Plugin', 'plugin action link', 'wpsso' ), $pro_transl );
+
 						} else {
+
 							$text = sprintf( _x( 'Purchase %s Add-on', 'plugin action link', 'wpsso' ), $pro_transl );
 						}
 
 						if ( ! empty( $info[ 'url' ] ) ) {
+
 							$text = '<a href="' . $info[ 'url' ] . '"' . ( empty( $info[ 'tabindex' ] ) ? '' :
 								' tabindex="' . $info[ 'tabindex' ] . '"' ) . '>' .  $text . '</a>';
 						}
@@ -2375,52 +2401,85 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 					case 'notice-image-rejected':
 
-						if ( WpssoWpMeta::is_meta_page() ) {
+						$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
 
-							$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
-							$md_tab   = _x( 'Priority Media', 'metabox tab', 'wpsso' );
+						$media_tab = _x( 'Priority Media', 'metabox tab', 'wpsso' );
+
+						$is_meta_page = WpssoWpMeta::is_meta_page();
+
+						if ( $is_meta_page ) {
 
 							$text .= sprintf( __( 'A larger custom image can be selected in the %1$s metabox under the %2$s tab.',
-								'wpsso' ), $mb_title, $md_tab );
+								'wpsso' ), $mb_title, $media_tab );
 						}
 
 						/**
-						 * WpssoMedia->img_size_within_limits() uses show_adjust_img_opts = false for
-						 * images with an incorrect aspect ratio.
+						 * WpssoMedia->is_image_within_config_limits() sets 'show_adjust_img_opts' = false
+						 * for images with an aspect ratio that exceeds the hard-coded config limits.
 						 */
-						if ( ! isset( $info[ 'show_adjust_img_opts' ] ) || ! empty( $info[ 'show_adjust_img_opts' ] ) ) {
+						if ( ! isset( $info[ 'show_adjust_img_opts' ] ) ||
+							! empty( $info[ 'show_adjust_img_opts' ] ) ) {
 
 							if ( current_user_can( 'manage_options' ) ) {
 
+								$upscale_option_link = $this->p->util->get_admin_url( 'advanced#sucom-tabset_plugin-tab_integration',
+									_x( 'Upscale Media Library Images', 'option label', 'wpsso' ) );
+
+								$pct_option_link = $this->p->util->get_admin_url( 'advanced#sucom-tabset_plugin-tab_integration',
+									_x( 'Maximum Image Upscale Percent', 'option label', 'wpsso' ) );
+
+								$img_dim_option_link = $this->p->util->get_admin_url( 'advanced#sucom-tabset_plugin-tab_integration',
+									_x( 'Enforce Image Dimension Checks', 'option label', 'wpsso' ) );
+
+								$img_sizes_page_link = $this->p->util->get_admin_url( 'image-sizes',
+									_x( 'Image Sizes', 'lib file description', 'wpsso' ) );
+
 								/**
-								 * Signal that additional md5() matching sections should be removed from the notice messages.
+								 * Add an HTML comment to signal that additional md5() matching
+								 * sections should be removed from any following notice messages
+								 * (ie. show this section only once).
 								 */
 								$text .= '<!-- show-once -->';
 
-								$text .= ' <p style="margin-left:0;"><em>' . __( 'Additional information shown only to users with Administrative privileges:', 'wpsso' ) . '</em></p>';
+								$text .= ' <p style="margin-left:0;"><em>' .
+									__( 'Additional information shown only to users with Administrative privileges:',
+										'wpsso' ) . '</em></p>';
 
 								$text .= '<ul>';
 
-								$img_sizes_page_link = $this->p->util->get_admin_url( 'image-sizes', _x( 'Image Sizes', 'lib file description', 'wpsso' ) );
+								if ( $is_meta_page ) {
 
-								$text .= ' <li>' . sprintf( __( 'Update image size dimensions in the %s settings page.', 'wpsso' ), $img_sizes_page_link ) . '</li>';
+									$text .= '<li>' . sprintf( __( 'Select a larger image under the %1$s &gt; %2$s tab.',
+										'wpsso' ), $mb_title, $media_tab ) . '</li>';
+								}
 
 								if ( empty( $this->p->options[ 'plugin_upscale_images' ] ) ) {
 
-									$upscale_option_link = $this->p->util->get_admin_url( 'advanced#sucom-tabset_plugin-tab_integration', _x( 'Upscale Media Library Images', 'option label', 'wpsso' ) );
+									$text .= '<li>' . sprintf( __( 'Enable the %s option.',
+										'wpsso' ), $upscale_option_link ) . '</li>';
 
-									$text .= '<li>' . sprintf( __( 'Enable the %s option.', 'wpsso' ), $upscale_option_link ) . '</li>';
+								} else {
+
+									$text .= ' <li>' . sprintf( __( 'Increase the %s option value.',
+										'wpsso' ), $pct_option_link ) . '</li>';
 								}
 
-								$percent_option_link = $this->p->util->get_admin_url( 'advanced#sucom-tabset_plugin-tab_integration', _x( 'Maximum Image Upscale Percent', 'option label', 'wpsso' ) );
+								/**
+								 * WpssoMedia->is_image_within_config_limits() sets
+								 * 'show_adjust_img_size_opts' = false for images that are too
+								 * small for the hard-coded config limits.
+								 */
+								if ( ! isset( $info[ 'show_adjust_img_size_opts' ] ) ||
+									! empty( $info[ 'show_adjust_img_size_opts' ] ) ) {
 
-								$text .= ' <li>' . sprintf( __( 'Increase the %s option value.', 'wpsso' ), $percent_option_link ) . '</li>';
+									$text .= ' <li>' . sprintf( __( 'Update image size dimensions in the %s settings page.',
+										'wpsso' ), $img_sizes_page_link ) . '</li>';
 
-								if ( ! empty( $this->p->options[ 'plugin_check_img_dims' ] ) ) {
+									if ( ! empty( $this->p->options[ 'plugin_check_img_dims' ] ) ) {
 
-									$img_dim_option_link = $this->p->util->get_admin_url( 'advanced#sucom-tabset_plugin-tab_integration', _x( 'Enforce Image Dimension Checks', 'option label', 'wpsso' ) );
-
-									$text .= ' <li>' . sprintf( __( 'Disable the %s option (not recommended).', 'wpsso' ), $img_dim_option_link ) . '</li>';
+										$text .= ' <li>' . sprintf( __( 'Disable the %s option (not recommended).',
+											'wpsso' ), $img_dim_option_link ) . '</li>';
+									}
 								}
 
 								$text .= '</ul>';
@@ -2628,34 +2687,98 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 			 */
 			} elseif ( strpos( $msg_key, 'column-' ) === 0 ) {
 
+				$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+
+				$li_support_link = empty( $info[ 'url' ][ 'support' ] ) ? '' :
+					'<li><a href="' . $info[ 'url' ][ 'support' ] . '">' . __( 'Premium plugin support.', 'wpsso' ) . '</a></li>';
+
 				switch ( $msg_key ) {
 
-					case 'column-purchase-pro':
-
-						$mb_title = _x( $this->p->cf[ 'meta' ][ 'title' ], 'metabox title', 'wpsso' );
+					case 'column-purchase-wpsso':
 
 						$text = '<p>' . sprintf( __( '<strong>%s includes:</strong>', 'wpsso' ), $info[ 'short_pro' ] ) . '</p>';
 
 						$text .= '<ul>';
 
-						$text .= ' <li>' . sprintf( __( 'Additional options in the %s metabox.', 'wpsso' ), $mb_title ) . '</li>';
+						$text .= ' <li>' . __( 'Integration with 3rd party plugins and service APIs (WooCommerce, Yoast SEO, YouTube, Bitly, and many more).', 'wpsso' ) . '</li>';
 
-						$text .= ' <li>' . __( 'Integration with 3rd party plugins and service APIs.', 'wpsso' ) . '</li>';
+						$text .= ' <li>' . __( 'Detection of embedded videos in the content text.', 'wpsso' ) . '</li>';
+
+						$text .= ' <li>' . __( 'Provides Twitter Player Card meta tags.', 'wpsso' ) . '</li>';
+
+						$text .= ' <li>' . __( 'Upscaling of images and URL shortening.', 'wpsso' ) . '</li>';
 
 						$text .= ' <li>' . __( 'Advanced plugin settings.', 'wpsso' ) . '</li>';
 
-						$text .= ' <li>' . __( 'Access to development and release candidate updates.', 'wpsso' ) . '</li>';
+						$text .= ' <li>' . __( 'Access to development updates.', 'wpsso' ) . '</li>';
 
-						$text .= ' <li>' . __( 'Premium plugin support.', 'wpsso' ) . '</li>';
-
+						$text .= $li_support_link;
+						
 						$text .= '</ul>';
 
-						$text .= '<p>' . sprintf( __( '<strong>%1$s licenses never expire</strong> &mdash; you may receive unlimited / lifetime updates and support for each licensed WordPress Site Address.', 'wpsso' ), $pro_transl ) . ' ';
+						break;
 
-						$text .= __( 'How great is that!?', 'wpsso' ) . ' :-)</p>';
+					case 'column-purchase-wpssojson':
 
+						$text = '<p>' . sprintf( __( '<strong>%s includes:</strong>', 'wpsso' ), $info[ 'short_pro' ] ) . '</p>';
 
-						$text .= '<p><strong>' . sprintf( __( 'Purchase %1$s quickly and easily with PayPal!', 'wpsso' ), $info[ 'short_pro' ] ) . '</strong></p>';
+						$text .= '<ul>';
+
+						$text .= ' <li>' . sprintf( __( 'Additional Schema options in the %s metabox to customize creative works, events, how-tos, job postings, movies, products, recipes, reviews, and many more.', 'wpsso' ), $mb_title ) . '</li>';
+
+						$text .= ' <li>' . __( 'Access to development updates.', 'wpsso' ) . '</li>';
+
+						$text .= $li_support_link;
+						
+						$text .= '</ul>';
+
+						break;
+
+					case 'column-purchase-wpssoorg':
+
+						$json_info = $this->p->cf[ 'plugin' ][ 'wpssojson' ];
+
+						$json_addon_link = $this->p->util->get_admin_url( 'addons#wpssojson', $json_info[ 'name' ] );
+
+						$text = '<p>' . sprintf( __( '<strong>%s includes:</strong>', 'wpsso' ), $info[ 'short_pro' ] ) . '</p>';
+
+						$text .= '<ul>';
+
+						$text .= ' <li>' . __( 'Manage the details of multiple organizations.', 'wpsso' ) . '</li>';
+
+						$text .= ' <li>' . sprintf( __( 'Offers an organization selector for the %s add-on.', 'wpsso' ), $json_addon_link ) . '</li>';
+
+						$text .= ' <li>' . __( 'Access to development updates.', 'wpsso' ) . '</li>';
+
+						$text .= $li_support_link;
+						
+						$text .= '</ul>';
+
+						break;
+
+					case 'column-purchase-wpssoplm':
+
+						$text = '<p>' . sprintf( __( '<strong>%s includes:</strong>', 'wpsso' ), $info[ 'short_pro' ] ) . '</p>';
+
+						$text .= '<ul>';
+
+						$text .= ' <li>' . sprintf( __( 'Includes a %1$s tab in the %2$s metabox to select a place or customize place information.', 'wpsso' ), _x( 'Schema Place', 'metabox tab', 'wpsso' ), $mb_title ) . '</li>';
+
+						$text .= ' <li>' . __( 'Access to development updates.', 'wpsso' ) . '</li>';
+
+						$text .= $li_support_link;
+						
+						$text .= '</ul>';
+
+						break;
+
+					case 'column-help-support':
+
+						$text = '<p>';
+
+						$text .= sprintf( __( '<strong>Development of %1$s is driven by user requests</strong> &mdash; we welcome all your comments and suggestions.', 'wpsso' ), $info[ 'short' ] ) . ' ;-)';
+
+						$text .= '</p>';
 
 						break;
 
@@ -2876,6 +2999,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 			if ( false !== $local_cache ) {
 
 				if ( isset( $local_cache[ $msg_key ] ) ) {
+
 					return $local_cache[ $msg_key ];
 				}
 
@@ -2890,6 +3014,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 			list( $ext, $p_ext ) = $this->get_ext_p_ext( $ext );
 
 			if ( empty( $ext ) ) {
+
 				return '';
 			}
 
@@ -2958,23 +3083,16 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 			return $html;
 		}
 
-		public function recommend_img_dims( $opt_pre ) {
-
-			$og_def_img_dims = $this->p->msgs->get_def_img_dims( $opt_pre );
-
-			return ' <em>' . $this->p->msgs->get_def_img_dims( 'og_img' ). ' ' . __( 'recommended', 'wpsso' ) . '</em>';
-		}
-
 		/**
 		 * $extra_css_class can be empty, 'left', or 'inline'.
 		 */
 		public function p_img_disabled( $extra_css_class = '' ) {
 
-			$link = $this->p->util->get_admin_url( 'general#sucom-tabset_pub-tab_pinterest',
+			$pin_opt_link = $this->p->util->get_admin_url( 'general#sucom-tabset_pub-tab_pinterest',
 				_x( 'Add Hidden Image for Pinterest', 'option label', 'wpsso' ) );
 
 			// translators: %s is the option name, linked to its settings page.
-			$text = sprintf( __( 'Modifications disabled (%s option is unchecked).', 'wpsso' ), $link );
+			$text = sprintf( __( 'Modifications disabled (%s option is unchecked).', 'wpsso' ), $pin_opt_link );
 
 			return '<p class="status-msg smaller disabled ' . $extra_css_class . '">' . $text . '</p>';
 		}
@@ -3005,10 +3123,12 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 			} else {
 
-				$link = $this->p->util->get_admin_url( 'addons#wpssojson', $this->p->cf[ 'plugin' ][ 'wpssojson' ][ 'name' ] );
+				$json_addon_link = $this->p->util->get_admin_url( 'addons#wpssojson',
+					$this->p->cf[ 'plugin' ][ 'wpssojson' ][ 'name' ] );
 
 				// translators: %s is is the add-on name (and a link to the add-on page).
-				$text = sprintf( __( 'Activate the %s add-on<br/>for Schema markup and structured data options.', 'wpsso' ), $link );
+				$text = sprintf( __( 'Activate the %s add-on<br/>if you require additional options for Schema markup and structured data.',
+					'wpsso' ), $json_addon_link );
 
 				return '<p class="status-msg">' . $text . '</p>';
 			}
@@ -3035,6 +3155,7 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 			if ( is_string( $ext ) ) {
 
 				if ( strpos( $ext, $this->p->lca ) !== 0 ) {
+
 					$ext = $this->p->lca . $ext;
 				}
 
@@ -3052,15 +3173,10 @@ if ( ! class_exists( 'WpssoMessages' ) ) {
 
 		private function get_def_img_dims( $opt_pre ) {
 
-			$def_opts = $this->p->opt->get_defaults();
-
-			$img_width = empty( $def_opts[ $opt_pre . '_width' ] ) ? 0 : $def_opts[ $opt_pre . '_width' ];
-
-			$img_height = empty( $def_opts[ $opt_pre . '_height' ] ) ? 0 : $def_opts[ $opt_pre . '_height' ];
-
-			$img_cropped = empty( $def_opts[ $opt_pre . '_crop' ] ) ?
-				_x( 'uncropped', 'option value', 'wpsso' ) :
-				_x( 'cropped', 'option value', 'wpsso' );
+			$def_opts    = $this->p->opt->get_defaults();
+			$img_width   = empty( $def_opts[ $opt_pre . '_img_width' ] ) ? 0 : $def_opts[ $opt_pre . '_img_width' ];
+			$img_height  = empty( $def_opts[ $opt_pre . '_img_height' ] ) ? 0 : $def_opts[ $opt_pre . '_img_height' ];
+			$img_cropped = empty( $def_opts[ $opt_pre . '_img_crop' ] ) ? _x( 'uncropped', 'option value', 'wpsso' ) : _x( 'cropped', 'option value', 'wpsso' );
 
 			return $img_width . 'x' . $img_height . 'px ' . $img_cropped;
 		}
